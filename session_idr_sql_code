@@ -1,0 +1,1 @@
+CREATE TABLE `result_and_transcript_system`.`session_idr` ( `session_idr` INT NOT NULL , `session_year` INT NOT NULL , `comments` INT NOT NULL ) ENGINE = InnoDB;
