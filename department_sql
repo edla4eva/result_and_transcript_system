@@ -1,0 +1,1 @@
+CREATE TABLE `result_prime`.`department` ( `dept_name` TEXT NOT NULL , `dept_faculty` TEXT NOT NULL , `comments` TEXT NOT NULL ) ENGINE = InnoDB;
