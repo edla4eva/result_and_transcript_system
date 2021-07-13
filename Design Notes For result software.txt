@@ -1,7 +1,7 @@
 Result Processing and Transcript System 
 
 Features of Result Part 
-1 Generate result frm database 
+1 Generate result from database 
 1 Store result from excel format into database
 2 Generate broadsheet from result in database 
 3 Print broadsheet 
