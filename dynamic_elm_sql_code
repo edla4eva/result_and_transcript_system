@@ -1,0 +1,1 @@
+CREATE TABLE `result_and_trancript_db`.`dynamic_elm` ( `hod` TEXT NOT NULL , `lecturer` TEXT NOT NULL , `course_id` INT NOT NULL , `course_title` TEXT NOT NULL ) ENGINE = InnoDB;
