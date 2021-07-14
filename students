@@ -1,1 +1,0 @@
-CREATE TABLE `result_and_trancript_system`.`students` ( `student_id` INT NOT NULL , `student_matno` TEXT NOT NULL , `student_firstname` TEXT NOT NULL , `student_surname` TEXT NOT NULL , `student_othernames` INT NOT NULL , `student_title` TEXT NOT NULL , `student_deptidr` INT NOT NULL ) ENGINE = InnoDB;
