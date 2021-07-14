@@ -1,0 +1,1 @@
+CREATE TABLE `result_and_transcript_system`.`courses` ( `course_id` INT NOT NULL , `course_code` TEXT NOT NULL , `course_unit` INT NOT NULL , `course_title` TEXT NOT NULL , `course_semesrer` INT NOT NULL ) ENGINE = InnoDB;
