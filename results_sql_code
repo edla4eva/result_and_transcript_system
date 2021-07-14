@@ -1,1 +1,0 @@
-CREATE TABLE `result_and_transcript_system`.`results` ( `result_id` INT NOT NULL , `s_n` INT NOT NULL , `c_a` INT NOT NULL , `exam` INT NOT NULL , `total` INT NOT NULL , `rules` TEXT NOT NULL , `course_idr` INT NOT NULL , `session_idr` INT NOT NULL ) ENGINE = InnoDB;

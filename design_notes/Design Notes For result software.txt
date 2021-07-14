@@ -15,7 +15,7 @@ Transcript Part
 2 Generate transcript from raw scores in database  
 
 
-Method of development 
+Method of devlopment 
 
 -rapid development method/agile 
 
