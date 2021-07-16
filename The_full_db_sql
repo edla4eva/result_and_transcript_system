@@ -36,7 +36,7 @@ student_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 CREATE TABLE rules (
 transcript_code LONGTEXT NOT NULL,
 section_id INT NOT NULL UNIQUE,
-transcript_id INT NOT NULL PRIMARY KEY);
+course_id INT NOT NULL);
 
 CREATE TABLE result (
 student_id INT NOT NULL,
@@ -52,9 +52,9 @@ ALTER TABLE `dynamic_db` ADD CONSTRAINT `dynamic_db`_`course_id`_`courses`_`cour
 ALTER TABLE `dynamic_db` ADD CONSTRAINT `dynamic_db`_session_id_`session_idr`_`session_idr` FOREIGN KEY (session_id) REFERENCES `session_idr`(`session_idr`);
 ALTER TABLE students ADD CONSTRAINT students_`student_deptidr`_`department`_`dept_name` FOREIGN KEY (`student_deptidr`) REFERENCES `department`(`dept_name`);
 ALTER TABLE rules ADD CONSTRAINT rules_section_id_`session_idr`_`session_idr` FOREIGN KEY (section_id) REFERENCES `session_idr`(`session_idr`);
+ALTER TABLE rules ADD CONSTRAINT rules_course_id_`courses`_`course_id` FOREIGN KEY (course_id) REFERENCES `courses`(`course_id`);
 ALTER TABLE result ADD CONSTRAINT result_student_id_students_student_id FOREIGN KEY (student_id) REFERENCES students(student_id);
 ALTER TABLE result ADD CONSTRAINT result_mat_no_students_`mat_no` FOREIGN KEY (mat_no) REFERENCES students(`mat_no`);
-T main_dbtable_course_code_`courses`_`course_code` FOREIGN KEY (course_code) REFERENCES `courses`(`course_code`);
 ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_session_year_`session_idr`_`session_year` FOREIGN KEY (session_year) REFERENCES `session_idr`(`session_year`);
 ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_dept_`department`_`dept_name` FOREIGN KEY (dept) REFERENCES `department`(`dept_name`);
 ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_course_title_`courses`_`course_title` FOREIGN KEY (course_title) REFERENCES `courses`(`course_title`);
