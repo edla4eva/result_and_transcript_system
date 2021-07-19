@@ -1,22 +1,22 @@
 
-CREATE TABLE results (
-result_id INT NOT NULL COMMENT 'result Id',
-s_n INT NOT NULL COMMENT 'serial number',
-mat_no TEXT NOT NULL COMMENT 'mat number',
-first_name TEXT NOT NULL COMMENT 'first name ',
-surname TEXT NOT NULL COMMENT 'surname',
-other_name INT NOT NULL COMMENT 'other names',
-c_a INT NOT NULL COMMENT 'continuous assessment',
-exam INT NOT NULL COMMENT 'exam scores',
-Total INT NOT NULL COMMENT 'total score',
-course_code TEXT NOT NULL COMMENT 'course code',
-session_year YEAR NOT NULL COMMENT 'section year',
-dept TEXT NOT NULL COMMENT 'Department',
-course_title TEXT NOT NULL COMMENT 'course title',
-course_unit INT NOT NULL COMMENT 'course units');
+CREATE TABLE main_dbtable (
+result_id INT NOT NULL UNIQUE,
+s_n INT NOT NULL,
+mat_no TEXT NOT NULL,
+first_name TEXT NOT NULL,
+surname TEXT NOT NULL,
+other_name INT NOT NULL,
+c_a INT NOT NULL,
+exam INT NOT NULL,
+Total INT NOT NULL,
+course_code TEXT NOT NULL,
+session_year YEAR NOT NULL,
+dept TEXT NOT NULL,
+course_title TEXT NOT NULL,
+course_unit INT NOT NULL);
 
 CREATE TABLE `courses` (
-`course_id` INT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
+`course_id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 `course_code` TEXT NOT NULL,
 `course_unit` INT NOT NULL,
 `course_title` TEXT NOT NULL,
@@ -26,35 +26,60 @@ CREATE TABLE `department` (
 `dept_name` TEXT NOT NULL,
 `dept_faculty` TEXT NOT NULL,
 `comments` TEXT NOT NULL,
-dept_id INT NOT NULL PRIMARY KEY COMMENT 'department Id');
+dept_id INT NOT NULL PRIMARY KEY);
 
-CREATE TABLE `dynamic_elm` (
+CREATE TABLE `dynamic_db` (
 `hod` TEXT NOT NULL,
 `lecturer` TEXT NOT NULL,
 `course_id` INT NOT NULL,
-`course_title` TEXT NOT NULL);
+`course_title` TEXT NOT NULL,
+session_id INT NOT NULL);
 
 CREATE TABLE `session_idr` (
-`session_idr` INT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
+`session_idr` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 `session_year` YEAR NOT NULL,
-`comments` INT NOT NULL);
+`comments` TEXT NOT NULL);
 
 CREATE TABLE students (
-student_id INT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
-`student_matno` TEXT NOT NULL,
+student_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+`mat_no` TEXT NOT NULL UNIQUE,
 `student_firstname` TEXT NOT NULL,
 `student_surname` TEXT NOT NULL,
 `student_othernames` INT NOT NULL,
 `student_deptidr` TEXT NOT NULL);
 
-ALTER TABLE results ADD CONSTRAINT results_mat_no_students_`student_matno` FOREIGN KEY (mat_no) REFERENCES students(`student_matno`);
-ALTER TABLE results ADD CONSTRAINT results_first_name_students_`student_firstname` FOREIGN KEY (first_name) REFERENCES students(`student_firstname`);
-ALTER TABLE results ADD CONSTRAINT results_surname_students_`student_surname` FOREIGN KEY (surname) REFERENCES students(`student_surname`);
-ALTER TABLE results ADD CONSTRAINT results_other_name_students_`student_othernames` FOREIGN KEY (other_name) REFERENCES students(`student_othernames`);
-ALTER TABLE results ADD CONSTRAINT results_course_code_`courses`_`course_code` FOREIGN KEY (course_code) REFERENCES `courses`(`course_code`);
-ALTER TABLE results ADD CONSTRAINT results_session_year_`session_idr`_`session_year` FOREIGN KEY (session_year) REFERENCES `session_idr`(`session_year`);
-ALTER TABLE results ADD CONSTRAINT results_dept_`department`_`dept_name` FOREIGN KEY (dept) REFERENCES `department`(`dept_name`);
-ALTER TABLE results ADD CONSTRAINT results_course_title_`courses`_`course_title` FOREIGN KEY (course_title) REFERENCES `courses`(`course_title`);
-ALTER TABLE results ADD CONSTRAINT results_course_unit_`courses`_`course_unit` FOREIGN KEY (course_unit) REFERENCES `courses`(`course_unit`);
+CREATE TABLE rules (
+transcript_code LONGTEXT NOT NULL,
+section_id INT NOT NULL UNIQUE,
+transcript_id INT NOT NULL PRIMARY KEY);
+
+CREATE TABLE result (
+student_id INT NOT NULL,
+s_n INT NOT NULL,
+mat_no TEXT NOT NULL,
+c_a INT NOT NULL,
+exam INT NOT NULL,
+total INT NOT NULL,
+result_id INT NOT NULL);
+
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_mat_no_students_`mat_no` FOREIGN KEY (mat_no) REFERENCES students(`mat_no`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_first_name_students_`student_firstname` FOREIGN KEY (first_name) REFERENCES students(`student_firstname`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_surname_students_`student_surname` FOREIGN KEY (surname) REFERENCES students(`student_surname`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_other_name_students_`student_othernames` FOREIGN KEY (other_name) REFERENCES students(`student_othernames`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_course_code_`courses`_`course_code` FOREIGN KEY (course_code) REFERENCES `courses`(`course_code`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_session_year_`session_idr`_`session_year` FOREIGN KEY (session_year) REFERENCES `session_idr`(`session_year`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_dept_`department`_`dept_name` FOREIGN KEY (dept) REFERENCES `department`(`dept_name`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_course_title_`courses`_`course_title` FOREIGN KEY (course_title) REFERENCES `courses`(`course_title`);
+ALTER TABLE main_dbtable ADD CONSTRAINT main_dbtable_course_unit_`courses`_`course_unit` FOREIGN KEY (course_unit) REFERENCES `courses`(`course_unit`);
 ALTER TABLE `courses` ADD CONSTRAINT `courses`_`course_semester`_`session_idr`_`session_year` FOREIGN KEY (`course_semester`) REFERENCES `session_idr`(`session_year`);
+ALTER TABLE `dynamic_db` ADD CONSTRAINT `dynamic_db`_`course_id`_`courses`_`course_id` FOREIGN KEY (`course_id`) REFERENCES `courses`(`course_id`);
+ALTER TABLE `dynamic_db` ADD CONSTRAINT `dynamic_db`_session_id_`session_idr`_`session_idr` FOREIGN KEY (session_id) REFERENCES `session_idr`(`session_idr`);
 ALTER TABLE students ADD CONSTRAINT students_`student_deptidr`_`department`_`dept_name` FOREIGN KEY (`student_deptidr`) REFERENCES `department`(`dept_name`);
+ALTER TABLE rules ADD CONSTRAINT rules_section_id_`session_idr`_`session_idr` FOREIGN KEY (section_id) REFERENCES `session_idr`(`session_idr`);
+ALTER TABLE result ADD CONSTRAINT result_student_id_students_student_id FOREIGN KEY (student_id) REFERENCES students(student_id);
+ALTER TABLE result ADD CONSTRAINT result_s_n_main_dbtable_s_n FOREIGN KEY (s_n) REFERENCES main_dbtable(s_n);
+ALTER TABLE result ADD CONSTRAINT result_mat_no_students_`mat_no` FOREIGN KEY (mat_no) REFERENCES students(`mat_no`);
+ALTER TABLE result ADD CONSTRAINT result_c_a_main_dbtable_c_a FOREIGN KEY (c_a) REFERENCES main_dbtable(c_a);
+ALTER TABLE result ADD CONSTRAINT result_exam_main_dbtable_exam FOREIGN KEY (exam) REFERENCES main_dbtable(exam);
+ALTER TABLE result ADD CONSTRAINT result_total_main_dbtable_Total FOREIGN KEY (total) REFERENCES main_dbtable(Total);
+ALTER TABLE result ADD CONSTRAINT result_result_id_main_dbtable_result_id FOREIGN KEY (result_id) REFERENCES main_dbtable(result_id);
