@@ -101,11 +101,11 @@ Public Class MDIParent1Main
         FormGenerateBroadsheet.Show()
     End Sub
 
-    Private Sub ButtonViewResult_Click(sender As Object, e As EventArgs) Handles ButtonViewResult.Click
+    Private Sub ToolStripStatusLabel_Click(sender As Object, e As EventArgs) Handles ToolStripStatusLabel.Click
 
     End Sub
 
-    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles PanelStudent.Paint
+    Private Sub ButtonImportCourseRegistrationForm_Click(sender As Object, e As EventArgs) Handles ButtonImportCourseRegistrationForm.Click
 
     End Sub
 
