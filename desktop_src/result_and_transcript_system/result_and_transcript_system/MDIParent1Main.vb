@@ -96,4 +96,12 @@ Public Class MDIParent1Main
     Private Sub ButtonGenerateBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonGenerateBroadsheet.Click
         FormGenerateBroadsheet.Show()
     End Sub
+
+    Private Sub ButtonViewResult_Click(sender As Object, e As EventArgs) Handles ButtonViewResult.Click
+
+    End Sub
+
+    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles PanelStudent.Paint
+
+    End Sub
 End Class
