@@ -77,19 +77,23 @@ Partial Class MDIParent1Main
         Me.StatusStrip = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
-        Me.PanelAdmin = New System.Windows.Forms.Panel()
-        Me.ButtonUploadResult = New System.Windows.Forms.Button()
-        Me.ButtonGenerateBroadsheet = New System.Windows.Forms.Button()
-        Me.ButtonViewResult = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.PanelCourseLecturer = New System.Windows.Forms.Panel()
         Me.ButtonImportCourseRegistrationForm = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ButtonViewResult = New System.Windows.Forms.Button()
+        Me.ButtonGenerateBroadsheet = New System.Windows.Forms.Button()
+        Me.ButtonUploadResult = New System.Windows.Forms.Button()
+        Me.PanelCourseAdviser = New System.Windows.Forms.Panel()
+        Me.PanelStudent = New System.Windows.Forms.Panel()
         Me.MenuStrip.SuspendLayout()
         Me.ToolStrip.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
-        Me.PanelAdmin.SuspendLayout()
+        Me.PanelCourseLecturer.SuspendLayout()
+        Me.PanelCourseAdviser.SuspendLayout()
+        Me.PanelStudent.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip
@@ -116,7 +120,7 @@ Partial Class MDIParent1Main
         Me.NewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
         Me.NewToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.NewToolStripMenuItem.Text = "&New"
         '
         'OpenToolStripMenuItem
@@ -125,13 +129,13 @@ Partial Class MDIParent1Main
         Me.OpenToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
         Me.OpenToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.OpenToolStripMenuItem.Text = "&Open"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(143, 6)
         '
         'SaveToolStripMenuItem
         '
@@ -139,19 +143,19 @@ Partial Class MDIParent1Main
         Me.SaveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black
         Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
         Me.SaveToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.SaveToolStripMenuItem.Text = "&Save"
         '
         'SaveAsToolStripMenuItem
         '
         Me.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem"
-        Me.SaveAsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SaveAsToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.SaveAsToolStripMenuItem.Text = "Save &As"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(143, 6)
         '
         'PrintToolStripMenuItem
         '
@@ -159,7 +163,7 @@ Partial Class MDIParent1Main
         Me.PrintToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black
         Me.PrintToolStripMenuItem.Name = "PrintToolStripMenuItem"
         Me.PrintToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.P), System.Windows.Forms.Keys)
-        Me.PrintToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.PrintToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.PrintToolStripMenuItem.Text = "&Print"
         '
         'PrintPreviewToolStripMenuItem
@@ -167,24 +171,24 @@ Partial Class MDIParent1Main
         Me.PrintPreviewToolStripMenuItem.Image = CType(resources.GetObject("PrintPreviewToolStripMenuItem.Image"), System.Drawing.Image)
         Me.PrintPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black
         Me.PrintPreviewToolStripMenuItem.Name = "PrintPreviewToolStripMenuItem"
-        Me.PrintPreviewToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.PrintPreviewToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.PrintPreviewToolStripMenuItem.Text = "Print Pre&view"
         '
         'PrintSetupToolStripMenuItem
         '
         Me.PrintSetupToolStripMenuItem.Name = "PrintSetupToolStripMenuItem"
-        Me.PrintSetupToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.PrintSetupToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.PrintSetupToolStripMenuItem.Text = "Print Setup"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(143, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'EditMenu
@@ -466,100 +470,121 @@ Partial Class MDIParent1Main
         Me.ToolStripStatusLabel.Size = New System.Drawing.Size(39, 17)
         Me.ToolStripStatusLabel.Text = "Status"
         '
-        'PanelAdmin
+        'PanelCourseLecturer
         '
-        Me.PanelAdmin.Controls.Add(Me.ButtonImportCourseRegistrationForm)
-        Me.PanelAdmin.Controls.Add(Me.Button1)
-        Me.PanelAdmin.Controls.Add(Me.Label3)
-        Me.PanelAdmin.Controls.Add(Me.Label2)
-        Me.PanelAdmin.Controls.Add(Me.Label1)
-        Me.PanelAdmin.Controls.Add(Me.ButtonViewResult)
-        Me.PanelAdmin.Controls.Add(Me.ButtonGenerateBroadsheet)
-        Me.PanelAdmin.Controls.Add(Me.ButtonUploadResult)
-        Me.PanelAdmin.Dock = System.Windows.Forms.DockStyle.Left
-        Me.PanelAdmin.Location = New System.Drawing.Point(0, 49)
-        Me.PanelAdmin.Name = "PanelAdmin"
-        Me.PanelAdmin.Size = New System.Drawing.Size(175, 434)
-        Me.PanelAdmin.TabIndex = 9
-        '
-        'ButtonUploadResult
-        '
-        Me.ButtonUploadResult.Location = New System.Drawing.Point(12, 30)
-        Me.ButtonUploadResult.Name = "ButtonUploadResult"
-        Me.ButtonUploadResult.Size = New System.Drawing.Size(134, 53)
-        Me.ButtonUploadResult.TabIndex = 0
-        Me.ButtonUploadResult.Text = "Upload Result"
-        Me.ButtonUploadResult.UseVisualStyleBackColor = True
-        '
-        'ButtonGenerateBroadsheet
-        '
-        Me.ButtonGenerateBroadsheet.Location = New System.Drawing.Point(12, 146)
-        Me.ButtonGenerateBroadsheet.Name = "ButtonGenerateBroadsheet"
-        Me.ButtonGenerateBroadsheet.Size = New System.Drawing.Size(133, 52)
-        Me.ButtonGenerateBroadsheet.TabIndex = 1
-        Me.ButtonGenerateBroadsheet.Text = "Generate Broadsheet"
-        Me.ButtonGenerateBroadsheet.UseVisualStyleBackColor = True
-        '
-        'ButtonViewResult
-        '
-        Me.ButtonViewResult.Location = New System.Drawing.Point(15, 371)
-        Me.ButtonViewResult.Name = "ButtonViewResult"
-        Me.ButtonViewResult.Size = New System.Drawing.Size(133, 60)
-        Me.ButtonViewResult.TabIndex = 2
-        Me.ButtonViewResult.Text = "View Result"
-        Me.ButtonViewResult.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 14)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(82, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Course Lecturer"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 130)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(78, 13)
-        Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Course Adviser"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(12, 355)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(44, 13)
-        Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Student"
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(12, 204)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(133, 60)
-        Me.Button1.TabIndex = 6
-        Me.Button1.Text = "Process Transcript"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.PanelCourseLecturer.Controls.Add(Me.Label1)
+        Me.PanelCourseLecturer.Controls.Add(Me.ButtonUploadResult)
+        Me.PanelCourseLecturer.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PanelCourseLecturer.Location = New System.Drawing.Point(0, 49)
+        Me.PanelCourseLecturer.Name = "PanelCourseLecturer"
+        Me.PanelCourseLecturer.Size = New System.Drawing.Size(152, 434)
+        Me.PanelCourseLecturer.TabIndex = 9
         '
         'ButtonImportCourseRegistrationForm
         '
-        Me.ButtonImportCourseRegistrationForm.Location = New System.Drawing.Point(12, 270)
+        Me.ButtonImportCourseRegistrationForm.Location = New System.Drawing.Point(0, 154)
         Me.ButtonImportCourseRegistrationForm.Name = "ButtonImportCourseRegistrationForm"
         Me.ButtonImportCourseRegistrationForm.Size = New System.Drawing.Size(133, 60)
         Me.ButtonImportCourseRegistrationForm.TabIndex = 7
         Me.ButtonImportCourseRegistrationForm.Text = "Button Import Course Registration Form"
         Me.ButtonImportCourseRegistrationForm.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(0, 88)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(133, 60)
+        Me.Button1.TabIndex = 6
+        Me.Button1.Text = "Process Transcript"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Label3.Location = New System.Drawing.Point(0, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(44, 13)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "Student"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Label2.Location = New System.Drawing.Point(0, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(78, 13)
+        Me.Label2.TabIndex = 4
+        Me.Label2.Text = "Course Adviser"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Label1.Location = New System.Drawing.Point(0, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(82, 13)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "Course Lecturer"
+        '
+        'ButtonViewResult
+        '
+        Me.ButtonViewResult.Location = New System.Drawing.Point(0, 27)
+        Me.ButtonViewResult.Name = "ButtonViewResult"
+        Me.ButtonViewResult.Size = New System.Drawing.Size(133, 60)
+        Me.ButtonViewResult.TabIndex = 2
+        Me.ButtonViewResult.Text = "View Result"
+        Me.ButtonViewResult.UseVisualStyleBackColor = True
+        '
+        'ButtonGenerateBroadsheet
+        '
+        Me.ButtonGenerateBroadsheet.Location = New System.Drawing.Point(0, 30)
+        Me.ButtonGenerateBroadsheet.Name = "ButtonGenerateBroadsheet"
+        Me.ButtonGenerateBroadsheet.Size = New System.Drawing.Size(133, 52)
+        Me.ButtonGenerateBroadsheet.TabIndex = 1
+        Me.ButtonGenerateBroadsheet.Text = "Generate Broadsheet"
+        Me.ButtonGenerateBroadsheet.UseVisualStyleBackColor = True
+        '
+        'ButtonUploadResult
+        '
+        Me.ButtonUploadResult.Location = New System.Drawing.Point(0, 29)
+        Me.ButtonUploadResult.Name = "ButtonUploadResult"
+        Me.ButtonUploadResult.Size = New System.Drawing.Size(134, 53)
+        Me.ButtonUploadResult.TabIndex = 0
+        Me.ButtonUploadResult.Text = "Upload Result"
+        Me.ButtonUploadResult.UseVisualStyleBackColor = True
+        '
+        'PanelCourseAdviser
+        '
+        Me.PanelCourseAdviser.Controls.Add(Me.ButtonImportCourseRegistrationForm)
+        Me.PanelCourseAdviser.Controls.Add(Me.Label2)
+        Me.PanelCourseAdviser.Controls.Add(Me.Button1)
+        Me.PanelCourseAdviser.Controls.Add(Me.ButtonGenerateBroadsheet)
+        Me.PanelCourseAdviser.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PanelCourseAdviser.Location = New System.Drawing.Point(152, 49)
+        Me.PanelCourseAdviser.Name = "PanelCourseAdviser"
+        Me.PanelCourseAdviser.Size = New System.Drawing.Size(146, 434)
+        Me.PanelCourseAdviser.TabIndex = 11
+        '
+        'PanelStudent
+        '
+        Me.PanelStudent.Controls.Add(Me.Label3)
+        Me.PanelStudent.Controls.Add(Me.ButtonViewResult)
+        Me.PanelStudent.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PanelStudent.Location = New System.Drawing.Point(298, 49)
+        Me.PanelStudent.Name = "PanelStudent"
+        Me.PanelStudent.Size = New System.Drawing.Size(140, 434)
+        Me.PanelStudent.TabIndex = 12
+        '
         'MDIParent1Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(680, 505)
-        Me.Controls.Add(Me.PanelAdmin)
+        Me.Controls.Add(Me.PanelStudent)
+        Me.Controls.Add(Me.PanelCourseAdviser)
+        Me.Controls.Add(Me.PanelCourseLecturer)
         Me.Controls.Add(Me.ToolStrip)
         Me.Controls.Add(Me.MenuStrip)
         Me.Controls.Add(Me.StatusStrip)
@@ -574,8 +599,12 @@ Partial Class MDIParent1Main
         Me.ToolStrip.PerformLayout()
         Me.StatusStrip.ResumeLayout(False)
         Me.StatusStrip.PerformLayout()
-        Me.PanelAdmin.ResumeLayout(False)
-        Me.PanelAdmin.PerformLayout()
+        Me.PanelCourseLecturer.ResumeLayout(False)
+        Me.PanelCourseLecturer.PerformLayout()
+        Me.PanelCourseAdviser.ResumeLayout(False)
+        Me.PanelCourseAdviser.PerformLayout()
+        Me.PanelStudent.ResumeLayout(False)
+        Me.PanelStudent.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -632,7 +661,7 @@ Partial Class MDIParent1Main
     Friend WithEvents ToolBarToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents StatusBarToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolsMenu As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents PanelAdmin As Panel
+    Friend WithEvents PanelCourseLecturer As Panel
     Friend WithEvents ButtonViewResult As Button
     Friend WithEvents ButtonGenerateBroadsheet As Button
     Friend WithEvents ButtonUploadResult As Button
@@ -641,4 +670,6 @@ Partial Class MDIParent1Main
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents ButtonImportCourseRegistrationForm As Button
+    Friend WithEvents PanelCourseAdviser As Panel
+    Friend WithEvents PanelStudent As Panel
 End Class
