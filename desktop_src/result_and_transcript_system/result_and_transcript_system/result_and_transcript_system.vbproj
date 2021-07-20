@@ -87,18 +87,14 @@
     <Compile Include="FormGenerateBroadsheet.Designer.vb">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
     </Compile>
-    <Compile Include="FormGenerateBroadsheet.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="FormGenerateBroadsheet.vb" />
     <Compile Include="FormStudent.Designer.vb">
       <DependentUpon>FormStudent.vb</DependentUpon>
     </Compile>
     <Compile Include="FormStudent.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormUploadResult.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="FormUploadResult.vb" />
     <Compile Include="FormUploadResult.Designer.vb">
       <DependentUpon>FormUploadResult.vb</DependentUpon>
       <SubType>Form</SubType>
@@ -106,9 +102,7 @@
     <Compile Include="LoginForm1.Designer.vb">
       <DependentUpon>LoginForm1.vb</DependentUpon>
     </Compile>
-    <Compile Include="LoginForm1.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="LoginForm1.vb" />
     <Compile Include="ModuleResourceConfig.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
