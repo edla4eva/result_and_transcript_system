@@ -15,7 +15,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
@@ -46,11 +46,77 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.6\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="DoddleReport, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DoddleReport.1.5.2.0\lib\net40\DoddleReport.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel.Helper, Version=1.0.1.0, Culture=neutral, PublicKeyToken=ab40b1b8217243eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReaderHelper.1.0.3.0\lib\Excel.Helper.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.1.9, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.3.1\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.DataVisualization.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.Design.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.WebDesign.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.ReportViewer.WinForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2403\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.7.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.7.9\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.5.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.4\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -72,10 +138,79 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassAnswerEventArgs.vb" />
+    <Compile Include="ClassBroadsheets.vb" />
+    <Compile Include="ClassDB.vb" />
+    <Compile Include="ClasseEF.vb" />
+    <Compile Include="ClassExcel.vb" />
+    <Compile Include="ClassExcelFile.vb" />
+    <Compile Include="ClassExcelResult.vb" />
+    <Compile Include="ClassPDF.vb" />
+    <Compile Include="ClassReports.vb" />
+    <Compile Include="FormAddNewStuff.Designer.vb">
+      <DependentUpon>FormAddNewStuff.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddNewStuff.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAdmin.Designer.vb">
+      <DependentUpon>FormAdmin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAdmin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewResults.Designer.vb">
+      <DependentUpon>FormViewResults.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewResults.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewBroadsheets.Designer.vb">
+      <DependentUpon>FormViewBroadsheets.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewBroadsheets.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.vb">
+      <DependentUpon>FormSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormResultsTranscripts.designer.vb">
+      <DependentUpon>FormResultsTranscripts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormResultsTranscripts.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCourseAdviser.Designer.vb">
+      <DependentUpon>FormCourseAdviser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCourseAdviser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCourseLecturer.Designer.vb">
+      <DependentUpon>FormCourseLecturer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCourseLecturer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormGenerateBroadsheet.Designer.vb">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
     </Compile>
     <Compile Include="FormGenerateBroadsheet.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStudentsRegistration.designer.vb">
+      <DependentUpon>FormStudentsRegistration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormStudentsRegistration.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStudent.Designer.vb">
+      <DependentUpon>FormStudent.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormStudent.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormUploadResult.vb">
@@ -85,18 +220,26 @@
       <DependentUpon>FormUploadResult.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ModuleGeneral.vb" />
+    <Compile Include="HomeForm.Designer.vb">
+      <DependentUpon>HomeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="HomeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LoginForm1.Designer.vb">
       <DependentUpon>LoginForm1.vb</DependentUpon>
     </Compile>
     <Compile Include="LoginForm1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MDIParent1Main.Designer.vb">
-      <DependentUpon>MDIParent1Main.vb</DependentUpon>
+    <Compile Include="MainForm.Designer.vb">
+      <DependentUpon>MainForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="MDIParent1Main.vb">
+    <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ModuleNetworkUtility.vb" />
     <Compile Include="ModuleResourceConfig.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -114,20 +257,55 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RGBColors.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormAddNewStuff.resx">
+      <DependentUpon>FormAddNewStuff.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAdmin.resx">
+      <DependentUpon>FormAdmin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormViewResults.resx">
+      <DependentUpon>FormViewResults.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormViewBroadsheets.resx">
+      <DependentUpon>FormViewBroadsheets.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormResultsTranscripts.resx">
+      <DependentUpon>FormResultsTranscripts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCourseAdviser.resx">
+      <DependentUpon>FormCourseAdviser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCourseLecturer.resx">
+      <DependentUpon>FormCourseLecturer.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormGenerateBroadsheet.resx">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStudentsRegistration.resx">
+      <DependentUpon>FormStudentsRegistration.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStudent.resx">
+      <DependentUpon>FormStudent.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUploadResult.resx">
       <DependentUpon>FormUploadResult.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="HomeForm.resx">
+      <DependentUpon>HomeForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginForm1.resx">
       <DependentUpon>LoginForm1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MDIParent1Main.resx">
-      <DependentUpon>MDIParent1Main.vb</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -136,6 +314,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagramForms.cd" />
+    <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -146,6 +327,21 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Report1.rdlc" />
+    <None Include="ReportAccount.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="female-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Male-Image.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

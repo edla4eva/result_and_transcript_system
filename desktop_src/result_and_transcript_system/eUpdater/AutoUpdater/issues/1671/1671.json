@@ -1,0 +1,39 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": null,
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "//Added the function to support proxy\n//This method has been deprecated. Please use the proxy selected for you by default.\n//clientDownload.Proxy = System.Net.WebProxy.GetDefaultProxy();\nclientDownload.Proxy = WebRequest.GetSystemWebProxy();",
+    "LastUpdatedDate": "2013-11-20T01:06:56.377-08:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Unassigned",
+      "Severity": 0,
+      "Id": 0
+    },
+    "ProjectName": "AutoUpdater",
+    "ReportedDate": "2013-11-20T01:06:56.377-08:00",
+    "Status": {
+      "Name": "Proposed",
+      "Id": 1
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "deprecated method",
+    "Type": {
+      "Name": "Unassigned",
+      "Id": 5
+    },
+    "VoteCount": 1,
+    "Id": 1671
+  },
+  "FileAttachments": [],
+  "Comments": []
+}

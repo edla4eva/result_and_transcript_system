@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "509095",
+    "ThreadId": "231399",
+    "Html": "<p>Can you include a sample of the XML that would reside on the server.</p>",
+    "PostedDate": "2010-10-18T18:49:31.41-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "894485",
+    "ThreadId": "231399",
+    "Html": "<p>&nbsp;</p>\r\n<p><a href=\"http://autoupdater.codeplex.com/SourceControl/changeset/1815\">http://autoupdater.codeplex.com/SourceControl/changeset/1815</a></p>",
+    "PostedDate": "2012-08-02T00:22:11.457-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "1360879",
+    "ThreadId": "231399",
+    "Html": "can you help me understand it. How can i use it in my project please i need help. i wanna use it but need help<br />\n",
+    "PostedDate": "2015-03-09T03:06:41.887-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  }
+]

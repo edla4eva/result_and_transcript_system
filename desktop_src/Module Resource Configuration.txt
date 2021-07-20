@@ -1,0 +1,66 @@
+Module ModuleResourceConfig
+
+    '-------------------------------
+    '    Main Form
+    '-------------------------------
+    Dim ButtonHomeText As String = "Home"
+
+    Dim ButtonUserText As String = "User"
+
+
+    '-------------------------------
+    '   Home Form
+    '-------------------------------
+
+
+
+    '-------------------------------
+    '   Login Form
+    '-------------------------------
+    Dim LabelUsernameText As String = "Username"
+    Dim LabelPasswordText As String = "Password"
+    Dim ButtonOkText As String = "Ok"
+    Dim ButtonCancelText1 As String = "Cancel"
+
+
+    '------------------------------
+    '  FormUploadResult
+    '------------------------------
+    Dim ButtonBrowseResultText As String = "Browse for Result...."
+    Dim ButtonCancelText2 As String = "Cancel"
+    Dim ButtonUploadResultText As String = "Upload Result"
+    Dim LabelFilenameText1 As String = "Filename (Excel file .xlsx)"
+
+    '------------------------------
+    '  FormStudent
+    '------------------------------
+
+
+    '--------------------------------------
+    '  FormGenerateBroadsheet
+    '--------------------------------------
+    Dim LabelDepartmentText As String = "Department"
+    Dim LabelLevelText As String = "Level"
+    Dim LabelSessionText As String = "Session"
+    Dim ButtonProcessBroadsheetText As String = "Process Broadsheet"
+    Dim ButtonCancelText3 As String = "Cancel"
+    Dim ButtonApplyText As String = "Apply"
+    Dim ButtonBackupText As String = "Backup Broadsheet"
+    Dim LabelInfoText As String = "This broadsheet can be used to make final adjustments to scores as approved by departmental board or facuty board"
+    Dim LabelFilenameText2 As String = "Filename (Excel file .xlsx)"
+
+
+    '-------------------------------------
+    '  FormCourseLecturer
+    '-------------------------------------
+    Dim ButtonUploadResult As String = "Upload Result "
+
+
+    '--------------------------------------
+    '  FormCourseAdviser
+    '--------------------------------------
+    Dim ButtonButton1Text As String = "Button1"
+    Dim ButtonButton2Text As String = "Button2"
+    Dim ButtonButton3Text As String = "Button3"
+
+End Module

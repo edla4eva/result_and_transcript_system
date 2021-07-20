@@ -1,1 +1,0 @@
-CREATE TABLE `result_and_transript_db`.`results` ( `result_id` INT NOT NULL AUTO_INCREMENT , `s_n` INT NOT NULL , `student_idr` INT NOT NULL , `ca` INT NOT NULL , `exam` INT NOT NULL , `total` INT NOT NULL , `rules` VARCHAR(100) NOT NULL , `course_idr` INT NOT NULL , `Session_idr` INT NOT NULL , `department_idr` INT NOT NULL , PRIMARY KEY (`result_id`)) ENGINE = InnoDB;

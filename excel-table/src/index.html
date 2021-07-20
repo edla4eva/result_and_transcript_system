@@ -1,0 +1,39 @@
+<html>
+<head>
+  <title>Excel Table</title>
+  <link rel="stylesheet" href="css/excel-table.css" />
+</head>
+<body>
+  <table class="excel-table">
+    <thead>
+    </thead>
+    <tbody>
+      </tr>
+    </tbody>
+  </table>
+
+  <script src="js/jquery.js"></script>
+  <script src="js/excel-table.js"></script>
+  <script>
+    $(function(){
+	  // Code to generate table dynamically
+      var rows = "", headerCols= "";
+      for(let row = 0; row < 100; row++){
+        rows += "<tr>";
+        for(let col = 0; col < 10; col++){
+			if(row===0){
+				headerCols += "<th> "+ col + "</th>";
+			}
+            rows += "<td><input type='text' class='editable' value='"+ col +"' /></td>";
+        }
+        rows += "</tr>";
+      }
+	  $(".excel-table thead").html("<tr>"+headerCols+"</tr>");
+      $(".excel-table tbody").html(rows);
+	  
+	  // This is how you can use the plugin in your jQuery app
+      $(".excel-table").exceltable();
+    });
+  </script>
+</body>
+</html>

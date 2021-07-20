@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+
+# third party files 
+/third_party
 # User-specific files
 *.rsuser
 *.suo
@@ -17,6 +20,9 @@
 mono_crash.*
 
 # Build results
+/obj
+/bin
+/object
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
