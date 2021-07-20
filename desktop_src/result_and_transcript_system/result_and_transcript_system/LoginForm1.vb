@@ -11,28 +11,18 @@ Public Class LoginForm1
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
         If Me.UsernameTextBox.Text = "adminCO" And
                 Me.PasswordTextBox.Text = "adminCO" Then
-            'If password id correct, show main form
-            MDIParent1Main.Show()
-            MDIParent1Main.PanelCourseAdviser.Show()
-            MDIParent1Main.PanelStudent.Hide()
-            MDIParent1Main.PanelCourseLecturer.Hide()
-            FormUploadResult.Show()
+            'If password id correct, show main form 
+            FormCourseAdviser.Show()
+
 
 
         ElseIf Me.UsernameTextBox.Text = "adminST" And
-                    Me.PasswordTextBox.Text = "admminST" Then
-            MDIParent1Main.Show()
-            MDIParent1Main.PanelCourseAdviser.Hide()
-            MDIParent1Main.PanelStudent.Show()
-            MDIParent1Main.PanelCourseLecturer.Hide()
+                    Me.PasswordTextBox.Text = "adminST" Then
+            FormStudent.Show()
 
         ElseIf Me.UsernameTextBox.Text = "adminCL" And
                 Me.PasswordTextBox.Text = "adminCL" Then
-            MDIParent1Main.Show()
-            MDIParent1Main.PanelCourseAdviser.Hide()
-            MDIParent1Main.PanelStudent.Hide()
-            MDIParent1Main.PanelCourseLecturer.Show()
-
+            FormCourseLecturer.Show()
 
 
 
@@ -46,6 +36,14 @@ Public Class LoginForm1
     End Sub
 
     Private Sub UsernameLabel_Click(sender As Object, e As EventArgs) Handles UsernameLabel.Click
+
+    End Sub
+
+    Private Sub LoginForm1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub UsernameTextBox_TextChanged(sender As Object, e As EventArgs) Handles UsernameTextBox.TextChanged
 
     End Sub
 End Class

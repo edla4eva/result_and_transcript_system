@@ -72,10 +72,28 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormCourseAdviser.Designer.vb">
+      <DependentUpon>FormCourseAdviser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCourseAdviser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCourseLecturer.Designer.vb">
+      <DependentUpon>FormCourseLecturer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCourseLecturer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormGenerateBroadsheet.Designer.vb">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
     </Compile>
     <Compile Include="FormGenerateBroadsheet.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStudent.Designer.vb">
+      <DependentUpon>FormStudent.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormStudent.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormUploadResult.vb">
@@ -89,12 +107,6 @@
       <DependentUpon>LoginForm1.vb</DependentUpon>
     </Compile>
     <Compile Include="LoginForm1.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MDIParent1Main.Designer.vb">
-      <DependentUpon>MDIParent1Main.vb</DependentUpon>
-    </Compile>
-    <Compile Include="MDIParent1Main.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ModuleResourceConfig.vb" />
@@ -116,17 +128,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormCourseAdviser.resx">
+      <DependentUpon>FormCourseAdviser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCourseLecturer.resx">
+      <DependentUpon>FormCourseLecturer.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormGenerateBroadsheet.resx">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStudent.resx">
+      <DependentUpon>FormStudent.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUploadResult.resx">
       <DependentUpon>FormUploadResult.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm1.resx">
       <DependentUpon>LoginForm1.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MDIParent1Main.resx">
-      <DependentUpon>MDIParent1Main.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
