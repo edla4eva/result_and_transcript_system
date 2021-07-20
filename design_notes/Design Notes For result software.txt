@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+<<<<<<<< HEAD:design_notes/Design Notes For result software.txt
 Result Processing and Transcript System 
 
 Features of Result Part 
@@ -23,3 +25,39 @@ Method of devlopment
 
 
 
+========
+=======
+>>>>>>> 40ad0b8b721fb6da9040dffb2811bf1f00e997f4
+Result Processing and Transcript System 
+
+Features of Result Part 
+1 Generate result from database 
+1 Store result from excel format into database
+2 Generate broadsheet from result in database 
+3 Print broadsheet 
+4 Manually edit/format broadsheet
+5 Generate senate version result 
+6 Synchronize Database with exams and records and cloud 
+
+
+Transcript Part 
+1 Encode transcript processing rules  
+2 Generate transcript from raw scores in database  
+
+
+<<<<<<< HEAD
+Method of development 
+=======
+Method of devlopment 
+>>>>>>> 40ad0b8b721fb6da9040dffb2811bf1f00e997f4
+
+-rapid development method/agile 
+
+
+
+
+
+<<<<<<< HEAD
+>>>>>>>> 40ad0b8b721fb6da9040dffb2811bf1f00e997f4:Design Notes For result software.txt
+=======
+>>>>>>> 40ad0b8b721fb6da9040dffb2811bf1f00e997f4
