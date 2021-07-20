@@ -12,6 +12,10 @@ Public Class MDIParent1Main
         ChildForm.Text = "Window " & m_ChildFormNumber
 
         ChildForm.Show()
+        Dim TxStyle As FontStyle = "Arial.Bold"
+
+
+
     End Sub
 
     Private Sub OpenFile(ByVal sender As Object, ByVal e As EventArgs) Handles OpenToolStripMenuItem.Click, OpenToolStripButton.Click
@@ -102,6 +106,10 @@ Public Class MDIParent1Main
     End Sub
 
     Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles PanelStudent.Paint
+
+    End Sub
+
+    Private Sub ButtonImportCourseRegistrationForm_Click(sender As Object, e As EventArgs) Handles ButtonImportCourseRegistrationForm.Click
 
     End Sub
 End Class

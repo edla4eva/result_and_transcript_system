@@ -486,7 +486,7 @@ Partial Class MDIParent1Main
         Me.ButtonImportCourseRegistrationForm.Name = "ButtonImportCourseRegistrationForm"
         Me.ButtonImportCourseRegistrationForm.Size = New System.Drawing.Size(133, 60)
         Me.ButtonImportCourseRegistrationForm.TabIndex = 7
-        Me.ButtonImportCourseRegistrationForm.Text = "Button Import Course Registration Form"
+        Me.ButtonImportCourseRegistrationForm.Text = " Import Course Registration Form"
         Me.ButtonImportCourseRegistrationForm.UseVisualStyleBackColor = True
         '
         'Button1
