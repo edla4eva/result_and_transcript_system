@@ -31,5 +31,5 @@ Progress Report with Tools:
 + This schema aided in  the design of the relationship between the entities of the tables.
 
 ** Visual Studio:
-+ The design for the desktop application is underway using visuak basic (visual Basic).
++ The design for the desktop application is underway using visual basic (visual Basic).
 
