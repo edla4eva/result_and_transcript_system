@@ -1,0 +1,51 @@
+$browser-context: 16
+
+// font family
+$fontFamily: 'Barlow', sans-serif
+
+*
+    padding: 0
+    margin: 0
+    box-sizing: border-box
+    scroll-behavior: smooth
+    font-size: #{$browser-context}px
+
+    &:focus 
+        outline: none
+        box-shadow: none
+    
+
+    &::before, &::after 
+        box-sizing: border-box
+
+body 
+    height: 100vh
+    position: relative
+    font-family: $fontFamily
+
+ul 
+
+    li 
+        list-style: none
+
+a
+    text-decoration: none
+    cursor: pointer
+
+button
+    cursor: pointer
+
+// input auto fill bg
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus 
+    // animation-name: autofill
+    // animation-fill-mode: both
+    -webkit-box-shadow: 0 0 0 30px white inset !important
+    -webkit-text-fill-color: black !important 

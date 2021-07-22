@@ -1,0 +1,134 @@
+@use 'defaults' as *
+@use 'functions' as *
+@use 'variables' as *
+    
+// font-family form google fonts
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap')
+
+// type scale mixins
+// em funtion was declared in _functions.sass
+// font weights 
+// Regular = 400
+// Medium = 500
+// Semi-Bold = 600
+// Bold = 700
+
+// display type
+//weights: 400 500 600
+@mixin display($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(86px)
+    line-height: em(96px)
+    letter-spacing: em(-1.5px)
+
+//heading type
+//weights: 400 500 600
+@mixin headingOne($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(53px)
+    line-height: em(64px)
+    letter-spacing: em(-0.5px)
+
+//weights: 400 500 600
+@mixin headingTwo($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(43px)
+    line-height: em(56px)
+    letter-spacing: em(0px)
+
+//weights: 400 500 600
+@mixin headingThree($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(30px)
+    line-height: em(40px)
+    letter-spacing: em(0.25px)
+
+//weights: 500 600 700
+@mixin headingFOur($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(24px)
+    line-height: em(32px)
+    letter-spacing: em(0px)
+
+// subtitle type
+//weights: 400 500 600
+@mixin subtitleOne($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(19px)
+    line-height: em(24px)
+    letter-spacing: em(0.2px)
+
+//weights: 400 500 600
+@mixin subtitleTwo($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(17px)
+    line-height: em(20px)
+    letter-spacing: em(0.15px)
+
+// body type
+//weights: 400 700
+@mixin bodyOne($weight, $underline)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(16px)
+    line-height: em(20px)
+    letter-spacing: em(0.5px)
+    // paragraph-spacing: em(12px)
+    text-decoration-line: $underline
+
+//weights: 400 700
+@mixin bodyTwo($weight, $underline)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(14px)
+    line-height: em(16px)
+    letter-spacing: em(0.3px)
+    // paragraph-spacing: em(12px)
+    text-decoration-line: $underline
+
+// button type
+//weights: 600 700
+@mixin buttonOne($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(16px)
+    line-height: em(24px)
+    letter-spacing: em(1.25px)
+
+//weights: 600 700
+@mixin buttonTwo($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(14px)
+    line-height: em(20px)
+    letter-spacing: em(1px)
+
+// caption type
+//weights: 400 500 600
+@mixin caption($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(14px)
+    line-height: em(16px)
+    letter-spacing: em(0.4px)
+
+// overline type
+//weights: 400 500 600
+@mixin overline($weight)
+    font-family: $fontFamily
+    font-weight: #{$weight}
+    font-size: em(13px)
+    line-height: em(16px)
+    letter-spacing: em(1.2px)
+
+// End of type scale mixins
+
+// button mixins
+
