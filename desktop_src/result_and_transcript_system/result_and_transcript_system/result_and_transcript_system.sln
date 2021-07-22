@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "result_and_transcript_system", "result_and_transcript_system\result_and_transcript_system.vbproj", "{6F90B8C0-7AB6-46ED-8465-5C348E4EFD5B}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "result_and_transcript_system", "result_and_transcript_system.vbproj", "{6F90B8C0-7AB6-46ED-8465-5C348E4EFD5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,8 +18,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DC7EE6C1-FB32-479F-8CE5-C10F085C5FFD}
 	EndGlobalSection
 EndGlobal
