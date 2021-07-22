@@ -1,3 +1,6 @@
+Imports result_and_transcript_system.MainForm
+
+
 Public Class LoginForm1
 
     ' TODO: Insert code to perform custom authentication using the provided username and password 
@@ -12,26 +15,21 @@ Public Class LoginForm1
         If Me.UsernameTextBox.Text = "adminCO" And
                 Me.PasswordTextBox.Text = "adminCO" Then
             'If password id correct, show main form 
-            FormCourseAdviser.Show()
-
-
+            MainForm.ChangeMenu("CourseAdviser")
 
         ElseIf Me.UsernameTextBox.Text = "adminST" And
                     Me.PasswordTextBox.Text = "adminST" Then
-            FormStudent.Show()
+            MainForm.ChangeMenu("Student")
 
         ElseIf Me.UsernameTextBox.Text = "adminCL" And
                 Me.PasswordTextBox.Text = "adminCL" Then
-            FormCourseLecturer.Show()
-
-
-
-            Me.Hide()
-            End If
+            MainForm.ChangeMenu("CourseLecturer")
+        End If
 
     End Sub
 
     Private Sub Cancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel.Click
+        MainForm.ChangeMenu("Home")
         Me.Close()
     End Sub
 

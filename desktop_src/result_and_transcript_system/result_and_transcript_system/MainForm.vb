@@ -14,13 +14,14 @@
 
         ' Add any initialization after the InitializeComponent() call.
         leftBorderButton = New Panel
-        leftBorderButton.Size = New Size(7, 65)
+        leftBorderButton.Size = New Size(7, 55)
         SidePanel.Controls.Add(leftBorderButton)
 
     End Sub
 
     Private Sub ActiveButton(senderBtn As Object, customColor As Color)
         If senderBtn IsNot Nothing Then
+            DisableButton()
             currentButton = CType(senderBtn, Button)
             currentButton.BackColor = Color.FromArgb(44, 62, 80)
             currentButton.ForeColor = Color.White
@@ -53,7 +54,7 @@
 
     End Sub
 
-    Private Sub ChangeMenu(menu As String)
+    Public Sub ChangeMenu(menu As String)
         Select Case menu
             Case "Home"
                 addForm(HomeForm)
@@ -61,6 +62,16 @@
                 addForm(LoginForm1)
             Case "CourseAdviser"
                 addForm(FormCourseAdviser)
+            Case "CourseLecturer"
+                addForm(FormCourseLecturer)
+            Case "GenerateBroadsheet"
+                addForm(FormGenerateBroadsheet)
+            Case "CourseAdviser"
+                addForm(FormCourseAdviser)
+            Case "Student"
+                addForm(FormStudent)
+            Case "UploadResult"
+                addForm(FormUploadResult)
         End Select
     End Sub
 
@@ -72,5 +83,9 @@
     Private Sub ButtonUser_Click(sender As Object, e As EventArgs) Handles ButtonUser.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         ChangeMenu("User")
+    End Sub
+
+    Private Sub PanelContainer_Paint(sender As Object, e As PaintEventArgs) Handles PanelContainer.Paint
+
     End Sub
 End Class

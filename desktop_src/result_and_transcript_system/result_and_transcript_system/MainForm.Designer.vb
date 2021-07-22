@@ -32,9 +32,9 @@ Partial Class MainForm
         '
         'PanelContainer
         '
-        Me.PanelContainer.Location = New System.Drawing.Point(140, 115)
+        Me.PanelContainer.Location = New System.Drawing.Point(140, 73)
         Me.PanelContainer.Name = "PanelContainer"
-        Me.PanelContainer.Size = New System.Drawing.Size(638, 311)
+        Me.PanelContainer.Size = New System.Drawing.Size(638, 445)
         Me.PanelContainer.TabIndex = 5
         '
         'SidePanel
@@ -45,7 +45,7 @@ Partial Class MainForm
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Left
         Me.SidePanel.Location = New System.Drawing.Point(0, 15)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 423)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 515)
         Me.SidePanel.TabIndex = 4
         '
         'ButtonUser
@@ -87,12 +87,14 @@ Partial Class MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(790, 438)
+        Me.ClientSize = New System.Drawing.Size(790, 530)
         Me.Controls.Add(Me.PanelContainer)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.Panel1)
+        Me.ForeColor = System.Drawing.Color.Transparent
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "MainForm"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.Text = "MainForm"
         Me.SidePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
