@@ -3,6 +3,30 @@
     Private currentButton As Button
     Private leftBorderButton As Panel
 
+    Const WM_NCHITTEST As Integer = &H84
+    Const HTCLIENT As Integer = 1
+    Const HTCAPTION As Integer = 2
+
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        MyBase.WndProc(m)
+
+        Select Case m.Msg
+            Case WM_NCHITTEST
+                If m.Result = CType(HTCLIENT, Integer) Then
+                    m.Result = CType(HTCAPTION, IntPtr)
+                End If
+        End Select
+
+    End Sub
+
+    Protected Overrides ReadOnly Property CreateParams As CreateParams
+        Get
+            Dim cp As CreateParams = MyBase.CreateParams
+            cp.Style = cp.Style Or &H40000
+            Return cp
+        End Get
+    End Property
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ChangeMenu("Home")
     End Sub
@@ -88,4 +112,34 @@
     Private Sub PanelContainer_Paint(sender As Object, e As PaintEventArgs) Handles PanelContainer.Paint
 
     End Sub
+
+    Private Sub MainForm_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
+
+    End Sub
+
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Dim draggable As Boolean
+    Dim mouseX As Integer
+    Dim mouseY As Integer
+
+    Private Sub Panel1_MouseDown(sender As Object, e As MouseEventArgs) Handles Panel1.MouseDown
+        draggable = True
+        mouseX = Cursor.Position.X - Me.Left
+        mouseY = Cursor.Position.Y - Me.Top
+    End Sub
+
+    Private Sub Panel1_MouseMove(sender As Object, e As MouseEventArgs) Handles Panel1.MouseMove
+        If draggable Then
+            Me.Top = Cursor.Position.Y - mouseY
+            Me.Left = Cursor.Position.X - mouseX
+        End If
+    End Sub
+
+    Private Sub Panel1_MouseUp(sender As Object, e As MouseEventArgs) Handles Panel1.MouseUp
+        draggable = False
+    End Sub
 End Class
+

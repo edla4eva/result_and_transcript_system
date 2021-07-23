@@ -94,12 +94,6 @@
     <Compile Include="FormGenerateBroadsheet.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSize.Designer.vb">
-      <DependentUpon>FormSize.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FormSize.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FormStudent.Designer.vb">
       <DependentUpon>FormStudent.vb</DependentUpon>
     </Compile>
@@ -159,9 +153,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormGenerateBroadsheet.resx">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormSize.resx">
-      <DependentUpon>FormSize.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormStudent.resx">
       <DependentUpon>FormStudent.vb</DependentUpon>
