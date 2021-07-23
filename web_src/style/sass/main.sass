@@ -4,6 +4,9 @@
 @use 'partials/mixins' as *
 @use 'partials/placeholders' as *
 
+/* button properties
+
+/* for primary filled buttons
 .PriFilledBtn
     color: $primary001
     background-color: $primary002Normal
@@ -11,6 +14,7 @@
     &:hover
         background-color: $primary002Hover
 
+/* for primary outlined buttons
 .PriOutlinedBtn
     color: $primary002Normal
     background-color: $white
@@ -19,3 +23,65 @@
     &:hover
         background-color: $grayLight
 
+/* for fixed or wide buttons
+.fixedBtn
+    width: em(308px)
+
+/* regular buttons
+/* extra large button
+.xlBtn
+    @include buttonOne(600)
+    padding: $xl-dbp
+
+/* large button
+.lBtn
+    @include buttonOne(700)
+    padding: $l-dbp
+
+/* medium button
+.mBtn
+    @include buttonTwo(600)
+    padding: $m-dbp
+
+/* small button
+.sBtn
+    @include buttonTwo(700)
+    padding: $s-dbp
+
+.xlBtn, .lBtn, .mBtn, .sBtn
+    gap: em(12px)
+
+/* icon-only buttons
+/* extra large
+.xlIconBtn
+    padding: $xl-ibp
+
+/* large
+.lIconBtn
+    padding: $l-ibp
+
+/* medium
+.mIconBtn
+    padding: $m-ibp
+
+/* small
+.sIconBtn
+    padding: $s-ibp
+
+.xliconBtn, .lIconBtn, .mIconBtn, .sIconBtn
+    display: flex
+    justify-content: center
+    align-items: center
+
+/* with svg
+.xlBtn svg, .xlIconBtn svg, .lBtn svg, .lIconBtn svg
+    width: em(24px)
+    height: em(24px)
+
+.mBtn svg, .mIconBtn svg
+    width: em(20px)
+    height: em(20px)
+
+.sBtn svg, .sIconBtn svg
+    width: em(16px)
+    height: em(16px)
