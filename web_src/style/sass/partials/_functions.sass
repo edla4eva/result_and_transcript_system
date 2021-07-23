@@ -11,3 +11,11 @@
     $context: $context * 1px
 
   @return $pixels / $context * 1em
+
+$icon-sizes: 32, 24, 20, 16
+
+@each $i in $icon-sizes
+  .iconSize-#{$i}
+    width: em($i)
+    height: em($i)
+   

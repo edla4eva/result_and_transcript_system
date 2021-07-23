@@ -1,8 +1,21 @@
 @use 'partials/defaults' as *
+@use 'partials/variables' as *
 @use 'partials/functions' as *
 @use 'partials/mixins' as *
 @use 'partials/placeholders' as *
 
+.PriFilledBtn
+    color: $primary001
+    background-color: $primary002Normal
 
-// h1
-//     @extend %lBtn
+    &:hover
+        background-color: $primary002Hover
+
+.PriOutlinedBtn
+    color: $primary002Normal
+    background-color: $white
+    border: em(2px) solid $primary002Normal
+
+    &:hover
+        background-color: $grayLight
+
