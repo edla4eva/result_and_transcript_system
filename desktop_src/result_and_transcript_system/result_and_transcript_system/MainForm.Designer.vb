@@ -32,9 +32,10 @@ Partial Class MainForm
         '
         'PanelContainer
         '
-        Me.PanelContainer.Location = New System.Drawing.Point(140, 115)
+        Me.PanelContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelContainer.Location = New System.Drawing.Point(134, 30)
         Me.PanelContainer.Name = "PanelContainer"
-        Me.PanelContainer.Size = New System.Drawing.Size(638, 311)
+        Me.PanelContainer.Size = New System.Drawing.Size(656, 500)
         Me.PanelContainer.TabIndex = 5
         '
         'SidePanel
@@ -43,9 +44,9 @@ Partial Class MainForm
         Me.SidePanel.Controls.Add(Me.ButtonUser)
         Me.SidePanel.Controls.Add(Me.ButtonHome)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Left
-        Me.SidePanel.Location = New System.Drawing.Point(0, 15)
+        Me.SidePanel.Location = New System.Drawing.Point(0, 30)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 423)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 500)
         Me.SidePanel.TabIndex = 4
         '
         'ButtonUser
@@ -54,7 +55,7 @@ Partial Class MainForm
         Me.ButtonUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonUser.ForeColor = System.Drawing.Color.White
-        Me.ButtonUser.Location = New System.Drawing.Point(3, 184)
+        Me.ButtonUser.Location = New System.Drawing.Point(3, 161)
         Me.ButtonUser.Name = "ButtonUser"
         Me.ButtonUser.Size = New System.Drawing.Size(128, 55)
         Me.ButtonUser.TabIndex = 1
@@ -80,19 +81,23 @@ Partial Class MainForm
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(790, 15)
+        Me.Panel1.Size = New System.Drawing.Size(790, 30)
         Me.Panel1.TabIndex = 3
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(790, 438)
+        Me.BackColor = System.Drawing.SystemColors.Window
+        Me.ClientSize = New System.Drawing.Size(790, 530)
         Me.Controls.Add(Me.PanelContainer)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.Panel1)
+        Me.ForeColor = System.Drawing.Color.Transparent
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "MainForm"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MainForm"
         Me.SidePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
