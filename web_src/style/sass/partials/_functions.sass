@@ -1,0 +1,23 @@
+@use 'defaults' as *
+
+//*px to em conversion mixin
+// $browser-context was declared in _defaults.sass
+
+@function em($pixels, $context: $browser-context) 
+  @if (unitless($pixels)) 
+    $pixels: $pixels * 1px
+
+  @if (unitless($context)) 
+    $context: $context * 1px
+
+  @return $pixels / $context * 1em
+
+/* icon sizes
+/* just add class to svg
+$icon-sizes: 32, 24, 20, 16
+
+@each $i in $icon-sizes
+  .iconSize-#{$i}
+    width: em($i)
+    height: em($i)
+   
