@@ -27,7 +27,7 @@ Partial Class FormCourseLecturer
         '
         'ButtonUploadResult
         '
-        Me.ButtonUploadResult.Location = New System.Drawing.Point(12, 63)
+        Me.ButtonUploadResult.Location = New System.Drawing.Point(59, 121)
         Me.ButtonUploadResult.Name = "ButtonUploadResult"
         Me.ButtonUploadResult.Size = New System.Drawing.Size(156, 44)
         Me.ButtonUploadResult.TabIndex = 0
@@ -40,6 +40,7 @@ Partial Class FormCourseLecturer
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(284, 261)
         Me.Controls.Add(Me.ButtonUploadResult)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormCourseLecturer"
         Me.Text = "FormCourseLecturer"
         Me.ResumeLayout(False)
