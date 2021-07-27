@@ -17,3 +17,9 @@ C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_trans
 C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.exe.licenses
 C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.HomeForm.resources
 C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.MainForm.resources
+C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.DataSet.dll
+C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.dll
+C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.pdb
+C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.xml
+C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.DataSet.pdb
+C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.DataSet.xml
