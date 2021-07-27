@@ -24,12 +24,12 @@ Partial Class LoginForm1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.LoginMiddlePanel = New System.Windows.Forms.Panel()
-        Me.PasswordTextBox = New System.Windows.Forms.TextBox()
-        Me.PasswordLabel = New System.Windows.Forms.Label()
-        Me.UsernameTextBox = New System.Windows.Forms.TextBox()
         Me.UsernameLabel = New System.Windows.Forms.Label()
-        Me.OK = New System.Windows.Forms.Button()
-        Me.Cancel = New System.Windows.Forms.Button()
+        Me.UsernameTextBox = New System.Windows.Forms.TextBox()
+        Me.LoginCancelButton = New System.Windows.Forms.Button()
+        Me.PasswordLabel = New System.Windows.Forms.Label()
+        Me.PasswordTextBox = New System.Windows.Forms.TextBox()
+        Me.LoginOKButton = New System.Windows.Forms.Button()
         Me.LoginMiddlePanel.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -38,42 +38,15 @@ Partial Class LoginForm1
         Me.LoginMiddlePanel.AutoSize = True
         Me.LoginMiddlePanel.Controls.Add(Me.UsernameLabel)
         Me.LoginMiddlePanel.Controls.Add(Me.UsernameTextBox)
-        Me.LoginMiddlePanel.Controls.Add(Me.Cancel)
+        Me.LoginMiddlePanel.Controls.Add(Me.LoginCancelButton)
         Me.LoginMiddlePanel.Controls.Add(Me.PasswordLabel)
         Me.LoginMiddlePanel.Controls.Add(Me.PasswordTextBox)
-        Me.LoginMiddlePanel.Controls.Add(Me.OK)
+        Me.LoginMiddlePanel.Controls.Add(Me.LoginOKButton)
         Me.LoginMiddlePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LoginMiddlePanel.Location = New System.Drawing.Point(0, 0)
         Me.LoginMiddlePanel.Name = "LoginMiddlePanel"
         Me.LoginMiddlePanel.Size = New System.Drawing.Size(643, 397)
         Me.LoginMiddlePanel.TabIndex = 16
-        '
-        'PasswordTextBox
-        '
-        Me.PasswordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.PasswordTextBox.Location = New System.Drawing.Point(146, 188)
-        Me.PasswordTextBox.Name = "PasswordTextBox"
-        Me.PasswordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.PasswordTextBox.Size = New System.Drawing.Size(274, 20)
-        Me.PasswordTextBox.TabIndex = 9
-        '
-        'PasswordLabel
-        '
-        Me.PasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.PasswordLabel.Location = New System.Drawing.Point(143, 164)
-        Me.PasswordLabel.Name = "PasswordLabel"
-        Me.PasswordLabel.Size = New System.Drawing.Size(274, 21)
-        Me.PasswordLabel.TabIndex = 8
-        Me.PasswordLabel.Text = "&Password"
-        Me.PasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'UsernameTextBox
-        '
-        Me.UsernameTextBox.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.UsernameTextBox.Location = New System.Drawing.Point(146, 141)
-        Me.UsernameTextBox.Name = "UsernameTextBox"
-        Me.UsernameTextBox.Size = New System.Drawing.Size(274, 20)
-        Me.UsernameTextBox.TabIndex = 7
         '
         'UsernameLabel
         '
@@ -85,24 +58,51 @@ Partial Class LoginForm1
         Me.UsernameLabel.Text = "&User name"
         Me.UsernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'OK
+        'UsernameTextBox
         '
-        Me.OK.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK.Location = New System.Drawing.Point(308, 239)
-        Me.OK.Name = "OK"
-        Me.OK.Size = New System.Drawing.Size(109, 23)
-        Me.OK.TabIndex = 10
-        Me.OK.Text = "&OK"
+        Me.UsernameTextBox.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.UsernameTextBox.Location = New System.Drawing.Point(146, 141)
+        Me.UsernameTextBox.Name = "UsernameTextBox"
+        Me.UsernameTextBox.Size = New System.Drawing.Size(274, 20)
+        Me.UsernameTextBox.TabIndex = 7
         '
-        'Cancel
+        'LoginCancelButton
         '
-        Me.Cancel.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel.Location = New System.Drawing.Point(146, 239)
-        Me.Cancel.Name = "Cancel"
-        Me.Cancel.Size = New System.Drawing.Size(110, 23)
-        Me.Cancel.TabIndex = 11
-        Me.Cancel.Text = "&Cancel"
+        Me.LoginCancelButton.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LoginCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.LoginCancelButton.Location = New System.Drawing.Point(146, 239)
+        Me.LoginCancelButton.Name = "LoginCancelButton"
+        Me.LoginCancelButton.Size = New System.Drawing.Size(110, 23)
+        Me.LoginCancelButton.TabIndex = 11
+        Me.LoginCancelButton.Text = "&Cancel"
+        '
+        'PasswordLabel
+        '
+        Me.PasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PasswordLabel.Location = New System.Drawing.Point(143, 164)
+        Me.PasswordLabel.Name = "PasswordLabel"
+        Me.PasswordLabel.Size = New System.Drawing.Size(274, 21)
+        Me.PasswordLabel.TabIndex = 8
+        Me.PasswordLabel.Text = "&Password"
+        Me.PasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'PasswordTextBox
+        '
+        Me.PasswordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PasswordTextBox.Location = New System.Drawing.Point(146, 188)
+        Me.PasswordTextBox.Name = "PasswordTextBox"
+        Me.PasswordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.PasswordTextBox.Size = New System.Drawing.Size(274, 20)
+        Me.PasswordTextBox.TabIndex = 9
+        '
+        'LoginOKButton
+        '
+        Me.LoginOKButton.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LoginOKButton.Location = New System.Drawing.Point(308, 239)
+        Me.LoginOKButton.Name = "LoginOKButton"
+        Me.LoginOKButton.Size = New System.Drawing.Size(109, 23)
+        Me.LoginOKButton.TabIndex = 10
+        Me.LoginOKButton.Text = "&OK"
         '
         'LoginForm1
         '
@@ -124,8 +124,8 @@ Partial Class LoginForm1
 
     End Sub
     Friend WithEvents LoginMiddlePanel As Panel
-    Friend WithEvents Cancel As Button
-    Friend WithEvents OK As Button
+    Friend WithEvents LoginCancelButton As Button
+    Friend WithEvents LoginOKButton As Button
     Friend WithEvents LogInFlowLayoutPanel1 As FlowLayoutPanel
     Friend WithEvents UsernameLabel As Label
     Friend WithEvents UsernameTextBox As TextBox
