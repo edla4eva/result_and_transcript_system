@@ -29,6 +29,7 @@ Partial Class FormStudent
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(725, 361)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormStudent"
         Me.Text = "FormStudent"
         Me.ResumeLayout(False)
