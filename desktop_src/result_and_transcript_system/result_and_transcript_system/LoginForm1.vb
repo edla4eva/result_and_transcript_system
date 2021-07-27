@@ -34,7 +34,7 @@ Public Class LoginForm1
 
 
     Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs)
-        ' Me.BackColor = RGBColors.colorCrimson
+        Me.BackColor = RGBColors.colorBlue
     End Sub
 
 
@@ -72,5 +72,9 @@ Public Class LoginForm1
         'Changes the panel to the home form
         MainForm.ChangeMenu("Home")
         Me.Close()
+    End Sub
+
+    Private Sub UsernameLabel_Click_1(sender As Object, e As EventArgs) Handles UsernameLabel.Click
+
     End Sub
 End Class
