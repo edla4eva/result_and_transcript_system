@@ -23,3 +23,7 @@ C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_trans
 C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.xml
 C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.DataSet.pdb
 C:\Users\Ohiosumua Daniel\Documents\Visual Studio 2015\Projects\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.DataSet.xml
+C:\Users\Ohiosumua Daniel\Documents\GitHub\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\result_and_transcript_system.exe.config
+C:\Users\Ohiosumua Daniel\Documents\GitHub\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.exe
+C:\Users\Ohiosumua Daniel\Documents\GitHub\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.xml
+C:\Users\Ohiosumua Daniel\Documents\GitHub\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.pdb
