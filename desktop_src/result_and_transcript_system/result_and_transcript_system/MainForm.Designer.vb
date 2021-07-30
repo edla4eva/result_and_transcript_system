@@ -32,11 +32,10 @@ Partial Class MainForm
         '
         'PanelContainer
         '
-        Me.PanelContainer.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelContainer.Location = New System.Drawing.Point(134, 30)
+        Me.PanelContainer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelContainer.Location = New System.Drawing.Point(137, 30)
         Me.PanelContainer.Name = "PanelContainer"
-        Me.PanelContainer.Size = New System.Drawing.Size(656, 500)
+        Me.PanelContainer.Size = New System.Drawing.Size(715, 508)
         Me.PanelContainer.TabIndex = 5
         '
         'SidePanel
@@ -48,7 +47,7 @@ Partial Class MainForm
         Me.SidePanel.Controls.Add(Me.ButtonHome)
         Me.SidePanel.Location = New System.Drawing.Point(0, 30)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 500)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 508)
         Me.SidePanel.TabIndex = 4
         '
         'ButtonUser
@@ -84,7 +83,7 @@ Partial Class MainForm
         Me.Panel1.BackColor = System.Drawing.Color.Crimson
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(790, 30)
+        Me.Panel1.Size = New System.Drawing.Size(864, 30)
         Me.Panel1.TabIndex = 3
         '
         'MainForm
@@ -92,7 +91,7 @@ Partial Class MainForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
-        Me.ClientSize = New System.Drawing.Size(790, 530)
+        Me.ClientSize = New System.Drawing.Size(864, 538)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.PanelContainer)
