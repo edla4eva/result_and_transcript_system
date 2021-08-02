@@ -33,9 +33,11 @@ Partial Class MainForm
         'PanelContainer
         '
         Me.PanelContainer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelContainer.BackColor = System.Drawing.Color.Transparent
+        Me.PanelContainer.ForeColor = System.Drawing.Color.Black
         Me.PanelContainer.Location = New System.Drawing.Point(137, 30)
         Me.PanelContainer.Name = "PanelContainer"
-        Me.PanelContainer.Size = New System.Drawing.Size(715, 508)
+        Me.PanelContainer.Size = New System.Drawing.Size(724, 508)
         Me.PanelContainer.TabIndex = 5
         '
         'SidePanel
@@ -92,10 +94,10 @@ Partial Class MainForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Window
         Me.ClientSize = New System.Drawing.Size(864, 538)
+        Me.Controls.Add(Me.PanelContainer)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
-        Me.Controls.Add(Me.PanelContainer)
-        Me.ForeColor = System.Drawing.Color.Transparent
+        Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "MainForm"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show

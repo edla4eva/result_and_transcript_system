@@ -22,6 +22,7 @@ Partial Class FormCourseLecturer
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.ButtonUploadResult = New System.Windows.Forms.Button()
         Me.CourseLecturerDataGrid = New System.Windows.Forms.DataGridView()
         Me.CourseLecturerFileNameLabel = New System.Windows.Forms.Label()
@@ -44,8 +45,18 @@ Partial Class FormCourseLecturer
         '
         'CourseLecturerDataGrid
         '
+        Me.CourseLecturerDataGrid.BackgroundColor = System.Drawing.Color.SkyBlue
+        Me.CourseLecturerDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.CourseLecturerDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.CourseLecturerDataGrid.GridColor = System.Drawing.SystemColors.ActiveCaptionText
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.DimGray
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.CourseLecturerDataGrid.DefaultCellStyle = DataGridViewCellStyle3
+        Me.CourseLecturerDataGrid.GridColor = System.Drawing.SystemColors.ActiveBorder
         Me.CourseLecturerDataGrid.Location = New System.Drawing.Point(12, 7)
         Me.CourseLecturerDataGrid.Name = "CourseLecturerDataGrid"
         Me.CourseLecturerDataGrid.Size = New System.Drawing.Size(781, 319)
@@ -82,7 +93,7 @@ Partial Class FormCourseLecturer
         Me.CourseLectureBrowseButton.Name = "CourseLectureBrowseButton"
         Me.CourseLectureBrowseButton.Size = New System.Drawing.Size(102, 20)
         Me.CourseLectureBrowseButton.TabIndex = 5
-        Me.CourseLectureBrowseButton.Text = "Upload"
+        Me.CourseLectureBrowseButton.Text = "Open File"
         Me.CourseLectureBrowseButton.UseVisualStyleBackColor = True
         '
         'CourseLecturerSheetLabel
@@ -99,14 +110,14 @@ Partial Class FormCourseLecturer
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(805, 470)
+        Me.Controls.Add(Me.CourseLecturerDataGrid)
         Me.Controls.Add(Me.CourseLecturerSheetLabel)
         Me.Controls.Add(Me.CourseLectureBrowseButton)
         Me.Controls.Add(Me.CourseLectureTextbox)
         Me.Controls.Add(Me.CourseLecturerComboSheet)
         Me.Controls.Add(Me.CourseLecturerFileNameLabel)
-        Me.Controls.Add(Me.CourseLecturerDataGrid)
         Me.Controls.Add(Me.ButtonUploadResult)
-        Me.ForeColor = System.Drawing.Color.Transparent
+        Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormCourseLecturer"
         Me.Text = "FormCourseLecturer"
