@@ -51,6 +51,7 @@ Partial Class LoginForm1
         'UsernameLabel
         '
         Me.UsernameLabel.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.UsernameLabel.ForeColor = System.Drawing.Color.Black
         Me.UsernameLabel.Location = New System.Drawing.Point(146, 115)
         Me.UsernameLabel.Name = "UsernameLabel"
         Me.UsernameLabel.Size = New System.Drawing.Size(274, 23)
@@ -70,6 +71,7 @@ Partial Class LoginForm1
         '
         Me.LoginCancelButton.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.LoginCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.LoginCancelButton.ForeColor = System.Drawing.Color.Black
         Me.LoginCancelButton.Location = New System.Drawing.Point(146, 239)
         Me.LoginCancelButton.Name = "LoginCancelButton"
         Me.LoginCancelButton.Size = New System.Drawing.Size(110, 23)
@@ -79,6 +81,7 @@ Partial Class LoginForm1
         'PasswordLabel
         '
         Me.PasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PasswordLabel.ForeColor = System.Drawing.Color.Black
         Me.PasswordLabel.Location = New System.Drawing.Point(143, 164)
         Me.PasswordLabel.Name = "PasswordLabel"
         Me.PasswordLabel.Size = New System.Drawing.Size(274, 21)
@@ -98,6 +101,7 @@ Partial Class LoginForm1
         'LoginOKButton
         '
         Me.LoginOKButton.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LoginOKButton.ForeColor = System.Drawing.Color.Black
         Me.LoginOKButton.Location = New System.Drawing.Point(308, 239)
         Me.LoginOKButton.Name = "LoginOKButton"
         Me.LoginOKButton.Size = New System.Drawing.Size(109, 23)
