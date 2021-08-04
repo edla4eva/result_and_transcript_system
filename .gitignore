@@ -17,6 +17,7 @@
 mono_crash.*
 
 # Build results
+/obj
 /bin
 /object
 [Dd]ebug/
