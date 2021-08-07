@@ -27,7 +27,10 @@ Partial Class MainForm
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonHome = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ButtonExit = New System.Windows.Forms.Button()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.SidePanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelContainer
@@ -44,6 +47,7 @@ Partial Class MainForm
         Me.SidePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonExit)
         Me.SidePanel.Controls.Add(Me.ButtonUser)
         Me.SidePanel.Controls.Add(Me.ButtonHome)
         Me.SidePanel.Location = New System.Drawing.Point(0, 30)
@@ -82,10 +86,36 @@ Partial Class MainForm
         Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.BackColor = System.Drawing.Color.Crimson
+        Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(790, 30)
         Me.Panel1.TabIndex = 3
+        '
+        'ButtonExit
+        '
+        Me.ButtonExit.FlatAppearance.BorderSize = 0
+        Me.ButtonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonExit.ForeColor = System.Drawing.Color.White
+        Me.ButtonExit.Location = New System.Drawing.Point(3, 223)
+        Me.ButtonExit.Name = "ButtonExit"
+        Me.ButtonExit.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonExit.TabIndex = 2
+        Me.ButtonExit.Text = "Exit"
+        Me.ButtonExit.UseVisualStyleBackColor = True
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.DimGray
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DarkRed
+        Me.LinkLabel1.Location = New System.Drawing.Point(731, 9)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(49, 13)
+        Me.LinkLabel1.TabIndex = 0
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Close (X)"
         '
         'MainForm
         '
@@ -103,6 +133,8 @@ Partial Class MainForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MainForm"
         Me.SidePanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -112,4 +144,6 @@ Partial Class MainForm
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ButtonUser As Button
     Friend WithEvents ButtonHome As Button
+    Friend WithEvents ButtonExit As Button
+    Friend WithEvents LinkLabel1 As LinkLabel
 End Class
