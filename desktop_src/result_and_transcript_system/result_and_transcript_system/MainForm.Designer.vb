@@ -24,10 +24,10 @@ Partial Class MainForm
     Private Sub InitializeComponent()
         Me.PanelContainer = New System.Windows.Forms.Panel()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonExit = New System.Windows.Forms.Button()
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonHome = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ButtonExit = New System.Windows.Forms.Button()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.SidePanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -54,6 +54,19 @@ Partial Class MainForm
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 500)
         Me.SidePanel.TabIndex = 4
+        '
+        'ButtonExit
+        '
+        Me.ButtonExit.FlatAppearance.BorderSize = 0
+        Me.ButtonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonExit.ForeColor = System.Drawing.Color.White
+        Me.ButtonExit.Location = New System.Drawing.Point(3, 223)
+        Me.ButtonExit.Name = "ButtonExit"
+        Me.ButtonExit.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonExit.TabIndex = 2
+        Me.ButtonExit.Text = "Exit"
+        Me.ButtonExit.UseVisualStyleBackColor = True
         '
         'ButtonUser
         '
@@ -92,22 +105,10 @@ Partial Class MainForm
         Me.Panel1.Size = New System.Drawing.Size(790, 30)
         Me.Panel1.TabIndex = 3
         '
-        'ButtonExit
-        '
-        Me.ButtonExit.FlatAppearance.BorderSize = 0
-        Me.ButtonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonExit.ForeColor = System.Drawing.Color.White
-        Me.ButtonExit.Location = New System.Drawing.Point(3, 223)
-        Me.ButtonExit.Name = "ButtonExit"
-        Me.ButtonExit.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonExit.TabIndex = 2
-        Me.ButtonExit.Text = "Exit"
-        Me.ButtonExit.UseVisualStyleBackColor = True
-        '
         'LinkLabel1
         '
         Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.DimGray
+        Me.LinkLabel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DarkRed
         Me.LinkLabel1.Location = New System.Drawing.Point(731, 9)
