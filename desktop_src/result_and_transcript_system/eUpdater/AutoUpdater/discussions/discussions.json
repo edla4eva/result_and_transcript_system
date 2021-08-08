@@ -1,0 +1,27 @@
+[
+  {
+    "Id": "231399",
+    "Title": "Sample code of the server side XML",
+    "LatestDate": "2015-03-09T03:06:41.887-07:00"
+  },
+  {
+    "Id": "231729",
+    "Title": "Signature validation",
+    "LatestDate": "2015-03-09T03:07:01.607-07:00"
+  },
+  {
+    "Id": "248180",
+    "Title": "AutoupdateService.xml",
+    "LatestDate": "2012-08-02T00:22:16.02-07:00"
+  },
+  {
+    "Id": "432379",
+    "Title": " <ServerUrl> Example is required as well",
+    "LatestDate": "2015-03-09T03:00:56.99-07:00"
+  },
+  {
+    "Id": "577568",
+    "Title": "Implementation",
+    "LatestDate": "2015-03-09T02:57:55.017-07:00"
+  }
+]

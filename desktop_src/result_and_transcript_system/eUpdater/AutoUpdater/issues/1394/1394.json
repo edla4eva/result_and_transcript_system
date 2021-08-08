@@ -1,0 +1,50 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": null,
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "Hi there,\n\nThis is a very powerfull app and I am impressed the way it is working smoothly. I was trying to check it with my project but I observed that it is not downloading the contents of an file if it contains XML. I tried to search on google why it is happening, but unable to get any solution.\n\nCan you help me out?",
+    "LastUpdatedDate": "2015-03-09T03:09:17.167-07:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Low",
+      "Severity": 50,
+      "Id": 1
+    },
+    "ProjectName": "AutoUpdater",
+    "ReportedDate": "2012-12-29T00:48:42.523-08:00",
+    "Status": {
+      "Name": "Proposed",
+      "Id": 1
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "Why it is not downloading files having XML content?",
+    "Type": {
+      "Name": "Issue",
+      "Id": 3
+    },
+    "VoteCount": 1,
+    "Id": 1394
+  },
+  "FileAttachments": [],
+  "Comments": [
+    {
+      "Message": "can you help me understand it. How can i use it in my project please i need help. i wanna use it but need help",
+      "PostedDate": "2015-03-09T03:09:09.26-07:00",
+      "Id": -2147483648
+    },
+    {
+      "Message": "can you help me understand it. How can i use it in my project please i need help. i wanna use it but need help",
+      "PostedDate": "2015-03-09T03:09:17.167-07:00",
+      "Id": -2147483648
+    }
+  ]
+}

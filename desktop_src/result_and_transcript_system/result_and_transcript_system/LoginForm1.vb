@@ -52,8 +52,8 @@ Public Class LoginForm1
     'This is for when the ok button is clicked
     Private Sub OK_Click(sender As Object, e As EventArgs) Handles LoginOKButton.Click
         'This is an if statement to check if the username and password is correct
-        If Me.UsernameTextBox.Text = "adminCO" And
-                Me.PasswordTextBox.Text = "adminCO" Then
+        If Me.UsernameTextBox.Text = "adminCA" And
+                Me.PasswordTextBox.Text = "adminCA" Then
             'If password id correct, change the panel menu
             MainForm.ChangeMenu("CourseAdviser")    'This passes the form name to the changeMenu method in the mainForm
 

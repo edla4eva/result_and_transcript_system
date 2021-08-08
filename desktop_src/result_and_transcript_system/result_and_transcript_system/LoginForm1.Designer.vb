@@ -70,11 +70,12 @@ Partial Class LoginForm1
         '
         Me.LoginCancelButton.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.LoginCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.LoginCancelButton.Location = New System.Drawing.Point(146, 239)
+        Me.LoginCancelButton.Location = New System.Drawing.Point(137, 309)
         Me.LoginCancelButton.Name = "LoginCancelButton"
-        Me.LoginCancelButton.Size = New System.Drawing.Size(110, 23)
+        Me.LoginCancelButton.Size = New System.Drawing.Size(280, 51)
         Me.LoginCancelButton.TabIndex = 11
         Me.LoginCancelButton.Text = "&Cancel"
+        Me.LoginCancelButton.Visible = False
         '
         'PasswordLabel
         '
@@ -98,9 +99,9 @@ Partial Class LoginForm1
         'LoginOKButton
         '
         Me.LoginOKButton.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.LoginOKButton.Location = New System.Drawing.Point(308, 239)
+        Me.LoginOKButton.Location = New System.Drawing.Point(137, 233)
         Me.LoginOKButton.Name = "LoginOKButton"
-        Me.LoginOKButton.Size = New System.Drawing.Size(109, 23)
+        Me.LoginOKButton.Size = New System.Drawing.Size(280, 51)
         Me.LoginOKButton.TabIndex = 10
         Me.LoginOKButton.Text = "&OK"
         '

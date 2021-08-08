@@ -85,6 +85,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassAnswerEventArgs.vb" />
+    <Compile Include="ClassExcelResult.vb" />
     <Compile Include="FormCourseAdviser.Designer.vb">
       <DependentUpon>FormCourseAdviser.vb</DependentUpon>
     </Compile>
@@ -134,6 +136,7 @@
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ModuleNetworkUtility.vb" />
     <Compile Include="ModuleResourceConfig.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

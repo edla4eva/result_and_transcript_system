@@ -1,0 +1,39 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": null,
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "1. Updater cannot update application each time user runs application.\n2. Dependency from assembly is a big drawback. If your updater will be a standalone application - it can update itself and target application. And any other application will not have to be .Net2 (separation from application)\n3. If your Updater requires admin rights to store files in programfiles or for selfupdate - it will be not usable for production deployment applications.\n4. Is there a rollback for previous versions???",
+    "LastUpdatedDate": "2013-02-14T13:12:40.127-08:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Low",
+      "Severity": 50,
+      "Id": 1
+    },
+    "ProjectName": "AutoUpdater",
+    "ReportedDate": "2010-10-20T03:45:26.523-07:00",
+    "Status": {
+      "Name": "Proposed",
+      "Id": 1
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "My thoughs about updater",
+    "Type": {
+      "Name": "Issue",
+      "Id": 3
+    },
+    "VoteCount": 1,
+    "Id": 410
+  },
+  "FileAttachments": [],
+  "Comments": []
+}

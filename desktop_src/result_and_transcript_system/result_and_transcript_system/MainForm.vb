@@ -103,7 +103,7 @@
             Case "CourseAdviser"
                 addForm(FormCourseAdviser)
             Case "CourseLecturer"
-                addForm(FormCourseLecturer)
+                addForm(FormUploadResult)
             Case "GenerateBroadsheet"
                 addForm(FormGenerateBroadsheet)
             Case "CourseAdviser"

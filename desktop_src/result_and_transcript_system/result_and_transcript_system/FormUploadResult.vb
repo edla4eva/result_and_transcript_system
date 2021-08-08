@@ -11,6 +11,8 @@
             resultFileName = FileOpenDialogBroadsheet.FileName()
         End If
         TextBoxExcelFilename.Text = resultFileName
+        Dim myDataSet As DataSet = objResult.getFromDBResultssDataset
+        DataGridView1.DataSource = myDataSet.Tables("TableResults").DefaultView
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBoxExcelFilename.TextChanged
