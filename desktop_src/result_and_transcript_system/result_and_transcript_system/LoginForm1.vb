@@ -17,11 +17,6 @@ Public Class LoginForm1
 
 
 
-    Private Sub LoginMiddlePanel_Paint(sender As Object, e As PaintEventArgs) Handles LoginMiddlePanel.Paint
-        'Me.BackColor = RGBColors.colorBlack2
-
-    End Sub
-
     'This is for when the ok button is clicked
     Private Sub OK_Click(sender As Object, e As EventArgs) Handles LoginOKButton.Click
         'This is an if statement to check if the username and password is correct
@@ -49,5 +44,9 @@ Public Class LoginForm1
 
     Private Sub LoginForm1_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.BackColor = RGBColors.colorBlack2
+    End Sub
+
+    Private Sub LoginForm1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
+        ' If e.KeyChar = Keys.Return Then AcceptButton.PerformClick()
     End Sub
 End Class

@@ -27,11 +27,11 @@ Partial Class FormUploadResult
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonResultList = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonBrowse = New System.Windows.Forms.Button()
-        Me.ButtonResultList = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.SuspendLayout()
@@ -83,6 +83,19 @@ Partial Class FormUploadResult
         Me.SidePanel.Size = New System.Drawing.Size(134, 450)
         Me.SidePanel.TabIndex = 6
         '
+        'ButtonResultList
+        '
+        Me.ButtonResultList.FlatAppearance.BorderSize = 0
+        Me.ButtonResultList.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonResultList.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonResultList.ForeColor = System.Drawing.Color.White
+        Me.ButtonResultList.Location = New System.Drawing.Point(3, 284)
+        Me.ButtonResultList.Name = "ButtonResultList"
+        Me.ButtonResultList.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonResultList.TabIndex = 4
+        Me.ButtonResultList.Text = "List Results"
+        Me.ButtonResultList.UseVisualStyleBackColor = True
+        '
         'ButtonCloud
         '
         Me.ButtonCloud.FlatAppearance.BorderSize = 0
@@ -109,14 +122,14 @@ Partial Class FormUploadResult
         Me.ButtonUpload.Text = "Upload"
         Me.ButtonUpload.UseVisualStyleBackColor = True
         '
-        'ButtonUser
+        'ButtonProcessBroadsheet
         '
         Me.ButtonUser.FlatAppearance.BorderSize = 0
         Me.ButtonUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonUser.ForeColor = System.Drawing.Color.White
         Me.ButtonUser.Location = New System.Drawing.Point(3, 161)
-        Me.ButtonUser.Name = "ButtonUser"
+        Me.ButtonUser.Name = "ButtonProcessBroadsheet"
         Me.ButtonUser.Size = New System.Drawing.Size(128, 55)
         Me.ButtonUser.TabIndex = 1
         Me.ButtonUser.Text = "Check Result"
@@ -135,23 +148,11 @@ Partial Class FormUploadResult
         Me.ButtonBrowse.Text = "Browse..."
         Me.ButtonBrowse.UseVisualStyleBackColor = True
         '
-        'ButtonResultList
-        '
-        Me.ButtonResultList.FlatAppearance.BorderSize = 0
-        Me.ButtonResultList.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonResultList.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonResultList.ForeColor = System.Drawing.Color.White
-        Me.ButtonResultList.Location = New System.Drawing.Point(3, 284)
-        Me.ButtonResultList.Name = "ButtonResultList"
-        Me.ButtonResultList.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonResultList.TabIndex = 4
-        Me.ButtonResultList.Text = "List Results"
-        Me.ButtonResultList.UseVisualStyleBackColor = True
-        '
         'FormUploadResult
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.Button2)

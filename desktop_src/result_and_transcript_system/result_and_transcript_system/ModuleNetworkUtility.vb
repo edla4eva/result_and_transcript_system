@@ -9,7 +9,7 @@ Imports System.Drawing.Bitmap
 'Imports RapChatLib.RapChatLib
 Module ModuleNetworkUtility
 #Region "Declarations"
-    Public USER_DIRECTORY As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\ResultAndTranscriptSystem"
+
     Public Listener As New TcpListener(65535)
     Public Client As New TcpClient
     Public Message As String = ""
@@ -20,12 +20,7 @@ Module ModuleNetworkUtility
 
 
 #End Region
-    Public objResult As New ClassExcelResult()
-    Public dblQuote As String = """"
 
-    Public Function dblQuoted(dStr As String) As String
-        Return dblQuote & dStr & dblQuote
-    End Function
     Sub initializeObjects()
         Try
         Catch ex As Exception

@@ -84,6 +84,7 @@ Partial Class FormStudent
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(82, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(725, 361)
         Me.Controls.Add(Me.SidePanel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None

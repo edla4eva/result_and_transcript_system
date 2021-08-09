@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormBills
+Partial Class FormResultsTranscripts
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,10 +22,10 @@ Partial Class FormBills
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxGuestID = New System.Windows.Forms.TextBox()
@@ -49,9 +49,9 @@ Partial Class FormBills
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.PictureBoxImg = New System.Windows.Forms.PictureBox()
         Me.ButtonAddBill = New System.Windows.Forms.Button()
-        Me.ButtonPrintBill = New System.Windows.Forms.Button()
-        Me.ButtonGenerateBill = New System.Windows.Forms.Button()
-        Me.ButtonRoom1 = New System.Windows.Forms.Button()
+        Me.ButtonResultsTranscripts = New System.Windows.Forms.Button()
+        Me.ButtonTranscript = New System.Windows.Forms.Button()
+        Me.ButtonCheck = New System.Windows.Forms.Button()
         Me.ButtonCalc = New System.Windows.Forms.Button()
         Me.ButtonPayBill = New System.Windows.Forms.Button()
         CType(Me.dgw, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -62,15 +62,17 @@ Partial Class FormBills
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.ForeColor = System.Drawing.Color.Silver
         Me.Label1.Location = New System.Drawing.Point(27, 69)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(49, 13)
+        Me.Label1.Size = New System.Drawing.Size(40, 13)
         Me.Label1.TabIndex = 9
-        Me.Label1.Text = "Guest ID"
+        Me.Label1.Text = "StaffID"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.ForeColor = System.Drawing.Color.Silver
         Me.Label2.Location = New System.Drawing.Point(27, 92)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(98, 13)
@@ -88,18 +90,18 @@ Partial Class FormBills
         '
         Me.dgw.AllowUserToAddRows = False
         Me.dgw.AllowUserToDeleteRows = False
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FloralWhite
-        Me.dgw.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FloralWhite
+        Me.dgw.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
         Me.dgw.BackgroundColor = System.Drawing.Color.White
         Me.dgw.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.PaleGoldenrod
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSteelBlue
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgw.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.PaleGoldenrod
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgw.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.dgw.ColumnHeadersHeight = 24
         Me.dgw.Cursor = System.Windows.Forms.Cursors.Hand
         Me.dgw.EnableHeadersVisualStyles = False
@@ -109,21 +111,21 @@ Partial Class FormBills
         Me.dgw.Name = "dgw"
         Me.dgw.ReadOnly = True
         Me.dgw.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.CadetBlue
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgw.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle7.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgw.RowHeadersDefaultCellStyle = DataGridViewCellStyle7
         Me.dgw.RowHeadersWidth = 25
         Me.dgw.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White
-        Me.dgw.RowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle8.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White
+        Me.dgw.RowsDefaultCellStyle = DataGridViewCellStyle8
         Me.dgw.RowTemplate.Height = 18
         Me.dgw.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgw.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
@@ -159,9 +161,9 @@ Partial Class FormBills
         Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(206, 19)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(98, 24)
+        Me.Label3.Size = New System.Drawing.Size(103, 24)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Guest Bill"
+        Me.Label3.Text = "Transcript"
         '
         'TextBoxGuestInfo
         '
@@ -181,6 +183,7 @@ Partial Class FormBills
         'Label4
         '
         Me.Label4.AutoSize = True
+        Me.Label4.ForeColor = System.Drawing.Color.Silver
         Me.Label4.Location = New System.Drawing.Point(27, 131)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(33, 13)
@@ -197,6 +200,7 @@ Partial Class FormBills
         'Label5
         '
         Me.Label5.AutoSize = True
+        Me.Label5.ForeColor = System.Drawing.Color.Silver
         Me.Label5.Location = New System.Drawing.Point(27, 170)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(42, 13)
@@ -213,6 +217,7 @@ Partial Class FormBills
         'Label6
         '
         Me.Label6.AutoSize = True
+        Me.Label6.ForeColor = System.Drawing.Color.Silver
         Me.Label6.Location = New System.Drawing.Point(27, 213)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(35, 13)
@@ -229,6 +234,7 @@ Partial Class FormBills
         'Label7
         '
         Me.Label7.AutoSize = True
+        Me.Label7.ForeColor = System.Drawing.Color.Silver
         Me.Label7.Location = New System.Drawing.Point(27, 254)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(37, 13)
@@ -245,6 +251,7 @@ Partial Class FormBills
         'Label8
         '
         Me.Label8.AutoSize = True
+        Me.Label8.ForeColor = System.Drawing.Color.Silver
         Me.Label8.Location = New System.Drawing.Point(27, 295)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(49, 13)
@@ -261,6 +268,7 @@ Partial Class FormBills
         'Label9
         '
         Me.Label9.AutoSize = True
+        Me.Label9.ForeColor = System.Drawing.Color.Silver
         Me.Label9.Location = New System.Drawing.Point(27, 337)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(49, 13)
@@ -276,7 +284,6 @@ Partial Class FormBills
         '
         'PictureBoxImg
         '
-        Me.PictureBoxImg.Image = Global.eAccount.My.Resources.Resources.pool
         Me.PictureBoxImg.Location = New System.Drawing.Point(534, 40)
         Me.PictureBoxImg.Name = "PictureBoxImg"
         Me.PictureBoxImg.Size = New System.Drawing.Size(329, 118)
@@ -293,7 +300,6 @@ Partial Class FormBills
         Me.ButtonAddBill.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAddBill.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonAddBill.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonAddBill.Image = Global.eAccount.My.Resources.Resources.user16b
         Me.ButtonAddBill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonAddBill.Location = New System.Drawing.Point(12, 471)
         Me.ButtonAddBill.Name = "ButtonAddBill"
@@ -302,59 +308,56 @@ Partial Class FormBills
         Me.ButtonAddBill.Text = "Add Bill"
         Me.ButtonAddBill.UseVisualStyleBackColor = False
         '
-        'ButtonPrintBill
+        'ButtonResultsTranscripts
         '
-        Me.ButtonPrintBill.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonPrintBill.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonPrintBill.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green
-        Me.ButtonPrintBill.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.ButtonPrintBill.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonPrintBill.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonPrintBill.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonPrintBill.Image = Global.eAccount.My.Resources.Resources.select16
-        Me.ButtonPrintBill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonPrintBill.Location = New System.Drawing.Point(285, 101)
-        Me.ButtonPrintBill.Name = "ButtonPrintBill"
-        Me.ButtonPrintBill.Size = New System.Drawing.Size(234, 57)
-        Me.ButtonPrintBill.TabIndex = 44
-        Me.ButtonPrintBill.Text = "Print Bill"
-        Me.ButtonPrintBill.UseVisualStyleBackColor = False
+        Me.ButtonResultsTranscripts.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonResultsTranscripts.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonResultsTranscripts.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green
+        Me.ButtonResultsTranscripts.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.ButtonResultsTranscripts.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonResultsTranscripts.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonResultsTranscripts.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonResultsTranscripts.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ButtonResultsTranscripts.Location = New System.Drawing.Point(285, 101)
+        Me.ButtonResultsTranscripts.Name = "ButtonResultsTranscripts"
+        Me.ButtonResultsTranscripts.Size = New System.Drawing.Size(234, 57)
+        Me.ButtonResultsTranscripts.TabIndex = 44
+        Me.ButtonResultsTranscripts.Text = "Print"
+        Me.ButtonResultsTranscripts.UseVisualStyleBackColor = False
         '
-        'ButtonGenerateBill
+        'ButtonTranscript
         '
-        Me.ButtonGenerateBill.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonGenerateBill.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonGenerateBill.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green
-        Me.ButtonGenerateBill.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.ButtonGenerateBill.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonGenerateBill.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonGenerateBill.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonGenerateBill.Image = Global.eAccount.My.Resources.Resources.select16
-        Me.ButtonGenerateBill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonGenerateBill.Location = New System.Drawing.Point(285, 40)
-        Me.ButtonGenerateBill.Name = "ButtonGenerateBill"
-        Me.ButtonGenerateBill.Size = New System.Drawing.Size(234, 55)
-        Me.ButtonGenerateBill.TabIndex = 8
-        Me.ButtonGenerateBill.Text = "View Bills (Refresh)"
-        Me.ButtonGenerateBill.UseVisualStyleBackColor = False
+        Me.ButtonTranscript.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonTranscript.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonTranscript.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green
+        Me.ButtonTranscript.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.ButtonTranscript.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonTranscript.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonTranscript.ForeColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.ButtonTranscript.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ButtonTranscript.Location = New System.Drawing.Point(285, 40)
+        Me.ButtonTranscript.Name = "ButtonTranscript"
+        Me.ButtonTranscript.Size = New System.Drawing.Size(234, 55)
+        Me.ButtonTranscript.TabIndex = 8
+        Me.ButtonTranscript.Text = "Generate Transcript"
+        Me.ButtonTranscript.UseVisualStyleBackColor = False
         '
-        'ButtonRoom1
+        'ButtonCheck
         '
-        Me.ButtonRoom1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonRoom1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonRoom1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green
-        Me.ButtonRoom1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.ButtonRoom1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonRoom1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonRoom1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonRoom1.Image = Global.eAccount.My.Resources.Resources.user16b
-        Me.ButtonRoom1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonRoom1.Location = New System.Drawing.Point(141, 40)
-        Me.ButtonRoom1.Name = "ButtonRoom1"
-        Me.ButtonRoom1.Size = New System.Drawing.Size(92, 42)
-        Me.ButtonRoom1.TabIndex = 7
-        Me.ButtonRoom1.Text = "..."
-        Me.ButtonRoom1.UseVisualStyleBackColor = False
+        Me.ButtonCheck.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonCheck.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonCheck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green
+        Me.ButtonCheck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.ButtonCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonCheck.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonCheck.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonCheck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ButtonCheck.Location = New System.Drawing.Point(141, 40)
+        Me.ButtonCheck.Name = "ButtonCheck"
+        Me.ButtonCheck.Size = New System.Drawing.Size(92, 42)
+        Me.ButtonCheck.TabIndex = 7
+        Me.ButtonCheck.Text = "check..."
+        Me.ButtonCheck.UseVisualStyleBackColor = False
         '
         'ButtonCalc
         '
@@ -365,13 +368,12 @@ Partial Class FormBills
         Me.ButtonCalc.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonCalc.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonCalc.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonCalc.Image = Global.eAccount.My.Resources.Resources.user16b
         Me.ButtonCalc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonCalc.Location = New System.Drawing.Point(12, 376)
         Me.ButtonCalc.Name = "ButtonCalc"
         Me.ButtonCalc.Size = New System.Drawing.Size(221, 76)
         Me.ButtonCalc.TabIndex = 60
-        Me.ButtonCalc.Text = "Calculate Bill for Room"
+        Me.ButtonCalc.Text = "Compute"
         Me.ButtonCalc.UseVisualStyleBackColor = False
         '
         'ButtonPayBill
@@ -383,7 +385,6 @@ Partial Class FormBills
         Me.ButtonPayBill.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonPayBill.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonPayBill.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonPayBill.Image = Global.eAccount.My.Resources.Resources.user16b
         Me.ButtonPayBill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonPayBill.Location = New System.Drawing.Point(279, 532)
         Me.ButtonPayBill.Name = "ButtonPayBill"
@@ -392,10 +393,11 @@ Partial Class FormBills
         Me.ButtonPayBill.Text = "Pay Bill"
         Me.ButtonPayBill.UseVisualStyleBackColor = False
         '
-        'FormBills
+        'FormResultsTranscripts
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1011, 624)
         Me.Controls.Add(Me.ButtonPayBill)
         Me.Controls.Add(Me.ButtonCalc)
@@ -414,18 +416,18 @@ Partial Class FormBills
         Me.Controls.Add(Me.TextBoxDate)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.ButtonAddBill)
-        Me.Controls.Add(Me.ButtonPrintBill)
+        Me.Controls.Add(Me.ButtonResultsTranscripts)
         Me.Controls.Add(Me.TextBoxGuestInfo)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.dgw)
         Me.Controls.Add(Me.TextBoxGuestID)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ButtonGenerateBill)
-        Me.Controls.Add(Me.ButtonRoom1)
-        Me.Name = "FormBills"
+        Me.Controls.Add(Me.ButtonTranscript)
+        Me.Controls.Add(Me.ButtonCheck)
+        Me.Name = "FormResultsTranscripts"
         Me.Tag = "Front"
-        Me.Text = "Bills"
+        Me.Text = "Results - Transcript"
         CType(Me.dgw, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
@@ -435,8 +437,8 @@ Partial Class FormBills
 
     End Sub
 
-    Friend WithEvents ButtonRoom1 As Button
-    Friend WithEvents ButtonGenerateBill As Button
+    Friend WithEvents ButtonCheck As Button
+    Friend WithEvents ButtonTranscript As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxGuestID As TextBox
@@ -445,7 +447,7 @@ Partial Class FormBills
     Friend WithEvents lblSet As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxGuestInfo As TextBox
-    Friend WithEvents ButtonPrintBill As Button
+    Friend WithEvents ButtonResultsTranscripts As Button
     Friend WithEvents ButtonAddBill As Button
     Friend WithEvents TextBoxDate As TextBox
     Friend WithEvents Label4 As Label

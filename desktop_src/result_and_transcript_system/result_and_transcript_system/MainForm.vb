@@ -1,5 +1,5 @@
 ﻿Public Class MainForm
-
+#Region "UI Stuff"
     'This are the variables for the button and panel objects
     Private currentButton As Button
     Private leftBorderButton As Panel
@@ -89,32 +89,6 @@
         frm.Show()
 
     End Sub
-
-
-    'This method tells the addForm the right form .....
-    'To change to when the right parameter is passed
-    Public Sub ChangeMenu(menu As String)
-        'This is select case statement for every form that needs to be changed to
-        Select Case menu
-            Case "Home"
-                addForm(HomeForm)
-            Case "User"
-                addForm(LoginForm1)
-            Case "CourseAdviser"
-                addForm(FormCourseAdviser)
-            Case "CourseLecturer"
-                addForm(FormUploadResult)
-            Case "GenerateBroadsheet"
-                addForm(FormGenerateBroadsheet)
-            Case "CourseAdviser"
-                addForm(FormCourseAdviser)
-            Case "Student"
-                addForm(FormStudent)
-            Case "UploadResult"
-                addForm(FormUploadResult)
-        End Select
-    End Sub
-
     'This is for when the home button is clicked
     Private Sub ButtonHome_Click(sender As Object, e As EventArgs) Handles ButtonHome.Click
         ActiveButton(sender, RGBColors.colorCrimson)
@@ -125,18 +99,6 @@
     Private Sub ButtonUser_Click(sender As Object, e As EventArgs) Handles ButtonUser.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         ChangeMenu("User")
-    End Sub
-
-    Private Sub PanelContainer_Paint(sender As Object, e As PaintEventArgs) Handles PanelContainer.Paint
-
-    End Sub
-
-    Private Sub MainForm_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
-
-    End Sub
-
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
     End Sub
 
     'This variables are used for making the mainForm draggable
@@ -167,6 +129,37 @@
         draggable = False
     End Sub
 
+#End Region
+    'This method tells the addForm the right form .....
+    'To change to when the right parameter is passed
+    'TODO: Let all UI actions be handled in this class (i.e seperate UI from functionality
+    Public Sub ChangeMenu(menu As String)
+        'This is select case statement for every form that needs to be changed to
+        Select Case menu
+            Case "Home"
+                addForm(HomeForm)
+            Case "User"
+                addForm(LoginForm1)
+            Case "CourseAdviser"
+                addForm(FormCourseAdviser)
+            Case "CourseLecturer"
+                addForm(FormUploadResult)
+            Case "GenerateBroadsheet"
+                addForm(FormGenerateBroadsheet)
+            Case "CourseAdviser"
+                addForm(FormCourseAdviser)
+            Case "Student"
+                addForm(FormStudent)
+            Case "UploadResult"
+                addForm(FormUploadResult)
+            Case "StudentsRegistration"
+                addForm(FormStudentsRegistration)
+            Case "ResultsTranscripts"
+                addForm(FormResultsTranscripts)
+        End Select
+    End Sub
+
+
     Private Sub ButtonExit_Click(sender As Object, e As EventArgs) Handles ButtonExit.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         If MessageBox.Show("Are you sure you want to close the application?", "Quit", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
@@ -176,6 +169,18 @@
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Me.ButtonExit.PerformClick()
+    End Sub
+
+    Private Sub LinkLabelMax_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelMax.LinkClicked
+        If Me.WindowState = FormWindowState.Maximized Then
+            Me.WindowState = FormWindowState.Normal
+        Else
+            Me.WindowState = FormWindowState.Maximized
+        End If
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        Me.WindowState = FormWindowState.Minimized
     End Sub
 End Class
 

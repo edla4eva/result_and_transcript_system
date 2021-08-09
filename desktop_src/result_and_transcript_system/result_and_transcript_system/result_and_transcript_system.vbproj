@@ -50,13 +50,12 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MySql.Data, Version=6.7.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.7.9\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -86,7 +85,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassAnswerEventArgs.vb" />
+    <Compile Include="ClassBroadsheets.vb" />
+    <Compile Include="ClassDB.vb" />
+    <Compile Include="ClassExcel.vb" />
     <Compile Include="ClassExcelResult.vb" />
+    <Compile Include="FormResultsTranscripts.designer.vb">
+      <DependentUpon>FormResultsTranscripts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormResultsTranscripts.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormCourseAdviser.Designer.vb">
       <DependentUpon>FormCourseAdviser.vb</DependentUpon>
     </Compile>
@@ -105,6 +113,12 @@
     <Compile Include="FormGenerateBroadsheet.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormStudentsRegistration.designer.vb">
+      <DependentUpon>FormStudentsRegistration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormStudentsRegistration.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormStudent.Designer.vb">
       <DependentUpon>FormStudent.vb</DependentUpon>
     </Compile>
@@ -118,6 +132,7 @@
       <DependentUpon>FormUploadResult.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ModuleGeneral.vb" />
     <Compile Include="HomeForm.Designer.vb">
       <DependentUpon>HomeForm.vb</DependentUpon>
     </Compile>
@@ -157,6 +172,9 @@
     <Compile Include="RGBColors.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormResultsTranscripts.resx">
+      <DependentUpon>FormResultsTranscripts.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormCourseAdviser.resx">
       <DependentUpon>FormCourseAdviser.vb</DependentUpon>
     </EmbeddedResource>
@@ -165,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormGenerateBroadsheet.resx">
       <DependentUpon>FormGenerateBroadsheet.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStudentsRegistration.resx">
+      <DependentUpon>FormStudentsRegistration.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormStudent.resx">
       <DependentUpon>FormStudent.vb</DependentUpon>
@@ -202,6 +223,9 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

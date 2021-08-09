@@ -26,6 +26,7 @@ Partial Class FormCourseAdviser
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.ButtonResultList = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
@@ -39,6 +40,7 @@ Partial Class FormCourseAdviser
         '
         'Button1
         '
+        Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button1.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Location = New System.Drawing.Point(25, 73)
         Me.Button1.Name = "Button1"
@@ -49,7 +51,7 @@ Partial Class FormCourseAdviser
         '
         'Button2
         '
-        Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.Button2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button2.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button2.Location = New System.Drawing.Point(224, 73)
         Me.Button2.Name = "Button2"
@@ -60,7 +62,7 @@ Partial Class FormCourseAdviser
         '
         'Button3
         '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button3.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button3.Location = New System.Drawing.Point(422, 73)
         Me.Button3.Name = "Button3"
@@ -72,6 +74,7 @@ Partial Class FormCourseAdviser
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.Button4)
         Me.SidePanel.Controls.Add(Me.ButtonResultList)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonUpload)
@@ -83,6 +86,19 @@ Partial Class FormCourseAdviser
         Me.SidePanel.Size = New System.Drawing.Size(134, 431)
         Me.SidePanel.TabIndex = 7
         '
+        'Button4
+        '
+        Me.Button4.FlatAppearance.BorderColor = System.Drawing.Color.Gray
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Button4.ForeColor = System.Drawing.Color.White
+        Me.Button4.Location = New System.Drawing.Point(0, 39)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(128, 55)
+        Me.Button4.TabIndex = 5
+        Me.Button4.Text = "Students"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
         'ButtonResultList
         '
         Me.ButtonResultList.FlatAppearance.BorderSize = 0
@@ -93,7 +109,7 @@ Partial Class FormCourseAdviser
         Me.ButtonResultList.Name = "ButtonResultList"
         Me.ButtonResultList.Size = New System.Drawing.Size(128, 55)
         Me.ButtonResultList.TabIndex = 4
-        Me.ButtonResultList.Text = "List Results"
+        Me.ButtonResultList.Text = "List Results/ Transcripts"
         Me.ButtonResultList.UseVisualStyleBackColor = True
         '
         'ButtonCloud
@@ -122,14 +138,14 @@ Partial Class FormCourseAdviser
         Me.ButtonUpload.Text = "Upload"
         Me.ButtonUpload.UseVisualStyleBackColor = True
         '
-        'ButtonUser
+        'ButtonProcessBroadsheet
         '
         Me.ButtonUser.FlatAppearance.BorderSize = 0
         Me.ButtonUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonUser.ForeColor = System.Drawing.Color.White
         Me.ButtonUser.Location = New System.Drawing.Point(3, 161)
-        Me.ButtonUser.Name = "ButtonUser"
+        Me.ButtonUser.Name = "ButtonProcessBroadsheet"
         Me.ButtonUser.Size = New System.Drawing.Size(128, 55)
         Me.ButtonUser.TabIndex = 1
         Me.ButtonUser.Text = "Check Result"
@@ -160,6 +176,7 @@ Partial Class FormCourseAdviser
         '
         'Label2
         '
+        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(12, 223)
@@ -171,6 +188,7 @@ Partial Class FormCourseAdviser
         '
         'Label3
         '
+        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(427, 223)
@@ -214,4 +232,5 @@ Partial Class FormCourseAdviser
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents Button4 As Button
 End Class

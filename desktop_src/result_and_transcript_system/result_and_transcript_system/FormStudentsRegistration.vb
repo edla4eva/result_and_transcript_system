@@ -1,5 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Public Class FormProducts
+Public Class FormStudentsRegistration
     Dim con As MySql.Data.MySqlClient.MySqlConnection
     Dim cmd As MySql.Data.MySqlClient.MySqlCommand
     Dim strSQL As String
@@ -7,7 +7,7 @@ Public Class FormProducts
     Dim ref As Integer
 
     Private Sub FormRooms_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.MdiParent = MDIParentMain
+        'Me.MdiParent = MDIParentMain
         Me.WindowState = FormWindowState.Maximized
         Me.Reset()
 
@@ -26,11 +26,11 @@ Public Class FormProducts
 
     End Sub
     Sub Reset()
-        txtGuestName.Text = ""
-        ref = CInt(CLng(Now.ToOADate * 200) + 100)
-        mappDB.ref = ref
-        mappDB.rDate = FormatMyDate(Now) & " " & FormatMyTime(Now)  'Now.ToShortDateString & " " & Now.ToShortTimeString
-        GetData()
+        txtStudentName.Text = ""
+        'ref = CInt(CLng(Now.ToOADate * 200) + 100)
+        'mappDB.ref = ref
+        'mappDB.rDate = FormatMyDate(Now) & " " & FormatMyTime(Now)  'Now.ToShortDateString & " " & Now.ToShortTimeString
+        'GetData()
     End Sub
     Public Sub GetData()
         Try
@@ -39,10 +39,10 @@ Public Class FormProducts
             con.Open()
 
             '--All rooms
-            If mappDB.ProductLine = "" Then
-                strSQL = SQL_SELECT_ROOMS
+            If mappDB.MATNO = "" Then
+                strSQL = SQL_SELECT_RESULTS_WHERE_MATNO
             Else
-                strSQL = String.Format(SQL_SELECT_PRODUCTS_WHERE_PRODUCTLINE, mappDB.ProductLine)
+                strSQL = String.Format(SQL_SELECT_RESULTS_WHERE_MATNO, mappDB.MATNO)
             End If
 
             cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
@@ -51,17 +51,11 @@ Public Class FormProducts
             myDA.Fill(myDataSet, "Room")
             dgw.DataSource = myDataSet.Tables("Room").DefaultView
 
-            '--Avaliable rooms
-            'strSQL = SQL_SELECT_AVAILIABLE_ROOMS
-            'cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            'myDA = New MySqlDataAdapter(cmd)
-            'myDataSet = New DataSet()
-            'myDA.Fill(myDataSet, "Avaliable_Room")
-            'dgv_rooms.DataSource = myDataSet.Tables("Avaliable_Room").DefaultView
 
             con.Close()
 
-            UpdateSaleCart()
+            ' UpdateSaleCart() 
+            'TODO: 
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -82,34 +76,34 @@ Public Class FormProducts
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Public Sub UpdateSaleCart()
-        Try
+    'Public Sub UpdateSaleCart()
+    '    Try
 
-            GetBillsDataWhere(String.Format(STR_SQL_CART_BILLS_WHERE, ref, mappDB.rDate))
+    '        GetBillsDataWhere(String.Format(STR_SQL_CART_BILLS_WHERE, ref, mappDB.rDate))
 
-            For Each col As DataGridViewColumn In dgv_rooms.Columns
-                col.Width = 0
-                col.Visible = False
-                If col.HeaderText = "date" Then
-                    col.Width = 70
-                    col.Visible = True
-                ElseIf col.HeaderText = "details" Then
-                    col.Width = 130
-                    col.Visible = True
-                ElseIf col.HeaderText = "credit" Then
-                    col.Width = 60
-                    col.Visible = True
-                ElseIf col.HeaderText = "ref" Then
-                    col.Width = 50
-                    col.Visible = True
-                End If
-            Next
+    '        For Each col As DataGridViewColumn In dgv_rooms.Columns
+    '            col.Width = 0
+    '            col.Visible = False
+    '            If col.HeaderText = "date" Then
+    '                col.Width = 70
+    '                col.Visible = True
+    '            ElseIf col.HeaderText = "details" Then
+    '                col.Width = 130
+    '                col.Visible = True
+    '            ElseIf col.HeaderText = "credit" Then
+    '                col.Width = 60
+    '                col.Visible = True
+    '            ElseIf col.HeaderText = "ref" Then
+    '                col.Width = 50
+    '                col.Visible = True
+    '            End If
+    '        Next
 
-            dgv_rooms.Refresh()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+    '        dgv_rooms.Refresh()
+    '    Catch ex As Exception
+    '        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    '    End Try
+    'End Sub
     Public Sub GetDataWhere(s As String)
         Try
             strConnectionString = mappDB.getConnectionString(False)
@@ -128,9 +122,9 @@ Public Class FormProducts
     End Sub
 
 
-    Private Sub txtGuestName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtGuestName.TextChanged
+    Private Sub txtStudentName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentName.TextChanged
 
-        strSQL = String.Format(SQL_SELECT_ROOMS_WHERE, txtGuestName.Text)
+        strSQL = String.Format(SQL_SELECT_RESULTS_WHERE_MATNO, txtStudentName.Text)
         GetDataWhere(strSQL)
     End Sub
 
@@ -163,59 +157,47 @@ Public Class FormProducts
         Me.Close()
     End Sub
 
-
-    Private Sub ButtonSell_Click(sender As Object, e As EventArgs) Handles ButtonSell.Click
-        ' Add to cartsell
-        'If captured Then
-        '    sell(True)
-        'Else
-        '    CaptureProduct()
-        '    sell(False)
-        'End If
-
-        sell(False)
-    End Sub
     Public Sub CaptureProduct()
-        'get quantity first and subtract 1
-        Dim qty As Integer = CInt(dgw.SelectedRows(0).Cells("quantityInStock").Value)
-        Dim tmpProductCode As String = dgw.SelectedRows(0).Cells(0).Value.ToString
-        Dim tmpPrice As Double = CInt(dgw.SelectedRows(0).Cells("buyPrice").Value)
+        ''get quantity first and subtract 1
+        'Dim qty As Integer = CInt(dgw.SelectedRows(0).Cells("quantityInStock").Value)
+        'Dim tmpProductCode As String = dgw.SelectedRows(0).Cells(0).Value.ToString
+        'Dim tmpPrice As Double = CInt(dgw.SelectedRows(0).Cells("buyPrice").Value)
 
 
-        'Capture Product
-        mappDB.ProductCode = tmpProductCode
-        mappDB.ProductQty = qty
-        Me.TextBoxDetails.Text = "1 No. of " & mappDB.ProductCode.ToString
-        Me.TextBoxQty.Text = "1"
-        Me.TextBoxUnitPrice.Text = tmpPrice.ToString
-        Me.LabelRef.Text = ref.ToString
-        Me.TextBoxCredit.Text = tmpPrice.ToString
+        ''Capture Product
+        'mappDB.ProductCode = tmpProductCode
+        'mappDB.ProductQty = qty
+        'Me.TextBoxDetails.Text = "1 No. of " & mappDB.ProductCode.ToString
+        'Me.TextBoxQty.Text = "1"
+        'Me.TextBoxUnitPrice.Text = tmpPrice.ToString
+        'Me.LabelRef.Text = ref.ToString
+        'Me.TextBoxCredit.Text = tmpPrice.ToString
 
 
     End Sub
 
-    Public Sub sell(all As Boolean)
-        Dim sDate, sQty, sDet, sCr, sDr, sBal, sRef, sStat As String
+    'Public Sub sell(all As Boolean)
+    '    Dim sDate, sQty, sDet, sCr, sDr, sBal, sRef, sStat As String
 
-        sDet = Me.TextBoxDetails.Text
-        sQty = Me.TextBoxQty.Text
-        'sU = Me.TextBoxUnitPrice.Text '= tmpPrice.ToString
-        sRef = Me.LabelRef.Text
-        sCr = Me.TextBoxCredit.Text '= tmpPrice.ToString
-        sDr = "0"
-        sBal = "0"
-        sDate = mappDB.rDate 'FormatMyDate(Now) & " " & FormatMyTime(Now) '' "2018-10-09 00:00:00"
-        'sell
-        UpdateRecordWhere(String.Format(SQL_UPDATE_PRODUCT, mappDB.ProductQty - CInt(sQty), mappDB.ProductCode))
-        'insert into bills
-        '(`guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status`) VALUES ('1', '1', '2018-10-09 00:00:00', '1 No of Resistor', '0', '2000', '2000', '55', 'paid');"
-        InsertRecord(String.Format(SQL_INSERT_INTO_SALE_CART, sDate, sDet, sDr, sCr, sBal, sRef, "not paid"))
-        MsgBox("Product " & mappDB.ProductCode.ToString & " Sold Successfully!, Enter the Sales Details")
+    '    sDet = Me.TextBoxDetails.Text
+    '    sQty = Me.TextBoxQty.Text
+    '    'sU = Me.TextBoxUnitPrice.Text '= tmpPrice.ToString
+    '    sRef = Me.LabelRef.Text
+    '    sCr = Me.TextBoxCredit.Text '= tmpPrice.ToString
+    '    sDr = "0"
+    '    sBal = "0"
+    '    sDate = mappDB.rDate 'FormatMyDate(Now) & " " & FormatMyTime(Now) '' "2018-10-09 00:00:00"
+    '    'sell
+    '    UpdateRecordWhere(String.Format(SQL_UPDATE_PRODUCT, mappDB.ProductQty - CInt(sQty), mappDB.ProductCode))
+    '    'insert into bills
+    '    '(`guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status`) VALUES ('1', '1', '2018-10-09 00:00:00', '1 No of Resistor', '0', '2000', '2000', '55', 'paid');"
+    '    InsertRecord(String.Format(SQL_INSERT_INTO_SALE_CART, sDate, sDet, sDr, sCr, sBal, sRef, "not paid"))
+    '    MsgBox("Product " & mappDB.ProductCode.ToString & " Sold Successfully!, Enter the Sales Details")
 
-        'refresh Datagrid
-        UpdateSaleCart()
+    '    'refresh Datagrid
+    '    UpdateSaleCart()
 
-    End Sub
+    'End Sub
     Function FormatMyDate(dtp As Date) As String
         Dim StrDate As String = "00000000"
         'mySQL Palaver
@@ -233,21 +215,21 @@ Public Class FormProducts
         Return StrDate
     End Function
     Public Sub updatePix()
-        Try
-            UpdateRecordWhere(String.Format(SQL_UPDATE_ROOMS, "booked", CInt(dgw.SelectedRows(0).Cells(6).Value) + 1))
-            mappDB.ProductCode = CStr(dgw.SelectedRows(0).Cells(0).Value)
-            'MsgBox(Application.StartupPath & "\images\")
+        'Try
+        '    UpdateRecordWhere(String.Format(SQL_UPDATE_ROOMS, "booked", CInt(dgw.SelectedRows(0).Cells(6).Value) + 1))
+        '    mappDB.ProductCode = CStr(dgw.SelectedRows(0).Cells(0).Value)
+        '    'MsgBox(Application.StartupPath & "\images\")
 
-            If My.Computer.FileSystem.FileExists(Application.StartupPath & "\images\" & mappDB.ProductCode & ".jpg") Then
-                PictureBox1.Image = Image.FromFile(Application.StartupPath & "\images\" & mappDB.ProductCode & ".jpg")
-            Else
-                PictureBox1.Image = Image.FromFile(Application.StartupPath & "\images\" & "img.jpg")
+        '    If My.Computer.FileSystem.FileExists(Application.StartupPath & "\images\" & mappDB.ProductCode & ".jpg") Then
+        '        PictureBox1.Image = Image.FromFile(Application.StartupPath & "\images\" & mappDB.ProductCode & ".jpg")
+        '    Else
+        '        PictureBox1.Image = Image.FromFile(Application.StartupPath & "\images\" & "img.jpg")
 
-            End If
+        '    End If
 
-        Catch ex As Exception
+        'Catch ex As Exception
 
-        End Try
+        'End Try
 
     End Sub
     Public Function UpdateRecordWhere(s As String) As String
@@ -306,14 +288,11 @@ Public Class FormProducts
 
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonCheckOut.Click
-        FormBills.Show()
-        FormBills.BringToFront()
+        FormResultsTranscripts.Show()
+        FormResultsTranscripts.BringToFront()
 
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs)
-        FormAddProduct.Show()
-    End Sub
 
 
 
@@ -327,7 +306,7 @@ Public Class FormProducts
     End Sub
 
     Private Sub dgv_rooms_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_rooms.CellContentDoubleClick
-        sell(False)
+        ' sell(False)
 
     End Sub
 
