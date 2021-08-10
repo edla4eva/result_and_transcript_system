@@ -2,7 +2,7 @@
 Imports System.Data.OleDb
 Imports Microsoft.VisualBasic.FileIO
 Imports System.Data.SqlClient
-Imports Microsoft.Office.Interop
+Imports ExcelInterop = Microsoft.Office.Interop.Excel
 
 Public Class ClassExcelResult
     Structure resultScore
@@ -223,11 +223,11 @@ Public Class ClassExcelResult
         Dim i As Integer = 0
         Dim strArrayMATNO, strArrayNAME, strArrayCA, strArrayEXAM, strArraySCORE, strArraySURNAME, strArrayOtherNames As String()
         Try
-            excelApp = New Excel.Application
+            excelApp = New ExcelInterop.Application
 
             If Me.resultfileNameValue = Nothing Or Not System.IO.File.Exists(Me.resultfileNameValue) Then Exit Function 'todo
             excelWB = excelApp.Workbooks.Open(Me.resultfileNameValue)
-            excelWS = CType(excelWB.Sheets(1), Excel.Worksheet)
+            excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
 
             Dim strCellContent As String = ""
             Dim MATNoFound As Boolean = False
@@ -396,7 +396,7 @@ Public Class ClassExcelResult
         'If r > 6 Then Call selectCells("B9:B" & r)
 
 
-        'With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlEdgeLeft)
+        'With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeLeft)
         'excelWS.Cells.Range("B" & startRow & ":B" & r).Select() 'select rows
 
         'dr = dt.NewRow()

@@ -14,7 +14,7 @@ Public Class FormResultsTranscripts
     Private Sub reset()
         mappDB.MATNO = "ENG1234567" 'TODO Test
         'GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.StaffID.ToString))
-        TextBoxGuestID.Text = GetRecordWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
+        TextBoxGuestID.Text = mappDB.GetRecordWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
         mappDB.GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
     End Sub
 
@@ -69,6 +69,7 @@ Public Class FormResultsTranscripts
 
     Private Sub ButtonTranscript_Click(sender As Object, e As EventArgs) Handles ButtonTranscript.Click
         Dim myDataset As DataSet
+        mappDB.MATNO = "ENG1234567" 'TODO Test
         myDataset = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString), "Result")
         dgw.DataSource = myDataset.Tables("Result").DefaultView
         myDataset.Clear()

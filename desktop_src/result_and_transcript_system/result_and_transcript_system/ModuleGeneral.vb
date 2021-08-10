@@ -2,7 +2,7 @@
 
 Imports System.Configuration
 Imports MySql.Data.MySqlClient
-Imports Microsoft.Office.Interop
+Imports ExcelInterop = Microsoft.Office.Interop.Excel
 'Imports Microsoft.Office.Core
 Imports System.Data.OleDb
 
@@ -10,7 +10,7 @@ Module ModuleGeneral
 
 
     'Create db objects
-    Public mappDB As New ClassDB
+    Public mappDB As New ClassDB()
     Public mappDBCloud As New ClassDB() '(cloud)
     Public objResult As New ClassExcelResult()
     Public objBroadsheet As New ClassBroadsheets()
@@ -27,13 +27,16 @@ Module ModuleGeneral
 
     'DB defalults
     Public STR_connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\db.mdb"
+    Public STR_connectionStringCloud As String = "server=localhost;User Id=root;Persist Security Info=True;database=result_and_transript_db"
+
+
     'TODO: 'Public STR_connectionString As String = CType(ConfigurationManager.AppSettings("connString").ToString, String)
 
     'Excel
     Public Const strApplicationName As String = "e-Result"
-    Public excelApp As Excel.Application
-    Public excelWS As Excel.Worksheet
-    Public excelWB As Excel.Workbook
+    Public excelApp As ExcelInterop.Application
+    Public excelWS As ExcelInterop.Worksheet
+    Public excelWB As ExcelInterop.Workbook
     'General constants
     Public dblQuote As String = """"
     'Public intLoanID As Integer = CType(My.Settings.Item("LoanID").ToString, Integer)
@@ -302,35 +305,35 @@ Module ModuleGeneral
 
         'excelWS.Cells.Range(_range).Borders ()
 
-        With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlEdgeLeft)
-            .LineStyle = Excel.XlLineStyle.xlContinuous
-            .Weight = Excel.XlBorderWeight.xlHairline
-            .ColorIndex = Excel.Constants.xlAutomatic
+        With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeLeft)
+            .LineStyle = ExcelInterop.XlLineStyle.xlContinuous
+            .Weight = ExcelInterop.XlBorderWeight.xlHairline
+            .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
-        With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlEdgeTop)
-            .LineStyle = Excel.XlLineStyle.xlContinuous
-            .Weight = Excel.XlBorderWeight.xlHairline
-            .ColorIndex = Excel.Constants.xlAutomatic
+        With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeTop)
+            .LineStyle = ExcelInterop.XlLineStyle.xlContinuous
+            .Weight = ExcelInterop.XlBorderWeight.xlHairline
+            .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
-        With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlEdgeBottom)
-            .LineStyle = Excel.XlLineStyle.xlContinuous
-            .Weight = Excel.XlBorderWeight.xlHairline
-            .ColorIndex = Excel.Constants.xlAutomatic
+        With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeBottom)
+            .LineStyle = ExcelInterop.XlLineStyle.xlContinuous
+            .Weight = ExcelInterop.XlBorderWeight.xlHairline
+            .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
-        With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlEdgeRight)
-            .LineStyle = Excel.XlLineStyle.xlContinuous
-            .Weight = Excel.XlBorderWeight.xlHairline
-            .ColorIndex = Excel.Constants.xlAutomatic
+        With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeRight)
+            .LineStyle = ExcelInterop.XlLineStyle.xlContinuous
+            .Weight = ExcelInterop.XlBorderWeight.xlHairline
+            .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
-        With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlInsideVertical)
-            .LineStyle = Excel.XlLineStyle.xlContinuous
-            .Weight = Excel.XlBorderWeight.xlHairline
-            .ColorIndex = Excel.Constants.xlAutomatic
+        With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlInsideVertical)
+            .LineStyle = ExcelInterop.XlLineStyle.xlContinuous
+            .Weight = ExcelInterop.XlBorderWeight.xlHairline
+            .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
-        With excelWS.Cells.Range(_range).Borders(Excel.XlBordersIndex.xlInsideHorizontal)
-            .LineStyle = Excel.XlLineStyle.xlContinuous
-            .Weight = Excel.XlBorderWeight.xlHairline
-            .ColorIndex = Excel.Constants.xlAutomatic
+        With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlInsideHorizontal)
+            .LineStyle = ExcelInterop.XlLineStyle.xlContinuous
+            .Weight = ExcelInterop.XlBorderWeight.xlHairline
+            .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
     End Sub
     Public Sub logError(str As String)

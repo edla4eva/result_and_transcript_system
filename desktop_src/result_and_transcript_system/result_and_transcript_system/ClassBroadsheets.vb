@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Office.Interop
+﻿'Imports Microsoft.Office.Interop.Excel
+Imports ExcelInterop = Microsoft.Office.Interop.Excel
 
 Public Class ClassBroadsheets
     Public Delegate Sub OnPropertyChanged(ByVal sende As Object, e As ClassAnswerEventArgs)
@@ -11,7 +12,7 @@ Public Class ClassBroadsheets
         Try
             'Me._excelWB.FileNameWB = PROG_DIRECTORY & "\templates\broadsheet.xltx"
             _broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
-            '_excelWB = New Excel.Workbook
+            '_excelWB = New ExcelInterop.Workbook
 
         Catch ex As Exception
             MsgBox("Cannot create Excel Automation Object" & vbCrLf & ex.Message)
@@ -22,7 +23,7 @@ Public Class ClassBroadsheets
     Private _strMATNO As String() = Nothing
     Private _broadsheetFileName As String = Nothing
     Private _progress As Integer = 0
-    Private _excelWB As Excel.Workbook
+    Private _excelWB As ExcelInterop.Workbook
     Private _regInfoCoursesFirstSem As List(Of String)
     Private _regInfoCoursesSecondSem As List(Of String)
     Private _processedBroadsheetFileName As String = Nothing
@@ -50,11 +51,11 @@ Public Class ClassBroadsheets
             _regInfoCoursesFirstSem = value
         End Set
     End Property
-    Public Property excelWB() As Excel.Workbook
+    Public Property excelWB() As ExcelInterop.Workbook
         Get
             Return _excelWB
         End Get
-        Set(ByVal value As Excel.Workbook)
+        Set(ByVal value As ExcelInterop.Workbook)
             _excelWB = value
         End Set
     End Property
@@ -116,11 +117,11 @@ Public Class ClassBroadsheets
         Dim i As Integer = 0
         ' Dim strArrayMATNO, strArrayNAME, strArrayCA, strArrayEXAM, strArrayTOTAL, strArraySURNAME, strArrayOtherNames As String()
         Try
-            excelApp = New Excel.Application
+            excelApp = New ExcelInterop.Application
 
             If _broadsheetFileName = Nothing Or Not System.IO.File.Exists(_broadsheetFileName) Then Exit Function 'todo
             excelWB = excelApp.Workbooks.Open(Me.broadsheetFileName)
-            excelWS = CType(excelWB.Sheets(1), Excel.Worksheet)
+            excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
             'show it
             excelApp.Visible = False
 
