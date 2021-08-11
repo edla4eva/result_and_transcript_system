@@ -8,6 +8,7 @@
     Const WM_NCHITTEST As Integer = &H84
     Const HTCLIENT As Integer = 1
     Const HTCAPTION As Integer = 2
+    Private dCurrentForm As String = "User"
 
     'This overrides the WndProc method to control the main form to make it adjustable
     'This was a borrowed code
@@ -181,6 +182,16 @@
 
     Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
         Me.WindowState = FormWindowState.Minimized
+    End Sub
+
+    Private Sub ButtonCurrent_Click(sender As Object, e As EventArgs) Handles ButtonCurrent.Click
+        ActiveButton(sender, RGBColors.colorCrimson)
+        ChangeMenu(dCurrentForm)
+    End Sub
+    Public Sub setDCurrentForm(s As String)
+        dCurrentForm = s
+        Me.ButtonCurrent.Text = s
+
     End Sub
 End Class
 

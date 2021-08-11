@@ -4,7 +4,7 @@
 [Setup]
 AppName=Result and Trascript Processing System
 AppVersion=1.0
-DefaultDirName={pf}\ResultandTrascriptProcessingSystem
+DefaultDirName={commonpf}\ResultandTrascriptProcessingSystem
 DefaultGroupName=ResultandTrascriptProcessingSystem
 UninstallDisplayIcon={app}\ResultandTrascriptProcessingSystem.exe
 Compression=lzma2
@@ -37,7 +37,7 @@ Source: "..\bin\debug\samples\broadsheet.xlsx"; DestDir: "{app}\bibles"
 
 ;templates
 Source: "..\bin\debug\templates\result.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
-Source: "..\bin\debug\templates\result.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
+Source: "..\bin\debug\templates\broadsheet.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 
 
 

@@ -29,9 +29,10 @@ Partial Class MainForm
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonHome = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabelMax = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
+        Me.ButtonCurrent = New System.Windows.Forms.Button()
         Me.SidePanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -51,6 +52,7 @@ Partial Class MainForm
         Me.SidePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonCurrent)
         Me.SidePanel.Controls.Add(Me.LinkLabel2)
         Me.SidePanel.Controls.Add(Me.ButtonExit)
         Me.SidePanel.Controls.Add(Me.ButtonUser)
@@ -126,6 +128,19 @@ Partial Class MainForm
         Me.Panel1.Size = New System.Drawing.Size(790, 30)
         Me.Panel1.TabIndex = 3
         '
+        'LinkLabel3
+        '
+        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.DimGray
+        Me.LinkLabel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel3.AutoSize = True
+        Me.LinkLabel3.LinkColor = System.Drawing.Color.DarkRed
+        Me.LinkLabel3.Location = New System.Drawing.Point(676, 9)
+        Me.LinkLabel3.Name = "LinkLabel3"
+        Me.LinkLabel3.Size = New System.Drawing.Size(19, 13)
+        Me.LinkLabel3.TabIndex = 2
+        Me.LinkLabel3.TabStop = True
+        Me.LinkLabel3.Text = "__"
+        '
         'LinkLabelMax
         '
         Me.LinkLabelMax.ActiveLinkColor = System.Drawing.Color.DimGray
@@ -152,18 +167,18 @@ Partial Class MainForm
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Close (X)"
         '
-        'LinkLabel3
+        'ButtonCurrent
         '
-        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.DimGray
-        Me.LinkLabel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel3.AutoSize = True
-        Me.LinkLabel3.LinkColor = System.Drawing.Color.DarkRed
-        Me.LinkLabel3.Location = New System.Drawing.Point(676, 9)
-        Me.LinkLabel3.Name = "LinkLabel3"
-        Me.LinkLabel3.Size = New System.Drawing.Size(19, 13)
-        Me.LinkLabel3.TabIndex = 2
-        Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "__"
+        Me.ButtonCurrent.FlatAppearance.BorderSize = 0
+        Me.ButtonCurrent.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonCurrent.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonCurrent.ForeColor = System.Drawing.Color.White
+        Me.ButtonCurrent.Location = New System.Drawing.Point(3, 342)
+        Me.ButtonCurrent.Name = "ButtonCurrent"
+        Me.ButtonCurrent.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonCurrent.TabIndex = 4
+        Me.ButtonCurrent.Text = "Current View"
+        Me.ButtonCurrent.UseVisualStyleBackColor = True
         '
         'MainForm
         '
@@ -198,4 +213,5 @@ Partial Class MainForm
     Friend WithEvents LinkLabel2 As LinkLabel
     Friend WithEvents LinkLabelMax As LinkLabel
     Friend WithEvents LinkLabel3 As LinkLabel
+    Friend WithEvents ButtonCurrent As Button
 End Class

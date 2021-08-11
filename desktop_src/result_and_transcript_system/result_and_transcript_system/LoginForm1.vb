@@ -24,14 +24,20 @@ Public Class LoginForm1
                 Me.PasswordTextBox.Text = "adminCA" Then
             'If password id correct, change the panel menu
             MainForm.ChangeMenu("CourseAdviser")    'This passes the form name to the changeMenu method in the mainForm
-
+            MainForm.setDCurrentForm("CourseAdviser")
         ElseIf Me.UsernameTextBox.Text = "adminST" And
                     Me.PasswordTextBox.Text = "adminST" Then
             MainForm.ChangeMenu("Student")
+            MainForm.setDCurrentForm("Student")
 
         ElseIf Me.UsernameTextBox.Text = "adminCL" And
                 Me.PasswordTextBox.Text = "adminCL" Then
             MainForm.ChangeMenu("CourseLecturer")
+            MainForm.setDCurrentForm("CourseLecturer")
+        ElseIf Me.UsernameTextBox.Text = "admin" And
+             Me.PasswordTextBox.Text = "adminCL" Then
+            MainForm.ChangeMenu("CourseAdviser")
+            MainForm.setDCurrentForm("CourseAdviser")
         End If
     End Sub
 

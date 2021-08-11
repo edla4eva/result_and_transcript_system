@@ -14,12 +14,15 @@ Module ModuleGeneral
     Public mappDBCloud As New ClassDB() '(cloud)
     Public objResult As New ClassExcelResult()
     Public objBroadsheet As New ClassBroadsheets()
+
+
     Public conn As New MySql.Data.MySqlClient.MySqlConnection
     Dim oadDataGrid As MySqlDataAdapter
     Dim oadDataGridLocal As OleDbDataAdapter
     Dim dtDataGrid As DataTable
     'create Excel objects
     Public myExcelApp As New ClassExcel
+    Public objExcelFile As New ClassExcelFile() 'ExcelDataReader object
 
     'App settings
     Public USER_DIRECTORY As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\ResultAndTranscriptSystem"

@@ -35,13 +35,13 @@ Partial Class FormGenerateBroadsheet
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.ButtonResultList = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
         Me.ButtonProcessBroadsheet = New System.Windows.Forms.Button()
         Me.ButtonBrowse = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
@@ -165,6 +165,19 @@ Partial Class FormGenerateBroadsheet
         Me.SidePanel.Size = New System.Drawing.Size(134, 517)
         Me.SidePanel.TabIndex = 27
         '
+        'Button3
+        '
+        Me.Button3.FlatAppearance.BorderSize = 0
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Button3.ForeColor = System.Drawing.Color.White
+        Me.Button3.Location = New System.Drawing.Point(6, 423)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(128, 55)
+        Me.Button3.TabIndex = 6
+        Me.Button3.Text = "Cancel"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
         'Button4
         '
         Me.Button4.FlatAppearance.BorderColor = System.Drawing.Color.Gray
@@ -242,19 +255,6 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonBrowse.TabIndex = 0
         Me.ButtonBrowse.Text = "BroadSheets"
         Me.ButtonBrowse.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.FlatAppearance.BorderSize = 0
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Button3.ForeColor = System.Drawing.Color.White
-        Me.Button3.Location = New System.Drawing.Point(6, 423)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(128, 55)
-        Me.Button3.TabIndex = 6
-        Me.Button3.Text = "Cancel"
-        Me.Button3.UseVisualStyleBackColor = True
         '
         'Label6
         '
