@@ -53,12 +53,9 @@ Partial Class FormUploadResult
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.ComboBox4 = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
         Me.ComboBox5 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox6 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -67,6 +64,9 @@ Partial Class FormUploadResult
         '
         'TextBoxExcelFilename
         '
+        Me.TextBoxExcelFilename.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxExcelFilename.Location = New System.Drawing.Point(44, 52)
         Me.TextBoxExcelFilename.Name = "TextBoxExcelFilename"
         Me.TextBoxExcelFilename.Size = New System.Drawing.Size(541, 20)
@@ -386,51 +386,6 @@ Partial Class FormUploadResult
         Me.Label7.TabIndex = 3
         Me.Label7.Text = "NB: Correct Order of Columns: S/N, MATNO, NAME, SCORE"
         '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(44, 75)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(28, 13)
-        Me.Label10.TabIndex = 13
-        Me.Label10.Text = "Col1"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(174, 75)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(28, 13)
-        Me.Label11.TabIndex = 14
-        Me.Label11.Text = "Col2"
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(301, 75)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(28, 13)
-        Me.Label12.TabIndex = 15
-        Me.Label12.Text = "Col3"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(425, 75)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(28, 13)
-        Me.Label13.TabIndex = 16
-        Me.Label13.Text = "Col4"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(554, 75)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(28, 13)
-        Me.Label14.TabIndex = 18
-        Me.Label14.Text = "Col4"
-        '
         'ComboBox5
         '
         Me.ComboBox5.FormattingEnabled = True
@@ -439,7 +394,27 @@ Partial Class FormUploadResult
         Me.ComboBox5.Name = "ComboBox5"
         Me.ComboBox5.Size = New System.Drawing.Size(121, 21)
         Me.ComboBox5.TabIndex = 17
-        Me.ComboBox5.Text = "SCORE"
+        Me.ComboBox5.Text = "-"
+        '
+        'ComboBox6
+        '
+        Me.ComboBox6.FormattingEnabled = True
+        Me.ComboBox6.Items.AddRange(New Object() {"S/N", "MATNO", "NAME", "SCORE", "-"})
+        Me.ComboBox6.Location = New System.Drawing.Point(823, 91)
+        Me.ComboBox6.Name = "ComboBox6"
+        Me.ComboBox6.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBox6.TabIndex = 20
+        Me.ComboBox6.Text = "-"
+        '
+        'ComboBox7
+        '
+        Me.ComboBox7.FormattingEnabled = True
+        Me.ComboBox7.Items.AddRange(New Object() {"S/N", "MATNO", "NAME", "SCORE", "-"})
+        Me.ComboBox7.Location = New System.Drawing.Point(694, 91)
+        Me.ComboBox7.Name = "ComboBox7"
+        Me.ComboBox7.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBox7.TabIndex = 19
+        Me.ComboBox7.Text = "-"
         '
         'FormUploadResult
         '
@@ -447,12 +422,9 @@ Partial Class FormUploadResult
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(913, 471)
-        Me.Controls.Add(Me.Label14)
+        Me.Controls.Add(Me.ComboBox6)
+        Me.Controls.Add(Me.ComboBox7)
         Me.Controls.Add(Me.ComboBox5)
-        Me.Controls.Add(Me.Label13)
-        Me.Controls.Add(Me.Label12)
-        Me.Controls.Add(Me.Label11)
-        Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.ComboBox4)
         Me.Controls.Add(Me.ComboBox3)
@@ -505,10 +477,7 @@ Partial Class FormUploadResult
     Friend WithEvents ComboBox3 As ComboBox
     Friend WithEvents ComboBox4 As ComboBox
     Friend WithEvents Label7 As Label
-    Friend WithEvents Label10 As Label
-    Friend WithEvents Label11 As Label
-    Friend WithEvents Label12 As Label
-    Friend WithEvents Label13 As Label
-    Friend WithEvents Label14 As Label
     Friend WithEvents ComboBox5 As ComboBox
+    Friend WithEvents ComboBox6 As ComboBox
+    Friend WithEvents ComboBox7 As ComboBox
 End Class

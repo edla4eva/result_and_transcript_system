@@ -284,4 +284,89 @@ Public Class ClassDB
         End Try
         Return returnVal
     End Function
+    Public Function getDataReader(TableName As String, Optional isLocal As Boolean = True) As Boolean
+        Dim Table As DataTable = New DataTable()
+        Dim adapterL As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter("Select * from " + TableName, Me.connLocal.ConnectionString)
+        ' Dim adapterC As OleDb.OleDbDataAdapter = New MySqlDataAdapter("Select * from " + TableName, Me.connRemote.ConnectionString)
+
+        If isLocal Then
+            adapterL.Fill(Table)
+        Else
+
+        End If
+        Return True
+    End Function
+    'Useful for updating and Syncing
+    Public Function CompareDataTables(ByVal first As DataTable, ByVal second As DataTable) As DataTable
+        first.TableName = "FirstTable"
+        second.TableName = "SecondTable"
+        Dim table As DataTable = New DataTable("Difference")
+
+        Try
+
+            Using ds As DataSet = New DataSet()
+                ds.Tables.AddRange(New DataTable() {first.Copy(), second.Copy()})
+                Dim firstcolumns As DataColumn() = New DataColumn(ds.Tables(0).Columns.Count - 1) {}
+
+                For i As Integer = 0 To firstcolumns.Length - 1
+                    firstcolumns(i) = ds.Tables(0).Columns(i)
+                Next
+
+                Dim secondcolumns As DataColumn() = New DataColumn(ds.Tables(1).Columns.Count - 1) {}
+
+                For i As Integer = 0 To secondcolumns.Length - 1
+                    secondcolumns(i) = ds.Tables(1).Columns(i)
+                Next
+
+                Dim r As DataRelation = New DataRelation(String.Empty, firstcolumns, secondcolumns, False)
+                ds.Relations.Add(r)
+
+                For i As Integer = 0 To first.Columns.Count - 1
+                    table.Columns.Add(first.Columns(i).ColumnName, first.Columns(i).DataType)
+                Next
+
+                table.BeginLoadData()
+
+                For Each parentrow As DataRow In ds.Tables(0).Rows
+                    Dim childrows As DataRow() = parentrow.GetChildRows(r)
+                    If childrows Is Nothing OrElse childrows.Length = 0 Then table.LoadDataRow(parentrow.ItemArray, True)
+                Next
+
+                table.EndLoadData()
+            End Using
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+        Return table
+    End Function
+
+    Public Function bulkInsertDB(dt As DataTable) As Boolean
+        Dim con As OleDb.OleDbConnection = Me.conn
+        'create the table
+        Dim sql As String = "Create Table abcd ("
+        For Each column As DataColumn In dt.Columns
+            sql += "[" & column.ColumnName & "] " & "nvarchar(50)" & ","
+        Next
+
+        sql = sql.TrimEnd(New Char() {","c}) & ")"
+
+        Dim cmd As OleDbCommand = New OleDbCommand(sql, con)
+        Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd)
+        cmd.ExecuteNonQuery()
+
+
+        'Pull the table records and insert new
+        Using adapter = New OleDbDataAdapter("SELECT * FROM abcd", con)
+
+            Using builder = New OleDbCommandBuilder(adapter)
+                adapter.InsertCommand = builder.GetInsertCommand()
+                adapter.Update(dt)
+            End Using
+        End Using
+
+        con.Close()
+        Return True
+    End Function
 End Class

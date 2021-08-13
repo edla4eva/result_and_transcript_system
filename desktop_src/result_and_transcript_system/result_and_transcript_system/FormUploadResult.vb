@@ -159,13 +159,7 @@
         DataGridView1.Refresh()
     End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
 
-    End Sub
-
-    Private Sub DataGridView1_SizeChanged(sender As Object, e As EventArgs) Handles DataGridView1.SizeChanged
-
-    End Sub
 
     Private Sub DataGridView1_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
         resizeCombosToGrid()
@@ -182,5 +176,9 @@
         ComboBox4.Left = ComboBox3.Left + DataGridView1.Columns(2).Width
         ComboBox5.Width = DataGridView1.Columns(4).Width
         ComboBox5.Left = ComboBox4.Left + DataGridView1.Columns(3).Width
+        ComboBox6.Width = DataGridView1.Columns(5).Width
+        ComboBox6.Left = ComboBox5.Left + DataGridView1.Columns(4).Width
+        ComboBox7.Width = DataGridView1.Columns(6).Width
+        ComboBox7.Left = ComboBox6.Left + DataGridView1.Columns(5).Width
     End Sub
 End Class

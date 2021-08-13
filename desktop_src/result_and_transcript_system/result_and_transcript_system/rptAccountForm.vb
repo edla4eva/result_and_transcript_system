@@ -1,6 +1,7 @@
 Imports MySql.Data.MySqlClient
 Imports Microsoft.Office.Interop
 
+
 Public Class rptAccountForm
     Dim cmdlocal As MySql.Data.MySqlClient.MySqlCommand
     Dim rd As MySql.Data.MySqlClient.MySqlDataReader

@@ -84,6 +84,41 @@ Public Class ClassExcel
             'can cause error
         End Try
     End Function
+    'TODO
+    Public Sub importdatafromexcelOLEDB(ByVal excelfilepath As String)
+        Dim ssqltable As String = "tdatamigrationtable"
+        Dim myexceldataquery As String = "select student,rollno,course from [sheet1$]"
+
+        Try
+            Dim sexcelconnectionstring As String = "provider=microsoft.jet.oledb.4.0;data source=" & excelfilepath & ";extended properties=" & """excel 8.0;hdr=yes;"""
+            Dim ssqlconnectionstring As String = "server=mydatabaseservername;user
+            id = dbuserid
+            password = dbuserpassword
+            database = databasename
+             ;"
+            'first delete
+            Dim sclearsql As String = "delete from " & ssqltable
+            Dim sqlconn As SqlConnection = New SqlConnection(ssqlconnectionstring)
+            Dim sqlcmd As SqlCommand = New SqlCommand(sclearsql, sqlconn)
+            sqlconn.Open()
+            sqlcmd.ExecuteNonQuery()
+            sqlconn.Close()
+
+            Dim oledbconn As OleDbConnection = New OleDbConnection(sexcelconnectionstring)
+            Dim oledbcmd As OleDbCommand = New OleDbCommand(myexceldataquery, oledbconn)
+            oledbconn.Open()
+            Dim dr As OleDbDataReader = oledbcmd.ExecuteReader()
+            Dim bulkcopy As SqlBulkCopy = New SqlBulkCopy(ssqlconnectionstring)
+            bulkcopy.DestinationTableName = ssqltable
+
+            While dr.Read()
+                bulkcopy.WriteToServer(dr)
+            End While
+
+            oledbconn.Close()
+        Catch ex As Exception
+        End Try
+    End Sub
 
 
 
