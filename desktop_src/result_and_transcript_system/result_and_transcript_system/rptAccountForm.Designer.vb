@@ -96,7 +96,7 @@ Partial Class rptAccountForm
         '
         'ToolStripButton1
         '
-        Me.ToolStripButton1.Image = Global.eAccount.My.Resources.Resources.toexcel16
+        'Me.ToolStripButton1.Image = Global.eAccount.My.Resources.Resources.toexcel16
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(52, 22)
@@ -104,7 +104,7 @@ Partial Class rptAccountForm
         '
         'viewAllToolStripButton
         '
-        Me.viewAllToolStripButton.Image = Global.eAccount.My.Resources.Resources.toexcel16
+        'Me.viewAllToolStripButton.Image = Global.eAccount.My.Resources.Resources.toexcel16
         Me.viewAllToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.viewAllToolStripButton.Name = "viewAllToolStripButton"
         Me.viewAllToolStripButton.Size = New System.Drawing.Size(121, 22)
@@ -112,7 +112,7 @@ Partial Class rptAccountForm
         '
         'ToolStripButton2
         '
-        Me.ToolStripButton2.Image = Global.eAccount.My.Resources.Resources.off16a
+        'Me.ToolStripButton2.Image = Global.eAccount.My.Resources.Resources.off16a
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(56, 22)
@@ -148,7 +148,7 @@ Partial Class rptAccountForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackgroundImage = Global.eAccount.My.Resources.Resources.sidbnr
+        'Me.BackgroundImage = Global.eAccount.My.Resources.Resources.sidbnr
         Me.ClientSize = New System.Drawing.Size(499, 338)
         Me.ControlBox = False
         Me.Controls.Add(Me.Button1)

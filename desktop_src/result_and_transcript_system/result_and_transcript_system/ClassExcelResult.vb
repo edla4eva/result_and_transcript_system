@@ -212,7 +212,7 @@ Public Class ClassExcelResult
             'can cause error
         End Try
     End Function
-    Function importResultFromExcelWB() As DataSet
+    Function importResultFromExcelWBInterop() As DataSet
 
 
         Dim strCriteria As String = String.Empty

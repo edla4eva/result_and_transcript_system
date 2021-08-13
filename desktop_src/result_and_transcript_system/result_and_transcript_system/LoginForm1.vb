@@ -35,9 +35,10 @@ Public Class LoginForm1
             MainForm.ChangeMenu("CourseLecturer")
             MainForm.setDCurrentForm("CourseLecturer")
         ElseIf Me.UsernameTextBox.Text = "admin" And
-             Me.PasswordTextBox.Text = "adminCL" Then
-            MainForm.ChangeMenu("CourseAdviser")
-            MainForm.setDCurrentForm("CourseAdviser")
+             Me.PasswordTextBox.Text = "admin" Then
+            MainForm.ChangeMenu("admin")
+            MainForm.setDCurrentForm("admin")
+
         End If
     End Sub
 

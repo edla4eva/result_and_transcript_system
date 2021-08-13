@@ -36,7 +36,7 @@ Partial Class FormGenerateBroadsheet
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button4 = New System.Windows.Forms.Button()
+        Me.SelectBroadsheetTemplate = New System.Windows.Forms.Button()
         Me.ButtonResultList = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
@@ -153,7 +153,7 @@ Partial Class FormGenerateBroadsheet
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.SidePanel.Controls.Add(Me.Button3)
-        Me.SidePanel.Controls.Add(Me.Button4)
+        Me.SidePanel.Controls.Add(Me.SelectBroadsheetTemplate)
         Me.SidePanel.Controls.Add(Me.ButtonResultList)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonUpload)
@@ -180,16 +180,16 @@ Partial Class FormGenerateBroadsheet
         '
         'Button4
         '
-        Me.Button4.FlatAppearance.BorderColor = System.Drawing.Color.Gray
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Button4.ForeColor = System.Drawing.Color.White
-        Me.Button4.Location = New System.Drawing.Point(0, 39)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(128, 55)
-        Me.Button4.TabIndex = 5
-        Me.Button4.Text = "Select Template"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.SelectBroadsheetTemplate.FlatAppearance.BorderColor = System.Drawing.Color.Gray
+        Me.SelectBroadsheetTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.SelectBroadsheetTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.SelectBroadsheetTemplate.ForeColor = System.Drawing.Color.White
+        Me.SelectBroadsheetTemplate.Location = New System.Drawing.Point(0, 39)
+        Me.SelectBroadsheetTemplate.Name = "Button4"
+        Me.SelectBroadsheetTemplate.Size = New System.Drawing.Size(128, 55)
+        Me.SelectBroadsheetTemplate.TabIndex = 5
+        Me.SelectBroadsheetTemplate.Text = "Select Template"
+        Me.SelectBroadsheetTemplate.UseVisualStyleBackColor = True
         '
         'ButtonResultList
         '
@@ -306,7 +306,7 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents ComboBoxDepartments As ComboBox
     Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents SidePanel As Panel
-    Friend WithEvents Button4 As Button
+    Friend WithEvents SelectBroadsheetTemplate As Button
     Friend WithEvents ButtonResultList As Button
     Friend WithEvents ButtonCloud As Button
     Friend WithEvents ButtonUpload As Button

@@ -30,102 +30,62 @@ Public Class FormStudentsRegistration
         'ref = CInt(CLng(Now.ToOADate * 200) + 100)
         'mappDB.ref = ref
         'mappDB.rDate = FormatMyDate(Now) & " " & FormatMyTime(Now)  'Now.ToShortDateString & " " & Now.ToShortTimeString
-        'GetData()
+        GetData()
     End Sub
     Public Sub GetData()
         Try
-            strConnectionString = mappDB.getConnectionString(False)
-            con = New MySql.Data.MySqlClient.MySqlConnection(strConnectionString)
-            con.Open()
+            Dim tmpDS = mappDB.GetDataWhere(String.Format(SQL_SELECT_ALL_RESULTS_WHERE_MATNO, mappDB.MATNO), "Results")
+            Dim cmdLocal As New OleDb.OleDbCommand(strSQL, mappDB.connLocal)
+            Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
 
-            '--All rooms
-            If mappDB.MATNO = "" Then
-                strSQL = SQL_SELECT_RESULTS_WHERE_MATNO
-            Else
-                strSQL = String.Format(SQL_SELECT_RESULTS_WHERE_MATNO, mappDB.MATNO)
-            End If
-
-            cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            Dim myDA As MySqlDataAdapter = New MySqlDataAdapter(cmd)
-            Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, "Room")
-            dgw.DataSource = myDataSet.Tables("Room").DefaultView
-
-
-            con.Close()
-
-            ' UpdateSaleCart() 
+            myDA.Fill(tmpDS, "Results")
+            dgw.DataSource = tmpDS.Tables("Results").DefaultView
+            UpdateCourses()
             'TODO: 
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Public Sub GetBillsDataWhere(s As String)
+
+    Public Sub UpdateCourses()
         Try
-            strConnectionString = mappDB.getConnectionString(False)
-            con = New MySql.Data.MySqlClient.MySqlConnection(strConnectionString)
-            con.Open()
-            strSQL = s
-            cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            Dim myDA As MySqlDataAdapter = New MySqlDataAdapter(cmd)
-            Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, "Guest")
-            dgv_rooms.DataSource = myDataSet.Tables("Guest").DefaultView
+            Dim tmpDS As DataSet
+            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_WHERE, mappDB.MATNO), "Courses") 'todo
+            dgv_courses.DataSource = tmpDS.Tables("Courses").DefaultView
             con.Close()
+
+            For Each col As DataGridViewColumn In dgv_courses.Columns
+                col.Width = 0
+                col.Visible = False
+                If col.HeaderText = "date" Then
+                    col.Width = 70
+                    col.Visible = True
+                ElseIf col.HeaderText = "details" Then
+                    col.Width = 130
+                    col.Visible = True
+                ElseIf col.HeaderText = "credit" Then
+                    col.Width = 60
+                    col.Visible = True
+                ElseIf col.HeaderText = "ref" Then
+                    col.Width = 50
+                    col.Visible = True
+                End If
+            Next
+
+            dgv_courses.Refresh()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    'Public Sub UpdateSaleCart()
-    '    Try
-
-    '        GetBillsDataWhere(String.Format(STR_SQL_CART_BILLS_WHERE, ref, mappDB.rDate))
-
-    '        For Each col As DataGridViewColumn In dgv_rooms.Columns
-    '            col.Width = 0
-    '            col.Visible = False
-    '            If col.HeaderText = "date" Then
-    '                col.Width = 70
-    '                col.Visible = True
-    '            ElseIf col.HeaderText = "details" Then
-    '                col.Width = 130
-    '                col.Visible = True
-    '            ElseIf col.HeaderText = "credit" Then
-    '                col.Width = 60
-    '                col.Visible = True
-    '            ElseIf col.HeaderText = "ref" Then
-    '                col.Width = 50
-    '                col.Visible = True
-    '            End If
-    '        Next
-
-    '        dgv_rooms.Refresh()
-    '    Catch ex As Exception
-    '        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-    '    End Try
-    'End Sub
-    Public Sub GetDataWhere(s As String)
-        Try
-            strConnectionString = mappDB.getConnectionString(False)
-            con = New MySql.Data.MySqlClient.MySqlConnection(strConnectionString)
-            con.Open()
-            strSQL = s
-            cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            Dim myDA As MySqlDataAdapter = New MySqlDataAdapter(cmd)
-            Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, "Room")
-            dgw.DataSource = myDataSet.Tables("Room").DefaultView       'all room
-            con.Close()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
 
     Private Sub txtStudentName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentName.TextChanged
-
-        strSQL = String.Format(SQL_SELECT_RESULTS_WHERE_MATNO, txtStudentName.Text)
-        GetDataWhere(strSQL)
+        mappDB.MATNO = txtStudentName.Text
+        Dim tmpDS = mappDB.GetDataWhere(String.Format(SQL_SELECT_ALL_RESULTS_WHERE_MATNO, mappDB.MATNO), "Results")
+        Dim cmdLocal As New OleDb.OleDbCommand(strSQL, mappDB.connLocal)
+        Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
+        myDA.Fill(tmpDS, "Results")
+        dgw.DataSource = tmpDS.Tables("Results").DefaultView
+        UpdateCourses()
     End Sub
 
     Private Sub dgw_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgw.CellContentClick
@@ -134,14 +94,14 @@ Public Class FormStudentsRegistration
 
 
     Private Sub dgw_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgw.RowsAdded
-
+        On Error Resume Next
         For Each row As DataGridViewRow In Me.dgw.Rows
 
-            If row.Cells.Item("is_product_sold_out").Value.ToString = "no" Then
+            If row.Cells.Item("is_registered").Value.ToString = "no" Then
                 row.DefaultCellStyle.BackColor = Color.White
-            ElseIf row.Cells.Item("is_product_sold_out").Value.ToString = "almost" Then
+            ElseIf row.Cells.Item("is_registered").Value.ToString = "partial" Then
                 row.DefaultCellStyle.BackColor = Color.Orange
-            ElseIf row.Cells.Item("is_product_sold_out").Value.ToString = "yes" Then
+            ElseIf row.Cells.Item("is_registered").Value.ToString = "yes" Then
                 row.DefaultCellStyle.BackColor = Color.PaleVioletRed
             End If
         Next
@@ -157,47 +117,51 @@ Public Class FormStudentsRegistration
         Me.Close()
     End Sub
 
-    Public Sub CaptureProduct()
+    Public Sub CaptureCourses()
         ''get quantity first and subtract 1
-        'Dim qty As Integer = CInt(dgw.SelectedRows(0).Cells("quantityInStock").Value)
-        'Dim tmpProductCode As String = dgw.SelectedRows(0).Cells(0).Value.ToString
-        'Dim tmpPrice As Double = CInt(dgw.SelectedRows(0).Cells("buyPrice").Value)
+        Dim units As Integer = CInt(dgw.SelectedRows(0).Cells("units").Value)
+        Dim MATNO As String = dgw.SelectedRows(0).Cells(1).Value.ToString
+        Dim semester As Double = CInt(dgw.SelectedRows(0).Cells("semester").Value)
+        Dim credits As Double = CInt(dgw.SelectedRows(0).Cells("credits").Value)
+        Dim courseCode As Double = CInt(dgw.SelectedRows(0).Cells("courseCode").Value)
 
+        ''Capture Studennt TODO
+        mappDB.MATNO = MATNO
 
-        ''Capture Product
-        'mappDB.ProductCode = tmpProductCode
-        'mappDB.ProductQty = qty
-        'Me.TextBoxDetails.Text = "1 No. of " & mappDB.ProductCode.ToString
-        'Me.TextBoxQty.Text = "1"
-        'Me.TextBoxUnitPrice.Text = tmpPrice.ToString
-        'Me.LabelRef.Text = ref.ToString
-        'Me.TextBoxCredit.Text = tmpPrice.ToString
+        Me.TextBoxCourseCode.Text = courseCode.ToString
+        Me.TextBoxSemester.Text = semester.ToString
+        Me.TextBoxUnits.Text = units.ToString
+        Me.LabelRef.Text = ref.ToString
+        Me.TextBoxTotalCredits.Text = credits.ToString
 
 
     End Sub
 
-    'Public Sub sell(all As Boolean)
-    '    Dim sDate, sQty, sDet, sCr, sDr, sBal, sRef, sStat As String
+    Public Sub unregisterStudent()
 
-    '    sDet = Me.TextBoxDetails.Text
-    '    sQty = Me.TextBoxQty.Text
-    '    'sU = Me.TextBoxUnitPrice.Text '= tmpPrice.ToString
-    '    sRef = Me.LabelRef.Text
-    '    sCr = Me.TextBoxCredit.Text '= tmpPrice.ToString
-    '    sDr = "0"
-    '    sBal = "0"
-    '    sDate = mappDB.rDate 'FormatMyDate(Now) & " " & FormatMyTime(Now) '' "2018-10-09 00:00:00"
-    '    'sell
-    '    UpdateRecordWhere(String.Format(SQL_UPDATE_PRODUCT, mappDB.ProductQty - CInt(sQty), mappDB.ProductCode))
-    '    'insert into bills
-    '    '(`guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status`) VALUES ('1', '1', '2018-10-09 00:00:00', '1 No of Resistor', '0', '2000', '2000', '55', 'paid');"
-    '    InsertRecord(String.Format(SQL_INSERT_INTO_SALE_CART, sDate, sDet, sDr, sCr, sBal, sRef, "not paid"))
-    '    MsgBox("Product " & mappDB.ProductCode.ToString & " Sold Successfully!, Enter the Sales Details")
 
-    '    'refresh Datagrid
-    '    UpdateSaleCart()
+    End Sub
+    Public Sub registerStudent(all As Boolean)
+        Dim sDate, sUnits, sCC, sS, sRef, sTC As String
 
-    'End Sub
+
+        sCC = Me.TextBoxCourseCode.Text
+        sTC = Me.TextBoxTotalCredits.Text
+        sS = Me.TextBoxSemester.Text
+        sUnits = Me.TextBoxUnits.Text
+
+        sRef = Me.LabelRef.Text
+        sTC = 0
+
+        sDate = FormatMyDate(Now) & " " & FormatMyTime(Now) '' "2018-10-09 00:00:00" 'mappDB.rDate '
+        '    'sell
+        mappDB.UpdateRecordWhere(String.Format(STR_SQL_COURSES_WHERE, sUnits, mappDB.MATNO)) 'todo
+        MsgBox("ProduCoursect " & sCC & " updated Successfully!,")
+
+        '    'refresh Datagrid
+        UpdateCourses()
+
+    End Sub
     Function FormatMyDate(dtp As Date) As String
         Dim StrDate As String = "00000000"
         'mySQL Palaver
@@ -262,51 +226,21 @@ Public Class FormStudentsRegistration
         End Try
         Return returnVal
     End Function
-    Public Function GetRecordWhere(s As String) As String
-        Dim returnVal As String = ""
-        Try
-            strConnectionString = mappDB.getConnectionString(False)
-            con = New MySql.Data.MySqlClient.MySqlConnection(strConnectionString)
-            con.Open()
-            strSQL = s
-            cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            Dim rd As MySqlDataReader
-
-            rd = cmd.ExecuteReader
-            rd.Read()
-            If rd.HasRows Then
-                returnVal = rd.GetString(0) & " " & rd.GetString(1)
-                'TextBoxGuestInfo.Text = rd.GetString(0) & " " & rd.GetString(1)
-            End If
-            rd.Close()
-            rd = Nothing
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-        Return returnVal
-    End Function
 
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonCheckOut.Click
-        FormResultsTranscripts.Show()
-        FormResultsTranscripts.BringToFront()
-
-    End Sub
-
-
-
-
-    Private Sub btnExportExcel_Click(sender As Object, e As EventArgs) Handles btnExportExcel.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonUnregister.Click
+        unregisterStudent()
 
     End Sub
 
     Private Sub dgw_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgw.CellContentDoubleClick
         updatePix()
-        CaptureProduct()
+        CaptureCourses()
+
     End Sub
 
-    Private Sub dgv_rooms_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_rooms.CellContentDoubleClick
-        ' sell(False)
+    Private Sub dgv_rooms_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_courses.CellContentDoubleClick
+        registerStudent(False)
 
     End Sub
 
@@ -315,14 +249,11 @@ Public Class FormStudentsRegistration
         updatePix()
     End Sub
 
-    Private Sub TextBoxQty_TextChanged(sender As Object, e As EventArgs) Handles TextBoxQty.TextChanged
-        On Error Resume Next
-        If CInt(TextBoxQty.Text) > 0 Then computeAmount()
-    End Sub
-    Private Function computeAmount() As Boolean
+    Private Function computeCredits() As Integer
         Try
-            TextBoxCredit.Text = (CDbl(TextBoxQty.Text) * CDbl(TextBoxUnitPrice.Text)).ToString
-            Return True
+            'for each row
+            'sum =sum + row(units)
+            Return 0
         Catch ex As Exception
             Return False
         End Try
@@ -335,7 +266,7 @@ Public Class FormStudentsRegistration
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
         PictureBox2.Image = PictureBox1.Image
-
         PictureBox2.Visible = Not PictureBox2.Visible
     End Sub
+
 End Class

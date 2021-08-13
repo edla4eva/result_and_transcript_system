@@ -267,4 +267,21 @@ Public Class ClassDB
         End Try
         Return returnVal
     End Function
+
+
+    Public Function InsertRecord(dstrSQL As String) As String
+        'ToDo: optimize for speed
+        'support parameters
+        Dim returnVal As String = ""
+        Try
+            If Me.conn.connectionstate = ConnectionState.Closed Then Me.conn.open()
+            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
+            cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
+            If Me.conn.connectionstate = ConnectionState.Open Then conn.Close()
+        Catch ex As Exception
+            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
+            ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+        Return returnVal
+    End Function
 End Class

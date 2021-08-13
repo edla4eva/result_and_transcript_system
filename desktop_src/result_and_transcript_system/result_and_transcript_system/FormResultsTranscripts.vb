@@ -29,7 +29,7 @@ Public Class FormResultsTranscripts
         p4 = Me.TextBoxCredit.Text
         p5 = Me.TextBoxBalance.Text
         p6 = Me.TextBoxRef.Text
-        str = String.Format(STR_SQL_INSERT_ESULTS, p0, p1) ', p2, p3, p4, p5, p6
+        str = String.Format(STR_SQL_INSERT_RESULTS, p0, p1) ', p2, p3, p4, p5, p6
         mappDB.UpdateRecordWhere(str)
         MsgBox("Bill Addedd!")
     End Sub

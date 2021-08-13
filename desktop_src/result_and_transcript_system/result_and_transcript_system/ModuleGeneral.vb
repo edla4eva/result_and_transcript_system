@@ -47,9 +47,12 @@ Module ModuleGeneral
     'Queries
     'FormResult
     Public STR_SQL_ALL_RESULTS_WHERE As String = "SELECT id, matno, score FROM tableResults WHERE matno='{0}' order by id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
-    Public STR_SQL_INSERT_ESULTS As String = "INSERT INTO `db`.`tableResults` (`id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
+    Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`tableResults` (`id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
     Public SQL_SELECT_RESULTS_WHERE_MATNO As String = " SELECT * FROM TableResults WHERE matno= '{0}'"
     Public SQL_SELECT_ALL_RESULTS_WHERE_MATNO As String = "SELECT * FROM TableResults "
+
+
+    Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by id" ' 
 
     'Public STR_SQL_ALL_USERS As String = "SELECT user_id, username, status as STATUS from tblusers order by status"
     'Public STR_SQL_ALL_GUESTS_BILLS_WHERE As String = "SELECT `guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status` FROM `guest_account` WHERE guest_id_ref='{0}' order by date"

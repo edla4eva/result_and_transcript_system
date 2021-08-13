@@ -136,28 +136,49 @@
     'TODO: Let all UI actions be handled in this class (i.e seperate UI from functionality
     Public Sub ChangeMenu(menu As String)
         'This is select case statement for every form that needs to be changed to
+
         Select Case menu
             Case "Home"
                 addForm(HomeForm)
+                Me.WindowState = FormWindowState.Normal
             Case "User"
                 addForm(LoginForm1)
+                Me.WindowState = FormWindowState.Normal
+            Case "Settings"
+                addForm(FormSettings)
+                Me.WindowState = FormWindowState.Maximized
             Case "CourseAdviser"
                 addForm(FormCourseAdviser)
+                Me.WindowState = FormWindowState.Maximized
             Case "CourseLecturer"
                 addForm(FormUploadResult)
+                Me.WindowState = FormWindowState.Maximized
             Case "GenerateBroadsheet"
                 addForm(FormGenerateBroadsheet)
+                Me.WindowState = FormWindowState.Maximized
             Case "CourseAdviser"
                 addForm(FormCourseAdviser)
+                Me.WindowState = FormWindowState.Maximized
             Case "Student"
                 addForm(FormStudent)
+                Me.WindowState = FormWindowState.Maximized
             Case "UploadResult"
                 addForm(FormUploadResult)
+                Me.WindowState = FormWindowState.Maximized
             Case "StudentsRegistration"
                 addForm(FormStudentsRegistration)
+                Me.WindowState = FormWindowState.Maximized
             Case "ResultsTranscripts"
                 addForm(FormResultsTranscripts)
+                Me.WindowState = FormWindowState.Maximized
+            Case "admin"
+                addForm(FormAdmin)
+                Me.WindowState = FormWindowState.Maximized
         End Select
+    End Sub
+
+    Public Sub status(s As String)
+        Me.TextBoxStatus.Text = Me.TextBoxStatus.Text & vbCrLf & s
     End Sub
 
 
@@ -192,6 +213,11 @@
         dCurrentForm = s
         Me.ButtonCurrent.Text = s
 
+    End Sub
+
+    Private Sub ButtonSettings_Click(sender As Object, e As EventArgs) Handles ButtonSettings.Click
+        ActiveButton(sender, RGBColors.colorCrimson)
+        ChangeMenu("Settings")
     End Sub
 End Class
 

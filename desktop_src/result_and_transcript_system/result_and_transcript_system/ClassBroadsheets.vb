@@ -18,7 +18,7 @@ Public Class ClassBroadsheets
             MsgBox("Cannot create Excel Automation Object" & vbCrLf & ex.Message)
         End Try
     End Sub
-#Region "Result Properties"
+#Region "Broadsheet Properties"
     Private _broadsheetSemester As String = ""
     Private _strMATNO As String() = Nothing
     Private _broadsheetFileName As String = Nothing
@@ -107,7 +107,7 @@ Public Class ClassBroadsheets
 #End Region
 
 
-    Function openBroadsheetExcelWB() As Boolean
+    Function openBroadsheetExcelWBInterop() As Boolean
 
         Dim strCriteria As String = String.Empty
         Dim startRow As Integer = 1

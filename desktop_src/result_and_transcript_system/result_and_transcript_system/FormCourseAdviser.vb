@@ -18,4 +18,12 @@
     Private Sub ButtonResultList_Click(sender As Object, e As EventArgs) Handles ButtonResultList.Click
         MainForm.ChangeMenu("ResultsTranscripts")
     End Sub
+
+    Private Sub ButtonUpload_Click(sender As Object, e As EventArgs) Handles ButtonUpload.Click
+        MainForm.ChangeMenu("UploadResult")
+    End Sub
+
+    Private Sub ButtonUser_Click(sender As Object, e As EventArgs) Handles ButtonUser.Click
+        MainForm.ChangeMenu("UploadResult")
+    End Sub
 End Class

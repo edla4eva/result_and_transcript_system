@@ -21,23 +21,47 @@ Type: files; Name: "{app}\ResultandTrascriptProcessingSystem.exe"
 ;main program
 Source: "..\bin\debug\result_and_transcript_system.exe"; DestDir: "{app}"
 Source: "..\bin\debug\result_and_transcript_system.exe.config"; DestDir: "{app}"
+;Database
+Source: "..\bin\debug\db\db.mdb"; DestDir: "{app}\db"
+
 ;dlls
 Source: "..\bin\debug\ExcelDataReader.DataSet.dll"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Excel.Helper.dll"; DestDir: "{app}"
+Source: "..\bin\debug\NPOI.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Excel.Helper.dll"; DestDir: "{app}"
+Source: "..\bin\debug\NPOI.dll"; DestDir: "{app}"
+Source: "..\bin\debug\NPOI.OOXML.dll"; DestDir: "{app}"
+Source: "..\bin\debug\NPOI.OpenXml4Net.dll"; DestDir: "{app}"
+
+Source: "..\bin\debug\NPOI.OpenXmlFormats.dll"; DestDir: "{app}"
+Source: "..\bin\debug\MySql.Data.dll"; DestDir: "{app}"
 
 ;pdb and xml todo
 Source: "..\bin\debug\ExcelDataReader.DataSet.pdb"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.pdb"; DestDir: "{app}"
 
 Source: "..\bin\debug\ExcelDataReader.DataSet.xml"; DestDir: "{app}"
+Source: "..\bin\debug\Excel.Helper.xml"; DestDir: "{app}"
+Source: "..\bin\debug\ExcelDataReader.xml"; DestDir: "{app}"
+Source: "..\bin\debug\NPOI.OOXML.xml"; DestDir: "{app}"
+Source: "..\bin\debug\NPOI.xml"; DestDir: "{app}"
 
 
 ;samples
-Source: "..\bin\debug\samples\broadsheet.xlsx"; DestDir: "{app}\bibles"
+Source: "..\bin\debug\samples\broadsheet.xlsx"; DestDir: "{app}\samples"
+Source: "..\bin\debug\samples\result.xlsx"; DestDir: "{app}\samples"
+Source: "..\bin\debug\samples\broadsheet.xlsx"; DestDir: "{userdocs}\{#Mydir}\samples"
+Source: "..\bin\debug\samples\result.xlsx"; DestDir: "{userdocs}\{#Mydir}\samples"
+
+
 
 ;templates
 Source: "..\bin\debug\templates\result.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\templates\broadsheet.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
+;save copy in prog path
+Source: "..\bin\debug\templates\broadsheet.xltx"; DestDir: "{app}\templates"
+Source: "..\bin\debug\templates\result.xltx"; DestDir: "{app}\templates"
 
 
 

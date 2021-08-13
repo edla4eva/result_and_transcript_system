@@ -117,6 +117,19 @@
     <Compile Include="ClassExcel.vb" />
     <Compile Include="ClassExcelFile.vb" />
     <Compile Include="ClassExcelResult.vb" />
+    <Compile Include="ClassReports.vb" />
+    <Compile Include="FormAdmin.Designer.vb">
+      <DependentUpon>FormAdmin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAdmin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.vb">
+      <DependentUpon>FormSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormResultsTranscripts.designer.vb">
       <DependentUpon>FormResultsTranscripts.vb</DependentUpon>
     </Compile>
@@ -200,6 +213,12 @@
     <Compile Include="RGBColors.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormAdmin.resx">
+      <DependentUpon>FormAdmin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormResultsTranscripts.resx">
       <DependentUpon>FormResultsTranscripts.vb</DependentUpon>
     </EmbeddedResource>

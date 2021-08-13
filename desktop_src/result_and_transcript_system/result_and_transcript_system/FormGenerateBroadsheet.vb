@@ -25,7 +25,8 @@
             '        Try
             '
             objExcelFile.excelFileName = PROG_DIRECTORY & "\samples\broadsheet.xlsx"
-            Dim myDataSet As DataSet = objExcelFile.readResultFile()
+            Dim myDataSet As DataSet ' = objExcelFile.readResultFile()
+            myDataSet = objExcelFile.readResultFile()
             'DataGridView1.DataSource = myDataSet.Tables(0).DefaultView
             'myDataSet.Clear()
 
@@ -34,7 +35,7 @@
             DataGridView1.DataSource = myDataSet.Tables(0).DefaultView
             myDataSet.Clear()
             myDataSet = Nothing
-
+            hideButtons("Process", True)
         Catch ex As Exception
             MsgBox("Cannot create Excel File Object" & vbCrLf & ex.Message)
         End Try
@@ -43,6 +44,37 @@
     End Sub
 
     Private Sub ButtonResultList_Click(sender As Object, e As EventArgs) Handles ButtonResultList.Click
-        objExcelFile.createExcelFile()
+        objExcelFile.createExcelFile(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
+        objExcelFile.modifyExcelFile(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
+        Label6.Text = "Done: check GeneratedResult.xlsx"
+        MainForm.status("Done: generated GeneratedResult.xlsx")
+    End Sub
+
+    Private Sub SelectBroadsheetTemplate_Click(sender As Object, e As EventArgs) Handles SelectBroadsheetTemplate.Click
+        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+        Dim resultFileName As String = ""
+
+        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+            resultFileName = FileOpenDialogBroadsheet.FileName()
+        End If
+        Me.TextBox1.Text = resultFileName
+        objExcelFile.excelFileName = resultFileName
+
+        showButtons("Process", False)
+    End Sub
+
+    Sub showButtons(ButtonName As String, enableOnly As Boolean)
+        Select Case ButtonName
+            Case "Process"
+                If enableOnly Then Me.ButtonProcessBroadsheet.Enabled = True Else Me.ButtonProcessBroadsheet.Visible = True
+
+        End Select
+    End Sub
+    Sub hideButtons(ButtonName As String, disableOnly As Boolean)
+        Select Case ButtonName
+            Case "Process"
+                If disableOnly Then Me.ButtonProcessBroadsheet.Enabled = False Else Me.ButtonProcessBroadsheet.Visible = False
+
+        End Select
     End Sub
 End Class
