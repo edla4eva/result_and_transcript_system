@@ -29,7 +29,7 @@ Partial Class FormGenerateBroadsheet
         Me.Label4 = New System.Windows.Forms.Label()
         Me.TextBoxLevel = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.TextBoxTemplateFileName = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.TextBoxSession = New System.Windows.Forms.TextBox()
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
@@ -41,18 +41,31 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
         Me.ButtonProcessBroadsheet = New System.Windows.Forms.Button()
-        Me.ButtonBrowse = New System.Windows.Forms.Button()
+        Me.ButtonAdjustTemplate = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
+        Me.PanelModify = New System.Windows.Forms.Panel()
+        Me.ButtonApplyModification = New System.Windows.Forms.Button()
+        Me.ButtonRefereshListSecond = New System.Windows.Forms.Button()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.ListBox2 = New System.Windows.Forms.ListBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.ButtonRefereshListFirst = New System.Windows.Forms.Button()
+        Me.LabelClosePanelModify = New System.Windows.Forms.Label()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
+        Me.PanelModify.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridView1
         '
+        Me.DataGridView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Location = New System.Drawing.Point(29, 158)
         Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.Size = New System.Drawing.Size(541, 187)
+        Me.DataGridView1.Size = New System.Drawing.Size(628, 187)
         Me.DataGridView1.TabIndex = 9
         '
         'Label2
@@ -68,7 +81,7 @@ Partial Class FormGenerateBroadsheet
         '
         Me.TextBoxDepartment.Location = New System.Drawing.Point(29, 31)
         Me.TextBoxDepartment.Name = "TextBoxDepartment"
-        Me.TextBoxDepartment.Size = New System.Drawing.Size(123, 20)
+        Me.TextBoxDepartment.Size = New System.Drawing.Size(33, 20)
         Me.TextBoxDepartment.TabIndex = 12
         '
         'Label3
@@ -94,7 +107,7 @@ Partial Class FormGenerateBroadsheet
         '
         Me.TextBoxLevel.Location = New System.Drawing.Point(29, 73)
         Me.TextBoxLevel.Name = "TextBoxLevel"
-        Me.TextBoxLevel.Size = New System.Drawing.Size(123, 20)
+        Me.TextBoxLevel.Size = New System.Drawing.Size(33, 20)
         Me.TextBoxLevel.TabIndex = 15
         '
         'Label1
@@ -106,12 +119,12 @@ Partial Class FormGenerateBroadsheet
         Me.Label1.TabIndex = 19
         Me.Label1.Text = "Filename (Excel file .xlsx)"
         '
-        'TextBox1
+        'TextBoxTemplateFileName
         '
-        Me.TextBox1.Location = New System.Drawing.Point(32, 442)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(374, 20)
-        Me.TextBox1.TabIndex = 18
+        Me.TextBoxTemplateFileName.Location = New System.Drawing.Point(32, 442)
+        Me.TextBoxTemplateFileName.Name = "TextBoxTemplateFileName"
+        Me.TextBoxTemplateFileName.Size = New System.Drawing.Size(625, 20)
+        Me.TextBoxTemplateFileName.TabIndex = 18
         '
         'Label5
         '
@@ -126,14 +139,14 @@ Partial Class FormGenerateBroadsheet
         '
         Me.TextBoxSession.Location = New System.Drawing.Point(29, 121)
         Me.TextBoxSession.Name = "TextBoxSession"
-        Me.TextBoxSession.Size = New System.Drawing.Size(123, 20)
+        Me.TextBoxSession.Size = New System.Drawing.Size(33, 20)
         Me.TextBoxSession.TabIndex = 22
         '
         'ComboBoxDepartments
         '
         Me.ComboBoxDepartments.FormattingEnabled = True
         Me.ComboBoxDepartments.Items.AddRange(New Object() {"Computer Engineering", "Production Engineering"})
-        Me.ComboBoxDepartments.Location = New System.Drawing.Point(159, 29)
+        Me.ComboBoxDepartments.Location = New System.Drawing.Point(66, 29)
         Me.ComboBoxDepartments.Name = "ComboBoxDepartments"
         Me.ComboBoxDepartments.Size = New System.Drawing.Size(161, 21)
         Me.ComboBoxDepartments.TabIndex = 24
@@ -143,7 +156,7 @@ Partial Class FormGenerateBroadsheet
         '
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
-        Me.ComboBox1.Location = New System.Drawing.Point(159, 73)
+        Me.ComboBox1.Location = New System.Drawing.Point(66, 73)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(161, 21)
         Me.ComboBox1.TabIndex = 25
@@ -158,7 +171,7 @@ Partial Class FormGenerateBroadsheet
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonUpload)
         Me.SidePanel.Controls.Add(Me.ButtonProcessBroadsheet)
-        Me.SidePanel.Controls.Add(Me.ButtonBrowse)
+        Me.SidePanel.Controls.Add(Me.ButtonAdjustTemplate)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(666, 0)
         Me.SidePanel.Name = "SidePanel"
@@ -178,14 +191,14 @@ Partial Class FormGenerateBroadsheet
         Me.Button3.Text = "Cancel"
         Me.Button3.UseVisualStyleBackColor = True
         '
-        'Button4
+        'SelectBroadsheetTemplate
         '
         Me.SelectBroadsheetTemplate.FlatAppearance.BorderColor = System.Drawing.Color.Gray
         Me.SelectBroadsheetTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.SelectBroadsheetTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.SelectBroadsheetTemplate.ForeColor = System.Drawing.Color.White
         Me.SelectBroadsheetTemplate.Location = New System.Drawing.Point(0, 39)
-        Me.SelectBroadsheetTemplate.Name = "Button4"
+        Me.SelectBroadsheetTemplate.Name = "SelectBroadsheetTemplate"
         Me.SelectBroadsheetTemplate.Size = New System.Drawing.Size(128, 55)
         Me.SelectBroadsheetTemplate.TabIndex = 5
         Me.SelectBroadsheetTemplate.Text = "Select Template"
@@ -243,18 +256,18 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonProcessBroadsheet.Text = "Process"
         Me.ButtonProcessBroadsheet.UseVisualStyleBackColor = True
         '
-        'ButtonBrowse
+        'ButtonAdjustTemplate
         '
-        Me.ButtonBrowse.FlatAppearance.BorderSize = 0
-        Me.ButtonBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonBrowse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonBrowse.ForeColor = System.Drawing.Color.White
-        Me.ButtonBrowse.Location = New System.Drawing.Point(3, 100)
-        Me.ButtonBrowse.Name = "ButtonBrowse"
-        Me.ButtonBrowse.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonBrowse.TabIndex = 0
-        Me.ButtonBrowse.Text = "BroadSheets"
-        Me.ButtonBrowse.UseVisualStyleBackColor = True
+        Me.ButtonAdjustTemplate.FlatAppearance.BorderSize = 0
+        Me.ButtonAdjustTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonAdjustTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonAdjustTemplate.ForeColor = System.Drawing.Color.White
+        Me.ButtonAdjustTemplate.Location = New System.Drawing.Point(3, 100)
+        Me.ButtonAdjustTemplate.Name = "ButtonAdjustTemplate"
+        Me.ButtonAdjustTemplate.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonAdjustTemplate.TabIndex = 0
+        Me.ButtonAdjustTemplate.Text = "Adjust Template"
+        Me.ButtonAdjustTemplate.UseVisualStyleBackColor = True
         '
         'Label6
         '
@@ -266,11 +279,134 @@ Partial Class FormGenerateBroadsheet
         Me.Label6.TabIndex = 28
         Me.Label6.Text = "This broadsheet can be used to make final adjustments to scores"
         '
+        'ComboBoxSessions
+        '
+        Me.ComboBoxSessions.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
+        Me.ComboBoxSessions.FormattingEnabled = True
+        Me.ComboBoxSessions.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
+        Me.ComboBoxSessions.Location = New System.Drawing.Point(66, 121)
+        Me.ComboBoxSessions.Name = "ComboBoxSessions"
+        Me.ComboBoxSessions.Size = New System.Drawing.Size(161, 21)
+        Me.ComboBoxSessions.TabIndex = 29
+        Me.ComboBoxSessions.Text = "2018/2019"
+        '
+        'PanelModify
+        '
+        Me.PanelModify.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelModify.Controls.Add(Me.ButtonApplyModification)
+        Me.PanelModify.Controls.Add(Me.ButtonRefereshListSecond)
+        Me.PanelModify.Controls.Add(Me.Label7)
+        Me.PanelModify.Controls.Add(Me.ListBox2)
+        Me.PanelModify.Controls.Add(Me.Label8)
+        Me.PanelModify.Controls.Add(Me.ButtonRefereshListFirst)
+        Me.PanelModify.Controls.Add(Me.LabelClosePanelModify)
+        Me.PanelModify.Controls.Add(Me.ListBox1)
+        Me.PanelModify.Location = New System.Drawing.Point(250, 31)
+        Me.PanelModify.Name = "PanelModify"
+        Me.PanelModify.Size = New System.Drawing.Size(407, 124)
+        Me.PanelModify.TabIndex = 30
+        Me.PanelModify.Visible = False
+        '
+        'ButtonApplyModification
+        '
+        Me.ButtonApplyModification.FlatAppearance.BorderColor = System.Drawing.Color.Gray
+        Me.ButtonApplyModification.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonApplyModification.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonApplyModification.ForeColor = System.Drawing.Color.White
+        Me.ButtonApplyModification.Location = New System.Drawing.Point(444, 59)
+        Me.ButtonApplyModification.Name = "ButtonApplyModification"
+        Me.ButtonApplyModification.Size = New System.Drawing.Size(55, 34)
+        Me.ButtonApplyModification.TabIndex = 11
+        Me.ButtonApplyModification.Text = "Apply"
+        Me.ButtonApplyModification.UseVisualStyleBackColor = True
+        '
+        'ButtonRefereshListSecond
+        '
+        Me.ButtonRefereshListSecond.FlatAppearance.BorderColor = System.Drawing.Color.Gray
+        Me.ButtonRefereshListSecond.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonRefereshListSecond.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonRefereshListSecond.ForeColor = System.Drawing.Color.White
+        Me.ButtonRefereshListSecond.Location = New System.Drawing.Point(210, 58)
+        Me.ButtonRefereshListSecond.Name = "ButtonRefereshListSecond"
+        Me.ButtonRefereshListSecond.Size = New System.Drawing.Size(55, 34)
+        Me.ButtonRefereshListSecond.TabIndex = 10
+        Me.ButtonRefereshListSecond.Text = "Referesh"
+        Me.ButtonRefereshListSecond.UseVisualStyleBackColor = True
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(210, 8)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(78, 13)
+        Me.Label7.TabIndex = 9
+        Me.Label7.Text = "2nd Semenster"
+        '
+        'ListBox2
+        '
+        Me.ListBox2.AllowDrop = True
+        Me.ListBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ListBox2.FormattingEnabled = True
+        Me.ListBox2.ItemHeight = 16
+        Me.ListBox2.Items.AddRange(New Object() {"Drag", "CourseCodes", "To", "Sort"})
+        Me.ListBox2.Location = New System.Drawing.Point(282, 8)
+        Me.ListBox2.Name = "ListBox2"
+        Me.ListBox2.Size = New System.Drawing.Size(120, 84)
+        Me.ListBox2.TabIndex = 8
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(3, 7)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(79, 13)
+        Me.Label8.TabIndex = 7
+        Me.Label8.Text = "First Semenster"
+        '
+        'ButtonRefereshListFirst
+        '
+        Me.ButtonRefereshListFirst.FlatAppearance.BorderColor = System.Drawing.Color.Gray
+        Me.ButtonRefereshListFirst.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonRefereshListFirst.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonRefereshListFirst.ForeColor = System.Drawing.Color.White
+        Me.ButtonRefereshListFirst.Location = New System.Drawing.Point(27, 56)
+        Me.ButtonRefereshListFirst.Name = "ButtonRefereshListFirst"
+        Me.ButtonRefereshListFirst.Size = New System.Drawing.Size(55, 34)
+        Me.ButtonRefereshListFirst.TabIndex = 6
+        Me.ButtonRefereshListFirst.Text = "Referesh"
+        Me.ButtonRefereshListFirst.UseVisualStyleBackColor = True
+        '
+        'LabelClosePanelModify
+        '
+        Me.LabelClosePanelModify.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LabelClosePanelModify.AutoSize = True
+        Me.LabelClosePanelModify.Location = New System.Drawing.Point(388, 6)
+        Me.LabelClosePanelModify.Name = "LabelClosePanelModify"
+        Me.LabelClosePanelModify.Size = New System.Drawing.Size(14, 13)
+        Me.LabelClosePanelModify.TabIndex = 1
+        Me.LabelClosePanelModify.Text = "X"
+        '
+        'ListBox1
+        '
+        Me.ListBox1.AllowDrop = True
+        Me.ListBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.ItemHeight = 16
+        Me.ListBox1.Items.AddRange(New Object() {"Drag", "CourseCodes", "To", "Sort"})
+        Me.ListBox1.Location = New System.Drawing.Point(84, 6)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(120, 84)
+        Me.ListBox1.TabIndex = 0
+        '
         'FormGenerateBroadsheet
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 517)
+        Me.Controls.Add(Me.PanelModify)
+        Me.Controls.Add(Me.ComboBoxSessions)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.ComboBox1)
@@ -278,7 +414,7 @@ Partial Class FormGenerateBroadsheet
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.TextBoxSession)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.TextBoxTemplateFileName)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.TextBoxLevel)
         Me.Controls.Add(Me.Label3)
@@ -289,6 +425,8 @@ Partial Class FormGenerateBroadsheet
         Me.Text = "Form Generate Broadsheet"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
+        Me.PanelModify.ResumeLayout(False)
+        Me.PanelModify.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -300,7 +438,7 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents Label4 As Label
     Friend WithEvents TextBoxLevel As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents TextBoxTemplateFileName As TextBox
     Friend WithEvents Label5 As Label
     Friend WithEvents TextBoxSession As TextBox
     Friend WithEvents ComboBoxDepartments As ComboBox
@@ -311,7 +449,17 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents ButtonCloud As Button
     Friend WithEvents ButtonUpload As Button
     Friend WithEvents ButtonProcessBroadsheet As Button
-    Friend WithEvents ButtonBrowse As Button
+    Friend WithEvents ButtonAdjustTemplate As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents Label6 As Label
+    Friend WithEvents ComboBoxSessions As ComboBox
+    Friend WithEvents PanelModify As Panel
+    Friend WithEvents ListBox1 As ListBox
+    Friend WithEvents ButtonRefereshListFirst As Button
+    Friend WithEvents LabelClosePanelModify As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label7 As Label
+    Friend WithEvents ListBox2 As ListBox
+    Friend WithEvents ButtonApplyModification As Button
+    Friend WithEvents ButtonRefereshListSecond As Button
 End Class

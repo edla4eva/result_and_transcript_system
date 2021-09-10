@@ -29,6 +29,9 @@ Module ModuleGeneral
     Public PROG_DIRECTORY As String = My.Application.Info.DirectoryPath
 
     'DB defalults
+    ' '32 bit Access
+    Public STR_connectionString32 = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" '& "User ID=admin;" & "Password=" & m_password
+    '64 bits
     Public STR_connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\db.mdb"
     Public STR_connectionStringCloud As String = "server=localhost;User Id=root;Persist Security Info=True;database=result_and_transript_db"
 
@@ -46,13 +49,56 @@ Module ModuleGeneral
 
     'Queries
     'FormResult
+    'all
+    Public STR_SQL_ALL_RESULTS As String = "SELECT * FROM results order by result_id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
+    Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
+
+    Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM department"
+    Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT * FROM sessions" ' 
+    Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM students" ' 
+    'some
     Public STR_SQL_ALL_RESULTS_WHERE As String = "SELECT id, matno, score FROM tableResults WHERE matno='{0}' order by id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
-    Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`tableResults` (`id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
     Public SQL_SELECT_RESULTS_WHERE_MATNO As String = " SELECT * FROM TableResults WHERE matno= '{0}'"
     Public SQL_SELECT_ALL_RESULTS_WHERE_MATNO As String = "SELECT * FROM TableResults "
+    Public STR_SQL_ALL_STUDENTS_IN_DEPT As String = "SELECT * FROM students WHERE student_dept_idr={0}" ' 
+
+    Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by course_code" ' 
+    Public STR_SQL_COURSES_SPD_WHERE As String = "SELECT * FROM reg WHERE matno='{0}'"
+    'inserts
+    Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
+
+    'Course reg combo
+    '"SELECT course_code, course_title, course_unit, course_semester FROM Courses WHERE (((course_semester)=2)) ORDER BY Courses.course_code;"
+
+    Public STR_SQL_COURSE_REG_FIRST_SEMESTER = "SELECT FC.CourseCode, FC.CourseTitle, FC.CourseCredit FROM FC WHERE (((FC.CourseSemester)=1)) ORDER BY FC.CourseCode;"
+    Public STR_SQL_COURSE_REG_SECOND_SEMESTER = "SELECT CourseCode,CourseTitle,CourseCredit FROM FC WHERE (((CourseSemester)=2)) ORDER BY CourseCode;"
+    'EX SCR Expanded 1 - lookup
+    'SELECT reg.MatNo, reg.CourseCode_1.Value AS CourseCode, reg.Dept, DLookUp("CourseTitle","FC_1","CourseCode='" & [CourseCode] & "'") AS Course_Title, DLookUp("CourseCredit","FC_1","CourseCode='" & [CourseCode] & "'") AS Course_Credit, IIf(IsNull([Course_Credit]),0,[Course_Credit]*1) AS CourseCredit, reg.Pix, DLookUp("CourseSemester","FC_1","CourseCode='" & [CourseCode] & "'") AS CourseSemester, reg.Surname, reg.OtherNames, reg.Level, reg.Fees_Status
+    'FROM reg
+    'WHERE (((reg.CourseCode_1.Value)=[Enter Course Code]) And ((reg.Dept)=[Enter Department]));
+
+    'EX CrossTab - course projection
+    'TRANSFORM Count(SCR_Expanded_1.MatNo) As CountOfMatNo
+    'Select Case SCR_Expanded_1.CourseCode, FC.CourseTitle, FC.TeachingDept, FC.CourseSemester, Count(SCR_Expanded_1.MatNo) As [Total Of MatNo]
+    'FROM SCR_Expanded_1 INNER JOIN FC On SCR_Expanded_1.CourseCode = FC.CourseCode
+    'GROUP BY SCR_Expanded_1.CourseCode, FC.CourseTitle, FC.TeachingDept, FC.CourseSemester
+    'PIVOT SCR_Expanded_1.Dept;
+
+    'QueryCourses_CPE_1  - only cpe first semester courses
+    'Select Case Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester, Courses.course_level, Courses.course_dept_idr, Courses.Teaching_dept
+    'FROM Courses
+    'WHERE (((Courses.course_semester)=1) And ((Courses.Teaching_dept)="Computer Engineering"));
 
 
-    Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by id" ' 
+    'BroadSheets
+    Public STR_SQL_ALL_BROADSHEET As String = "SELECT * FROM results WHERE( (session='{0}') And (level={1}));"
+
+
+    Public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';"
+
+
+
+
 
     'Public STR_SQL_ALL_USERS As String = "SELECT user_id, username, status as STATUS from tblusers order by status"
     'Public STR_SQL_ALL_GUESTS_BILLS_WHERE As String = "SELECT `guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status` FROM `guest_account` WHERE guest_id_ref='{0}' order by date"
@@ -117,35 +163,52 @@ Module ModuleGeneral
         colAO = 41
         colAP = 42
     End Enum
-
+    Public lettersToNum As String() = {"0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP",
+    "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "BA", "BB", "BC", "BD", "BE", "BF",
+    "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BV",
+    "BW", "BX", "BY", "BZ",
+    "CA", "CB", "CC", "CD", "CE", "CF",
+    "CG", "CH", "CI", "CJ", "CK", "CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT", "CU", "CV",
+    "CW", "CX", "CY", "CZ", "DA", "DB", "DC", "DD", "DE", "DF",
+    "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN", "DO", "DP", "DQ", "DR", "DS", "DT", "DU", "DV",
+    "DW", "DX", "DY", "DZ", "EA", "EB", "EC", "ED", "EE", "EF",
+    "EG", "EH", "EI", "EJ", "EK", "EL", "EM", "EN", "EO", "EP", "EQ", "ER", "ES", "ET", "EU", "EV",
+    "EW", "EX", "EY", "EZ"}
 
     Public Sub combolist(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, ByVal this_cbo As ComboBox, Optional dConnMode As String = "local")
-        Dim oad As Object
-        Dim ds As New DataSet
-        Dim strtmp As String = this_cbo.Text.ToString : this_cbo.Text = String.Empty
-        If dConnMode = "local" Then
-            oad = New OleDbDataAdapter(this_sql, mappDB.connLocal)
-            oad.Fill(ds)
-        Else
-            oad = New MySqlDataAdapter(this_sql, mappDB.connRemote)
-            oad.Fill(ds)
-        End If
+        Try
+            Dim oad As Object
+            Dim ds As New DataSet
+            Dim strtmp As String = this_cbo.Text.ToString : this_cbo.Text = String.Empty
+            If dConnMode = "local" Then
+                oad = New OleDbDataAdapter(this_sql, mappDB.connLocal)
+                oad.Fill(ds)
+            Else
+                oad = New MySqlDataAdapter(this_sql, mappDB.connRemote)
+                oad.Fill(ds)
+            End If
 
 
-        With this_cbo
-            .DataSource = ds.Tables(0)
-            .ValueMember = this_value
-            .DisplayMember = this_member
-        End With
+            With this_cbo
+                .DataSource = ds.Tables(0)
+                .ValueMember = this_value
+                .DisplayMember = this_member
+            End With
 
-        this_sql = Nothing
-        this_value = Nothing
-        this_member = Nothing
-        ds = Nothing
-        oad = Nothing
+            this_sql = Nothing
+            this_value = Nothing
+            this_member = Nothing
+            ds = Nothing
+            oad = Nothing
 
-        mappDB.close()
+            'mappDB.close()
+        Catch ex As Exception
+            log(ex.ToString)
+            Throw ex
 
+        End Try
     End Sub
 
 
@@ -209,6 +272,7 @@ Module ModuleGeneral
     End Sub
 
     Public Sub log(ByVal _msg As String)
+        On Error Resume Next
         Dim fileName As String = My.Application.Info.DirectoryPath & "\reports\log.txt"
         Dim fileExists As Boolean
         fileExists = My.Computer.FileSystem.FileExists(fileName)
@@ -219,6 +283,7 @@ Module ModuleGeneral
             My.Computer.FileSystem.WriteAllText(fileName, _msg & vbCrLf, True)
         End If
     End Sub
+
     'store accounts to hastable
     'Structure _accounts
     '    Dim m_table As Hashtable
@@ -342,18 +407,6 @@ Module ModuleGeneral
             .ColorIndex = ExcelInterop.Constants.xlAutomatic
         End With
     End Sub
-    Public Sub logError(str As String)
-        On Error Resume Next
-        Dim fileExists As Boolean
 
-        fileExists = My.Computer.FileSystem.FileExists(USER_DIRECTORY & "\db\error_log" & Now.Date.ToString & ".txt")
-        If fileExists = True Then
-            My.Computer.FileSystem.WriteAllText(USER_DIRECTORY & "\db\error_log" & Now.ToLongDateString & ".txt", str, True)
-        Else
-            My.Computer.FileSystem.WriteAllText(USER_DIRECTORY & "\db\error_log" & Now.ToLongDateString & ".txt", String.Empty, False)
-
-
-        End If
-    End Sub
 End Module
 

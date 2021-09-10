@@ -1,0 +1,27 @@
+{
+  "name": "excel-table",
+  "version": "1.0.2",
+  "description": "A jQuery based plugin to convert an html table into an Excel grid.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shail9689/excel-table.git"
+  },
+  "keywords": [
+    "jQuery",
+    "excel",
+    "excel",
+    "excel table",
+    "excel",
+    "grid"
+  ],
+  "author": "Shailendra Gusain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shail9689/excel-table/issues"
+  },
+  "homepage": "https://github.com/shail9689/excel-table#readme"
+}

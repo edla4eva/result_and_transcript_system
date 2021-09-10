@@ -3,15 +3,15 @@
         Me.BackColor = RGBColors.colorBlack2
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonResultsSubmitted.Click
 
     End Sub
 
-    Private Sub ButtonBrowse_Click(sender As Object, e As EventArgs) Handles ButtonBrowse.Click
-        MainForm.ChangeMenu("GenerateBroadsheet")
+    Private Sub ButtonBrowse_Click(sender As Object, e As EventArgs) Handles ButtonBroadsheets.Click
+        MainForm.ChangeMenu("viewBroadsheets")
     End Sub
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles ButtonStudents.Click
         MainForm.ChangeMenu("StudentsRegistration")
     End Sub
 
@@ -23,7 +23,22 @@
         MainForm.ChangeMenu("UploadResult")
     End Sub
 
-    Private Sub ButtonUser_Click(sender As Object, e As EventArgs) Handles ButtonUser.Click
-        MainForm.ChangeMenu("UploadResult")
+
+    Private Sub ButtonResults_Click(sender As Object, e As EventArgs) Handles ButtonResults.Click
+        MainForm.ChangeMenu("ViewResults")
+    End Sub
+
+    Private Sub ButtonGenerateBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonGenerateBroadsheet.Click
+        MainForm.ChangeMenu("GenerateBroadsheet")
+    End Sub
+
+    Private Sub FormCourseAdviser_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        'TODO: Update dashboard
+        updateDashboard
+    End Sub
+    Sub updateDashBoard()
+        ButtonResultsSubmitted.Text = "#/##"
+        'TODO: Fetch from Database
+        'count of broadsheets
     End Sub
 End Class

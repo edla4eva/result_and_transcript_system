@@ -18,7 +18,7 @@ Public Class FormResultsTranscripts
         mappDB.GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
     End Sub
 
-    Private Sub ButtonAddBill_Click(sender As Object, e As EventArgs) Handles ButtonAddBill.Click
+    Private Sub ButtonAddResult_Click(sender As Object, e As EventArgs) Handles ButtonAddResult.Click
         'update
         Dim str As String
         Dim p0, p1, p2, p3, p4, p5, p6 As String
@@ -31,7 +31,7 @@ Public Class FormResultsTranscripts
         p6 = Me.TextBoxRef.Text
         str = String.Format(STR_SQL_INSERT_RESULTS, p0, p1) ', p2, p3, p4, p5, p6
         mappDB.UpdateRecordWhere(str)
-        MsgBox("Bill Addedd!")
+        MsgBox("Result Addedd!")
     End Sub
 
     Private Sub DateTimePicker1_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker1.ValueChanged
@@ -39,7 +39,7 @@ Public Class FormResultsTranscripts
     End Sub
 
 
-    Private Sub ButtonCalc_Click(sender As Object, e As EventArgs) Handles ButtonCalc.Click
+    Private Sub ButtonCalcGPA_Click(sender As Object, e As EventArgs) Handles ButtonCalcGPA.Click
 
         Me.TextBoxGuestInfo.Text = "TODO Details: "
 
@@ -56,12 +56,6 @@ Public Class FormResultsTranscripts
         'Next
     End Sub
 
-    Private Sub ButtonPayBill_Click(sender As Object, e As EventArgs) Handles ButtonPayBill.Click
-        'TODO:
-        MsgBox("Acknowledged by you")
-        log(Now.ToShortDateString & "," & Now.ToShortTimeString & "," & mappDB.UserName & "Acknowledged for" & mappDB.StaffID)
-
-    End Sub
 
     Private Sub ButtonCheck_Click(sender As Object, e As EventArgs) Handles ButtonCheck.Click
         Me.reset()
@@ -74,5 +68,10 @@ Public Class FormResultsTranscripts
         dgw.DataSource = myDataset.Tables("Result").DefaultView
         myDataset.Clear()
         myDataset = Nothing
+    End Sub
+
+    Private Sub FormResultsTranscripts_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        MainForm.doCloseForm()
+
     End Sub
 End Class

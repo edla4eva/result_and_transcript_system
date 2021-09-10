@@ -1,4 +1,6 @@
-﻿Public Class FormUploadResult
+﻿Imports System.ComponentModel
+
+Public Class FormUploadResult
     Private Sub FormUploadResult_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
         resizeCombosToGrid()
@@ -27,48 +29,59 @@
             'Get dataset from displayed datagrid
             'parse dataset record by record
             'insert record by record
-            Dim dMATNO, dScore, strSQL As String
-            Dim colMATNO, colScore As Integer
+            Dim strSQL As String   'dMATNO, dScore,
+            Dim dSession, dDept, dCourse As String
+            'Dim colMATNO, colScore As Integer
             'get headers
             'if checkBox custom then
             'colMATNO = comboMat.selectedindex
             'colScore = comboScore.selectedindex
             ' else
-            '|-|sn|matno|name|ca|exam|score|
-            colMATNO = 1
-            colScore = 6
+
 
             strSQL = SQL_SELECT_ALL_RESULTS_WHERE_MATNO '"INSERT INTO TableResults"
-            mappDB.InsertRecord(STR_SQL_INSERT_RESULTS)
-            For x = 0 To DataGridView1.Rows.GetRowCount(DataGridViewElementStates.Displayed)
-                dMATNO = CStr(DataGridView1.Rows(x).Cells(colMATNO).Value) 'CInt(dgw.SelectedRows(0).Cells("semester").Value)
-                dScore = CStr(DataGridView1.Rows(x).Cells(colScore).Value) 'CInt(dgw.SelectedRows(0).Cells("semester").Value)
+            'mappDB.InsertRecord(STR_SQL_INSERT_RESULTS)
+            'strSQL=strSQL& "VALUES (...)" 'TODO
+            'mappDB.UpdateRecordWhere(strSQL)
+
+            '#method 1 - creates table and inserts
+            Dim dt As DataTable
+            'Dim dv As DataView
 
 
-                'Dim p0, p1, p2, p3, p4, p5, p6, p7, p8, p9 As String
-                'INSERT INTO `products` (`productCode`, `productName`, `productLine`, `productScale`,
-                '`productVendor`, `productDescription`, `quantityInStock`, `buyPrice`, `MSRP`,
-                '`is_product_sold_out`) VALUES ('R012', 'Resistor 4.8 KOhm', 'Resistors', '1:7',
-                ''Analog Devices', 'Resistor 4.8 KOhm', '200', '100', '20', 'almost');
-                'p0 = Me.ProductCodeTextBox.Text
-                'p1 = Me.ProductNameTextBox.Text
-                'p2 = Me.cmbProductLine.Text
-                'p3 = Me.ProductScaleTextBox.Text
-                'p4 = Me.ProductVendortTextBox.Text
-                'p5 = Me.ProductdescriptionTextBox.Text
-                'p6 = Me.QtyTextBox1.Text
-                'p7 = Me.PriceTextBox2.Text
-                'p8 = Me.MSRP_Textbox.Text
-                'p9 = Me.Is_SoldTextBox.Text
+            'NOtE. journey 1. tmpDS.Tables(0).DefaultView 2. tmpDT =tmpDV.ToTable  dt=datagrid.source
+            DataGridView1.EndEdit()
+            DataGridView1.Update()
+            DataGridView1.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
+            dt = DataGridView1.DataSource 'causes error if dirty
+            'dt = dv.ToTable
+            '#method 1 manual Insert or bulkInsert
+            '#RODO: VALIDATION we need some AI to check these
+            If TextBoxSession.Text = "" Then
+                MsgBox("Please enter the session") 'prompt user
+                TextBoxSession.BackColor = Color.Pink
+                'TODO: check if session is in database and return session_id
+            ElseIf TextBoxDepartment.Text = "" Then
+                TextBoxDepartment.BackColor = Color.Pink
+            Else
+                'TODO:
+                dSession = TextBoxSession.Text '"2018/2019"
+                dDept = mappDB.getDeptID(TextBoxSession.Text).ToString 'Computer Engineering
+                dCourse = TextBoxCourseCode.Text 'CPE300"
+                mappDB.manualInsertDB(dt, dSession, CInt(dDept), dCourse)
+                MsgBox("ProdResultsult Added Successfully!")
+            End If
 
-                strSQL = String.Format(STR_SQL_INSERT_RESULTS, dMATNO, dScore) ', p2, p3, p4, p5, p6, p7, p8, p9)
 
-                'strSQL=strSQL& "VALUES (...)" 'TODO
-                mappDB.UpdateRecordWhere(strSQL)
+            '#method 2
+            'mappDB.InsertRecord(strSQL)
+
+            'method 3
+            ' mappDB.getDataReader("TableResults") 'then
+            ' mappDB.CompareDataTables(DataGridView1.DataSource.tables(0), dt)
 
 
-            Next
-            MsgBox("ProdResultsuct Added Successfully!")
+
 
 
             'End If
@@ -83,6 +96,7 @@
         ' objResult.resultFilename = My.Application.Info.DirectoryPath & "\samples\result.xlsx"
         objResult.excelVersion = "2013"
         Dim tmpDS As DataSet = objExcelFile.readResultFile()
+        'TODO: reset datagrid
         DataGridView1.DataSource = tmpDS.Tables(0).DefaultView
         showButtons("Check Result", True)
         resizeCombosToGrid()
@@ -97,10 +111,43 @@
                 If enableOnly Then Me.ButtonPreview.Enabled = True Else Me.ButtonPreview.Visible = True
         End Select
     End Sub
-
+    Sub hideButtons(enableOnly As Boolean, btn As Button) 'ButtonName As String, 
+        If enableOnly Then btn.Enabled = False
+        'Select Case ButtonName
+        '    Case "Check Result"
+        '        If enableOnly Then Me.ButtonCheck.Enabled = True Else Me.ButtonCheck.Visible = False
+        '    Case "upload"
+        '        If enableOnly Then Me.ButtonUpload.Enabled = True Else Me.ButtonUpload.Visible = False
+        '    Case "Preview"
+        '        If enableOnly Then Me.ButtonPreview.Enabled = True Else Me.ButtonPreview.Visible = False
+        'End Select
+    End Sub
     Private Sub ButtonResultList_Click(sender As Object, e As EventArgs) Handles ButtonResultList.Click
-        Dim myDataSet As DataSet = objResult.getFromDBResultssDataset
-        DataGridView1.DataSource = myDataSet.Tables("TableResults").DefaultView
+        If TextBoxSession.Text = "" Then
+            TextBoxSession.BackColor = Color.Pink
+            MessageBox.Show("Please enter the session and retry again")
+            Exit Sub
+        End If
+        Dim myDataSet As DataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text)
+        DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+
+
+        'TODO: show result summary in listbox
+        Dim rd As DataTableReader
+        Dim rowVals As String() = {}
+        rd = myDataSet.Tables(0).CreateDataReader
+        Try
+            If rd.Read() Then   'while
+                rd.GetValues(rowVals)
+                ListBoxResults.Items.AddRange(rowVals) 'test
+            End If
+            DataGridView2.Visible = True
+        Catch ex As Exception
+
+        End Try
+
+
+
     End Sub
 
     Private Sub ButtonCheck_Click(sender As Object, e As EventArgs) Handles ButtonCheck.Click
@@ -108,58 +155,186 @@
         Dim tmpDV As DataView
         Dim tmpDT As DataTable
         Dim snRow As Integer
-        tmpDv = Me.DataGridView1.DataSource
+        Dim emptyRow As Integer = 0
+        Dim rowCount As Integer = 0
+        Dim colCount As Integer = 0
+        Dim lstCols As New List(Of Integer)
+        Dim listcolNames As New List(Of String)
+        tmpDV = Me.DataGridView1.DataSource 'TODO: causes error if dirty
         tmpDT = tmpDV.ToTable()
-        'tmpDS.Tables(0).Rows(0).Delete()
-        ' tmpDS.Tables(0).Rows(1).Delete()
-        For i = 0 To tmpDT.Rows.Count - 1
+
+        '# Detect header row
+        rowCount = tmpDT.Rows.Count
+        For i = 0 To rowCount - 1
             If tmpDT.Rows(i).ItemArray().Contains("S/N") Or tmpDT.Rows(i).ItemArray().Contains("MAT") Then
-                MsgBox("ColumnHeader at row: " & i)
-                TextBoxDepartment.Text = tmpDT.Rows(0).Item(0).ToString
-                ' Label10.Text = tmpDS.Tables(0).Rows(0).Item(0)
+                Debug.Print("ColumnHeader at row: " & i)
                 snRow = i
                 Exit For
             End If
         Next
-        'For i = 0 To DataGridView1.Rows.Count - 1
-        '    If DataGridView1.Item(0, i).Value.ToString.Contains("S/N") Or DataGridView1.Item(0, i).Value.ToString.Contains("MAT") Then
-        '        MsgBox("ColumnHeader at row: " & i)
-        '        TextBoxDepartment.Text = DataGridView1.Item(1, 0).Value.ToString
-        '        ' Label10.Text = tmpDS.Tables(0).Rows(0).Item(0)
-        '        snRow = i
-        '        Exit For
-        '    End If
-        'Next
 
-        DataGridView1.Columns(0).HeaderText = DataGridView1.Item(0, snRow).Value.ToString
-        DataGridView1.Columns(1).HeaderText = DataGridView1.Item(1, snRow).Value.ToString
-        DataGridView1.Columns(2).HeaderText = DataGridView1.Item(2, snRow).Value.ToString
-        DataGridView1.Columns(3).HeaderText = DataGridView1.Item(3, snRow).Value.ToString
-
-        'todo delete data cols
-        'tmpDT.Columns(0).delete
-
-
-        'delete rows
-        For j = 0 To snRow
-            tmpDT.Rows(0).Delete()
-
+        '# display header rows
+        colCount = DataGridView1.Columns.Count
+        For i = 0 To colCount - 1
+            DataGridView1.Columns(i).HeaderText = DataGridView1.Item(i, snRow).Value.ToString
         Next
 
-        'TODO copy useful cols and rows into new data table
-        tmpDT.Columns.RemoveAt(0)
-        'Dim newDT As New DataTable
-        'newDT.Columns.Add(tmpDT.Columns(1))
-        'newDT.Columns.Add(tmpDT.Columns(2))
-        'newDT.Rows.Add(tmpDT.Rows())
+        '#change column names to match header text
+        Try
 
-        'display
-        Me.TextBoxPrefix.Text = tmpDT.Rows(0).Item(2).ToString
-        DataGridView1.DataSource = tmpDT
-        DataGridView1.Refresh()
+            For i = 0 To colCount - 1
+                If DataGridView1.Columns(i).HeaderText.ToUpper.Contains("MAT") Then
+                    DataGridView1.Columns(i).Name = "matno"
+                    DataGridView1.Columns(i).HeaderText = "matno"
+                    tmpDT.Columns(i).ColumnName = "matno"
+                ElseIf DataGridView1.Columns(i).HeaderText.ToUpper.Contains("NAME") Then
+                    DataGridView1.Columns(i).Name = "name"
+                    DataGridView1.Columns(i).HeaderText = "name"
+                    tmpDT.Columns(i).ColumnName = "name"
+                ElseIf DataGridView1.Columns(i).HeaderText.ToUpper.Contains("S/N") Or DataGridView1.Columns(i).HeaderText.ToUpper.Contains("SN") Then
+                    DataGridView1.Columns(i).Name = "sn"
+                    DataGridView1.Columns(i).HeaderText = "sn"
+                    tmpDT.Columns(i).ColumnName = "sn"
+                ElseIf DataGridView1.Columns(i).HeaderText.ToUpper.Contains("SCORE") Or DataGridView1.Columns(i).HeaderText.ToUpper.Contains("TOTAL") Then
+                    DataGridView1.Columns(i).Name = "score"
+                    DataGridView1.Columns(i).HeaderText = "score"
+                    tmpDT.Columns(i).ColumnName = "score"
+                ElseIf DataGridView1.Columns(i).HeaderText.ToUpper.Contains("CA") Or DataGridView1.Columns(i).HeaderText.ToUpper.Contains("CONTIN") Then
+                    DataGridView1.Columns(i).Name = "ca"
+                    DataGridView1.Columns(i).HeaderText = "ca"
+                    tmpDT.Columns(i).ColumnName = "ca"
+                Else
+                    'note column to delete
+                    lstCols.Add(i)
+                    listcolNames.Add(DataGridView1.Columns(i).Name)
+                    'DataGridView1.Columns.RemoveAt(i)
+                End If
+
+            Next
+
+
+
+
+            'attempt to get course code dept and other data
+            For j = 0 To snRow - 1
+                For i = 0 To tmpDT.Columns.Count - 1
+                    'TODO: test for null to avoid errors
+                    If tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("DEPARTMENT") Then
+                        'note it
+                        Me.TextBoxDepartment.Text = mappDB.getDeptName(DataGridView1.Rows(j).Cells(i).Value.ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("COURSE") Then
+                        Me.TextBoxCourseCode.Text = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/") Then
+                        Me.TextBoxSession.Text = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("SESSION") Then
+                        Me.TextBoxSession.Text = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/201") Then '201X eg 2019 2018
+                        Me.TextBoxSession.Text = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                        'todo: fix millenum kind of bug after 2050. e.g for i=205 to 999 if contains i.tostring
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/202") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("203") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("204") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("205") Then '202X eg 2020 2021
+                        Me.TextBoxSession.Text = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                    Else
+                    End If
+                Next
+            Next
+
+            'delete noted useless columns
+            Dim delColCount = 0
+            For Each iName In listcolNames
+                tmpDT.Columns.Remove(iName) 'TODO: its not removing, just moving to the end
+                'DataGridView1.InvalidateColumn(iName)
+
+                delColCount += 1 'update count of deleted cols
+            Next
+
+            'delete header rows
+            For j = 0 To snRow
+                tmpDT.Rows(0).Delete()
+            Next
+
+
+            'TODO: validate all values
+            'tmpDT.containsNulls
+            'change ABS = moduleGeneral.Settings.ABS '-1
+            'change NR = moduleGeneral.Settings.ABS '-2
+            'change N/A = moduleGeneral.Settings.ABS '-3
+            rowCount = tmpDT.Rows.Count
+            For i = 0 To rowCount - 1
+                For col = 0 To tmpDT.Columns.Count - 1
+                    If tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("NR") Or tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("NR") Then
+                        tmpDT.Rows(i).Item(col) = -2
+                    ElseIf tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("NA") Or tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("N/A") Then
+                        tmpDT.Rows(i).Item(col) = -3
+                    ElseIf tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("ABS") Or tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("ABS") Then
+                        tmpDT.Rows(i).Item(col) = -1 'moduleGeneral.Settings.ABS
+
+                    Else
+
+                    End If
+
+                Next
+
+                'check for empty rows
+                If Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And i > snRow Then
+                    If Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And Trim(tmpDT.Rows(i).Item("score").ToString) = "" Then
+                        emptyRow = i
+                    ElseIf Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Trim(tmpDT.Rows(i).Item("score").ToString) = "0" Then
+                        emptyRow = i
+                    ElseIf Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And Trim(tmpDT.Rows(i).Item("ca").ToString) = "" Then
+                        emptyRow = i
+
+                    Else
+
+                    End If
+
+                End If
+
+                'special check for matno
+                'validateMATNO(tmpDT.Rows(i).Item("matno"))
+                'if its not a matno store it. prompt the user to insert it into db.students table
+
+                'if matno does not exist, search db for name and suggest the matno
+
+                'if name does not exist in db, create MOCK matno and use it. flag mock matnos
+                'TODO: AUTO040998990 'eg matno auto
+                If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" Then tmpDT.Rows(i).Item("matno") = 0 - CInt(Rnd(5) * 10000)   ' mappDB.getAutoMATNo
+
+                'score cannot be null
+                If tmpDT.Rows(i).Item("score").ToString = "" Then tmpDT.Rows(i).Item("score") = -4 'moduleGeneral.Settings.ABS
+
+
+            Next
+
+            'delete empty rows below
+            rowCount = tmpDT.Rows.Count
+            If emptyRow > 0 Then
+                For j = emptyRow To rowCount - 1
+                    tmpDT.Rows(emptyRow).Delete()   'keep deleting the last row
+                Next
+            End If
+
+            'remove name its not needed anymore
+            tmpDT.Columns.Remove("name")
+
+            'TODO copy useful cols and rows into new data table
+            'Dim newDT As New DataTable
+            'newDT.Columns.Add(tmpDT.Columns(1))
+            'newDT.Columns.Add(tmpDT.Columns(2))
+            'newDT.Rows.Add(tmpDT.Rows())
+
+            'display
+            Me.TextBoxPrefix.Text = tmpDT.Rows(0).Item(2).ToString
+
+            DataGridView1.DataSource = tmpDT
+            DataGridView1.Refresh()
+
+            hideButtons(True, Me.ButtonCheck)   'Todo: remove UI code
+        Catch ex As Exception
+            MessageBox.Show("Result is not in the correct format, please correct ant try again")
+            logError(ex.ToString)
+            Exit Sub
+        End Try
     End Sub
-
-
 
     Private Sub DataGridView1_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
         resizeCombosToGrid()
@@ -180,5 +355,21 @@
         ComboBox6.Left = ComboBox5.Left + DataGridView1.Columns(4).Width
         ComboBox7.Width = DataGridView1.Columns(6).Width
         ComboBox7.Left = ComboBox6.Left + DataGridView1.Columns(5).Width
+    End Sub
+
+    Private Sub FormUploadResult_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        If mappDB.User = "CA" Then
+            MainForm.ChangeMenu("CourseAdviser")
+        ElseIf mappDB.User = "CL" Then
+            MainForm.ChangeMenu("CourseLecturer")
+        ElseIf mappDB.User = "ST" Then
+            MainForm.ChangeMenu("Student")
+        Else
+            MainForm.ChangeMenu("User")
+        End If
+    End Sub
+
+    Private Sub FormUploadResult_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+
     End Sub
 End Class

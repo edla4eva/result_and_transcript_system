@@ -184,15 +184,56 @@ Public Class ClassExcelFile
 
 
     Public Property excelFileName() As String
-                Get
-                    Return _excelFileName
-                End Get
-                Set(ByVal value As String)
-                    _excelFileName = value
-                End Set
-            End Property
+        Get
+            Return _excelFileName
+        End Get
+        Set(ByVal value As String)
+            _excelFileName = value
+        End Set
+    End Property
 
+    Public Function readExcelFile()
+        Return Nothing
+    End Function
     Public Function readResultFile() As DataSet
+
+        Dim stream As FileStream = Nothing
+        Dim endOfRow, colNum, dFieldCount, i, SNCol, matNoCol, sNRow As Integer
+        Dim dData As String = ""
+        endOfRow = colNum = i = dFieldCount = SNCol = matNoCol = sNRow = 0
+        colNum = 1
+        Dim excelReader As IExcelDataReader
+        Dim resultDS As DataSet
+        Try 'step 1
+            stream = File.Open(objExcelFile.excelFileName, FileMode.Open, FileAccess.Read)
+            'read from xml excel .xlsx
+
+            Try 'step 2
+                excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream)
+                'excelReader.isfirstrowascolumnNames = True 'OPTIONAL TODO:create col name from first row
+                resultDS = excelReader.AsDataSet() 'dataset result in results.tables 
+                dFieldCount = excelReader.FieldCount
+                stream.Dispose()
+
+            Catch ex As Exception
+                Return Nothing
+                Exit Function
+            End Try
+        Catch ex As Exception
+            If Not stream Is Nothing Then stream.Dispose()
+            Return Nothing
+            Exit Function
+        End Try
+
+
+
+
+
+        Return resultDS
+
+
+    End Function
+    Public Function readBroadSheetTemplateFile() As DataSet
 
         Dim stream As FileStream = Nothing
         Dim endOfRow, colNum, dFieldCount, i, SNCol, matNoCol, sNRow As Integer

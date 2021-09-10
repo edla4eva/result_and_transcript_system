@@ -9,11 +9,11 @@ Imports System.Drawing.Bitmap
 'Imports RapChatLib.RapChatLib
 Module ModuleNetworkUtility
 #Region "Declarations"
-
-    Public Listener As New TcpListener(65535)
+    Private ip As New Net.IPAddress({127, 0, 0, 1}) '(0x2414188f, 1) 'endian val for ip 143.24.20.36 
+    Public Listener As New TcpListener(ip, 65535)
     Public Client As New TcpClient
     Public Message As String = ""
-    Public Listener1 As New TcpListener(65534)
+    Public Listener1 As New TcpListener(ip, 65535)
     Public Client1 As New TcpClient
     Public Message1 As String = ""
     Public IPAdd As String

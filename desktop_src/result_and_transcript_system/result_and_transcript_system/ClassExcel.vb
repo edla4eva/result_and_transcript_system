@@ -11,7 +11,6 @@ Public Class ClassExcel
 
     Private _fileNameWB As String
     Private _previewImageFileName As String
-    Private slideStrValue As String
     Private _font As New Font("Arial", 50, FontStyle.Bold)
     Private _settings As Dictionary(Of String, String)
     Private _WBDataSet As DataSet
@@ -54,7 +53,6 @@ Public Class ClassExcel
             Me._font = New Font("Arial", 50, FontStyle.Bold)
             'USER_DIRECTORY
             Me._fileNameWB = USER_DIRECTORY & "\Samples\Result.xlsx"
-            Me.slideStrValue = "In the begining God created the heaven and the earth."
             Me.settings = getSettings(True)
         Catch ex As Exception
             Throw ex

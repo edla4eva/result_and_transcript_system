@@ -1,32 +1,26 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class FormStudentsRegistration
-    Dim con As MySql.Data.MySqlClient.MySqlConnection
-    Dim cmd As MySql.Data.MySqlClient.MySqlCommand
+
     Dim strSQL As String
     Dim strConnectionString As String
     Dim ref As Integer
 
     Private Sub FormRooms_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Me.MdiParent = MDIParentMain
         Me.WindowState = FormWindowState.Maximized
-        Me.Reset()
-
-        'resize cols
-        For Each col As DataGridViewColumn In dgw.Columns
-            col.Width = 50
-            If col.HeaderText = "productName" Then
-                col.Width = 100
-            ElseIf col.HeaderText = "productDescription" Then
-                col.Width = 150
-            ElseIf col.HeaderText = "buyPrice" Then
-                col.Width = 100
-            End If
-        Next
 
 
     End Sub
+    Private Sub FormStudentsRegistration_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        On Error Resume Next
+
+        Me.Reset()
+
+
+        'resize cols
+        resizeDatagrids("students")
+    End Sub
     Sub Reset()
-        txtStudentName.Text = ""
+        txtStudentMATNO.Text = ""
         'ref = CInt(CLng(Now.ToOADate * 200) + 100)
         'mappDB.ref = ref
         'mappDB.rDate = FormatMyDate(Now) & " " & FormatMyTime(Now)  'Now.ToShortDateString & " " & Now.ToShortTimeString
@@ -34,58 +28,70 @@ Public Class FormStudentsRegistration
     End Sub
     Public Sub GetData()
         Try
-            Dim tmpDS = mappDB.GetDataWhere(String.Format(SQL_SELECT_ALL_RESULTS_WHERE_MATNO, mappDB.MATNO), "Results")
-            Dim cmdLocal As New OleDb.OleDbCommand(strSQL, mappDB.connLocal)
-            Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
+            mappDB.Dept = 1 'TODO
+            Dim tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, mappDB.Dept), "students")
+            dgw.DataSource = tmpDS.Tables("students").DefaultView
+            If dgw.Rows.Count > 0 Then
+                UpdateCourses(dgw.Rows(0).Cells("matno").ToString)
+            End If
 
-            myDA.Fill(tmpDS, "Results")
-            dgw.DataSource = tmpDS.Tables("Results").DefaultView
-            UpdateCourses()
             'TODO: 
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
-    Public Sub UpdateCourses()
-        Try
-            Dim tmpDS As DataSet
-            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_WHERE, mappDB.MATNO), "Courses") 'todo
-            dgv_courses.DataSource = tmpDS.Tables("Courses").DefaultView
-            con.Close()
+    Public Sub resizeDatagrids(dGrid As String)
+        If dgv_courses.Rows.Count > 0 And dGrid = "Courses" Then
 
             For Each col As DataGridViewColumn In dgv_courses.Columns
                 col.Width = 0
                 col.Visible = False
-                If col.HeaderText = "date" Then
+                If col.HeaderText = "matno" Then
                     col.Width = 70
                     col.Visible = True
-                ElseIf col.HeaderText = "details" Then
-                    col.Width = 130
+                ElseIf col.HeaderText = "CourseCode_1" Then
+                    col.Width = 200
                     col.Visible = True
-                ElseIf col.HeaderText = "credit" Then
-                    col.Width = 60
-                    col.Visible = True
-                ElseIf col.HeaderText = "ref" Then
-                    col.Width = 50
+                ElseIf col.HeaderText = "CourseCode_2" Then
+                    col.Width = 200
                     col.Visible = True
                 End If
             Next
+        ElseIf dgw.Rows.Count > 0 And dGrid = "Students" Then
+
+            For Each col As DataGridViewColumn In dgw.Columns
+                col.Width = 50
+                If col.HeaderText = "matno" Then
+                    col.Width = 100
+                ElseIf col.HeaderText = "first_name" Then
+                    col.Width = 150
+                ElseIf col.HeaderText = "surname" Then
+                    col.Width = 100
+                End If
+            Next
+        End If
+    End Sub
+    Public Sub UpdateCourses(dMATNO As String)
+        Try
+            Dim tmpDS As DataSet
+            mappDB.MATNO = dMATNO
+            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_SPD_WHERE, mappDB.MATNO), "Courses") 'todo
+            dgv_courses.DataSource = tmpDS.Tables("Courses").DefaultView
 
             dgv_courses.Refresh()
+            resizeDatagrids("courses")
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub txtStudentName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentName.TextChanged
-        mappDB.MATNO = txtStudentName.Text
-        Dim tmpDS = mappDB.GetDataWhere(String.Format(SQL_SELECT_ALL_RESULTS_WHERE_MATNO, mappDB.MATNO), "Results")
-        Dim cmdLocal As New OleDb.OleDbCommand(strSQL, mappDB.connLocal)
-        Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
-        myDA.Fill(tmpDS, "Results")
-        dgw.DataSource = tmpDS.Tables("Results").DefaultView
-        UpdateCourses()
+    Private Sub txtStudentMATNO_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentMATNO.TextChanged
+        If txtStudentMATNO.Text.Length > 5 Then
+            mappDB.MATNO = txtStudentMATNO.Text
+            Dim tmpDS = mappDB.GetDataWhere(String.Format(SQL_SELECT_ALL_RESULTS_WHERE_MATNO, mappDB.MATNO), "Results")
+            dgw.DataSource = tmpDS.Tables("Results").DefaultView
+            UpdateCourses(mappDB.MATNO)
+        End If
     End Sub
 
     Private Sub dgw_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgw.CellContentClick
@@ -97,11 +103,10 @@ Public Class FormStudentsRegistration
         On Error Resume Next
         For Each row As DataGridViewRow In Me.dgw.Rows
 
-            If row.Cells.Item("is_registered").Value.ToString = "no" Then
+            If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
                 row.DefaultCellStyle.BackColor = Color.White
-            ElseIf row.Cells.Item("is_registered").Value.ToString = "partial" Then
-                row.DefaultCellStyle.BackColor = Color.Orange
-            ElseIf row.Cells.Item("is_registered").Value.ToString = "yes" Then
+
+            ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
                 row.DefaultCellStyle.BackColor = Color.PaleVioletRed
             End If
         Next
@@ -159,7 +164,7 @@ Public Class FormStudentsRegistration
         MsgBox("ProduCoursect " & sCC & " updated Successfully!,")
 
         '    'refresh Datagrid
-        UpdateCourses()
+        UpdateCourses(mappDB.MATNO)
 
     End Sub
     Function FormatMyDate(dtp As Date) As String
@@ -199,13 +204,11 @@ Public Class FormStudentsRegistration
     Public Function UpdateRecordWhere(s As String) As String
         Dim returnVal As String = ""
         Try
-            strConnectionString = mappDB.getConnectionString(False)
-            con = New MySql.Data.MySqlClient.MySqlConnection(strConnectionString)
-            con.Open()
-            strSQL = s
-            cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            cmd.ExecuteNonQuery()
-
+            Using con As New OleDb.OleDbConnection(STR_connectionString)
+                strSQL = s
+                Dim cmd As New OleDb.OleDbCommand(strSQL, con)
+                cmd.ExecuteNonQuery()
+            End Using
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -214,13 +217,14 @@ Public Class FormStudentsRegistration
     Public Function InsertRecord(s As String) As String
         Dim returnVal As String = ""
         Try
-            strConnectionString = mappDB.getConnectionString(False)
-            con = New MySql.Data.MySqlClient.MySqlConnection(strConnectionString)
-            con.Open()
-            strSQL = s
-            cmd = New MySql.Data.MySqlClient.MySqlCommand(strSQL, con)
-            cmd.ExecuteNonQuery()
 
+            Using con As New OleDb.OleDbConnection(STR_connectionString)
+                'con = mappDB.connLocal
+                'comes open con.Open()
+                strSQL = s
+                Dim cmd As New OleDb.OleDbCommand(strSQL, con)
+                cmd.ExecuteNonQuery()
+            End Using
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -268,5 +272,10 @@ Public Class FormStudentsRegistration
         PictureBox2.Image = PictureBox1.Image
         PictureBox2.Visible = Not PictureBox2.Visible
     End Sub
+
+    Private Sub FormStudentsRegistration_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        MainForm.doCloseForm()
+    End Sub
+
 
 End Class

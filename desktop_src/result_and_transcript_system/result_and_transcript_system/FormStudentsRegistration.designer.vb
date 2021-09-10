@@ -30,6 +30,7 @@ Partial Class FormStudentsRegistration
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgw = New System.Windows.Forms.DataGridView()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -38,7 +39,7 @@ Partial Class FormStudentsRegistration
         Me.btnClose = New System.Windows.Forms.Button()
         Me.btnReset = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.txtStudentName = New System.Windows.Forms.TextBox()
+        Me.txtStudentMATNO = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.lblSet = New System.Windows.Forms.Label()
@@ -90,6 +91,14 @@ Partial Class FormStudentsRegistration
         Me.dgw.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgw.ColumnHeadersHeight = 24
         Me.dgw.Cursor = System.Windows.Forms.Cursors.Hand
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.Gray
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgw.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgw.EnableHeadersVisualStyles = False
         Me.dgw.GridColor = System.Drawing.Color.White
         Me.dgw.Location = New System.Drawing.Point(9, 151)
@@ -97,21 +106,21 @@ Partial Class FormStudentsRegistration
         Me.dgw.Name = "dgw"
         Me.dgw.ReadOnly = True
         Me.dgw.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.CadetBlue
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgw.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgw.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgw.RowHeadersWidth = 25
         Me.dgw.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White
-        Me.dgw.RowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White
+        Me.dgw.RowsDefaultCellStyle = DataGridViewCellStyle5
         Me.dgw.RowTemplate.Height = 18
         Me.dgw.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgw.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
@@ -193,30 +202,30 @@ Partial Class FormStudentsRegistration
         'Panel3
         '
         Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel3.Controls.Add(Me.txtStudentName)
+        Me.Panel3.Controls.Add(Me.txtStudentMATNO)
         Me.Panel3.Controls.Add(Me.Label3)
         Me.Panel3.Location = New System.Drawing.Point(9, 75)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(213, 70)
         Me.Panel3.TabIndex = 1
         '
-        'txtStudentName
+        'txtStudentMATNO
         '
-        Me.txtStudentName.BackColor = System.Drawing.Color.White
-        Me.txtStudentName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtStudentName.Location = New System.Drawing.Point(13, 30)
-        Me.txtStudentName.Name = "txtStudentName"
-        Me.txtStudentName.Size = New System.Drawing.Size(183, 21)
-        Me.txtStudentName.TabIndex = 13
+        Me.txtStudentMATNO.BackColor = System.Drawing.Color.White
+        Me.txtStudentMATNO.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtStudentMATNO.Location = New System.Drawing.Point(13, 30)
+        Me.txtStudentMATNO.Name = "txtStudentMATNO"
+        Me.txtStudentMATNO.Size = New System.Drawing.Size(183, 21)
+        Me.txtStudentMATNO.TabIndex = 13
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(10, 10)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(151, 13)
+        Me.Label3.Size = New System.Drawing.Size(162, 13)
         Me.Label3.TabIndex = 12
-        Me.Label3.Text = "Search for Student  By Name :"
+        Me.Label3.Text = "Search for Student  By MATNO :"
         '
         'Panel2
         '
@@ -265,18 +274,18 @@ Partial Class FormStudentsRegistration
         '
         Me.dgv_courses.AllowUserToAddRows = False
         Me.dgv_courses.AllowUserToDeleteRows = False
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FloralWhite
-        Me.dgv_courses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FloralWhite
+        Me.dgv_courses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle6
         Me.dgv_courses.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.dgv_courses.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.SeaGreen
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LightSteelBlue
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgv_courses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = System.Drawing.Color.SeaGreen
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgv_courses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
         Me.dgv_courses.ColumnHeadersHeight = 24
         Me.dgv_courses.Cursor = System.Windows.Forms.Cursors.Hand
         Me.dgv_courses.EnableHeadersVisualStyles = False
@@ -286,21 +295,21 @@ Partial Class FormStudentsRegistration
         Me.dgv_courses.Name = "dgv_courses"
         Me.dgv_courses.ReadOnly = True
         Me.dgv_courses.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.Color.CadetBlue
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgv_courses.RowHeadersDefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgv_courses.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.dgv_courses.RowHeadersWidth = 25
         Me.dgv_courses.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle8.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White
-        Me.dgv_courses.RowsDefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle9.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle9.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White
+        Me.dgv_courses.RowsDefaultCellStyle = DataGridViewCellStyle9
         Me.dgv_courses.RowTemplate.Height = 18
         Me.dgv_courses.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgv_courses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
@@ -506,7 +515,7 @@ Partial Class FormStudentsRegistration
     Friend WithEvents btnClose As Button
     Friend WithEvents btnReset As Button
     Friend WithEvents Panel3 As Panel
-    Friend WithEvents txtStudentName As TextBox
+    Friend WithEvents txtStudentMATNO As TextBox
     Friend WithEvents Label3 As Label
     Friend WithEvents Panel2 As Panel
     Friend WithEvents lblSet As Label

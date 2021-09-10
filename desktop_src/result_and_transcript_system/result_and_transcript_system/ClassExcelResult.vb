@@ -116,36 +116,6 @@ Public Class ClassExcelResult
 
     Declare Function Win32MessageBox Lib "user32.dll" Alias "MessageBox" (ByVal hWnd As Integer, ByVal txt As String, ByVal caption As String, ByVal type As Integer) As Integer
 
-    Public Sub combolist(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, ByVal this_cbo As ListBox)
-        Try
-            Dim oConn As OleDbConnection = Me.getConn(, True)
-            Dim oad As New OleDbDataAdapter(this_sql, oConn)
-            Dim ds As New DataSet
-            Dim strtmp As String = this_cbo.Text.ToString : this_cbo.Text = String.Empty
-            oad.Fill(ds)
-
-            With this_cbo
-                .DataSource = ds.Tables(0)
-                .ValueMember = this_value
-                .DisplayMember = this_member
-            End With
-
-            this_sql = Nothing
-            this_value = Nothing
-            this_member = Nothing
-            ds = Nothing
-            oad = Nothing
-
-            oConn.Close()
-            oConn.Dispose()
-            oConn = Nothing
-        Catch ex As Exception
-            Throw ex
-        Finally
-            'can cause error
-        End Try
-    End Sub
-
 
     Function getSettings(Optional useDefault As Boolean = False) As Dictionary(Of String, String)
         Try
@@ -213,8 +183,6 @@ Public Class ClassExcelResult
         End Try
     End Function
     Function importResultFromExcelWBInterop() As DataSet
-
-
         Dim strCriteria As String = String.Empty
         Dim startRow As Integer = 1
         Dim endRow As Integer = 200
@@ -222,6 +190,9 @@ Public Class ClassExcelResult
         Dim strSQLTemp As String = ""
         Dim i As Integer = 0
         Dim strArrayMATNO, strArrayNAME, strArrayCA, strArrayEXAM, strArraySCORE, strArraySURNAME, strArrayOtherNames As String()
+
+        Dim strCellContent As String = ""
+        Dim MATNoFound As Boolean = False
         Try
             excelApp = New ExcelInterop.Application
 
@@ -229,8 +200,7 @@ Public Class ClassExcelResult
             excelWB = excelApp.Workbooks.Open(Me.resultfileNameValue)
             excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
 
-            Dim strCellContent As String = ""
-            Dim MATNoFound As Boolean = False
+
             r = 8 'textbox
             'Search for MATNO Column
             For i = 1 To 20
@@ -366,18 +336,21 @@ Public Class ClassExcelResult
         Try
 
             excelApp.Quit()
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWB)
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWS)
             'clean up variables
             mappDB.close()
             r = Nothing
             excelWS = Nothing
             excelWB = Nothing
             excelApp = Nothing
+
             GC.Collect() 'Best way to close excel NOTE: It works in release but youmay not notice in debug mode
 
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
-        Return ds
+
 
         'Scrap stuff--------------------
         'excelApp.Visible = True 'TODO: check
@@ -399,15 +372,11 @@ Public Class ClassExcelResult
         'With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeLeft)
         'excelWS.Cells.Range("B" & startRow & ":B" & r).Select() 'select rows
 
-        'dr = dt.NewRow()
-        'dr("SN") = 1
-        'dr("MATNO") = "ENG0607721"
-        'dr("CA") = 20
-        'dr("Score") = 60
-        'dr("Total") = 80
-        'dr("Name") = "Firstname SURNAME"
-        'dt.Rows.Add(dr)
+
+
+        Return ds
     End Function
+
     'Public Function creatDataSetFromArray(strArrayMAT As String(), strArrayCA As String(), strArrayEXAM As String(),
     '                                      strArrayTOTAL As String(), strArraySURNAME As String(), strArrayOtherNames As String()) As DataSet
     '    'Works perfectly
@@ -541,17 +510,23 @@ Public Class ClassExcelResult
         End Try
     End Function
 
-    Function getFromDBResultssDataset() As DataSet
+    Function getFromDBResultssDataset(dSession As String) As DataSet
         Try
-            Dim strSQL As String = "SELECT * FROM  TableResults"
+            'ts.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester
+            'FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Department On students.student_dept_idr = Department.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code;
+
+            Dim strSQL As String = "" '"SELECT * FROM  results INNER JOIN"
+            strSQL = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester"
+            strSQL = strSQL & " FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Department On students.student_dept_idr = Department.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code"
+            strSQL = strSQL & " WHERE results.session_idr=" & dSession & ";"
             Dim cmd As New OleDbCommand
             cmd.CommandType = CommandType.Text
             cmd.CommandText = strSQL
-            cmd.Connection = Me.getConn(, True)
+            cmd.Connection = mappDB.connLocal
             Dim myDA As OleDbDataAdapter = New OleDbDataAdapter(cmd)
             Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, "TableResults")
-            ' dgw.DataSource = myDataSet.Tables("TableResults").DefaultView
+            myDA.Fill(myDataSet, "results")
+            'dgw.DataSource = myDataSet.Tables("TableResults").DefaultView
             Return myDataSet
         Catch ex As Exception
             Throw ex

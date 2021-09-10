@@ -27,9 +27,10 @@ Partial Class MainForm
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.PanelBtn = New System.Windows.Forms.Panel()
         Me.ButtonSettings = New System.Windows.Forms.Button()
         Me.ButtonCurrent = New System.Windows.Forms.Button()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabelShowHide = New System.Windows.Forms.LinkLabel()
         Me.ButtonExit = New System.Windows.Forms.Button()
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonHome = New System.Windows.Forms.Button()
@@ -86,9 +87,10 @@ Partial Class MainForm
         Me.SidePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.PanelBtn)
         Me.SidePanel.Controls.Add(Me.ButtonSettings)
         Me.SidePanel.Controls.Add(Me.ButtonCurrent)
-        Me.SidePanel.Controls.Add(Me.LinkLabel2)
+        Me.SidePanel.Controls.Add(Me.LinkLabelShowHide)
         Me.SidePanel.Controls.Add(Me.ButtonExit)
         Me.SidePanel.Controls.Add(Me.ButtonUser)
         Me.SidePanel.Controls.Add(Me.ButtonHome)
@@ -96,6 +98,16 @@ Partial Class MainForm
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 500)
         Me.SidePanel.TabIndex = 4
+        '
+        'PanelBtn
+        '
+        Me.PanelBtn.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.PanelBtn.BackgroundImage = Global.result_and_transcript_system.My.Resources.Resources.panel
+        Me.PanelBtn.Location = New System.Drawing.Point(96, 37)
+        Me.PanelBtn.Name = "PanelBtn"
+        Me.PanelBtn.Size = New System.Drawing.Size(19, 15)
+        Me.PanelBtn.TabIndex = 6
+        Me.PanelBtn.Visible = False
         '
         'ButtonSettings
         '
@@ -122,19 +134,19 @@ Partial Class MainForm
         Me.ButtonCurrent.TabIndex = 4
         Me.ButtonCurrent.UseVisualStyleBackColor = True
         '
-        'LinkLabel2
+        'LinkLabelShowHide
         '
-        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.DimGray
-        Me.LinkLabel2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel2.AutoSize = True
-        Me.LinkLabel2.DisabledLinkColor = System.Drawing.Color.Silver
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.Silver
-        Me.LinkLabel2.Location = New System.Drawing.Point(79, 14)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(44, 13)
-        Me.LinkLabel2.TabIndex = 3
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "<< Hide"
+        Me.LinkLabelShowHide.ActiveLinkColor = System.Drawing.Color.DimGray
+        Me.LinkLabelShowHide.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabelShowHide.AutoSize = True
+        Me.LinkLabelShowHide.DisabledLinkColor = System.Drawing.Color.Silver
+        Me.LinkLabelShowHide.LinkColor = System.Drawing.Color.Silver
+        Me.LinkLabelShowHide.Location = New System.Drawing.Point(87, 11)
+        Me.LinkLabelShowHide.Name = "LinkLabelShowHide"
+        Me.LinkLabelShowHide.Size = New System.Drawing.Size(44, 13)
+        Me.LinkLabelShowHide.TabIndex = 3
+        Me.LinkLabelShowHide.TabStop = True
+        Me.LinkLabelShowHide.Text = "<< Hide"
         '
         'ButtonExit
         '
@@ -260,7 +272,7 @@ Partial Class MainForm
     Friend WithEvents ButtonHome As Button
     Friend WithEvents ButtonExit As Button
     Friend WithEvents LinkLabel1 As LinkLabel
-    Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents LinkLabelShowHide As LinkLabel
     Friend WithEvents LinkLabelMax As LinkLabel
     Friend WithEvents LinkLabel3 As LinkLabel
     Friend WithEvents ButtonCurrent As Button
@@ -268,4 +280,5 @@ Partial Class MainForm
     Friend WithEvents Panel3 As Panel
     Friend WithEvents TextBoxStatus As TextBox
     Friend WithEvents ButtonSettings As Button
+    Friend WithEvents PanelBtn As Panel
 End Class

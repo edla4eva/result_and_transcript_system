@@ -15,7 +15,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
@@ -123,6 +123,7 @@
     <Compile Include="ClassAnswerEventArgs.vb" />
     <Compile Include="ClassBroadsheets.vb" />
     <Compile Include="ClassDB.vb" />
+    <Compile Include="ClasseEF.vb" />
     <Compile Include="ClassExcel.vb" />
     <Compile Include="ClassExcelFile.vb" />
     <Compile Include="ClassExcelResult.vb" />
@@ -131,6 +132,18 @@
       <DependentUpon>FormAdmin.vb</DependentUpon>
     </Compile>
     <Compile Include="FormAdmin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewResults.Designer.vb">
+      <DependentUpon>FormViewResults.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewResults.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewBroadsheets.Designer.vb">
+      <DependentUpon>FormViewBroadsheets.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewBroadsheets.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormSettings.Designer.vb">
@@ -225,6 +238,12 @@
     <EmbeddedResource Include="FormAdmin.resx">
       <DependentUpon>FormAdmin.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormViewResults.resx">
+      <DependentUpon>FormViewResults.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormViewBroadsheets.resx">
+      <DependentUpon>FormViewBroadsheets.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormSettings.resx">
       <DependentUpon>FormSettings.vb</DependentUpon>
     </EmbeddedResource>
@@ -267,6 +286,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagramForms.cd" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -284,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="panel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

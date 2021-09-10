@@ -4,13 +4,16 @@ A Result and Transcript Processing System for Universities
 # SYSTEM DEVELOPMENT
 MODE OF DEVELOPMENT - Rapid Development
 
-TOOLS USED FOR DEVELOMENT:
+TOOLS AND LIBRARIES USED FOR DEVELOMENT:
 - GitHub
-- Xampp
+- XAMPP (MySQL and PHP)
 - Database Designer
 - Microsoft Excel 
 - Visual Studio
-
+- Inno Setup https://jrsoftware.org/isdl.php
+- ExcelDataReader
+- Microsoft Access
+- Visual Studio Code
 Progress Report with Tools:
 
 ** GitHub:
@@ -19,8 +22,8 @@ Progress Report with Tools:
 
 
 ** Microsoft Excel:
-+ The sample data has been stored in a table using microsoft excel
-+ This data is then exported to the database
++ The sample data is stored in spreadsheets using Microsoft Excel
++ This data is then imported into the database
 
 ** Xammp:
 + Xammp is then used to create and  design the database for the system using SQL code

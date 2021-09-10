@@ -13,15 +13,14 @@ Public Class ClassDB
     Private m_connMode As String '= "local" 'or remote
     Public Sub New(Optional modeLocalOrCloud As String = "local")
         Try
-            Call connect()
             If modeLocalOrCloud = "cloud" Then
                 Me.m_connMode = "remote"
                 m_connStr = ModuleGeneral.STR_connectionStringCloud
-                Call connect()
+
             Else
-                Me.m_connMode = "relocalmote"
+                Me.m_connMode = "local"
                 m_connStr = ModuleGeneral.STR_connectionString
-                Call connect()
+
             End If
 
         Catch ex As Exception
@@ -71,6 +70,15 @@ Public Class ClassDB
             staff_id = value
         End Set
     End Property
+    Private _user As String
+    Public Property User() As String
+        Get
+            Return _user
+        End Get
+        Set(ByVal value As String)
+            _user = value
+        End Set
+    End Property
     Private _matno As String
     Public Property MATNO() As String
         Get
@@ -89,68 +97,48 @@ Public Class ClassDB
             m_connStr = value
         End Set
     End Property
-    Public ReadOnly Property conn() As Object ' OleDb.OleDbConnection
-        Get
-            If m_connMode = Nothing Or m_connMode = "local" Then
-                If m_connLocal.State = 0 Then Call connect()
-                Return m_connLocal
-            Else
-                If m_conn.State = 0 Then Call connect()
-                Return m_conn
-            End If
 
-        End Get
-    End Property
-    Public ReadOnly Property connRemote() As MySqlConnection ' OleDb.OleDbConnection
-        Get
-            If m_conn Is Nothing Then m_conn = New MySqlConnection
-            If m_conn.State = 0 Then Call connect()
-            Return m_conn
-        End Get
-    End Property
-    Public ReadOnly Property connLocal() As OleDb.OleDbConnection
-        Get
-            If m_connLocal Is Nothing Then m_connLocal = New OleDbConnection
-            If m_connLocal.State = 0 Then Call connect()
-            Return m_connLocal
-        End Get
-    End Property
-    Sub connect()
+
+
+    Function conn() As Object ' OleDb.OleDbConnection
+
+        If m_connMode = Nothing Or m_connMode = "local" Then
+            Return connLocal()
+
+        Else
+
+            Return connRemote()
+        End If
+
+    End Function
+    Function connLocal() As OleDb.OleDbConnection
+
+
+        Dim tmpConn As OleDbConnection = New OleDbConnection
         Try
-            If m_connMode = Nothing Or m_connMode = "local" Then
 
-                If m_connLocal Is Nothing Then m_connLocal = New OleDbConnection
-                '32 bit Access
-                'm_connStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\abacuspro.mdb;" & "User ID=admin;" & "Password=" & m_password
-                '64 bit Access
-                m_connStr = ModuleGeneral.STR_connectionString ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "User ID=admin"
-                'TODO: m_conn.ConnectionString = STR_connectionString
-                m_connLocal.ConnectionString = m_connStr
-                m_connLocal.Open()
+            Try
+                m_connStr = ModuleGeneral.STR_connectionString '64
+                tmpConn.ConnectionString = ModuleGeneral.STR_connectionString
+                tmpConn.Open()  'todo: throws error if called 2nd time must close app--> Attempted to read or write protected memory. This is often an indication that other memory 
+            Catch ex As Exception
+                m_connStr = ModuleGeneral.STR_connectionString32 '32 bits
+                tmpConn.ConnectionString = ModuleGeneral.STR_connectionString32
+                tmpConn.Open()
+            End Try 'try 64 bit Access
 
-            Else
+            Return tmpConn
 
-                'm_conn = New OleDbConnection
-                If m_conn Is Nothing Then m_conn = New MySqlConnection
-                '32 bit Access
-                'm_conn.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\abacuspro.mdb;" & "User ID=admin;" & "Password=" & m_password
-                '64 bit Access
-                'm_conn.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.accdb;" & "User ID=admin"
-                'mySQL
-                'm_conn.ConnectionString = "server=localhost;User Id=crimpsof_TrussN;password=crimpsof_TrussN;Persist Security Info=True;database=crimpsof_trussnet"
-                m_conn.ConnectionString = ModuleGeneral.STR_connectionStringCloud
-                m_conn.Open()
-                m_conn.ChangeDatabase("crimpsof_ehotel")
-            End If
         Catch ex As Exception
             'Call showError(ex.Message)
             Throw New Exception("Database user aunthentication failed. Provide Server details, connect and try again")
         End Try
-    End Sub
-    Sub connectToMySQLServer(Optional ByVal strConn As String = "", Optional ByVal AutoDetect As Boolean = False, Optional ByVal txtIP As String = "localhost", Optional ByVal txtMySQLUserName As String = "crimpsof_ehotel", Optional ByVal txtMySQLPassword As String = "crimpsof_ehotel", Optional ByVal txtMySQLPasswordtxtIP As String = "crimpsof_TrussN")
+    End Function
+    Function connRemote(Optional ByVal strConn As String = "", Optional ByVal AutoDetect As Boolean = False, Optional ByVal txtIP As String = "localhost", Optional ByVal txtMySQLUserName As String = "root", Optional ByVal txtMySQLPassword As String = "", Optional ByVal txtMySQLPasswordtxtIP As String = "") As MySqlConnection
+
         If m_conn Is Nothing Then m_conn = New MySqlConnection
-        'server=localhost;user id=root;Password=sibigem;database=nsdc_reg;persist security info=True
         Dim connStr As String
+        Dim tmpConnRemote As New MySqlConnection
         'if AutoDetect Server is check
         If AutoDetect Then
             connStr = My.Settings.dbConnectionString 'server=localhost;user id=root;Password=1tl3ola8;database=mysql;pooling=false
@@ -162,27 +150,20 @@ Public Class ClassDB
         If strConn <> "" Then connStr = strConn
 
         Try
-            If m_conn.State = ConnectionState.Open Then m_conn.Close()
-            m_conn.ConnectionString = connStr
-            m_conn.Open()
-            conn.ChangeDatabase("crimpsof_ehotel")
+
+            tmpConnRemote.ConnectionString = connStr
+            tmpConnRemote.Open()
+            tmpConnRemote.ChangeDatabase("result_and_transript_db")
             m_connStr = connStr          'Note the connection string
+            Return tmpConnRemote
         Catch ex As MySqlException
             Throw New Exception("Database user aunthentication failed. " & vbCrLf & ex.Message)
         End Try
 
-    End Sub
-    Function getConnectionString(defaultStr As Boolean, Optional isLocal As Boolean = True) As String
-        Dim tempConn As Object
-        If isLocal = True Then tempConn = mappDB.conn Else tempConn = mappDB.conn
-        If defaultStr Then
-            Return My.Settings.dbConnectionString
-        Else
-            Return tempConn.ConnectionString
-        End If
-        tempConn.dispose
-        tempConn = Nothing
+
     End Function
+
+
     Sub close()
         Try
             m_conn.Close()
@@ -200,14 +181,13 @@ Public Class ClassDB
 
     Public Function GetDataWhere(dstrSQL As String, Optional dTableName As String = "Table") As DataSet
         Try
-            If Me.conn.state = ConnectionState.Closed Then Me.conn.open()  'todo manage connections
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
             Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
             Dim myDataSet As DataSet = New DataSet()
             myDA.Fill(myDataSet, dTableName)
             'dgw.DataSource = myDataSet.Tables("Result").DefaultView
             Return myDataSet
-            If Me.conn.state = ConnectionState.Open Then conn.Close()    'todo manage conn
+            closeConn(cmdLocal.Connection) 'safely close it
 
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
@@ -219,12 +199,11 @@ Public Class ClassDB
     Public Function GetDataWhereCloud(dstrSQL As String, Optional dTableName As String = "Table") As DataSet
         Dim retVal As DataSet = Nothing
         Try
-            If Me.conn.connectionstate = ConnectionState.Closed Then Me.conn.open()  'todo manage connections
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
             Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
             Dim myDataSet As DataSet = New DataSet()
             myDA.Fill(myDataSet, dTableName)
-            If Me.conn.connectionstate = ConnectionState.Open Then conn.Close()    'todo manage conn
+            closeConn(cmdLocal.Connection) 'safely close it
             retVal = myDataSet
 
         Catch ex As Exception
@@ -232,9 +211,14 @@ Public Class ClassDB
         End Try
         Return retVal
     End Function
+    Sub closeConn(cn As OleDb.OleDbConnection)
+        On Error Resume Next
+        If cn.State = ConnectionState.Open Then cn.Close()
+    End Sub
     Public Function GetRecordWhere(dstrSQL As String, Optional dTableName As String = "Table") As String
         Try
-            If Me.conn.state = ConnectionState.Closed Then Me.conn.open()
+            'If Me.conn.state = ConnectionState.Closed Then Me.conn.open()
+            'Using myconn As OleDb.OleDbConnection(str_connectionsting)
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
             Dim returnVal As String = Nothing
             Dim rd As OleDb.OleDbDataReader
@@ -246,7 +230,7 @@ Public Class ClassDB
             End If
             rd.Close()
             rd = Nothing
-            If Me.conn.state = ConnectionState.Open Then conn.Close()
+            closeConn(cmdLocal.Connection) 'safely close it
             Return returnVal
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
@@ -260,7 +244,7 @@ Public Class ClassDB
             If Me.conn.connectionstate = ConnectionState.Closed Then Me.conn.open()
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
             cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
-            If Me.conn.connectionstate = ConnectionState.Open Then conn.Close()
+            closeConn(cmdLocal.Connection) 'safely close it
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
             ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -274,17 +258,19 @@ Public Class ClassDB
         'support parameters
         Dim returnVal As String = ""
         Try
-            If Me.conn.connectionstate = ConnectionState.Closed Then Me.conn.open()
+
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
             cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
-            If Me.conn.connectionstate = ConnectionState.Open Then conn.Close()
+            closeConn(cmdLocal.Connection) 'safely close it
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
             ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
         Return returnVal
     End Function
-    Public Function getDataReader(TableName As String, Optional isLocal As Boolean = True) As Boolean
+    Public Fun
+    'TODO: incomplete fxn
+    Function getDataReader(TableName As String, Optional isLocal As Boolean = True) As Boolean
         Dim Table As DataTable = New DataTable()
         Dim adapterL As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter("Select * from " + TableName, Me.connLocal.ConnectionString)
         ' Dim adapterC As OleDb.OleDbDataAdapter = New MySqlDataAdapter("Select * from " + TableName, Me.connRemote.ConnectionString)
@@ -369,4 +355,136 @@ Public Class ClassDB
         con.Close()
         Return True
     End Function
+    Public Function manualInsertDB(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
+        '1. check for duplicates and delete
+        Dim con As OleDb.OleDbConnection = Me.conn
+        'update the table
+        ' Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score`) VALUES ('', '{0}', '{1}');"
+
+        Dim sql As String = "INSERT INTO results (result_id, student_idr, total) "
+        'mysql
+        'For Each row As DataRow In dt.Rows
+        '    sql += " VALUES ('', " & row.Item("matno") & "," & row.Item("score") & "),"
+        'Next
+        'sql = sql.TrimEnd(New Char() {","c}) & ";"
+        'MsgBox(sql)
+
+        'access
+        Dim cmd As OleDbCommand
+        Dim da As OleDbDataAdapter
+        Dim id As Long = 0
+
+        id = mappDB.getMaxID("select Max(Results.result_id) AS MaxOfresult_id FROM Results")
+        For Each row As DataRow In dt.Rows
+            id = id + 1
+            'access
+            'INSERT INTO results ( result_id, s_n, matno, total, department_idr, course_code_idr, session_idr )
+            'Select 3 As result_id, 1 As s_n, 1102290 As matno, 50 As total, 1 As department_idr, 'CPE272' AS course_code_idr, '2020/2021' AS session_idr;
+
+            sql = "INSERT INTO results (result_id,s_n,matno,total,department_idr, course_code_idr, session_idr) "
+            sql = sql & "VALUES (" & id & "," & row.Item("sn") & "," & row.Item("matno") & "," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "');"
+            'todo:
+            'sql = sql & "Select 5 As result_id, 1 As s_n, 1102290 As matno, 50 As total, 1 As department_idr, 'CPE272' AS course_code_idr, '2020/2021' AS session_idr;"
+
+
+            Debug.Print(sql)
+            cmd = New OleDbCommand(sql, con)
+            'cmd.Transaction.Begin()
+            da = New OleDbDataAdapter(cmd)
+            'da.Update(dt) 'da.fill() this is a promising mthd
+            cmd.ExecuteNonQuery()
+            'TODO: Show progress (trigger event)
+
+        Next
+
+        'cmd.Transaction.Commit()
+
+        con.Close()
+        Return True
+    End Function
+
+    Public Function getMaxID(dstrSQL) As Long
+        'SELECT Max(Results.result_id) AS MaxOfresult_id
+        'From Results
+        'Order By Max(Results.result_id) DESC;
+
+        Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
+        Dim returnVal As Long = Nothing
+        Dim rd As OleDb.OleDbDataReader
+
+        rd = cmdLocal.ExecuteReader
+        rd.Read()
+        If rd.HasRows Then
+            returnVal = CLng(rd.GetValue(0).ToString())
+        End If
+        rd.Close()
+        rd = Nothing
+        closeConn(cmdLocal.Connection) 'safely close it
+
+
+        Return returnVal
+
+    End Function
+
+    'TODO:: incomplete
+    Function getDeptName(strDept As String, Optional forceStrict As Boolean = False) As String
+        Dim retVal As String
+        If forceStrict = True Then
+            retVal = strDept
+        Else
+            retVal = strDept
+        End If
+        Return retVal
+    End Function
+    'TODO:: incomplete
+    Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
+        Dim retVal As Integer
+        If forceStrict = True Then retVal = 1
+        Return retVal
+    End Function
+    Function getSessionID(strSession As String, Optional forceStrict As Boolean = False) As String
+        'TODO: If forceStrict=True Then retVal= fromDB
+        Return Trim(strSession)
+    End Function
+    Function getCourseCode(strCourseCode As String, Optional forceStrict As Boolean = False) As String
+        Return Trim(strCourseCode)
+    End Function
+
+    'TODO:: incomplete
+    Public Function getAutoMATNo() As String
+
+        Dim dstrSQL As String = "SELECT minimum(matno) FROM Results"
+
+        'get the firt record  and add 1
+        Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
+        Dim returnVal As Long = Nothing
+        Dim rd As OleDb.OleDbDataReader
+
+        rd = cmdLocal.ExecuteReader
+        rd.Read()
+        If rd.HasRows Then
+            returnVal = CLng(rd.GetValue(0).ToString())
+        End If
+        rd.Close()
+        rd = Nothing
+        closeConn(cmdLocal.Connection) 'safely close it
+        returnVal = returnVal + rd.RecordsAffected ' 1
+
+        Return "AUTO" & Strings.FormatNumber(returnVal, 0, TriState.True, TriState.False, TriState.False)
+        Return Strings.FormatNumber(returnVal, 0, TriState.True, TriState.False, TriState.False)
+
+    End Function
+    Public Sub logDBError(str As String)
+        On Error Resume Next
+        Dim fileExists As Boolean
+
+        fileExists = My.Computer.FileSystem.FileExists(USER_DIRECTORY & "\db\error_log" & Now.Date.ToString & ".txt")
+        If fileExists = True Then
+            My.Computer.FileSystem.WriteAllText(USER_DIRECTORY & "\db\error_log" & Now.ToLongDateString & ".txt", str, True)
+        Else
+            My.Computer.FileSystem.WriteAllText(USER_DIRECTORY & "\db\error_log" & Now.ToLongDateString & ".txt", String.Empty, False)
+
+
+        End If
+    End Sub
 End Class

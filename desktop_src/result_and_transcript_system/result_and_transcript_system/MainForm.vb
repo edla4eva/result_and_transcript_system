@@ -174,6 +174,12 @@
             Case "admin"
                 addForm(FormAdmin)
                 Me.WindowState = FormWindowState.Maximized
+            Case "ViewResults"
+                addForm(FormViewResults)
+                Me.WindowState = FormWindowState.Maximized
+            Case "viewBroadsheets"
+                addForm(FormViewBroadsheets)
+                Me.WindowState = FormWindowState.Maximized
         End Select
     End Sub
 
@@ -218,6 +224,49 @@
     Private Sub ButtonSettings_Click(sender As Object, e As EventArgs) Handles ButtonSettings.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         ChangeMenu("Settings")
+    End Sub
+
+    Private Sub PanelBtn_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn.Paint
+
+    End Sub
+
+    Private Sub PanelBtn_Click(sender As Object, e As EventArgs) Handles PanelBtn.Click
+        If SidePanel.Width = PanelBtn.Width Then
+            SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 8
+        Else
+            SidePanel.Width = PanelBtn.Width
+        End If
+
+    End Sub
+
+    Private Sub LinkLabelShowHide_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelShowHide.LinkClicked
+        If SidePanel.Width < ButtonExit.Width Then
+            SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 10  '5% margin left and right
+            LinkLabelShowHide.Text = "<<Hide"
+            'todo show text
+            ButtonHome.Text = "Home"
+        Else
+            SidePanel.Width = LinkLabelShowHide.Width
+            LinkLabelShowHide.Text = " Show>>"
+            'todo
+            'show icons in button
+            'ButtonHome.BackgroundImage = HomeIcon 
+            ButtonHome.Text = "^"
+        End If
+    End Sub
+    Public Sub doCloseForm() 'Todo RemoUI
+        If mappDB.User = "CA" Then
+            Me.ChangeMenu("CourseAdviser")
+        ElseIf mappDB.User = "CL" Then
+            Me.ChangeMenu("CourseLecturer")
+        ElseIf mappDB.User = "ST" Then
+            Me.ChangeMenu("Student")
+        Else
+            Me.ChangeMenu("User")
+        End If
+    End Sub
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
     End Sub
 End Class
 

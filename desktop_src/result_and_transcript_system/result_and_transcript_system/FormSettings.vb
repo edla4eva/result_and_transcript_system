@@ -19,4 +19,8 @@
     Private Sub ButtonResultList_Click(sender As Object, e As EventArgs)
         MainForm.ChangeMenu("ResultsTranscripts")
     End Sub
+
+    Private Sub FormSettings_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        MainForm.doCloseForm()
+    End Sub
 End Class
