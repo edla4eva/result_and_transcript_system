@@ -53,8 +53,8 @@ Module ModuleGeneral
     Public STR_SQL_ALL_RESULTS As String = "SELECT * FROM results order by result_id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
     Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
 
-    Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM department"
-    Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT * FROM sessions" ' 
+    Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments"
+    Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
     Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM students" ' 
     'some
     Public STR_SQL_ALL_RESULTS_WHERE As String = "SELECT id, matno, score FROM tableResults WHERE matno='{0}' order by id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
@@ -182,27 +182,37 @@ Module ModuleGeneral
             Dim oad As Object
             Dim ds As New DataSet
             Dim strtmp As String = this_cbo.Text.ToString : this_cbo.Text = String.Empty
-            If dConnMode = "local" Then
-                oad = New OleDbDataAdapter(this_sql, mappDB.connLocal)
-                oad.Fill(ds)
-            Else
-                oad = New MySqlDataAdapter(this_sql, mappDB.connRemote)
-                oad.Fill(ds)
-            End If
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+
+                If dConnMode = "local" Then
+                    oad = New OleDbDataAdapter(this_sql, xConn)
+                    oad.Fill(ds)
+                Else
+                    'oad = New MySqlDataAdapter(this_sql, xConn)
+                    'oad.Fill(ds)
+                End If
 
 
-            With this_cbo
-                .DataSource = ds.Tables(0)
-                .ValueMember = this_value
-                .DisplayMember = this_member
-            End With
+                With this_cbo
+                    .DataSource = ds.Tables(0)
+                    .ValueMember = this_value
+                    .DisplayMember = this_member
+                End With
 
-            this_sql = Nothing
-            this_value = Nothing
-            this_member = Nothing
-            ds = Nothing
-            oad = Nothing
+                xConn.Close()
+                this_sql = Nothing
+                this_value = Nothing
+                this_member = Nothing
+                ds = Nothing
+                oad = Nothing
 
+            End Using
             'mappDB.close()
         Catch ex As Exception
             log(ex.ToString)
@@ -210,44 +220,131 @@ Module ModuleGeneral
 
         End Try
     End Sub
+    Public Function combolistDict(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, Optional dConnMode As String = "local") As Dictionary(Of String, String)
+        Try
+            Dim oad As Object
+            Dim ds As New DataSet
+            Dim strtmp As String = String.Empty
+            Dim retDict As New Dictionary(Of String, String)
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
 
+                If dConnMode = "local" Then
+                    oad = New OleDbDataAdapter(this_sql, xConn)
+                    oad.Fill(ds)
+                Else
+                    'oad = New MySqlDataAdapter(this_sql, xConn)
+                    'oad.Fill(ds)
+                End If
+
+
+                For i = 0 To ds.Tables(0).Rows.Count - 1
+                    retDict.Add(ds.Tables(0).Rows(i).Item(this_value), ds.Tables(0).Rows(i).Item(this_member))
+                Next
+
+                xConn.Close()
+                this_sql = Nothing
+                this_value = Nothing
+                this_member = Nothing
+                ds = Nothing
+                oad = Nothing
+            End Using
+            Return retDict
+        Catch ex As Exception
+            log(ex.ToString)
+            Throw ex
+
+        End Try
+    End Function
+    Public Function combolistDS(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, Optional dConnMode As String = "local") As DataSet
+        Try
+            Dim oad As Object
+            Dim ds As New DataSet
+            Dim strtmp As String = String.Empty
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+
+                If dConnMode = "local" Then
+                    oad = New OleDbDataAdapter(this_sql, xConn)
+                    oad.Fill(ds)
+                Else
+                    'oad = New MySqlDataAdapter(this_sql, xConn)
+                    'oad.Fill(ds)
+                End If
+
+
+
+
+                xConn.Close()
+                this_sql = Nothing
+                this_value = Nothing
+                this_member = Nothing
+                ds = Nothing
+                oad = Nothing
+
+            End Using
+            Return ds
+        Catch ex As Exception
+            log(ex.ToString)
+            Throw ex
+
+        End Try
+    End Function
 
     Public Sub fillGrid(ByVal _sql As String, ByVal _criteria As String, ByVal _orderBy As String, ByVal _grid As DataGridView, Optional ByVal _readonly As Boolean = False, Optional ByVal _bindingsource As BindingSource = Nothing)
         'TODO
-        If mappDB.connMode = "local" Or mappDB.connMode = Nothing Then
-            oadDataGridLocal = New OleDbDataAdapter(_sql + _criteria + _orderBy, mappDB.connLocal)
-        Else
-            oadDataGrid = New MySqlDataAdapter(_sql + _criteria + _orderBy, mappDB.connRemote)
-        End If
-
-        dtDataGrid = New DataTable
-
         Try
-            oadDataGrid.Fill(dtDataGrid)
-
-            With _grid
-
-                .DataSource = Nothing
-
-                If _bindingsource Is Nothing Then
-                    .DataSource = dtDataGrid
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                If mappDB.connMode = "local" Or mappDB.connMode = Nothing Then
+                    oadDataGridLocal = New OleDbDataAdapter(_sql + _criteria + _orderBy, xConn)
                 Else
-                    '_bindingsource = New BindingSource
-                    _bindingsource.DataSource = dtDataGrid
-                    .DataSource = _bindingsource
+                    oadDataGrid = New MySqlDataAdapter(_sql + _criteria + _orderBy, mappDB.connRemote)
                 End If
-                'hide column 0 
-                .Columns(0).Visible = False
 
-                .SelectionMode = DataGridViewSelectionMode.FullRowSelect
-                .Cursor = Cursors.Hand
+                dtDataGrid = New DataTable
 
-                If _readonly Then
-                    .ReadOnly = True
-                    .AllowUserToAddRows = False
-                End If
-            End With
+                oadDataGrid.Fill(dtDataGrid)
 
+                With _grid
+
+                    .DataSource = Nothing
+
+                    If _bindingsource Is Nothing Then
+                        .DataSource = dtDataGrid
+                    Else
+                        '_bindingsource = New BindingSource
+                        _bindingsource.DataSource = dtDataGrid
+                        .DataSource = _bindingsource
+                    End If
+                    'hide column 0 
+                    .Columns(0).Visible = False
+
+                    .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+                    .Cursor = Cursors.Hand
+
+                    If _readonly Then
+                        .ReadOnly = True
+                        .AllowUserToAddRows = False
+                    End If
+                End With
+                xConn.Close()
+            End Using
 
         Catch ex As Exception
             MessageBox.Show("query error : " & ex.Message)
@@ -262,7 +359,7 @@ Module ModuleGeneral
             _bindingsource = Nothing
             oadDataGrid = Nothing
             dtDataGrid = Nothing
-            mappDB.close()
+            mappDB.closeConn(oadDataGridLocal.SelectCommand.Connection)
         End Try
     End Sub
 

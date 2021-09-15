@@ -24,11 +24,7 @@ Public Class FormResultsTranscripts
         Dim p0, p1, p2, p3, p4, p5, p6 As String
         p0 = Me.TextBoxGuestID.Text
         p1 = Me.TextBoxDate.Text
-        p2 = Me.TextBoxDetails.Text
-        p3 = Me.TextBoxDebit.Text
-        p4 = Me.TextBoxCredit.Text
-        p5 = Me.TextBoxBalance.Text
-        p6 = Me.TextBoxRef.Text
+
         str = String.Format(STR_SQL_INSERT_RESULTS, p0, p1) ', p2, p3, p4, p5, p6
         mappDB.UpdateRecordWhere(str)
         MsgBox("Result Addedd!")

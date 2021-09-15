@@ -45,6 +45,7 @@ Partial Class FormViewResults
         Me.DataGridView2 = New System.Windows.Forms.DataGridView()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.ListBoxResults = New System.Windows.Forms.ListBox()
         Me.SidePanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -287,12 +288,21 @@ Partial Class FormViewResults
         Me.PictureBox2.TabStop = False
         Me.PictureBox2.Visible = False
         '
+        'ListBoxResults
+        '
+        Me.ListBoxResults.FormattingEnabled = True
+        Me.ListBoxResults.Location = New System.Drawing.Point(610, 426)
+        Me.ListBoxResults.Name = "ListBoxResults"
+        Me.ListBoxResults.Size = New System.Drawing.Size(144, 121)
+        Me.ListBoxResults.TabIndex = 25
+        '
         'FormViewResults
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(913, 471)
+        Me.Controls.Add(Me.ListBoxResults)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.DataGridView2)
@@ -334,4 +344,5 @@ Partial Class FormViewResults
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ListBoxFileNames As ListBox
     Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents ListBoxResults As ListBox
 End Class

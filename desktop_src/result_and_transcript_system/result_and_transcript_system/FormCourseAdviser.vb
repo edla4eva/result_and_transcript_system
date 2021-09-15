@@ -4,7 +4,7 @@
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonResultsSubmitted.Click
-
+        ButtonResults.PerformClick()
     End Sub
 
     Private Sub ButtonBrowse_Click(sender As Object, e As EventArgs) Handles ButtonBroadsheets.Click
@@ -37,8 +37,16 @@
         updateDashboard
     End Sub
     Sub updateDashBoard()
-        ButtonResultsSubmitted.Text = "#/##"
+        ButtonResultsSubmitted.Text = "4/32"
         'TODO: Fetch from Database
         'count of broadsheets
+    End Sub
+
+    Private Sub ButtonNoOfStudents_Click(sender As Object, e As EventArgs) Handles ButtonNoOfStudents.Click
+        ButtonStudents.PerformClick()
+    End Sub
+
+    Private Sub ButtonNoOfBroadsheets_Click(sender As Object, e As EventArgs) Handles ButtonNoOfBroadsheets.Click
+        ButtonBroadsheets.PerformClick()
     End Sub
 End Class

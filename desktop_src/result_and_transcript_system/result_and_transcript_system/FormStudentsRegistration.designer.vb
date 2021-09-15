@@ -61,6 +61,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonUnregister = New System.Windows.Forms.Button()
         Me.ButtonRegister = New System.Windows.Forms.Button()
         Me.LabelRef = New System.Windows.Forms.Label()
+        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
         CType(Me.dgw, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -263,6 +264,7 @@ Partial Class FormStudentsRegistration
         'Panel4
         '
         Me.Panel4.AutoScroll = True
+        Me.Panel4.Controls.Add(Me.CheckedListBox1)
         Me.Panel4.Controls.Add(Me.dgv_courses)
         Me.Panel4.Controls.Add(Me.Panel6)
         Me.Panel4.Location = New System.Drawing.Point(689, 212)
@@ -466,6 +468,15 @@ Partial Class FormStudentsRegistration
         Me.LabelRef.TabIndex = 74
         Me.LabelRef.Text = "Ref: #"
         '
+        'CheckedListBox1
+        '
+        Me.CheckedListBox1.FormattingEnabled = True
+        Me.CheckedListBox1.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
+        Me.CheckedListBox1.Location = New System.Drawing.Point(104, 90)
+        Me.CheckedListBox1.Name = "CheckedListBox1"
+        Me.CheckedListBox1.Size = New System.Drawing.Size(100, 19)
+        Me.CheckedListBox1.TabIndex = 75
+        '
         'FormStudentsRegistration
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -536,4 +547,5 @@ Partial Class FormStudentsRegistration
     Friend WithEvents Label2 As Label
     Friend WithEvents LabelRef As Label
     Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents CheckedListBox1 As CheckedListBox
 End Class

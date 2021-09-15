@@ -4,13 +4,11 @@ Imports Microsoft.Office.Interop
 'Imports Microsoft.Office.Core
 Imports System.Data.OleDb
 Public Class ClassDB
-
     Private m_connStr As String
     'Private m_password As String
-    Private m_conn As MySqlConnection ' OleDb.OleDbConnection
-    Private m_connLocal As OleDb.OleDbConnection
     Private m_user As String
     Private m_connMode As String '= "local" 'or remote
+    Private tmpConn As OleDb.OleDbConnection
     Public Sub New(Optional modeLocalOrCloud As String = "local")
         Try
             If modeLocalOrCloud = "cloud" Then
@@ -19,11 +17,12 @@ Public Class ClassDB
 
             Else
                 Me.m_connMode = "local"
-                m_connStr = ModuleGeneral.STR_connectionString
+                m_connStr = ModuleGeneral.STR_connectionString  '64
 
             End If
 
         Catch ex As Exception
+
         End Try
     End Sub
     Public Property connMode() As String
@@ -98,45 +97,30 @@ Public Class ClassDB
         End Set
     End Property
 
+    'This function was once manageable but now it is a BAD idea
+    ''Function connLocal() As OleDb.OleDbConnection
+    ''    Dim tmpConn As OleDbConnection = New OleDbConnection
+    ''    Try
+    ''        Try
+    ''            m_connStr = ModuleGeneral.STR_connectionString '64
+    ''            tmpConn.ConnectionString = ModuleGeneral.STR_connectionString
+    ''            tmpConn.Open()  'todo: throws error if called 2nd time must close app--> Attempted to read or write protected memory. This is often an indication that other memory 
+    ''        Catch ex As Exception
+    ''            m_connStr = ModuleGeneral.STR_connectionString32 '32 bits
+    ''            tmpConn.ConnectionString = ModuleGeneral.STR_connectionString32
+    ''            tmpConn.Open()
+    ''        End Try 'try 64 bit Access
 
+    ''        Return tmpConn
 
-    Function conn() As Object ' OleDb.OleDbConnection
-
-        If m_connMode = Nothing Or m_connMode = "local" Then
-            Return connLocal()
-
-        Else
-
-            Return connRemote()
-        End If
-
-    End Function
-    Function connLocal() As OleDb.OleDbConnection
-
-
-        Dim tmpConn As OleDbConnection = New OleDbConnection
-        Try
-
-            Try
-                m_connStr = ModuleGeneral.STR_connectionString '64
-                tmpConn.ConnectionString = ModuleGeneral.STR_connectionString
-                tmpConn.Open()  'todo: throws error if called 2nd time must close app--> Attempted to read or write protected memory. This is often an indication that other memory 
-            Catch ex As Exception
-                m_connStr = ModuleGeneral.STR_connectionString32 '32 bits
-                tmpConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                tmpConn.Open()
-            End Try 'try 64 bit Access
-
-            Return tmpConn
-
-        Catch ex As Exception
-            'Call showError(ex.Message)
-            Throw New Exception("Database user aunthentication failed. Provide Server details, connect and try again")
-        End Try
-    End Function
+    ''    Catch ex As Exception
+    ''        'Call showError(ex.Message)
+    ''        Throw New Exception("Database user aunthentication failed. Provide Server details, connect and try again")
+    ''    End Try
+    ''End Function
     Function connRemote(Optional ByVal strConn As String = "", Optional ByVal AutoDetect As Boolean = False, Optional ByVal txtIP As String = "localhost", Optional ByVal txtMySQLUserName As String = "root", Optional ByVal txtMySQLPassword As String = "", Optional ByVal txtMySQLPasswordtxtIP As String = "") As MySqlConnection
 
-        If m_conn Is Nothing Then m_conn = New MySqlConnection
+
         Dim connStr As String
         Dim tmpConnRemote As New MySqlConnection
         'if AutoDetect Server is check
@@ -164,31 +148,23 @@ Public Class ClassDB
     End Function
 
 
-    Sub close()
-        Try
-            m_conn.Close()
-        Catch
-        End Try
-    End Sub
-    Sub dispose()
-        Call close()
-        m_connStr = Nothing
-        m_user = Nothing
-        m_password = Nothing
-        m_conn = Nothing
-    End Sub
-
-
     Public Function GetDataWhere(dstrSQL As String, Optional dTableName As String = "Table") As DataSet
         Try
-            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
-            Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
-            Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, dTableName)
-            'dgw.DataSource = myDataSet.Tables("Result").DefaultView
-            Return myDataSet
-            closeConn(cmdLocal.Connection) 'safely close it
-
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+                Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
+                Dim myDataSet As DataSet = New DataSet()
+                myDA.Fill(myDataSet, dTableName)
+                'dgw.DataSource = myDataSet.Tables("Result").DefaultView
+                Return myDataSet
+                xConn.Close()
+            End Using
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
             'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -199,13 +175,19 @@ Public Class ClassDB
     Public Function GetDataWhereCloud(dstrSQL As String, Optional dTableName As String = "Table") As DataSet
         Dim retVal As DataSet = Nothing
         Try
-            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
-            Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
-            Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, dTableName)
-            closeConn(cmdLocal.Connection) 'safely close it
-            retVal = myDataSet
 
+            Using xConn As New MySqlConnection(ModuleGeneral.STR_connectionStringCloud)
+
+                xConn.Open()
+
+
+                Dim cmd As New MySqlCommand(dstrSQL, xConn)
+                Dim myDA As MySqlDataAdapter = New MySqlDataAdapter(cmd)
+                Dim myDataSet As DataSet = New DataSet()
+                myDA.Fill(myDataSet, dTableName)
+                xConn.Close() 'safely close it
+                retVal = myDataSet
+            End Using
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -214,24 +196,32 @@ Public Class ClassDB
     Sub closeConn(cn As OleDb.OleDbConnection)
         On Error Resume Next
         If cn.State = ConnectionState.Open Then cn.Close()
+        cn.Dispose()
     End Sub
     Public Function GetRecordWhere(dstrSQL As String, Optional dTableName As String = "Table") As String
         Try
-            'If Me.conn.state = ConnectionState.Closed Then Me.conn.open()
-            'Using myconn As OleDb.OleDbConnection(str_connectionsting)
-            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
-            Dim returnVal As String = Nothing
-            Dim rd As OleDb.OleDbDataReader
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+                Dim returnVal As String = Nothing
+                Dim rd As OleDb.OleDbDataReader
 
-            rd = cmdLocal.ExecuteReader
-            rd.Read()
-            If rd.HasRows Then
-                returnVal = rd.GetValue(0).ToString() & " " & rd.GetValue(1).ToString()
-            End If
-            rd.Close()
-            rd = Nothing
-            closeConn(cmdLocal.Connection) 'safely close it
-            Return returnVal
+                rd = cmdLocal.ExecuteReader
+                rd.Read()
+                If rd.HasRows Then
+                    returnVal = rd.GetValue(0).ToString()
+                End If
+                rd.Close()
+                rd = Nothing
+                closeConn(xConn) 'safely close it
+                Return returnVal
+            End Using
+
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
             'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -241,10 +231,18 @@ Public Class ClassDB
     Public Function UpdateRecordWhere(dstrSQL As String) As String
         Dim returnVal As String = ""
         Try
-            If Me.conn.connectionstate = ConnectionState.Closed Then Me.conn.open()
-            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
-            cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
-            closeConn(cmdLocal.Connection) 'safely close it
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+                cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
+                closeConn(xConn) 'safely close it
+            End Using
+
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
             ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -252,16 +250,22 @@ Public Class ClassDB
         Return returnVal
     End Function
 
-
     Public Function InsertRecord(dstrSQL As String) As String
         'ToDo: optimize for speed
         'support parameters
         Dim returnVal As String = ""
         Try
-
-            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
-            cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
-            closeConn(cmdLocal.Connection) 'safely close it
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+                cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
+                closeConn(xConn) 'safely close it
+            End Using
         Catch ex As Exception
             Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
             ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -271,15 +275,31 @@ Public Class ClassDB
     Public Fun
     'TODO: incomplete fxn
     Function getDataReader(TableName As String, Optional isLocal As Boolean = True) As Boolean
-        Dim Table As DataTable = New DataTable()
-        Dim adapterL As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter("Select * from " + TableName, Me.connLocal.ConnectionString)
-        ' Dim adapterC As OleDb.OleDbDataAdapter = New MySqlDataAdapter("Select * from " + TableName, Me.connRemote.ConnectionString)
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
 
-        If isLocal Then
-            adapterL.Fill(Table)
-        Else
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                Dim Table As DataTable = New DataTable()
+                Dim adapterL As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter("Select * from " + TableName, xConn.ConnectionString)
+                ' Dim adapterC As OleDb.OleDbDataAdapter = New MySqlDataAdapter("Select * from " + TableName, Me.connRemote.ConnectionString)
 
-        End If
+                If isLocal Then
+                    adapterL.Fill(Table)
+                Else
+
+                End If
+                adapterL.Dispose()
+                closeConn(xConn)
+            End Using
+        Catch ex As Exception
+
+            Throw ex
+        End Try
         Return True
     End Function
     'Useful for updating and Syncing
@@ -329,98 +349,129 @@ Public Class ClassDB
     End Function
 
     Public Function bulkInsertDB(dt As DataTable) As Boolean
-        Dim con As OleDb.OleDbConnection = Me.conn
-        'create the table
-        Dim sql As String = "Create Table abcd ("
-        For Each column As DataColumn In dt.Columns
-            sql += "[" & column.ColumnName & "] " & "nvarchar(50)" & ","
-        Next
 
-        sql = sql.TrimEnd(New Char() {","c}) & ")"
+        ''create the table
+        'Dim sql As String = "Create Table tmpp ("
+        'For Each column As DataColumn In dt.Columns
+        '    sql += "[" & column.ColumnName & "] " & "nvarchar(50)" & ","
+        'Next
 
-        Dim cmd As OleDbCommand = New OleDbCommand(sql, con)
-        Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd)
-        cmd.ExecuteNonQuery()
+        'sql = sql.TrimEnd(New Char() {","c}) & ")"
+
+        'Dim cmd As OleDbCommand = New OleDbCommand(sql, connLocal)
+        'Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd)
+        'cmd.ExecuteNonQuery()
+
+        'closeConn(cmd.Connection)
+
+        ''Pull the table records and insert new
+        'Using adapter = New OleDbDataAdapter("SELECT * FROM abcd", connLocal)
+
+        '    Using builder = New OleDbCommandBuilder(adapter)
+        '        adapter.InsertCommand = builder.GetInsertCommand()
+        '        adapter.Update(dt)
+        '    End Using
+        '    closeConn(adapter.SelectCommand.Connection)
+        'End Using
 
 
-        'Pull the table records and insert new
-        Using adapter = New OleDbDataAdapter("SELECT * FROM abcd", con)
-
-            Using builder = New OleDbCommandBuilder(adapter)
-                adapter.InsertCommand = builder.GetInsertCommand()
-                adapter.Update(dt)
-            End Using
-        End Using
-
-        con.Close()
-        Return True
+        Return False
     End Function
     Public Function manualInsertDB(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
-        '1. check for duplicates and delete
-        Dim con As OleDb.OleDbConnection = Me.conn
-        'update the table
-        ' Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score`) VALUES ('', '{0}', '{1}');"
-
-        Dim sql As String = "INSERT INTO results (result_id, student_idr, total) "
-        'mysql
-        'For Each row As DataRow In dt.Rows
-        '    sql += " VALUES ('', " & row.Item("matno") & "," & row.Item("score") & "),"
-        'Next
-        'sql = sql.TrimEnd(New Char() {","c}) & ";"
-        'MsgBox(sql)
-
-        'access
-        Dim cmd As OleDbCommand
-        Dim da As OleDbDataAdapter
-        Dim id As Long = 0
-
-        id = mappDB.getMaxID("select Max(Results.result_id) AS MaxOfresult_id FROM Results")
-        For Each row As DataRow In dt.Rows
-            id = id + 1
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+            Try
+                xConn.Open()
+            Catch ex1 As Exception
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.Open()
+            End Try
+            '1. check for duplicates and delete
+            Dim sql As String = "INSERT INTO results (result_id, student_idr, total) "  'todo: move sql to module
             'access
-            'INSERT INTO results ( result_id, s_n, matno, total, department_idr, course_code_idr, session_idr )
-            'Select 3 As result_id, 1 As s_n, 1102290 As matno, 50 As total, 1 As department_idr, 'CPE272' AS course_code_idr, '2020/2021' AS session_idr;
+            Dim cmd As New OleDbCommand
+            'Dim da As OleDbDataAdapter
+            Dim id As Long = 0
 
-            sql = "INSERT INTO results (result_id,s_n,matno,total,department_idr, course_code_idr, session_idr) "
-            sql = sql & "VALUES (" & id & "," & row.Item("sn") & "," & row.Item("matno") & "," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "');"
-            'todo:
-            'sql = sql & "Select 5 As result_id, 1 As s_n, 1102290 As matno, 50 As total, 1 As department_idr, 'CPE272' AS course_code_idr, '2020/2021' AS session_idr;"
+            id = mappDB.getMaxID("select Max(Results.result_id) AS MaxOfresult_id FROM Results")
+            For Each row As DataRow In dt.Rows
+                id = id + 1
+                'todo: use parameters
+                sql = "INSERT INTO results (result_id,s_n,matno,total,department_idr, course_code_idr, session_idr) "
+                sql = sql & "VALUES (" & id & "," & row.Item("sn") & ",'" & row.Item("matno") & "'," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "');"
 
+                'Debug.Print(sql)
+                cmd = New OleDbCommand(sql, xConn)
+                'cmd.Transaction.Begin()
+                'da = New OleDbDataAdapter(cmd)
+                'da.Update(dt) 'da.fill() this is a promising mthd
+                cmd.ExecuteNonQuery()
+                'TODO: Show progress (trigger event)
 
-            Debug.Print(sql)
-            cmd = New OleDbCommand(sql, con)
-            'cmd.Transaction.Begin()
-            da = New OleDbDataAdapter(cmd)
-            'da.Update(dt) 'da.fill() this is a promising mthd
-            cmd.ExecuteNonQuery()
-            'TODO: Show progress (trigger event)
+            Next
 
-        Next
+            'cmd.Transaction.Commit()
 
-        'cmd.Transaction.Commit()
-
-        con.Close()
+            closeConn(xConn)
+            cmd.Dispose()
+        End Using
         Return True
     End Function
+    Public Function manualInsertDBCloud(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
+        ''1. check for duplicates and delete
 
+        ''update the table
+        '' Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score`) VALUES ('', '{0}', '{1}');"
+        'Dim id As Integer
+        'id = mappDB.getMaxID("select Max(Results.result_id) AS MaxOfresult_id FROM Results")
+        'Dim sql As String = "INSERT INTO results (result_id, student_idr, total) "
+
+        ''mysql
+        'For Each row As DataRow In dt.Rows
+        '    sql += " VALUES (id, " & row.Item("matno") & "," & row.Item("score") & "),"
+        'Next
+        'sql = sql.TrimEnd(New Char() {","c}) & ";"
+
+        ''mySQL
+        'Dim cmd As New MySqlCommand
+        'Dim da As MySqlDataAdapter
+        'Dim id As Long = 0
+
+        'cmd = New OleDbCommand(sql, connLocal())
+        ''cmd.Transaction.Begin()
+        'da = New OleDbDataAdapter(cmd)
+        ''da.Update(dt) 'da.fill() this is a promising mthd
+        'cmd.ExecuteNonQuery()
+        ''TODO: Show progress (trigger event)
+
+
+
+        ''cmd.Transaction.Commit()
+
+        'closeConn(cmd.Connection)
+        Return True
+    End Function
     Public Function getMaxID(dstrSQL) As Long
-        'SELECT Max(Results.result_id) AS MaxOfresult_id
-        'From Results
-        'Order By Max(Results.result_id) DESC;
-
-        Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
         Dim returnVal As Long = Nothing
-        Dim rd As OleDb.OleDbDataReader
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+            Try
+                xConn.Open()
+            Catch ex1 As Exception
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.Open()
+            End Try
 
-        rd = cmdLocal.ExecuteReader
-        rd.Read()
-        If rd.HasRows Then
-            returnVal = CLng(rd.GetValue(0).ToString())
-        End If
-        rd.Close()
-        rd = Nothing
-        closeConn(cmdLocal.Connection) 'safely close it
+            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+            Dim rd As OleDb.OleDbDataReader
 
+            rd = cmdLocal.ExecuteReader
+            rd.Read()
+            If rd.HasRows Then
+                returnVal = CLng(rd.GetValue(0).ToString())
+            End If
+            rd.Close()
+            rd = Nothing
+            closeConn(xConn) 'safely close it
+        End Using
 
         Return returnVal
 
@@ -438,8 +489,14 @@ Public Class ClassDB
     End Function
     'TODO:: incomplete
     Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
-        Dim retVal As Integer
-        If forceStrict = True Then retVal = 1
+        Dim retVal As Integer = 1
+        If forceStrict = True Then
+            retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+        Else
+            'todo: Where Like in sql
+            retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+
+        End If
         Return retVal
     End Function
     Function getSessionID(strSession As String, Optional forceStrict As Boolean = False) As String
@@ -453,23 +510,30 @@ Public Class ClassDB
     'TODO:: incomplete
     Public Function getAutoMATNo() As String
 
-        Dim dstrSQL As String = "SELECT minimum(matno) FROM Results"
-
-        'get the firt record  and add 1
-        Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, conn)
+        Dim dstrSQL As String = "SELECT minimum(matno) FROM Results"    'TODO: move sql
         Dim returnVal As Long = Nothing
-        Dim rd As OleDb.OleDbDataReader
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+            Try
+                xConn.Open()
+            Catch ex1 As Exception
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.Open()
+            End Try
+            'get the firt record  and add 1
+            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
 
-        rd = cmdLocal.ExecuteReader
-        rd.Read()
-        If rd.HasRows Then
-            returnVal = CLng(rd.GetValue(0).ToString())
-        End If
-        rd.Close()
-        rd = Nothing
-        closeConn(cmdLocal.Connection) 'safely close it
-        returnVal = returnVal + rd.RecordsAffected ' 1
+            Dim rd As OleDb.OleDbDataReader
 
+            rd = cmdLocal.ExecuteReader
+            rd.Read()
+            If rd.HasRows Then
+                returnVal = CLng(rd.GetValue(0).ToString())
+            End If
+            rd.Close()
+            rd = Nothing
+            closeConn(xConn) 'safely close it
+            returnVal = returnVal + rd.RecordsAffected ' 1
+        End Using
         Return "AUTO" & Strings.FormatNumber(returnVal, 0, TriState.True, TriState.False, TriState.False)
         Return Strings.FormatNumber(returnVal, 0, TriState.True, TriState.False, TriState.False)
 

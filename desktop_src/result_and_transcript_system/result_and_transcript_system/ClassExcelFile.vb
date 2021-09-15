@@ -16,44 +16,158 @@ Public Class ClassExcelFile
 
         Private _excelFileName As String = Nothing
 
-        Public Sub New(Optional subFilePathExcludingProgDir As String = "\samples\broadsheet.xlsx")
-            Try
-                _excelFileName = My.Application.Info.DirectoryPath & subFilePathExcludingProgDir
-            Catch ex As Exception
-                MsgBox("Cannot create Excel Automation Object" & vbCrLf & ex.Message)
-            End Try
-        End Sub
-    Public Function createExcelFile(Optional fileName As String = "GeneratedResult.xlsx") As Boolean
+    Public Sub New(Optional subFilePathExcludingProgDir As String = "\samples\broadsheet.xlsx")
+        Try
+            _excelFileName = My.Application.Info.DirectoryPath & subFilePathExcludingProgDir
+        Catch ex As Exception
+            MsgBox("Cannot create Excel Automation Object" & vbCrLf & ex.Message)
+        End Try
+    End Sub
+    Public Function processBroadsheetFileMethod() As DataSet
+        Try
+            Dim sn As Integer = 7 'todo
+            Dim courseResult As Integer() = {}
+
+            'TODO: check if file exists
+            'If fileexists (objExcelFile.excelFileNameThen)
+
+            'End If
+            Dim myDataSet As DataSet ' = objExcelFile.readResultFile()
+            myDataSet = objExcelFile.readBroadSheetTemplateFile()
+
+            'Todo Add results----------------
+            ' courseResult = mappDB.getCourseResults(session, courseCode)
+            courseResult(0) = 99    'test
+            courseResult(1) = 99    'test
+            myDataSet.Tables(0).Rows(0 + sn).Item(1) = courseResult(0)
+            myDataSet.Tables(0).Rows(1 + sn).Item(1) = courseResult(1)
+            'add rows
+            'dr = dt.NewRow()
+            'dr("SN") = 1
+            'dr("MATNO") = "ENG0607721"
+            'dr("CA") = 20
+            'dr("Score") = 60
+            'dr("Total") = 80
+            'dr("Name") = "Firstname SURNAME"
+            'dt.Rows.Add(dr)
+            ''---------------------------------------------------------
+
+            Return myDataSet
+            'myDataSet.Clear()
+            'myDataSet = Nothing
+
+        Catch ex As Exception
+            MsgBox("Cannot create Excel File Object" & vbCrLf & ex.Message)
+        End Try
+
+    End Function
+    Public Function exportBroadsheettoExcelFile_NPOI(dv As DataView, Optional fileName As String = "") As Boolean
+        Dim dt As DataTable = dv.ToTable
+        Dim workbook As IWorkbook = New XSSFWorkbook()
+        Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
+        Dim row1 As IRow
+        Dim cell As ICell
+
+        If fileName = "" Then fileName = My.Application.Info.DirectoryPath & "\broadsheets\GeneratedBroadsheet.xlsx"
+
+        'headers
+        row1 = sheet1.CreateRow(1)
+        row1.CreateCell(1).SetCellValue("Name of Department")   'row1.CreateCell(jCol).SetCellValue("S/N")
+        row1 = sheet1.CreateRow(2)
+        row1.CreateCell(1).SetCellValue("Name of Faculty")
+        Dim style As ICellStyle = changeStyle(workbook)
+        'cell.SetCellValue(New XSSFRichTextString("This is a styled Department Name"))
+        'cell.CellStyle = style
+
+        'TODO:  iterate set style
+        style.BorderRight = BorderStyle.Medium
+        style.BorderLeft = BorderStyle.Medium
+        style.BorderTop = BorderStyle.Medium
+        style.BorderBottom = BorderStyle.Medium
+        row1.Cells(0).CellStyle = (style)
+
+
+        row1 = sheet1.CreateRow(8)  'row 9
+        For jCol = 0 To dt.Columns.Count - 1
+            row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
+        Next
+        row1 = sheet1.CreateRow(8)  'row 9
+        For jCol = 0 To dt.Columns.Count - 1
+            row1.CreateCell(jCol).SetCellValue("Test")   'row1.CreateCell(jCol).SetCellValue("S/N")
+        Next
+
+        For iRow = 0 To dt.Rows.Count - 1
+            row1 = sheet1.CreateRow(iRow + 9)
+            For jCol = 0 To dt.Columns.Count - 1
+                row1.CreateCell(jCol).SetCellValue(dt.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
+            Next
+        Next
+
+
+
+
+
+        hideCols(sheet1, ExcelColumns.colF - 1) '0=A, 1=B, 2=C, 3=D but the Enum has a base of 1
+            hideCols(sheet1, ExcelColumns.colH - 1) 'col H to AG 100-400L courses
+        'colAG = colz+colg
+        For x = ExcelColumns.colH To ExcelColumns.colZ + ExcelColumns.colG
+            hideCols(sheet1, x - 1)
+        Next
+
+        'set formula
+        row1 = sheet1.CreateRow(dt.Rows.Count)
+        cell = row1.CreateCell(0)
+        setFomula(sheet1, cell, "D2+D3+6")
+
+        setWidthHeight(sheet1, row1, cell)
+        mergeCells(sheet1, row1.Cells(0), row1.RowNum, row1.RowNum, 1, 2)
+
+
+        'save work
+        'todo: if file exists(fileName) create new filename
+        If System.IO.File.Exists(fileName) Then
+            fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
+            writeToFile(workbook, fileName)
+            'Throw New Exception("RTPS Error: Excel File Already Exists!")
+        Else
+            writeToFile(workbook, fileName)
+        End If
+
+
+        Return True
+    End Function
+
+    Public Function createExcelFile_NPOI(Optional fileName As String = "generatedExcelFile.xlsx") As Boolean
         Dim workbook As IWorkbook = New XSSFWorkbook()
         Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
         Dim row1 As IRow = sheet1.CreateRow(0)
-        row1.CreateCell(0).SetCellValue("S/N")
-        row1.CreateCell(1).SetCellValue("MATNO")
-        row1.CreateCell(2).SetCellValue("SCORE")
+        row1.CreateCell(0).SetCellValue("Sample Header")
+        row1.CreateCell(1).SetCellValue("Col2")
+        row1.CreateCell(2).SetCellValue("Col3")
         Dim row2 As IRow = sheet1.CreateRow(1)
-        row2.CreateCell(0).SetCellValue("1")
-        row2.CreateCell(1).SetCellValue("ENG0902145")
-        row2.CreateCell(2).SetCellValue("80")
+        row2.CreateCell(0).SetCellValue("Content 1")
+        row2.CreateCell(1).SetCellValue("99")
+        row2.CreateCell(2).SetCellValue("99")
         Dim row3 As IRow = sheet1.CreateRow(2)
-        row3.CreateCell(0).SetCellValue("2")
-        row3.CreateCell(1).SetCellValue("ENG0902345")
-        row3.CreateCell(2).SetCellValue("67")
+        row3.CreateCell(0).SetCellValue("Content 2")
+        row3.CreateCell(1).SetCellValue("99")
+        row3.CreateCell(2).SetCellValue("99")
         Dim row4 As IRow = sheet1.CreateRow(3)
-        row4.CreateCell(0).SetCellValue("3")
-        row4.CreateCell(1).SetCellValue("ENG0902348")
+        row4.CreateCell(0).SetCellValue("Content 3")
+        row4.CreateCell(1).SetCellValue("88")
         row4.CreateCell(2).SetCellValue("97")
 
         Dim row5 As IRow = sheet1.CreateRow(4)
         Dim cell As ICell = row5.CreateCell(1)
-        Dim style As ICellStyle = changeStyle(workbook, sheet1, row4, cell)
-        cell.SetCellValue(New XSSFRichTextString("This is a test for styling"))
+        Dim style As ICellStyle = changeStyle(workbook)
+        cell.SetCellValue(New XSSFRichTextString("Sample Styled Cell"))
 
         'TODO. iterate
         row4.Cells(0).CellStyle = (style)
         row4.Cells(1).CellStyle = (style)
         row4.Cells(2).CellStyle = (style)
 
-        setFomula(sheet1, row4.Cells(2))
+        setFomula(sheet1, row4.Cells(2), "A2+A3")    '"A2+A3"
         setWidthHeight(sheet1, row4, cell)
         'mergeCells(sheet1, row4.Cells(0), row4.RowNum, row4.RowNum, 1, 2)
         'save work
@@ -62,23 +176,14 @@ Public Class ClassExcelFile
         Return True
     End Function
     Public Function mergeCells(sheet As ISheet, cell As ICell, fRow As Integer, lRow As Integer, fCol As Integer, lCol As Integer) As Boolean
-
         'Merge Cells
         'fRow = lRow = 1
         'fCol = 1
         'lCol = 2
-        cell.SetCellValue(New XSSFRichTextString("This is a test of merging"))
         sheet.AddMergedRegion(New CellRangeAddress(fRow, lRow, fCol, lCol)) 'firstRow, lRow, fCol, lCol
-
-
         Return True
     End Function
-    Public Function changeStyle(workbook As IWorkbook, sheet As ISheet, row As IRow, cell As ICell) As ICellStyle
-        'Dim workbook As IWorkbook = New XSSFWorkbook()
-        ' Dim sheet As ISheet = workbook.CreateSheet("Sheet A1")
-        'Dim row As IRow = sheet.CreateRow(1)
-        'Dim cell As ICell = row.CreateCell(1)
-        cell.SetCellValue("Styled")
+    Public Function changeStyle(workbook As IWorkbook) As ICellStyle
         Dim style As ICellStyle = workbook.CreateCellStyle()
         style.BorderBottom = BorderStyle.Thin
         style.BottomBorderColor = IndexedColors.Black.Index
@@ -88,34 +193,15 @@ Public Class ClassExcelFile
         style.RightBorderColor = IndexedColors.Black.Index
         style.BorderTop = BorderStyle.Thin
         style.TopBorderColor = IndexedColors.Black.Index
-        'style.BorderDiagonalLineStyle = BorderStyle.Medium
-        'style.BorderDiagonal = BorderDiagonal.Forward
-        ' style.BorderDiagonalColor = IndexedColors.Gold.Index
-        cell.CellStyle = style
-
-        Dim cell2 As ICell = row.CreateCell(2)
-        'cell2.SetCellValue(5)
-        'Dim style2 As ICellStyle = workbook.CreateCellStyle
-        'style2.BorderDiagonalLineStyle = BorderStyle.Medium
-        'style2.BorderDiagonal = BorderDiagonal.Backward
-        'style2.BorderDiagonalColor = IndexedColors.Red.Index
-        'cell2.CellStyle = style2
-
-
-
-
         Return style
     End Function
-    Public Sub hideRowsCols(s As ISheet)
-        Dim r1 As IRow = s.CreateRow(0)
-        Dim r2 As IRow = s.CreateRow(1)
-        Dim r3 As IRow = s.CreateRow(2)
-        Dim r4 As IRow = s.CreateRow(3)
-        Dim r5 As IRow = s.CreateRow(4)
-        r2.ZeroHeight = True
-        s.SetColumnHidden(2, True)
+    Public Sub hideCols(s As ISheet, colNum As Integer)
+        s.SetColumnHidden(colNum, True)
     End Sub
-
+    Public Sub hideRows(s As ISheet, colNum As Integer)
+        Dim r1 As IRow = s.GetRow(0)
+        r1.ZeroHeight = True
+    End Sub
 
     Public Function setWidthHeight(sheet1 As ISheet, row As IRow, cell As ICell) As Boolean
 
@@ -129,25 +215,8 @@ Public Class ClassExcelFile
 
         Return True
     End Function
-    Public Function setFomula(s1 As ISheet, cell As ICell) As Boolean
-        cell.CellFormula = "A2+A3"
-        ''set A2
-        's1.CreateRow(1).CreateCell(0).SetCellValue(-5)
-        ''set B2
-        's1.GetRow(1).CreateCell(1).SetCellValue(1111)
-        ''set C2
-        's1.GetRow(1).CreateCell(2).SetCellValue(7.623)
-        ''set A3
-        's1.CreateRow(2).CreateCell(0).SetCellValue(2.2)
-
-        ''set A4=A2+A3
-        's1.CreateRow(3).CreateCell(0).CellFormula = "A2+A3"
-        'set D2=SUM(A2:C2);
-        's1.GetRow(1).CreateCell(3).CellFormula = "SUM(A2:C2)"
-
-        'Dim cell As ICell = sheet2.CreateRow(0).CreateCell(0);
-        'cell.CellFormula = "Sheet1!A2+Sheet1!A3"
-
+    Public Function setFomula(s1 As ISheet, cell As ICell, fmlStr As String) As Boolean
+        cell.CellFormula = fmlStr
         Return True
     End Function
 
@@ -157,9 +226,10 @@ Public Class ClassExcelFile
         File.Close()
         Return True
     End Function
-    Public Function modifyExcelFile(fileName As String) As Boolean
+    Public Function modifyExcelFile_NPOI(fileName As String, dv As DataView) As Boolean
         Dim xssfwb As XSSFWorkbook 'HSSFWorkbook for xls xSSFWorkbook for xlsx
-
+        Dim dt As New DataTable("Broadsheet")
+        dt = dv.ToTable
         Using file As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read)
             xssfwb = New XSSFWorkbook(file)
             file.Close()
@@ -167,12 +237,33 @@ Public Class ClassExcelFile
 
         Dim sheet As ISheet = xssfwb.GetSheetAt(0)
         Dim row As IRow = sheet.GetRow(0)
-        sheet.CreateRow(row.LastCellNum)
+        Dim newRow As IRow = sheet.CreateRow(row.LastCellNum)
+
         Dim cell As ICell = row.CreateCell(row.LastCellNum)
+
+
+        sheet = xssfwb.GetSheetAt(0)
+        row = sheet.GetRow(0)
+        cell = row.CreateCell(row.LastCellNum)
         cell.SetCellValue("test")
 
+        newRow = sheet.CreateRow(row.LastCellNum)  'new row
+
         For i As Integer = 0 To row.LastCellNum - 1
-            Console.WriteLine(row.GetCell(i))
+            'Debug.Print(row.GetCell(i).CellFormula)
+            'Debug.Print(row.GetCell(i).CellComment.String.ToString)
+            'Debug.Print(row.GetCell(i).StringCellValue) 'error if null
+        Next
+        For i As Integer = 0 To dt.Rows.Count - 1
+            cell = sheet.GetRow(i).Cells(1)
+            cell.SetCellFormula(dblQuote & dt.Rows(i).Item(0).ToString & dblQuote)
+            ''cell.CellComment=("=" & dblQuote & ds_audit.Tables(0).Rows(i).Item(0).ToString & dblQuote)
+            Debug.Print(cell.CellFormula)
+
+            cell = sheet.GetRow(i).Cells(2)
+            cell.SetCellFormula(dblQuote & dt.Rows(i).Item(2).ToString & dblQuote)
+
+            'Debug.Print(row.GetCell(i).StringCellValue)
         Next
 
         Using file As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Write)

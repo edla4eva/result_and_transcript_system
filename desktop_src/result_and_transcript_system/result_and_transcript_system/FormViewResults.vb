@@ -24,6 +24,29 @@ Public Class FormViewResults
     End Sub
 
     Private Sub ButtonUpload_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
+        If TextBoxSession.Text = "" Then
+            TextBoxSession.BackColor = Color.Pink
+            MessageBox.Show("Please enter the session and retry again")
+            Exit Sub
+        End If
+        Dim myDataSet As DataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text)
+        DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+
+
+        'TODO: show result summary in listbox
+        Dim rd As DataTableReader
+        Dim rowVals As String() = {}
+        rd = myDataSet.Tables(0).CreateDataReader
+        Try
+            If rd.Read() Then   'while
+                rd.GetValues(rowVals)
+                ListBoxResults.Items.AddRange(rowVals) 'test
+            End If
+            DataGridView2.Visible = True
+        Catch ex As Exception
+
+        End Try
+
 
 
     End Sub

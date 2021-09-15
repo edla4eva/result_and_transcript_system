@@ -31,7 +31,6 @@ Partial Class FormSettings
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonBrowse = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
@@ -47,9 +46,7 @@ Partial Class FormSettings
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
-        Me.TextBox5 = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.DataGridViewCoursesOrder = New System.Windows.Forms.DataGridView()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -84,7 +81,7 @@ Partial Class FormSettings
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(994, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 502)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 655)
         Me.SidePanel.TabIndex = 7
         '
         'Button4
@@ -136,19 +133,6 @@ Partial Class FormSettings
         Me.Label1.TabIndex = 8
         Me.Label1.Text = "Settings"
         '
-        'Label2
-        '
-        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.Silver
-        Me.Label2.Location = New System.Drawing.Point(180, 259)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(199, 24)
-        Me.Label2.TabIndex = 9
-        Me.Label2.Text = " Number of Students"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'GroupBox3
         '
         Me.GroupBox3.BackColor = System.Drawing.Color.Transparent
@@ -187,11 +171,11 @@ Partial Class FormSettings
         '
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
-        Me.ComboBox1.Location = New System.Drawing.Point(161, 195)
+        Me.ComboBox1.Location = New System.Drawing.Point(44, 197)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(161, 21)
         Me.ComboBox1.TabIndex = 31
-        Me.ComboBox1.Text = "Computer Engineering"
+        Me.ComboBox1.Text = "2018/2019"
         '
         'Label6
         '
@@ -206,21 +190,21 @@ Partial Class FormSettings
         '
         Me.TextBox2.Location = New System.Drawing.Point(31, 197)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(123, 20)
+        Me.TextBox2.Size = New System.Drawing.Size(13, 20)
         Me.TextBox2.TabIndex = 29
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(21, 58)
+        Me.TextBox1.Location = New System.Drawing.Point(31, 64)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(123, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(174, 20)
         Me.TextBox1.TabIndex = 28
         '
         'ComboBoxDepartments
         '
         Me.ComboBoxDepartments.FormattingEnabled = True
         Me.ComboBoxDepartments.Items.AddRange(New Object() {"Computer Engineering", "Production Engineering"})
-        Me.ComboBoxDepartments.Location = New System.Drawing.Point(161, 143)
+        Me.ComboBoxDepartments.Location = New System.Drawing.Point(44, 145)
         Me.ComboBoxDepartments.Name = "ComboBoxDepartments"
         Me.ComboBoxDepartments.Size = New System.Drawing.Size(161, 21)
         Me.ComboBoxDepartments.TabIndex = 27
@@ -239,7 +223,7 @@ Partial Class FormSettings
         '
         Me.TextBoxDepartment.Location = New System.Drawing.Point(31, 145)
         Me.TextBoxDepartment.Name = "TextBoxDepartment"
-        Me.TextBoxDepartment.Size = New System.Drawing.Size(123, 20)
+        Me.TextBoxDepartment.Size = New System.Drawing.Size(13, 20)
         Me.TextBoxDepartment.TabIndex = 25
         '
         'Label3
@@ -274,9 +258,7 @@ Partial Class FormSettings
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.TextBox4)
         Me.GroupBox1.Controls.Add(Me.ComboBox3)
-        Me.GroupBox1.Controls.Add(Me.TextBox5)
         Me.GroupBox1.Controls.Add(Me.Label9)
-        Me.GroupBox1.Controls.Add(Me.Label10)
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.GroupBox1.Location = New System.Drawing.Point(16, 352)
         Me.GroupBox1.Name = "GroupBox1"
@@ -307,19 +289,12 @@ Partial Class FormSettings
         'ComboBox3
         '
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Items.AddRange(New Object() {"Computer Engineering", "Production Engineering"})
-        Me.ComboBox3.Location = New System.Drawing.Point(151, 86)
+        Me.ComboBox3.Items.AddRange(New Object() {"Dark", "Light"})
+        Me.ComboBox3.Location = New System.Drawing.Point(21, 88)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(161, 21)
         Me.ComboBox3.TabIndex = 27
-        Me.ComboBox3.Text = "Computer Engineering"
-        '
-        'TextBox5
-        '
-        Me.TextBox5.Location = New System.Drawing.Point(21, 88)
-        Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(123, 20)
-        Me.TextBox5.TabIndex = 25
+        Me.ComboBox3.Text = "Dark"
         '
         'Label9
         '
@@ -334,19 +309,6 @@ Partial Class FormSettings
         Me.Label9.Text = "Font"
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label10
-        '
-        Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.ForeColor = System.Drawing.Color.Silver
-        Me.Label10.Location = New System.Drawing.Point(382, 97)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(178, 24)
-        Me.Label10.TabIndex = 11
-        Me.Label10.Text = "Results Submitted"
-        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'GroupBox2
         '
         Me.GroupBox2.BackColor = System.Drawing.Color.Transparent
@@ -355,9 +317,9 @@ Partial Class FormSettings
         Me.GroupBox2.Controls.Add(Me.TextBox6)
         Me.GroupBox2.Controls.Add(Me.Label12)
         Me.GroupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.GroupBox2.Location = New System.Drawing.Point(660, 55)
+        Me.GroupBox2.Location = New System.Drawing.Point(655, 55)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(620, 279)
+        Me.GroupBox2.Size = New System.Drawing.Size(300, 536)
         Me.GroupBox2.TabIndex = 15
         Me.GroupBox2.TabStop = False
         '
@@ -380,7 +342,7 @@ Partial Class FormSettings
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridViewCoursesOrder.DefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridViewCoursesOrder.Location = New System.Drawing.Point(16, 78)
+        Me.DataGridViewCoursesOrder.Location = New System.Drawing.Point(16, 43)
         Me.DataGridViewCoursesOrder.Name = "DataGridViewCoursesOrder"
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
@@ -390,7 +352,7 @@ Partial Class FormSettings
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridViewCoursesOrder.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
-        Me.DataGridViewCoursesOrder.Size = New System.Drawing.Size(406, 174)
+        Me.DataGridViewCoursesOrder.Size = New System.Drawing.Size(255, 403)
         Me.DataGridViewCoursesOrder.TabIndex = 33
         '
         'Button3
@@ -399,18 +361,18 @@ Partial Class FormSettings
         Me.Button3.BackColor = System.Drawing.Color.Transparent
         Me.Button3.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button3.ForeColor = System.Drawing.Color.Silver
-        Me.Button3.Location = New System.Drawing.Point(334, 28)
+        Me.Button3.Location = New System.Drawing.Point(16, 478)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(88, 30)
+        Me.Button3.Size = New System.Drawing.Size(255, 30)
         Me.Button3.TabIndex = 32
         Me.Button3.Text = "Add New Course"
         Me.Button3.UseVisualStyleBackColor = False
         '
         'TextBox6
         '
-        Me.TextBox6.Location = New System.Drawing.Point(194, 35)
+        Me.TextBox6.Location = New System.Drawing.Point(16, 452)
         Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.Size = New System.Drawing.Size(123, 20)
+        Me.TextBox6.Size = New System.Drawing.Size(255, 20)
         Me.TextBox6.TabIndex = 28
         '
         'Label12
@@ -419,11 +381,11 @@ Partial Class FormSettings
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.ForeColor = System.Drawing.Color.Silver
-        Me.Label12.Location = New System.Drawing.Point(27, 31)
+        Me.Label12.Location = New System.Drawing.Point(12, 97)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(144, 24)
+        Me.Label12.Size = New System.Drawing.Size(148, 24)
         Me.Label12.TabIndex = 12
-        Me.Label12.Text = "Courser Order"
+        Me.Label12.Text = "Courses Order"
         Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'FormSettings
@@ -431,11 +393,10 @@ Partial Class FormSettings
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(1128, 502)
+        Me.ClientSize = New System.Drawing.Size(1128, 655)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GroupBox3)
-        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.SidePanel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -459,7 +420,6 @@ Partial Class FormSettings
     Friend WithEvents ButtonUser As Button
     Friend WithEvents ButtonBrowse As Button
     Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
     Friend WithEvents Button4 As Button
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents Label4 As Label
@@ -475,9 +435,7 @@ Partial Class FormSettings
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents TextBox4 As TextBox
     Friend WithEvents ComboBox3 As ComboBox
-    Friend WithEvents TextBox5 As TextBox
     Friend WithEvents Label9 As Label
-    Friend WithEvents Label10 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents DataGridViewCoursesOrder As DataGridView

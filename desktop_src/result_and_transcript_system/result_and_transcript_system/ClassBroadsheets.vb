@@ -27,6 +27,7 @@ Public Class ClassBroadsheets
     Private _regInfoCoursesFirstSem As List(Of String)
     Private _regInfoCoursesSecondSem As List(Of String)
     Private _processedBroadsheetFileName As String = Nothing
+    Private _broadsheetDataDS As DataSet
     Public Property processedBroadsheetFileName() As String
         Get
             Return _processedBroadsheetFileName
@@ -59,11 +60,11 @@ Public Class ClassBroadsheets
             _excelWB = value
         End Set
     End Property
-    Public Property progress() As String
+    Public Property progress() As Integer
         Get
             Return _progress
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Integer)
             _progress = value
             Dim e As New ClassAnswerEventArgs
             e.VariableChanged = True
@@ -81,6 +82,19 @@ Public Class ClassBroadsheets
             e.VariableChanged = True
             e.Ans = -1
             RaiseEvent myEventOnPropertyChanged(Me, e) 'MATNOChanged
+        End Set
+    End Property
+
+    Public Property broadsheetDataDS() As DataSet
+        Get
+            Return _broadsheetDataDS
+        End Get
+        Set(ByVal value As DataSet)
+            _broadsheetDataDS = value
+            'Dim e As New ClassAnswerEventArgs
+            'e.VariableChanged = True
+            'e.Ans = -1
+            'RaiseEvent myEventOnPropertyChanged(Me, e) 'ds
         End Set
     End Property
     Public Property strMATNO() As String()
@@ -105,55 +119,194 @@ Public Class ClassBroadsheets
     End Property
 
 #End Region
-    Function createDataSetBS(strArrayMATNO As String()) As DataSet
-        '# Dataset creation 
+
+    Function createBroadsheetData(course_dept_idr As String, session_idr As String, course_level As String, Optional isInterrop As Boolean = False) As DataSet
+        'Algo
+        '1. count courseCodes in result table = j
+        '2. create dataset with j no of cols
+        'for each col.name
+        '   query students, left join results (convert null to NA -3
+        '   transfer query result col to dataset col
+        'next
+
+        '#1 count courseCodes in result table = j
+        Dim countC, countReg, countResultsBS As Integer
+        Dim coursesDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim strSQL, strSQLJoin As String
+        Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
+        Dim tmpInt As Integer = -4
+        strSQL = "SELECT Courses.course_code, Courses.course_level, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order, Count(Courses.course_order) AS CountOfcourse_order
+                  FROM Courses
+                 GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
+                 HAVING (((Courses.course_semester)=1) AND ((Courses.course_dept_idr)={0}) AND ((Count(Courses.course_order))>0))
+                 ORDER BY Courses.course_level, Courses.course_order;" 'and level
+        'or
+        'strSQL = "SELECT course_code,course_unit FROM QueryFS_Coursers_Ordered"
+        coursesDS = mappDB.GetDataWhere(String.Format(strSQL, course_dept_idr), "Courses")
+        countC = coursesDS.Tables(0).Rows.Count
+
+        strSQL = "SELECT reg.matno FROM reg WHERE session_idr='{0}'"    'and level=course_level 
+        RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQL, session_idr), "Reg")
+        countReg = RegStudentsDS.Tables(0).Rows.Count
+
+        strSQLJoin = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
+                      Results.Session_idr  FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
+                      Results.Session_idr HAVING (((Results.course_code_idr)='{0}') AND ((Results.Session_idr)='{1}'));"
+
+
+
+        '#2 Dataset creation 
         '--------------------------
         'Very good!
+        Dim ds As New DataSet
+        Dim dt As New DataTable
+        Dim dr As DataRow
+        Dim tmpCol As DataColumn    'Dim Coulumn, matnoCoulumn, nameCoulumn As DataColumn Dim caCoulumn, scoreCoulumn, examCoulumn, surnameCoulumn, otherNameCoulumn As DataColumn
+        Dim dictCol, dictMATNO As New Dictionary(Of String, Integer)
+        dt.TableName = "BroadsheetFS"
+
+        'Create Fixed Cols TODO: put in sub
+        tmpCol = New DataColumn("sn", Type.GetType("System.String")) '1
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("matno", Type.GetType("System.String")) '2
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("FullName", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("OtherNames", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Surname", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("RepeatAll", Type.GetType("System.String")) '6
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("RepeatFirstSem", Type.GetType("System.String")) '6 syst
+        dt.Columns.Add(tmpCol)
+
+        'Get mat nos
+        For i = 0 To countReg - 1
+            dictMATNO.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), -4)   'add disting students
+            'add em rows
+            dr = dt.NewRow()
+            dr("matno") = RegStudentsDS.Tables(0).Rows(i).Item("matno")
+            dr("sn") = (i + 1).ToString
+            dt.Rows.Add(dr)
+        Next
+
+        'worked TODO: let courses iterate like this in next loops
+        For j = 0 To countC - 1 'create columns for courses 'TODO: 1st and second
+            tmpCol = New DataColumn(coursesDS.Tables(0).Rows(j).Item("course_code"), Type.GetType("System.Int32"))
+            dt.Columns.Add(tmpCol)
+        Next
+
+
+        'from broadsheet template courses start from col H = 8 (i.e 7 counting from 0)
+        For jCourseCol = 7 To countC - 1 ' for each col(ie course code) put rows in result table in dictC
+            'HINT: this wrong line gave me problem for days strSQLJoin = String.Format(strSQLJoin, dt.Columns(jCourseCol).ColumnName, session_idr) 
+            tmpStr = String.Format(strSQLJoin, dt.Columns(jCourseCol).ColumnName, session_idr)   'SELECT ... LEFT JOIN
+
+            FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
+
+            'SELECT Reg.MatNo, Reg.session_idr, Results.total, Results.course_code_idr From Reg LEFT Join Results On Reg.MatNo = Results.matno'Where (((Reg.session_idr) = "2018/2019") And ((Results.course_code_idr) = "CPE301"));
+            'TODO: posible duplicate MATNO in query if duplicate result is in result table
+            'Approach 1: avoid duplicate in result table           'Approach 2: use agregate first or last           'Approach 3: use data structures list, array
+            countResultsBS = FSBroadsheetDS.Tables(0).Rows.Count
+            dictCol.Clear()
+
+            For iBSRow = 0 To countResultsBS - 1
+                tmpStr = FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("matno")
+                'Debug.Print(FSBroadsheetDS.Tables(0).Rows(i).Item(tmpCol.ColumnName))
+                'Debug.Print(FSBroadsheetDS.Tables(0).Rows(i).Item("total"))
+                If Not dictCol.ContainsKey(tmpStr) Then
+                    dictCol.Add(tmpStr, FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("LastOftotal"))   'add disting students
+                Else
+                    'todo: handle these duplicate results somehow
+                End If
+                'OR 'dictCol(tmpStr) = findMATNO(FSBroadsheetDS.Tables(0).Rows(i).Item("matno"), dictCol(i).key.name)   '
+            Next
+
+            'Debug.Print("MATNO: ")
+            'Debug.Print(String.Join(", ", dictMATNO.Values.ToArray.ToString))
+            'Debug.Print("Values: ")
+            'Debug.Print(String.Join(", ", dictCol.Values.ToArray.ToString))
+            'transfer  the matching scores to dictMATNO
+            Dim colKeys() As String = dictMATNO.Keys.ToArray
+            If dictCol.Count > 0 Then
+                For Each colkey In colKeys
+                    Dim tmpVal As Integer = dictMATNO(colkey)
+                    Debug.Print(colkey & ": " & dictMATNO(colkey).ToString & ", score: " & tmpVal) 'dictMATNO.ContainsValue("4"),  dictMATNO.containskey("4")
+
+                    If dictCol.ContainsKey(colkey) Then tmpVal = dictCol(colkey) Else tmpVal = -5 'change the value
+                    dictMATNO(colkey) = tmpVal
+                Next colkey
+
+
+                'Update dataset with result values
+                For iMainDS = 0 To dt.Rows.Count - 1
+                    'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
+                    tmpStrCourseCode = dt.Columns(jCourseCol).ColumnName
+                    tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
+                    If dictMATNO.ContainsKey(tmpStrMATNO) Then
+                        'todo
+                        dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
+                    Else
+                        dt.Rows(iMainDS).Item(tmpStrCourseCode) = -7
+                    End If
+                Next
+
+            Else
+                'No need to iterate through scores because no result was found
+            End If
+            objBroadsheet.progress = jCourseCol / countC * 80
+        Next    'end for  each col(ie course code)
+
+
+
+        'Now Update result in Dataset
+        If isInterrop Then  'TODO: impliment condition
+            'fml stuff special consideration for excel 
+        Else
+            'compute every thing first
+        End If
+
+        tmpCol = New DataColumn("TCF_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCP_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCR_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+
+        'others
+        tmpCol = New DataColumn("Session", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+
+        objBroadsheet.progress = 97 'update progress
+        ds.Tables.Add(dt)
+
+        Return ds
+    End Function
+
+    Function createDataSetHowTo(strArrayMATNO As String()) As DataSet
+        '# How to perform Dataset creation  'Very good!
+        '-------------------------
         Dim ds As New DataSet
         Dim dt As DataTable
         Dim dr As DataRow
         Dim snCoulumn, matnoCoulumn, nameCoulumn As DataColumn
 
-        Dim caCoulumn, scoreCoulumn, examCoulumn, surnameCoulumn, otherNameCoulumn As DataColumn
-
         dt = New DataTable()
         snCoulumn = New DataColumn("SN", Type.GetType("System.Int32"))
         matnoCoulumn = New DataColumn("MATNO", Type.GetType("System.String"))
-        nameCoulumn = New DataColumn("NAME", Type.GetType("System.String"))
-        caCoulumn = New DataColumn("CA", Type.GetType("System.String")) ' Type.GetType("System.Double"))
-        examCoulumn = New DataColumn("EXAM", Type.GetType("System.String")) ' Type.GetType("System.Double"))
-        scoreCoulumn = New DataColumn("SCORE", Type.GetType("System.String")) ' Type.GetType("System.Double"))
-        surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
-        otherNameCoulumn = New DataColumn("OtherNames", Type.GetType("System.String"))
 
         dt.TableName = "Result"
         dt.Columns.Add(snCoulumn)
         dt.Columns.Add(matnoCoulumn)
-        dt.Columns.Add(nameCoulumn)
-        dt.Columns.Add(caCoulumn)
-        dt.Columns.Add(examCoulumn)
-        dt.Columns.Add(scoreCoulumn)
-        dt.Columns.Add(surnameCoulumn)
-        dt.Columns.Add(otherNameCoulumn)
-
 
         For i = 0 To strArrayMATNO.Length - 1
             dr = dt.NewRow()
             dr("SN") = i + 1
             dr("MATNO") = strArrayMATNO(i)
-
-            'dr("NAME") = strArrayNAME(i).ToString
-            'dr("CA") = strArrayCA(i).ToString
-            'dr("EXAM") = strArrayEXAM(i).ToString
-            'dr("SCORE") = strArraySCORE(i).ToString
-            'dr("SURNAME") = strArraySURNAME(i).ToString
             dr("OtherNames") = "Firstname SURNAME"
             dt.Rows.Add(dr)
-
-
         Next
-
-        Me.progress = 80 'update progress
         ds.Tables.Add(dt)
 
         Return ds
@@ -315,7 +468,177 @@ Public Class ClassBroadsheets
         '=SUM(IF(AK10>data!$I$9,Broadsheet!$AK$9,0),IF(AL10>data!$I$9,Broadsheet!$AL$9,0),IF(AM10>data!$I$9,Broadsheet!$AM$9,0),IF(AN10>data!$I$9,Broadsheet!$AN$9,0))
         Return strRet
     End Function
-    Function updateExcelBroadSheetInterop(resultfileNameValue As String, dt As DataSet) As String
+    Function updateExcelBroadSheetInterop(dv As DataView, resultfileNameValue As String, generatedBroadsheetFileName As String) As String
+        Dim dt As DataTable = dv.ToTable
+        Dim strCriteria As String = String.Empty
+        Dim defaultStartRow As Integer = 1
+        Dim startCol As Integer = 1
+        Dim endCol As Integer = 150 'todo:check
+        Dim firstSemStartCol As Integer = 8 'todo:check
+        Dim firstSemEndCol As Integer = 8 + 55 'todo:check
+        Dim secondSemStartCol As Integer = 8 + 55 + 3 'todo:check
+        Dim secondSemEndCol As Integer = (8 + 55 + 3) + 55 'todo:check
+        Dim headerRow As Integer = 8
+        Dim endRow As Integer = 200
+        Dim endRowTemplate As Integer = 280
+        Dim startColLevel As Integer = 20
+        Dim endColLevel As Integer = 7
+        Dim startRow As Integer = 10  'starts at row 10
+        Dim strSQLTemp As String = ""
+        Dim i As Integer = 0
+        Dim tmpStr As String = Nothing
+        Dim tmpCount As Integer = 0
+
+        Dim strCellContent As String = ""
+        Dim strCellContent2 As String = ""
+
+        Dim templateCourses1(55) As String
+        Dim templateCourses2(55) As String
+
+        Dim fn As String = Nothing
+
+        'template matching numbers
+        startRow = 10
+        headerRow = 7
+
+        'broadshet data numbers
+        endRow = dt.Rows.Count
+
+        Try
+            excelApp = New ExcelInterop.Application
+            If resultfileNameValue = Nothing Or Not System.IO.File.Exists(resultfileNameValue) Then Exit Function 'todo
+            excelWB = excelApp.Workbooks.Open(resultfileNameValue)
+            excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
+
+            'The Courses in the template (Use assuming it overrides soft)
+            tmpCount = templateCourses1.Count
+            For j = firstSemStartCol To tmpCount - 1
+                templateCourses1(i) = dt.Rows(headerRow).Item(j).ToString          'excelWS.Cells(headerRow, ExcelColumns.colH + j)
+            Next
+            Me.progress = 30 'update progress bar
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+
+        excelApp.Visible = True
+
+        MsgBox("Excel will be launched make sure it is running properlyy with no dialog box open then clic ok to continue")
+
+        Dim strFormulaTC As String = "=H{0} + I{0} + J{0}" ' "=H9 + I9 + J9"
+        Dim strFormulaFullName As String = "=D{0} + E{0}" ' D9+E9" wont need fml if template is good
+        Dim endDGVCol As Integer
+        endDGVCol = dt.Columns.Count
+
+        If endDGVCol <> endCol Then
+            MsgBox("The generated broadsheet data does not match the template",, "Warning!")
+            endCol = endDGVCol
+        End If
+
+        'Delete extra rows early to make spreadsheet lighter
+        excelWS.Rows(endRow & ":200").delete() 'e.g 60:200    excelWS.Cells.Range("A" & endRow & ":Z150").Delete()
+        'resultfileNameValue = "Processed-" & Now & "-" & resultfileNameValue    'todo: avoid extension .xls
+        'excelWS.SaveAs(resultfileNameValue)
+        objBroadsheet.progress = 40
+        'TODO: modifying cells when a dialog is open in excel (eg unlicenced version) throws error. tip sendkeyd(enter) on error
+        For i = 0 To startRow - 1
+            'headers The header rows dont come from datagrid view
+            If i = 1 Then excelWS.Cells(i, 1) = "Department Name"
+            If i = 2 Then excelWS.Cells(i, 1) = "Faculty Name"
+            If i = 3 Then excelWS.Cells(i, 1) = "University  Name"
+            If i = 4 Then excelWS.Cells(i, 1) = "2020/2021 Academic Session "
+        Next
+
+
+        'data row headings
+        For j = 0 To endDGVCol - 1
+            If Not (IsDBNull(dt.Rows(headerRow).Item(j)) Or dt.Columns(j).ColumnName Is Nothing) Then
+                excelWS.Cells(headerRow + 1, j + 1) = dt.Columns(j).ColumnName 'excelWS.Cells(i, ExcelColumns.colA) = i
+            Else
+                excelWS.Cells(headerRow + 1, j + 1) = "Error"
+            End If
+            objBroadsheet.progress = j / endDGVCol * 60
+        Next
+
+
+
+        For i = startRow To endRow - 1
+            'students info
+            For j = 0 To firstSemStartCol - 1
+                If Not (IsDBNull(dt.Rows(i).Item(j)) Or dt.Rows(i - startRow).Item(j).ToString Is Nothing) Then
+                    excelWS.Cells(i, (j + 1)) = dt.Rows(i - startRow).Item(j).ToString
+                ElseIf (j >= firstSemStartCol And j <= firstSemEndCol) Then
+                    excelWS.Cells(i, (j + 1)) = "-6"    'String.Format(strFormulaFullName, i, i, i) 
+                Else
+                    'do nothing
+                End If
+            Next
+            'first sem esults
+            For j = firstSemStartCol To firstSemEndCol - 1  'first semester
+                'excelWS.Cells(i + 1, j + 1) = dt.Rows(i).Item(j).ToString 'excelWS.Cells(i, ExcelColumns.colA) = i
+                'String.Format(strFormulaFullName, i, i, i) 
+            Next
+            For j = secondSemStartCol To endCol - 1 '2nd semester less 
+                excelWS.Cells(i, (j + 1)) = dt.Rows(i).Item(j).ToString 'excelWS.Cells(i, ExcelColumns.colA) = i
+                'String.Format(strFormulaFullName, i, i, i) 
+            Next
+            'Pecific cols
+            excelWS.Cells(i + 1, ExcelColumns.colZ + 1) = "GPA" '=calcGPA(array_of_scores)
+            excelWS.Cells(i + 1, ExcelColumns.colY + 1) = "2.5"
+            excelWS.Cells(i + 1, ExcelColumns.colQ + 1) = String.Format(strFormulaTC, i, i, i)  'gpa formula
+            objBroadsheet.progress = i / endRow * 80
+        Next
+
+
+
+
+
+
+        'With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeLeft)
+        '    excelWS.Cells.Range("B" & startRow & ":B" & r).Select() 'select rows
+        'End With
+        'excelWS.Cells.Range("B" & startRow & ":B" & r).Copy()
+        'Debug.Print(My.Computer.Clipboard.GetData("range").ToString)
+        'Call selectCells("A" & lastRow & ":Z150" )
+
+
+        'clean up
+        Try
+            fn = broadsheetFileName & "_saved" & endRow & Rnd(5).ToString
+            If Not System.IO.File.Exists(generatedBroadsheetFileName) Then
+                excelWB.SaveAs(generatedBroadsheetFileName)
+            Else
+                Throw New Exception("RTPS Error: Excel File Already Exists!")
+            End If
+            'excelWB.Save()
+            excelApp.Quit()
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWB)
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWS)
+            'clean up variables
+            objBroadsheet.progress = 90
+            dt = Nothing
+            startRow = Nothing
+            excelWS = Nothing
+            excelWB = Nothing
+            excelApp = Nothing
+
+            'to do track process id of excel and kill it
+            GC.Collect() 'Best way to close excel NOTE: It works in release but youmay not notice in debug mode
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+
+            'Some errors the object has disconnected with the client
+        End Try
+
+
+        'Scrap stuff--------------------
+
+
+        Return fn
+    End Function
+    Function updateExcelBroadSheetInteropManualwithoutTemplateMatching(resultfileNameValue As String, dt As DataSet) As String
         Dim strCriteria As String = String.Empty
         Dim startRow As Integer = 1
         Dim headerRow As Integer = 8
@@ -411,14 +734,14 @@ Public Class ClassBroadsheets
 
         'clean up
         Try
-
-            excelApp.Quit()
             fn = broadsheetFileName & "_saved" & endRow & Rnd(5).ToString
             excelWB.SaveAs(broadsheetFileName & "_saved" & endRow & Rnd(5).ToString)
+            excelApp.Quit()
+
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWB)
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWS)
             'clean up variables
-            mappDB.close()
+
             r = Nothing
             excelWS = Nothing
             excelWB = Nothing
@@ -436,6 +759,7 @@ Public Class ClassBroadsheets
 
         Return fn
     End Function
+
     Function iterateRegisteredCoursesAndAddToBroadsheetTemplate() As String()
         Dim firstSemCourses As List(Of String) = Nothing
         Dim secondSemCourses As List(Of String) = Nothing
@@ -456,4 +780,22 @@ Public Class ClassBroadsheets
 
     '    Return True
     'End Function
+    Sub ExcelPDF()
+        'Dim workbook As New ExcelInterop.Workbook()
+        'workbook.LoadFromFile("D:\test.xlsx")
+
+        'workbook.ActiveSheet.ExportAsFixedFormat(xlTypePDF, "D:\test.pdf")
+
+
+
+
+    End Sub
+    'Option Strict Off 'Required for Late Binding
+    Sub ExcelPDFLateBinding()
+        Dim xl As Object
+        xl = CreateObject("Excel.Application")
+        Dim xwb As Object = xl.Workbooks.Open("D:\test.xlsx")
+        xwb.ActiveSheet.ExportAsFixedFormat(0, "D:\sample.pdf")
+        xl.Quit()
+    End Sub
 End Class

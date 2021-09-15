@@ -151,7 +151,7 @@
                 addForm(FormCourseAdviser)
                 Me.WindowState = FormWindowState.Maximized
             Case "CourseLecturer"
-                addForm(FormUploadResult)
+                addForm(FormCourseLecturer)
                 Me.WindowState = FormWindowState.Maximized
             Case "GenerateBroadsheet"
                 addForm(FormGenerateBroadsheet)

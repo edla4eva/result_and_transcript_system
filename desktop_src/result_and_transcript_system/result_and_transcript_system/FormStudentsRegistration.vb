@@ -277,5 +277,14 @@ Public Class FormStudentsRegistration
         MainForm.doCloseForm()
     End Sub
 
-
+    Private Sub dgv_courses_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_courses.CellContentClick
+        Dim dLeft As Integer = 0
+        CheckedListBox1.Visible = True
+        CheckedListBox1.Width = dgv_courses.Columns(e.ColumnIndex).Width    'todo: calc the with as only once
+        dLeft = dgv_courses.Left
+        For i = 0 To e.ColumnIndex ' dgv_courses.Columns.Count
+            dLeft = dLeft + dgv_courses.Columns(i).Width
+        Next
+        CheckedListBox1.Left = dLeft
+    End Sub
 End Class

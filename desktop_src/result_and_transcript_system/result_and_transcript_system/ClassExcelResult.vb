@@ -80,6 +80,14 @@ Public Class ClassExcelResult
         End Set
     End Property
 
+    Public Property resultTemplateFileName() As String
+        Get
+            Return _resultTemplateFileName
+        End Get
+        Set(ByVal value As String)
+            _resultTemplateFileName = value
+        End Set
+    End Property
     Public Property resultFilename() As String
         Get
             Return resultfileNameValue
@@ -102,7 +110,7 @@ Public Class ClassExcelResult
             Me._excelVersion = "2013"
             Me.fontValue = New Font("Arial", 14, FontStyle.Bold)
             'USER_DIRECTORY
-            Me._resultTemplateFileName = USER_DIRECTORY & "\templates\results.xlsx"
+            Me._resultTemplateFileName = PROG_DIRECTORY & "\templates\result.xlsx"
             Me._resultFlag = False
             'load defaults
             Me.settings = getSettings(True)
@@ -339,7 +347,7 @@ Public Class ClassExcelResult
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWB)
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelWS)
             'clean up variables
-            mappDB.close()
+
             r = Nothing
             excelWS = Nothing
             excelWB = Nothing
@@ -511,22 +519,30 @@ Public Class ClassExcelResult
     End Function
 
     Function getFromDBResultssDataset(dSession As String) As DataSet
+        Dim myDataSet As DataSet = New DataSet()
         Try
-            'ts.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester
-            'FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Department On students.student_dept_idr = Department.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code;
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.Open()
+                End Try
+                Dim strSQL As String = ""
+                strSQL = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester"
+                strSQL = strSQL & " FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Department On students.student_dept_idr = Department.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code"
+                strSQL = strSQL & " WHERE results.session_idr=" & dSession & ";"
+                Dim cmd As New OleDbCommand
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = strSQL
+                cmd.Connection = xConn
+                Dim myDA As OleDbDataAdapter = New OleDbDataAdapter(cmd)
 
-            Dim strSQL As String = "" '"SELECT * FROM  results INNER JOIN"
-            strSQL = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester"
-            strSQL = strSQL & " FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Department On students.student_dept_idr = Department.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code"
-            strSQL = strSQL & " WHERE results.session_idr=" & dSession & ";"
-            Dim cmd As New OleDbCommand
-            cmd.CommandType = CommandType.Text
-            cmd.CommandText = strSQL
-            cmd.Connection = mappDB.connLocal
-            Dim myDA As OleDbDataAdapter = New OleDbDataAdapter(cmd)
-            Dim myDataSet As DataSet = New DataSet()
-            myDA.Fill(myDataSet, "results")
-            'dgw.DataSource = myDataSet.Tables("TableResults").DefaultView
+                myDA.Fill(myDataSet, "results")
+                'dgw.DataSource = myDataSet.Tables("TableResults").DefaultView
+                xConn.Close()
+            End Using
+
             Return myDataSet
         Catch ex As Exception
             Throw ex

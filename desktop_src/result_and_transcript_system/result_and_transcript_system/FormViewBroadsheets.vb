@@ -52,10 +52,10 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub ButtonResultList_Click(sender As Object, e As EventArgs)
-        objExcelFile.createExcelFile(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
-        objExcelFile.modifyExcelFile(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
-        Label6.Text = "Done: check GeneratedResult.xlsx"
-        MainForm.status("Done: generated GeneratedResult.xlsx")
+        ' objExcelFile.createExcelFile_NPOI(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
+        'objExcelFile.modifyExcelFile_npoi(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
+        'Label6.Text = "Done: check GeneratedResult.xlsx"
+        'MainForm.status("Done: generated GeneratedResult.xlsx")
     End Sub
 
     Private Sub SelectBroadsheetTemplate_Click(sender As Object, e As EventArgs) Handles SelectBroadsheetTemplate.Click

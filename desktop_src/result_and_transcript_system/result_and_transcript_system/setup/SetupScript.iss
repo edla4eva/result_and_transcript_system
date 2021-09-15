@@ -59,11 +59,15 @@ Source: "..\bin\debug\samples\result.xlsx"; DestDir: "{userdocs}\{#Mydir}\sample
 ;templates
 Source: "..\bin\debug\templates\result.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\templates\broadsheet.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
+Source: "..\bin\debug\templates\broadsheet.xlsm"; DestDir: "{userdocs}\{#Mydir}\templates"
+Source: "..\bin\debug\templates\broadsheet_plain.xlsx"; DestDir: "{userdocs}\{#Mydir}\templates"
+Source: "..\bin\debug\templates\broadsheet - Copy3.xlsm"; DestDir: "{userdocs}\{#Mydir}\templates"
 ;save copy in prog path
-Source: "..\bin\debug\templates\broadsheet.xltx"; DestDir: "{app}\templates"
-Source: "..\bin\debug\templates\result.xltx"; DestDir: "{app}\templates"
-
-
+Source: "..\bin\debug\samples\sample_broadsheet.xlsm"; DestDir: "{app}\samples"
+Source: "..\bin\debug\samples\sample_result.xltx"; DestDir: "{app}\samples"
+;broadsheets
+Source: "..\bin\debug\broadsheets\broadsheet_saved.xlsm"; DestDir: "{userdocs}\{#Mydir}\broadsheets"
+Source: "..\bin\debug\results\sample_result.xlsx"; DestDir: "{userdocs}\{#Mydir}\results"
 
 ;{usercf}
 ;The path to the current user's Common Files directory. 
