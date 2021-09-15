@@ -57,10 +57,12 @@ Module ModuleGeneral
     Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
     Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM students" ' 
     'some
-    Public STR_SQL_ALL_RESULTS_WHERE As String = "SELECT id, matno, score FROM tableResults WHERE matno='{0}' order by id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
-    Public SQL_SELECT_RESULTS_WHERE_MATNO As String = " SELECT * FROM TableResults WHERE matno= '{0}'"
-    Public SQL_SELECT_ALL_RESULTS_WHERE_MATNO As String = "SELECT * FROM TableResults "
+    Public STR_SQL_ALL_RESULTS_WHERE As String = "SELECT id, matno, score FROM results WHERE matno='{0}' order by id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
+    Public SQL_SELECT_RESULTS_WHERE_MATNO As String = " SELECT * FROM results WHERE matno= '{0}'"
+    Public SQL_SELECT_ALL_RESULTS As String = "SELECT * FROM results"
     Public STR_SQL_ALL_STUDENTS_IN_DEPT As String = "SELECT * FROM students WHERE student_dept_idr={0}" ' 
+
+
 
     Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by course_code" ' 
     Public STR_SQL_COURSES_SPD_WHERE As String = "SELECT * FROM reg WHERE matno='{0}'"

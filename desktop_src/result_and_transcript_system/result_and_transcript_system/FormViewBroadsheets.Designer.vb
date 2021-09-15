@@ -47,6 +47,7 @@ Partial Class FormViewBroadsheets
         Me.Label8 = New System.Windows.Forms.Label()
         Me.ButtonRefereshListFirst = New System.Windows.Forms.Button()
         Me.LabelClosePanelModify = New System.Windows.Forms.Label()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
@@ -159,6 +160,7 @@ Partial Class FormViewBroadsheets
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonClose)
         Me.SidePanel.Controls.Add(Me.SelectBroadsheetTemplate)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonProcessBroadsheet)
@@ -316,6 +318,19 @@ Partial Class FormViewBroadsheets
         Me.LabelClosePanelModify.TabIndex = 1
         Me.LabelClosePanelModify.Text = "X"
         '
+        'ButtonClose
+        '
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 423)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 8
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
+        '
         'FormViewBroadsheets
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -327,6 +342,7 @@ Partial Class FormViewBroadsheets
         Me.Controls.Add(Me.TextBoxTemplateFileName)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.DataGridView1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormViewBroadsheets"
         Me.Text = "View Broadsheets"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -362,4 +378,5 @@ Partial Class FormViewBroadsheets
     Friend WithEvents ComboBox2 As ComboBox
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents Label6 As Label
+    Friend WithEvents ButtonClose As Button
 End Class

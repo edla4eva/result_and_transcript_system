@@ -1,9 +1,12 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.ComponentModel
+Imports MySql.Data.MySqlClient
 Public Class FormStudentsRegistration
 
     Dim strSQL As String
     Dim strConnectionString As String
     Dim ref As Integer
+
+    Dim tmpDS As DataSet
 
     Private Sub FormRooms_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.WindowState = FormWindowState.Maximized
@@ -12,29 +15,17 @@ Public Class FormStudentsRegistration
     End Sub
     Private Sub FormStudentsRegistration_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
-
-        Me.Reset()
-
-
-        'resize cols
-        resizeDatagrids("students")
-    End Sub
-    Sub Reset()
         txtStudentMATNO.Text = ""
-        'ref = CInt(CLng(Now.ToOADate * 200) + 100)
-        'mappDB.ref = ref
-        'mappDB.rDate = FormatMyDate(Now) & " " & FormatMyTime(Now)  'Now.ToShortDateString & " " & Now.ToShortTimeString
-        GetData()
+        BgWProcess.RunWorkerAsync(1)  'runs GetData()
+
+
+
     End Sub
+
     Public Sub GetData()
         Try
             mappDB.Dept = 1 'TODO
-            Dim tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, mappDB.Dept), "students")
-            dgw.DataSource = tmpDS.Tables("students").DefaultView
-            If dgw.Rows.Count > 0 Then
-                UpdateCourses(dgw.Rows(0).Cells("matno").ToString)
-            End If
-
+            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, mappDB.Dept), "students")
             'TODO: 
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -115,7 +106,13 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
-        Me.Reset()
+        btnReset.Enabled = False
+        Me.ProgressBarBS.Value = 5
+        TimerBS.Enabled = True
+        TimerBS.Start()
+
+        BgWProcess.RunWorkerAsync(1)  'runs GetData()
+
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
@@ -287,4 +284,33 @@ Public Class FormStudentsRegistration
         Next
         CheckedListBox1.Left = dLeft
     End Sub
+
+    Private Sub BgWProcess_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BgWProcess.DoWork
+        Select Case CInt(e.Argument)
+            Case 1 'all
+                Me.GetData()
+            Case 2
+
+            Case Else
+
+        End Select
+    End Sub
+
+    Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
+        ProgressBarBS.Value = (ProgressBarBS.Value + 3)
+    End Sub
+    Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
+        dgw.DataSource = tmpDS.Tables("students").DefaultView
+        If dgw.Rows.Count > 0 Then
+            UpdateCourses(dgw.Rows(0).Cells("matno").ToString)
+        End If
+
+        'resize cols
+        resizeDatagrids("students")
+        TimerBS.Stop()
+        btnReset.Enabled = True
+        Me.ProgressBarBS.Value = 100
+    End Sub
+
+
 End Class

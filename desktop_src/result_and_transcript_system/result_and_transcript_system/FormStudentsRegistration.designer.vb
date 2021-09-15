@@ -22,6 +22,7 @@ Partial Class FormStudentsRegistration
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -45,6 +46,7 @@ Partial Class FormStudentsRegistration
         Me.lblSet = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
         Me.dgv_courses = New System.Windows.Forms.DataGridView()
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.LabelAvaliable = New System.Windows.Forms.Label()
@@ -61,7 +63,9 @@ Partial Class FormStudentsRegistration
         Me.ButtonUnregister = New System.Windows.Forms.Button()
         Me.ButtonRegister = New System.Windows.Forms.Button()
         Me.LabelRef = New System.Windows.Forms.Label()
-        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
+        Me.BgWProcess = New System.ComponentModel.BackgroundWorker()
+        Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
+        Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
         CType(Me.dgw, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -272,6 +276,16 @@ Partial Class FormStudentsRegistration
         Me.Panel4.Size = New System.Drawing.Size(348, 349)
         Me.Panel4.TabIndex = 11
         '
+        'CheckedListBox1
+        '
+        Me.CheckedListBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckedListBox1.FormattingEnabled = True
+        Me.CheckedListBox1.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
+        Me.CheckedListBox1.Location = New System.Drawing.Point(104, 90)
+        Me.CheckedListBox1.Name = "CheckedListBox1"
+        Me.CheckedListBox1.Size = New System.Drawing.Size(136, 160)
+        Me.CheckedListBox1.TabIndex = 75
+        '
         'dgv_courses
         '
         Me.dgv_courses.AllowUserToAddRows = False
@@ -468,14 +482,25 @@ Partial Class FormStudentsRegistration
         Me.LabelRef.TabIndex = 74
         Me.LabelRef.Text = "Ref: #"
         '
-        'CheckedListBox1
+        'BgWProcess
         '
-        Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
-        Me.CheckedListBox1.Location = New System.Drawing.Point(104, 90)
-        Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(100, 19)
-        Me.CheckedListBox1.TabIndex = 75
+        '
+        'TimerBS
+        '
+        Me.TimerBS.Enabled = True
+        Me.TimerBS.Interval = 1000
+        '
+        'ProgressBarBS
+        '
+        Me.ProgressBarBS.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProgressBarBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
+        Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
+        Me.ProgressBarBS.Location = New System.Drawing.Point(19, 567)
+        Me.ProgressBarBS.Name = "ProgressBarBS"
+        Me.ProgressBarBS.Size = New System.Drawing.Size(659, 23)
+        Me.ProgressBarBS.TabIndex = 75
+        Me.ProgressBarBS.Value = 1
         '
         'FormStudentsRegistration
         '
@@ -483,6 +508,7 @@ Partial Class FormStudentsRegistration
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1131, 733)
+        Me.Controls.Add(Me.ProgressBarBS)
         Me.Controls.Add(Me.LabelRef)
         Me.Controls.Add(Me.TextBoxSemester)
         Me.Controls.Add(Me.Label2)
@@ -548,4 +574,7 @@ Partial Class FormStudentsRegistration
     Friend WithEvents LabelRef As Label
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents CheckedListBox1 As CheckedListBox
+    Friend WithEvents BgWProcess As System.ComponentModel.BackgroundWorker
+    Friend WithEvents TimerBS As Timer
+    Friend WithEvents ProgressBarBS As ProgressBar
 End Class

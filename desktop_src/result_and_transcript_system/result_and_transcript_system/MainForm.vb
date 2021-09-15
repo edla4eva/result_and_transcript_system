@@ -190,7 +190,7 @@
 
     Private Sub ButtonExit_Click(sender As Object, e As EventArgs) Handles ButtonExit.Click
         ActiveButton(sender, RGBColors.colorCrimson)
-        If MessageBox.Show("Are you sure you want to close the application?", "Quit", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
+        If MessageBox.Show("Are you sure you want to close this form?", "Close", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
             End
         End If
     End Sub

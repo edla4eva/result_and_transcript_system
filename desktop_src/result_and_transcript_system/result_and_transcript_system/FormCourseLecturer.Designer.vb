@@ -36,6 +36,7 @@ Partial Class FormCourseLecturer
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -165,13 +166,14 @@ Partial Class FormCourseLecturer
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonClose)
         Me.SidePanel.Controls.Add(Me.ButtonDownloadTemplate)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonUpload)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(684, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 408)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 525)
         Me.SidePanel.TabIndex = 17
         '
         'ButtonDownloadTemplate
@@ -218,11 +220,24 @@ Partial Class FormCourseLecturer
         Me.SaveFileDialog1.Filter = "Excel Files|*.xlsx"
         Me.SaveFileDialog1.RestoreDirectory = True
         '
+        'ButtonClose
+        '
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 405)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 7
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
+        '
         'FormCourseLecturer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(818, 408)
+        Me.ClientSize = New System.Drawing.Size(818, 525)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
@@ -253,4 +268,5 @@ Partial Class FormCourseLecturer
     Friend WithEvents ButtonCloud As Button
     Friend WithEvents ButtonUpload As Button
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
+    Friend WithEvents ButtonClose As Button
 End Class

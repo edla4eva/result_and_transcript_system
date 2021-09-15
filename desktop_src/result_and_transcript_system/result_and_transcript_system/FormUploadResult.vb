@@ -415,15 +415,7 @@ Public Class FormUploadResult
     End Sub
 
     Private Sub FormUploadResult_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-        If mappDB.User = "CA" Then
-            MainForm.ChangeMenu("CourseAdviser")
-        ElseIf mappDB.User = "CL" Then
-            MainForm.ChangeMenu("CourseLecturer")
-        ElseIf mappDB.User = "ST" Then
-            MainForm.ChangeMenu("Student")
-        Else
-            MainForm.ChangeMenu("User")
-        End If
+        MainForm.doCloseForm()
     End Sub
 
     Private Sub FormUploadResult_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -499,5 +491,9 @@ Public Class FormUploadResult
 
     Private Sub TextBoxCourseCode_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCourseCode.TextChanged
         ComboBoxCourseCode.SelectedIndex = ComboBoxCourseCode.FindString(TextBoxCourseCode.Text)
+    End Sub
+
+    Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
+        Me.Close()
     End Sub
 End Class

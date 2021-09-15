@@ -12,9 +12,11 @@ Public Class FormResultsTranscripts
     End Sub
 
     Private Sub reset()
-        mappDB.MATNO = "ENG1234567" 'TODO Test
+        ' mappDB.MATNO = "ENG1234567" 'TODO Test
         'GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.StaffID.ToString))
-        TextBoxGuestID.Text = mappDB.GetRecordWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
+
+        mappDB.GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
+
         mappDB.GetDataWhere(String.Format(STR_SQL_ALL_RESULTS_WHERE, mappDB.MATNO.ToString))
     End Sub
 
@@ -69,5 +71,9 @@ Public Class FormResultsTranscripts
     Private Sub FormResultsTranscripts_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
 
+    End Sub
+
+    Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
+        Me.Close()
     End Sub
 End Class

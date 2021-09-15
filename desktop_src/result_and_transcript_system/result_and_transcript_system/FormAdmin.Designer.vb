@@ -25,18 +25,19 @@ Partial Class FormAdmin
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
-        Me.Button4 = New System.Windows.Forms.Button()
+        Me.ButtonStudents = New System.Windows.Forms.Button()
         Me.ButtonResultList = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
-        Me.ButtonUser = New System.Windows.Forms.Button()
-        Me.ButtonBrowse = New System.Windows.Forms.Button()
+        Me.ButtonResults = New System.Windows.Forms.Button()
+        Me.ButtonBroadsheets = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         Me.SidePanel.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -71,30 +72,31 @@ Partial Class FormAdmin
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
-        Me.SidePanel.Controls.Add(Me.Button4)
+        Me.SidePanel.Controls.Add(Me.ButtonClose)
+        Me.SidePanel.Controls.Add(Me.ButtonStudents)
         Me.SidePanel.Controls.Add(Me.ButtonResultList)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonUpload)
-        Me.SidePanel.Controls.Add(Me.ButtonUser)
-        Me.SidePanel.Controls.Add(Me.ButtonBrowse)
+        Me.SidePanel.Controls.Add(Me.ButtonResults)
+        Me.SidePanel.Controls.Add(Me.ButtonBroadsheets)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(659, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 431)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 497)
         Me.SidePanel.TabIndex = 7
         '
-        'Button4
+        'ButtonStudents
         '
-        Me.Button4.FlatAppearance.BorderColor = System.Drawing.Color.Gray
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Button4.ForeColor = System.Drawing.Color.White
-        Me.Button4.Location = New System.Drawing.Point(0, 39)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(128, 55)
-        Me.Button4.TabIndex = 5
-        Me.Button4.Text = "Students"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.ButtonStudents.FlatAppearance.BorderColor = System.Drawing.Color.Gray
+        Me.ButtonStudents.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonStudents.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonStudents.ForeColor = System.Drawing.Color.White
+        Me.ButtonStudents.Location = New System.Drawing.Point(0, 39)
+        Me.ButtonStudents.Name = "ButtonStudents"
+        Me.ButtonStudents.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonStudents.TabIndex = 5
+        Me.ButtonStudents.Text = "Students"
+        Me.ButtonStudents.UseVisualStyleBackColor = True
         '
         'ButtonResultList
         '
@@ -135,31 +137,31 @@ Partial Class FormAdmin
         Me.ButtonUpload.Text = "Upload"
         Me.ButtonUpload.UseVisualStyleBackColor = True
         '
-        'ButtonUser
+        'ButtonResults
         '
-        Me.ButtonUser.FlatAppearance.BorderSize = 0
-        Me.ButtonUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonUser.ForeColor = System.Drawing.Color.White
-        Me.ButtonUser.Location = New System.Drawing.Point(3, 161)
-        Me.ButtonUser.Name = "ButtonUser"
-        Me.ButtonUser.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonUser.TabIndex = 1
-        Me.ButtonUser.Text = "Check Result"
-        Me.ButtonUser.UseVisualStyleBackColor = True
+        Me.ButtonResults.FlatAppearance.BorderSize = 0
+        Me.ButtonResults.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonResults.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonResults.ForeColor = System.Drawing.Color.White
+        Me.ButtonResults.Location = New System.Drawing.Point(3, 161)
+        Me.ButtonResults.Name = "ButtonResults"
+        Me.ButtonResults.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonResults.TabIndex = 1
+        Me.ButtonResults.Text = "Check Result"
+        Me.ButtonResults.UseVisualStyleBackColor = True
         '
-        'ButtonBrowse
+        'ButtonBroadsheets
         '
-        Me.ButtonBrowse.FlatAppearance.BorderSize = 0
-        Me.ButtonBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonBrowse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonBrowse.ForeColor = System.Drawing.Color.White
-        Me.ButtonBrowse.Location = New System.Drawing.Point(3, 100)
-        Me.ButtonBrowse.Name = "ButtonBrowse"
-        Me.ButtonBrowse.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonBrowse.TabIndex = 0
-        Me.ButtonBrowse.Text = "BroadSheets"
-        Me.ButtonBrowse.UseVisualStyleBackColor = True
+        Me.ButtonBroadsheets.FlatAppearance.BorderSize = 0
+        Me.ButtonBroadsheets.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonBroadsheets.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonBroadsheets.ForeColor = System.Drawing.Color.White
+        Me.ButtonBroadsheets.Location = New System.Drawing.Point(3, 100)
+        Me.ButtonBroadsheets.Name = "ButtonBroadsheets"
+        Me.ButtonBroadsheets.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonBroadsheets.TabIndex = 0
+        Me.ButtonBroadsheets.Text = "BroadSheets"
+        Me.ButtonBroadsheets.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -177,7 +179,7 @@ Partial Class FormAdmin
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.Silver
-        Me.Label2.Location = New System.Drawing.Point(12, 223)
+        Me.Label2.Location = New System.Drawing.Point(12, 256)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(199, 24)
         Me.Label2.TabIndex = 9
@@ -234,12 +236,25 @@ Partial Class FormAdmin
         Me.Label4.Text = "Results Submitted"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'ButtonClose
+        '
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 441)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 7
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
+        '
         'FormAdmin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(793, 431)
+        Me.ClientSize = New System.Drawing.Size(793, 497)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.Label2)
@@ -264,13 +279,14 @@ Partial Class FormAdmin
     Friend WithEvents ButtonResultList As Button
     Friend WithEvents ButtonCloud As Button
     Friend WithEvents ButtonUpload As Button
-    Friend WithEvents ButtonUser As Button
-    Friend WithEvents ButtonBrowse As Button
+    Friend WithEvents ButtonResults As Button
+    Friend WithEvents ButtonBroadsheets As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
-    Friend WithEvents Button4 As Button
+    Friend WithEvents ButtonStudents As Button
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents Label5 As Label
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents ButtonClose As Button
 End Class

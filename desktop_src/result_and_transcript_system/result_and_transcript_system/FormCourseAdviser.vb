@@ -49,4 +49,8 @@
     Private Sub ButtonNoOfBroadsheets_Click(sender As Object, e As EventArgs) Handles ButtonNoOfBroadsheets.Click
         ButtonBroadsheets.PerformClick()
     End Sub
+
+    Private Sub FormCourseAdviser_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        MainForm.doCloseForm()
+    End Sub
 End Class

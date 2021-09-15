@@ -43,6 +43,7 @@ Partial Class FormResultsTranscripts
         Me.ButtonTranscript = New System.Windows.Forms.Button()
         Me.ButtonCheck = New System.Windows.Forms.Button()
         Me.ButtonCalcGPA = New System.Windows.Forms.Button()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         CType(Me.dgw, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -280,12 +281,26 @@ Partial Class FormResultsTranscripts
         Me.ButtonCalcGPA.Text = "Compute GPA"
         Me.ButtonCalcGPA.UseVisualStyleBackColor = False
         '
+        'ButtonClose
+        '
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(888, 491)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 61
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
+        '
         'FormResultsTranscripts
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1011, 624)
+        Me.ClientSize = New System.Drawing.Size(1019, 624)
+        Me.Controls.Add(Me.ButtonClose)
         Me.Controls.Add(Me.ButtonCalcGPA)
         Me.Controls.Add(Me.PictureBoxImg)
         Me.Controls.Add(Me.DateTimePicker1)
@@ -330,4 +345,5 @@ Partial Class FormResultsTranscripts
     Friend WithEvents DateTimePicker1 As DateTimePicker
     Friend WithEvents PictureBoxImg As PictureBox
     Friend WithEvents ButtonCalcGPA As Button
+    Friend WithEvents ButtonClose As Button
 End Class
