@@ -131,20 +131,29 @@ Public Class ClassBroadsheets
 
         '#1 count courseCodes in result table = j
         Dim countC, countReg, countResultsBS As Integer
-        Dim coursesDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim coursesDS, coursesLevelDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim dictCoursesLevel As New Dictionary(Of Integer, String)
         Dim strSQL, strSQLJoin As String
         Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
         Dim tmpInt As Integer = -4
+        Dim scores(110) As String
+        Dim courses(110) As String
+        Dim credits(110) As Integer
+        Dim grades(110) As String
+        Dim gradePoints(110) As Integer
+        Dim passedCourses(110) As Boolean
+        Dim gpa As Double
         strSQL = "SELECT Courses.course_code, Courses.course_level, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order, Count(Courses.course_order) AS CountOfcourse_order
                   FROM Courses
                  GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
                  HAVING (((Courses.course_semester)=1) AND ((Courses.course_dept_idr)={0}) AND ((Count(Courses.course_order))>0))
                  ORDER BY Courses.course_level, Courses.course_order;" 'and level
-        'or
-        'strSQL = "SELECT course_code,course_unit FROM QueryFS_Coursers_Ordered"
+        'or'strSQL = "SELECT course_code,course_unit FROM QueryFS_Coursers_Ordered"
         coursesDS = mappDB.GetDataWhere(String.Format(strSQL, course_dept_idr), "Courses")
-        countC = coursesDS.Tables(0).Rows.Count
+        coursesLevelDS = coursesDS
+        coursesLevelDS.Tables(0).DefaultView.RowFilter = "course_level=" & course_level 'do use this for ui/ux
 
+        countC = coursesDS.Tables(0).Rows.Count
         strSQL = "SELECT reg.matno FROM reg WHERE session_idr='{0}'"    'and level=course_level 
         RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQL, session_idr), "Reg")
         countReg = RegStudentsDS.Tables(0).Rows.Count
@@ -195,6 +204,11 @@ Public Class ClassBroadsheets
         For j = 0 To countC - 1 'create columns for courses 'TODO: 1st and second
             tmpCol = New DataColumn(coursesDS.Tables(0).Rows(j).Item("course_code"), Type.GetType("System.Int32"))
             dt.Columns.Add(tmpCol)
+            credits(j) = CInt(coursesDS.Tables(0).Rows(j).Item("course_unit").ToString) 'todo: issues <110 courses
+            courses(j) = coursesDS.Tables(0).Rows(j).Item("course_code").ToString 'todo: issues <110 courses
+            If CInt(coursesDS.Tables(0).Rows(j).Item("course_level").ToString) >= CInt(course_level) Then       'level and higer level courses cannot be repeated
+                dictCoursesLevel.Add(j, coursesDS.Tables(0).Rows(j).Item("course_code").ToString)
+            End If
         Next
 
 
@@ -259,14 +273,8 @@ Public Class ClassBroadsheets
         Next    'end for  each col(ie course code)
 
 
-
-        'Now Update result in Dataset
-        If isInterrop Then  'TODO: impliment condition
-            'fml stuff special consideration for excel 
-        Else
-            'compute every thing first
-        End If
-
+        tmpCol = New DataColumn("RepeatCourses_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
         tmpCol = New DataColumn("TCF_1", Type.GetType("System.String"))
         dt.Columns.Add(tmpCol)
         tmpCol = New DataColumn("TCP_1", Type.GetType("System.String"))
@@ -277,6 +285,47 @@ Public Class ClassBroadsheets
         'others
         tmpCol = New DataColumn("Session", Type.GetType("System.String"))
         dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("GPA", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+
+
+        'Now Update result in Dataset
+        If isInterrop Then  'TODO: impliment condition
+            'fml stuff special consideration for excel 
+            'add formula
+            'Dim fsFml, ssFml As String
+            'Dim fml As String()
+            'fml = objBroadsheet.generateFormulaCO()
+            'fsFml = fml(0)
+            'ssFml = fml(1)
+
+        Else
+            'compute every thing first
+
+
+            'credits=From db query courses
+            Dim countRows As Integer = dt.Rows.Count - 1    'todo: move up
+            For i = 0 To countRows - 1
+                For j = 8 To 20 '63
+                    scores(j - 8) = dt.Rows(i).Item(j).ToString
+                    'passedCourses(j - 8) = isPassed(dt.Rows(i).Item(j).ToString)
+                Next
+                grades = getGRADES(scores, Nothing, Nothing)
+                gradePoints = getGRADESPoints(grades)
+                gpa = CalcGPA(gradePoints, credits)
+                dt.Rows(i).Item("GPA") = gpa.ToString
+                dt.Rows(i).Item("TCR_1") = TCR(grades, credits)
+                dt.Rows(i).Item("TCP_1") = TCP(grades, credits)
+
+                dt.Rows(i).Item("RepeatCourses_1") = getRepeatCourses(scores, credits, CInt(course_level), courses, dictCoursesLevel)
+                dt.Rows(i).Item("RepeatFirstSem") = dt.Rows(i).Item("RepeatCourses_1")
+
+
+                objBroadsheet.progress = 80 + (i / countRows * 16)  'max 80+16 = 96%
+            Next
+
+        End If
+
 
         objBroadsheet.progress = 97 'update progress
         ds.Tables.Add(dt)
@@ -780,22 +829,267 @@ Public Class ClassBroadsheets
 
     '    Return True
     'End Function
-    Sub ExcelPDF()
-        'Dim workbook As New ExcelInterop.Workbook()
-        'workbook.LoadFromFile("D:\test.xlsx")
+    Function getGRADES(strScore As String(), rulesMax As Integer(), rulesMin As Integer()) As String()
+        Dim tmpGrades As String()
+        ReDim tmpGrades(strScore.Count - 1)
+        For i = 0 To strScore.Count - 1
+            tmpGrades(i) = getGRADE(strScore(i), rulesMax, rulesMin)
+        Next
+        Return tmpGrades
 
-        'workbook.ActiveSheet.ExportAsFixedFormat(xlTypePDF, "D:\test.pdf")
+    End Function
+    Function getGRADE(strScore As String, rulesMax As Integer(), rulesMin As Integer()) As String
+        Dim score As Integer
+        Dim dGrade As String
+        Try
+            rulesMax = {100, 69, 59, 49, 44, 39}    'todo: use params
+            rulesMin = {70, 60, 50, 45, 40, 0}
+            dGrade = "**"
+            'error chechs
+            If strScore = "" Then
+                Return ""
+                Exit Function
+            ElseIf (strScore = "ABS") Then
+                Return "ABS"
+                Exit Function
+            ElseIf (strScore = "NR") Then
+                Return "NR"
+                Exit Function
+            ElseIf (strScore = "NA") Or (strScore = "N/A") Then
+                Return "NA"
+                Exit Function
+            End If
+
+            score = toNum(strScore)
+
+            If score = -4 Then
+                Return "#N"
+                Exit Function
+            End If
+
+            Dim amax, bmax, cmax, dmax, emax, fmax, amin, bmin, cmin, dmin, emin, fmin As Integer
+
+            'Get max
+            amax = rulesMax(0)
+            bmax = rulesMax(1)
+            cmax = rulesMax(2)
+            dmax = rulesMax(3)
+            emax = rulesMax(4)
+            fmax = rulesMax(5)
+            'Get min
+            amin = rulesMin(0)
+            bmin = rulesMin(1)
+            cmin = rulesMin(2)
+            dmin = rulesMin(3)
+            emin = rulesMin(4)
+            fmin = rulesMin(5)
+
+            If score >= amin And score <= amax Then
+                dGrade = "A"
+            ElseIf score >= bmin And score <= bmax Then
+                dGrade = "B"
+            ElseIf score >= cmin And score <= cmax Then
+                dGrade = "C"
+            ElseIf score >= dmin And score <= dmax Then
+                dGrade = "D"
+            ElseIf score >= emin And score <= emax Then
+                dGrade = "E"
+            ElseIf score >= fmin And score <= fmax Then
+                dGrade = "F"
+            ElseIf score = -1 Then
+                dGrade = "ABS"
+            ElseIf score = -2 Then
+                dGrade = "NR"
+            ElseIf score = -3 Then
+                dGrade = "NA"
+            ElseIf score < -3 Then
+                dGrade = ""
+            Else
+                dGrade = ""
+            End If
+
+            Return dGrade
 
 
+        Catch ex As Exception
+
+        End Try
+
+    End Function
+    Function getGRADESPoints(strGrades As String()) As Integer()
+        Dim tmpGradePoints As Integer()
+        ReDim tmpGradePoints(strGrades.Count - 1)
+        For i = 0 To strGrades.Count - 1
+            tmpGradePoints(i) = getGradePoint(strGrades(i))
+        Next
+        Return tmpGradePoints
+
+    End Function
+    Function getGradePoint(strScore As String) As Integer
+        Dim score As Integer
+        Dim dPoint As String
+        ' score = strScore
+        Try
+            If strScore = "A" Then
+                dPoint = "5"
+            ElseIf strScore = "B" Then
+                dPoint = "4"
+            ElseIf strScore = "C" Then
+                dPoint = "3"
+            ElseIf strScore = "D" Then
+                dPoint = "2"
+            ElseIf strScore = "E" Then
+                dPoint = "1"
+            ElseIf strScore = "F" Then
+                dPoint = "0"
+            ElseIf strScore = "ABS" Or strScore = "NR" Or strScore = "NA" Then
+                dPoint = "0"
+            ElseIf strScore < "" Then
+                dPoint = "0"
+            Else
+                dPoint = "0"
+            End If
+
+            Return CInt(dPoint)
 
 
-    End Sub
-    'Option Strict Off 'Required for Late Binding
-    Sub ExcelPDFLateBinding()
-        Dim xl As Object
-        xl = CreateObject("Excel.Application")
-        Dim xwb As Object = xl.Workbooks.Open("D:\test.xlsx")
-        xwb.ActiveSheet.ExportAsFixedFormat(0, "D:\sample.pdf")
-        xl.Quit()
-    End Sub
+        Catch ex As Exception
+
+        End Try
+
+    End Function
+    Function toNum(str As String) As Integer
+        Try
+
+            Dim strR As String = ""
+            Dim i As Integer
+
+            For i = 1 To Len(str)
+                Select Case Asc(Mid(str, i, 1))
+                    Case 48 To 57
+                        strR = strR & Mid(str, i, 1)
+                End Select
+            Next
+            If str = "" Then strR = -4
+            Return CInt(strR)
+        Catch ex As Exception
+            Return -4
+        End Try
+
+    End Function
+    Function IsRegisteredGrade(dGrade As String) As Boolean
+        Try
+
+
+            If dGrade = "R" Then
+                Return True        'error
+            ElseIf dGrade = "NR" Or dGrade = "NA" Or dGrade = "" Then
+                Return False
+            Else
+                Return True
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Function
+    Function IsRegisteredScore(dscore As String) As Boolean
+        Try
+
+            Dim dGrade As String = getGRADE(dscore, Nothing, Nothing)
+
+            Return IsRegisteredGrade(dGrade)        'error
+
+        Catch ex As Exception
+
+        End Try
+    End Function
+    Function isPassed(dScore As Integer, Optional passScore As Integer = 40) As Boolean
+        Try
+            If dScore < 0 Then
+                Return False        'error
+                Exit Function
+            ElseIf dScore >= passScore Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+    Function getRegisteredCourse(dScore As String) As Boolean
+        Try
+            If dScore = "" Or dScore = "NR" Or dScore = "NA" Then
+                Return False        'error
+            ElseIf dScore = "R" Then
+                Return True
+            Else
+                Return True
+            End If
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+    Function getRepeatCourses(scores As String(), dCredit As Integer(), dLevel As Integer, dCourses As String(), dLevelCourses As Dictionary(Of Integer, String)) As String
+        Dim tmpStr As String = ""
+
+        'dLevelCourses.Add(1, "GST111")
+        'dLevelCourses.Add(2, "GST112")
+        '...
+        'dLevelCourses.Add(3, "MEE211")
+
+        If Not dLevelCourses.ContainsValue("GST111") Then Debug.Print("not there")  'if it is not a level course, it can appear in repeated courses
+
+        Try
+            For i = 0 To scores.Count - 1
+                If IsRegisteredScore(scores(i)) And Not dLevelCourses.ContainsValue(dCourses(i)) Then
+                    If tmpStr = "" Then
+                        tmpStr = tmpStr & dCourses(i) & "/" & dCredit(i) & "/" & scores(i)   'avoid leading ","
+                    Else
+                        tmpStr = tmpStr & ", " & dCourses(i) & "/" & dCredit(i) & "/" & scores(i)
+                    End If
+
+                End If
+            Next
+            Return tmpStr
+        Catch ex As Exception
+            Return -4
+        End Try
+    End Function
+    Function TCP(scores As String(), dCredit As Integer()) As Integer
+        Dim sumTCP As Integer
+        Try
+            sumTCP = 0
+            For i = 0 To scores.Count - 1
+                If isPassed(toNum(scores(i))) Then sumTCP = sumTCP + dCredit(i)
+            Next
+            Return sumTCP
+
+        Catch ex As Exception
+            Return -4
+        End Try
+    End Function
+    Function TCR(dGrade As String(), dCredit As Integer()) As Integer
+        Dim sumTCP As Integer
+        Try
+            sumTCP = 0
+            For i = 0 To dGrade.Count - 1
+                If IsRegisteredGrade(dGrade(i)) Then sumTCP = sumTCP + dCredit(i)
+            Next
+            Return sumTCP
+
+        Catch ex As Exception
+            Return -4
+        End Try
+    End Function
+    Function CalcGPA(gradePoints As Integer(), credits As Integer()) As Double
+        Dim tmpGPA As Double = 0
+        Dim tmpCr As Double = 0
+        For i = 0 To gradePoints.Count - 1
+            tmpGPA = tmpGPA + gradePoints(i)
+            tmpCr = tmpCr + credits(i)
+        Next
+        If tmpCr > 0 Then tmpGPA = tmpGPA / tmpCr
+        Return tmpGPA
+    End Function
 End Class

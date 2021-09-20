@@ -15,13 +15,36 @@ Public Class FormGenerateBroadsheet
 
     Private Sub FormGenerateBroadsheet_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
-
-
+        Me.DataGridViewBroadSheet.BackgroundColor = RGBColors.colorBlack2
+        Me.DataGridViewBroadSheet.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
+        Me.DataGridViewBroadSheet.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
     End Sub
 
     Private Sub ButtonProcessBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonProcessBroadsheet.Click
-        PanelMenu.Visible = True
+        ButtonProcessBroadsheet.Enabled = False
+        TimerBS.Enabled = True
+        TimerBS.Start()
+        course_dept_idr = 1 '  ComboBoxDepartments.SelectedIndex + 1
+        session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
+        course_level = TextBoxLevel.Text '.SelectedItem.ToString  'not databound
+        objBroadsheet.broadsheetSemester = 2
 
+        If RadioButtonUseBuiltIn.Checked = True Then
+            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
+            'get broadsheetDatta from result and students table
+            BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
+        ElseIf RadioButtonUseExcel.Checked = True Then
+            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
+            'get broadsheetDatta from result and students table
+            BgWProcess.RunWorkerAsync(1)  'runs objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData().Tables(0).DefaultView
+        ElseIf RadioButtonUseBuiltInFormula.Checked = True Then
+            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
+            'get broadsheetDatta from result and students table
+            BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
+
+        Else
+
+        End If
     End Sub
     Private Sub processBroadsheetExcelInteropMethod()   'todo: orphaned sub
         Dim tmpDS As DataSet
@@ -175,8 +198,10 @@ Public Class FormGenerateBroadsheet
                 objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, True)
         'objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(1.ToString, "2018/2019", 100.ToString)
 
-            Case 2
+            Case 2  'use formula
                 objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
+
+
             Case Else
 
         End Select
@@ -210,8 +235,8 @@ Public Class FormGenerateBroadsheet
         'My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm", True)
         'replace template with fresh copy
 
-        MsgBox("Done: GeneratedResultBroadsheet.xlsm " & My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx")
-        Me.TextBoxTemplateFileName.Text = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx"
+        MsgBox("Done: GeneratedResultBroadsheet - " & objBroadsheet.processedBroadsheetFileName)
+        Me.TextBoxTemplateFileName.Text = objBroadsheet.processedBroadsheetFileName
         ButtonExportToExcel.Enabled = True
         TimerBS.Stop()
         ButtonProcessBroadsheet.Enabled = True
@@ -258,9 +283,13 @@ Public Class FormGenerateBroadsheet
 
 
         If MessageBox.Show("Are you sure you want to expoer to excel? Click yes to use Exce, Click No to create file without launching Excel", "Export", MessageBoxButtons.YesNoCancel) = MsgBoxResult.Yes Then
+            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm"
+
             bgwExportToExcel.RunWorkerAsync(1)  'runs  objBroadsheet.updateExcelBroadSheetInterop(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", DataGridViewBroadSheet.DataSource)
 
         Else
+            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx"
+
             bgwExportToExcel.RunWorkerAsync(2)
         End If
 
@@ -335,63 +364,7 @@ Public Class FormGenerateBroadsheet
         TextBoxSession.Text = ComboBoxSessions.Items(0).ToString
     End Sub
 
-    Private Sub ButtonClosePanelMenu_Click(sender As Object, e As EventArgs) Handles ButtonClosePanelMenu.Click
-        PanelMenu.Visible = False
 
-    End Sub
-
-    Private Sub ButtonProcessExcelInteropPlain_Click(sender As Object, e As EventArgs) Handles ButtonProcessExcelInteropPlain.Click
-
-        ButtonProcessBroadsheet.Enabled = False
-        TimerBS.Enabled = True
-        TimerBS.Start()
-        objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
-        objBroadsheet.broadsheetSemester = 2
-
-        'get broadsheetDatta from result and students table
-        course_dept_idr = 1 '  ComboBoxDepartments.SelectedIndex + 1
-        session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
-        course_level = TextBoxLevel.Text '.SelectedItem.ToString  'not databound
-
-        ' objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level)
-        'objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(1.ToString, "2018/2019", 100.ToString)
-        BgWProcess.RunWorkerAsync(1)  'runs objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData().Tables(0).DefaultView
-
-
-        ' DataGridView1.DataSource = objBroadsheet.createBroadsheetData().Tables(0).DefaultView
-
-        'add formula
-        'Dim fsFml, ssFml As String
-        'Dim fml As String()
-        'fml = objBroadsheet.generateFormulaCO()
-        'fsFml = fml(0)
-        'ssFml = fml(1)
-        'objExcelFile.excelFileName = PROG_DIRECTORY & "\templates\broadsheet.xltx"
-        '##-----METHOD One Interop
-        'processBroadsheetExcelInteropMethod()
-
-        'objExcelFile.excelFileName = PROG_DIRECTORY & "\samples\broadsheet.xlsx"
-        '##-----Method TWO - file
-
-
-        'DataGridViewBroadSheet.DataSource = objExcelFile.processBroadsheetFileMethod().Tables(0).DefaultView
-        'DataGridViewBroadSheet.Refresh()
-        ' MsgBox("done updating")
-
-    End Sub
-
-    Private Sub ButtonprocessExceFilePlain_Click(sender As Object, e As EventArgs) Handles ButtonprocessExceFilePlain.Click
-        ButtonProcessBroadsheet.Enabled = False
-        TimerBS.Enabled = True
-        TimerBS.Start()
-        objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
-        objBroadsheet.broadsheetSemester = 2
-        'get broadsheetDatta from result and students table
-        course_dept_idr = 1 '  ComboBoxDepartments.SelectedIndex + 1
-        session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
-        course_level = TextBoxLevel.Text '.SelectedItem.ToString  'not databound
-        BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
-    End Sub
 
     Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
@@ -399,6 +372,23 @@ Public Class FormGenerateBroadsheet
 
     Private Sub FormGenerateBroadsheet_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
+    End Sub
+
+    Private Sub UpgradeTo40ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeTo40ToolStripMenuItem.Click
+        If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
+            DataGridViewBroadSheet.CurrentCell().Value = 40
+
+            'effect change in audit dgv
+            'DataGridViewBroadSheet_audit.rows(currentcell.rowindex).cell(currentcekk.columnindex).value = "Ugraded from x to 40 by CA"
+        End If
+    End Sub
+
+    Private Sub ButtonExportPDF_Click(sender As Object, e As EventArgs) Handles ButtonExportPDF.Click
+        Dim obj As New ClassPDF
+        If My.Computer.FileSystem.FileExists(objBroadsheet.processedBroadsheetFileName) Then
+            obj.ExcelPDFLateBinding()
+            MsgBox("Saved as PDF in: " & objBroadsheet.processedBroadsheetFileName)
+        End If
     End Sub
 End Class
 

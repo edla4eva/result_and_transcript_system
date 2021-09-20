@@ -23,16 +23,23 @@ Partial Class FormGenerateBroadsheet
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DataGridViewBroadSheet = New System.Windows.Forms.DataGridView()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.UpgradeTo40ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UpgradeWith1MarkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UpgradeWith2MarksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChangeToToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripTextBox1 = New System.Windows.Forms.ToolStripTextBox()
+        Me.ApplyChangeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxDepartment = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -45,12 +52,7 @@ Partial Class FormGenerateBroadsheet
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
         Me.ComboBoxLevel = New System.Windows.Forms.ComboBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
-        Me.PanelMenu = New System.Windows.Forms.Panel()
-        Me.ButtonProcessExcelInteropPlain = New System.Windows.Forms.Button()
-        Me.ButtonClosePanelMenu = New System.Windows.Forms.Button()
-        Me.ButtonprocessExcelFileFormula = New System.Windows.Forms.Button()
-        Me.ButtonprocessExcelInteropFormula = New System.Windows.Forms.Button()
-        Me.ButtonprocessExceFilePlain = New System.Windows.Forms.Button()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonExportPDF = New System.Windows.Forms.Button()
         Me.ButtonExportToExcel = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -63,10 +65,10 @@ Partial Class FormGenerateBroadsheet
         Me.Label6 = New System.Windows.Forms.Label()
         Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
         Me.PanelModify = New System.Windows.Forms.Panel()
-        Me.ButtonApplyModification = New System.Windows.Forms.Button()
-        Me.ButtonRefereshListSecond = New System.Windows.Forms.Button()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.ListBox2 = New System.Windows.Forms.ListBox()
+        Me.RadioButtonUseBuiltInFormula = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonUseExcelWithFormula = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonUseBuiltIn = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonUseExcel = New System.Windows.Forms.RadioButton()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.ButtonRefereshListFirst = New System.Windows.Forms.Button()
         Me.LabelClosePanelModify = New System.Windows.Forms.Label()
@@ -81,10 +83,9 @@ Partial Class FormGenerateBroadsheet
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.DataGridViewTemp = New System.Windows.Forms.DataGridView()
-        Me.ButtonClose = New System.Windows.Forms.Button()
         CType(Me.DataGridViewBroadSheet, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.SidePanel.SuspendLayout()
-        Me.PanelMenu.SuspendLayout()
         Me.PanelModify.SuspendLayout()
         CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridViewTemp, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -92,34 +93,78 @@ Partial Class FormGenerateBroadsheet
         '
         'DataGridViewBroadSheet
         '
-        DataGridViewCellStyle19.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle19.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewBroadSheet.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle10.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewBroadSheet.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle10
         Me.DataGridViewBroadSheet.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridViewBroadSheet.BackgroundColor = System.Drawing.Color.Silver
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewBroadSheet.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewBroadSheet.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
         Me.DataGridViewBroadSheet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle21.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle21.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle21.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewBroadSheet.DefaultCellStyle = DataGridViewCellStyle21
+        Me.DataGridViewBroadSheet.ContextMenuStrip = Me.ContextMenuStrip1
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        DataGridViewCellStyle12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle12.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewBroadSheet.DefaultCellStyle = DataGridViewCellStyle12
         Me.DataGridViewBroadSheet.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewBroadSheet.Location = New System.Drawing.Point(29, 158)
         Me.DataGridViewBroadSheet.Name = "DataGridViewBroadSheet"
         Me.DataGridViewBroadSheet.Size = New System.Drawing.Size(724, 235)
         Me.DataGridViewBroadSheet.TabIndex = 9
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.UpgradeTo40ToolStripMenuItem, Me.UpgradeWith1MarkToolStripMenuItem, Me.UpgradeWith2MarksToolStripMenuItem, Me.ChangeToToolStripMenuItem, Me.ToolStripTextBox1, Me.ApplyChangeToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(190, 139)
+        Me.ContextMenuStrip1.Text = "Action"
+        '
+        'UpgradeTo40ToolStripMenuItem
+        '
+        Me.UpgradeTo40ToolStripMenuItem.Name = "UpgradeTo40ToolStripMenuItem"
+        Me.UpgradeTo40ToolStripMenuItem.Size = New System.Drawing.Size(189, 22)
+        Me.UpgradeTo40ToolStripMenuItem.Text = "Upgrade to 40"
+        '
+        'UpgradeWith1MarkToolStripMenuItem
+        '
+        Me.UpgradeWith1MarkToolStripMenuItem.Name = "UpgradeWith1MarkToolStripMenuItem"
+        Me.UpgradeWith1MarkToolStripMenuItem.Size = New System.Drawing.Size(189, 22)
+        Me.UpgradeWith1MarkToolStripMenuItem.Text = "Upgrade with 1 mark"
+        '
+        'UpgradeWith2MarksToolStripMenuItem
+        '
+        Me.UpgradeWith2MarksToolStripMenuItem.Name = "UpgradeWith2MarksToolStripMenuItem"
+        Me.UpgradeWith2MarksToolStripMenuItem.Size = New System.Drawing.Size(189, 22)
+        Me.UpgradeWith2MarksToolStripMenuItem.Text = "Upgrade with 2 marks"
+        '
+        'ChangeToToolStripMenuItem
+        '
+        Me.ChangeToToolStripMenuItem.Name = "ChangeToToolStripMenuItem"
+        Me.ChangeToToolStripMenuItem.Size = New System.Drawing.Size(189, 22)
+        Me.ChangeToToolStripMenuItem.Text = "Change to:"
+        '
+        'ToolStripTextBox1
+        '
+        Me.ToolStripTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
+        Me.ToolStripTextBox1.Size = New System.Drawing.Size(100, 23)
+        '
+        'ApplyChangeToolStripMenuItem
+        '
+        Me.ApplyChangeToolStripMenuItem.Name = "ApplyChangeToolStripMenuItem"
+        Me.ApplyChangeToolStripMenuItem.Size = New System.Drawing.Size(189, 22)
+        Me.ApplyChangeToolStripMenuItem.Text = "Apply Change"
         '
         'Label2
         '
@@ -220,7 +265,6 @@ Partial Class FormGenerateBroadsheet
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.SidePanel.Controls.Add(Me.ButtonClose)
-        Me.SidePanel.Controls.Add(Me.PanelMenu)
         Me.SidePanel.Controls.Add(Me.ButtonExportPDF)
         Me.SidePanel.Controls.Add(Me.ButtonExportToExcel)
         Me.SidePanel.Controls.Add(Me.Button3)
@@ -236,86 +280,18 @@ Partial Class FormGenerateBroadsheet
         Me.SidePanel.Size = New System.Drawing.Size(134, 660)
         Me.SidePanel.TabIndex = 27
         '
-        'PanelMenu
+        'ButtonClose
         '
-        Me.PanelMenu.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.PanelMenu.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
-        Me.PanelMenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PanelMenu.Controls.Add(Me.ButtonProcessExcelInteropPlain)
-        Me.PanelMenu.Controls.Add(Me.ButtonClosePanelMenu)
-        Me.PanelMenu.Controls.Add(Me.ButtonprocessExcelFileFormula)
-        Me.PanelMenu.Controls.Add(Me.ButtonprocessExcelInteropFormula)
-        Me.PanelMenu.Controls.Add(Me.ButtonprocessExceFilePlain)
-        Me.PanelMenu.Location = New System.Drawing.Point(6, 210)
-        Me.PanelMenu.Name = "PanelMenu"
-        Me.PanelMenu.Size = New System.Drawing.Size(125, 321)
-        Me.PanelMenu.TabIndex = 35
-        Me.PanelMenu.Visible = False
-        '
-        'ButtonProcessExcelInteropPlain
-        '
-        Me.ButtonProcessExcelInteropPlain.FlatAppearance.BorderColor = System.Drawing.Color.Gray
-        Me.ButtonProcessExcelInteropPlain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonProcessExcelInteropPlain.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonProcessExcelInteropPlain.ForeColor = System.Drawing.Color.White
-        Me.ButtonProcessExcelInteropPlain.Location = New System.Drawing.Point(3, 14)
-        Me.ButtonProcessExcelInteropPlain.Name = "ButtonProcessExcelInteropPlain"
-        Me.ButtonProcessExcelInteropPlain.Size = New System.Drawing.Size(124, 55)
-        Me.ButtonProcessExcelInteropPlain.TabIndex = 5
-        Me.ButtonProcessExcelInteropPlain.Text = "Use Excel App"
-        Me.ButtonProcessExcelInteropPlain.UseVisualStyleBackColor = True
-        '
-        'ButtonClosePanelMenu
-        '
-        Me.ButtonClosePanelMenu.FlatAppearance.BorderSize = 0
-        Me.ButtonClosePanelMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonClosePanelMenu.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonClosePanelMenu.ForeColor = System.Drawing.Color.White
-        Me.ButtonClosePanelMenu.Location = New System.Drawing.Point(-1, 258)
-        Me.ButtonClosePanelMenu.Name = "ButtonClosePanelMenu"
-        Me.ButtonClosePanelMenu.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonClosePanelMenu.TabIndex = 3
-        Me.ButtonClosePanelMenu.Text = "Cancel"
-        Me.ButtonClosePanelMenu.UseVisualStyleBackColor = True
-        '
-        'ButtonprocessExcelFileFormula
-        '
-        Me.ButtonprocessExcelFileFormula.FlatAppearance.BorderSize = 0
-        Me.ButtonprocessExcelFileFormula.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonprocessExcelFileFormula.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonprocessExcelFileFormula.ForeColor = System.Drawing.Color.White
-        Me.ButtonprocessExcelFileFormula.Location = New System.Drawing.Point(3, 205)
-        Me.ButtonprocessExcelFileFormula.Name = "ButtonprocessExcelFileFormula"
-        Me.ButtonprocessExcelFileFormula.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonprocessExcelFileFormula.TabIndex = 2
-        Me.ButtonprocessExcelFileFormula.Text = "Built-in Formula"
-        Me.ButtonprocessExcelFileFormula.UseVisualStyleBackColor = True
-        '
-        'ButtonprocessExcelInteropFormula
-        '
-        Me.ButtonprocessExcelInteropFormula.FlatAppearance.BorderSize = 0
-        Me.ButtonprocessExcelInteropFormula.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonprocessExcelInteropFormula.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonprocessExcelInteropFormula.ForeColor = System.Drawing.Color.White
-        Me.ButtonprocessExcelInteropFormula.Location = New System.Drawing.Point(3, 149)
-        Me.ButtonprocessExcelInteropFormula.Name = "ButtonprocessExcelInteropFormula"
-        Me.ButtonprocessExcelInteropFormula.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonprocessExcelInteropFormula.TabIndex = 1
-        Me.ButtonprocessExcelInteropFormula.Text = "Excel Formula"
-        Me.ButtonprocessExcelInteropFormula.UseVisualStyleBackColor = True
-        '
-        'ButtonprocessExceFilePlain
-        '
-        Me.ButtonprocessExceFilePlain.FlatAppearance.BorderSize = 0
-        Me.ButtonprocessExceFilePlain.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonprocessExceFilePlain.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonprocessExceFilePlain.ForeColor = System.Drawing.Color.White
-        Me.ButtonprocessExceFilePlain.Location = New System.Drawing.Point(3, 75)
-        Me.ButtonprocessExceFilePlain.Name = "ButtonprocessExceFilePlain"
-        Me.ButtonprocessExceFilePlain.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonprocessExceFilePlain.TabIndex = 0
-        Me.ButtonprocessExceFilePlain.Text = "Use Built-in App"
-        Me.ButtonprocessExceFilePlain.UseVisualStyleBackColor = True
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(6, 602)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 36
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
         '
         'ButtonExportPDF
         '
@@ -431,7 +407,7 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonAdjustTemplate.Name = "ButtonAdjustTemplate"
         Me.ButtonAdjustTemplate.Size = New System.Drawing.Size(128, 55)
         Me.ButtonAdjustTemplate.TabIndex = 0
-        Me.ButtonAdjustTemplate.Text = "Adjust Template"
+        Me.ButtonAdjustTemplate.Text = "Options"
         Me.ButtonAdjustTemplate.UseVisualStyleBackColor = True
         '
         'Label6
@@ -460,10 +436,10 @@ Partial Class FormGenerateBroadsheet
         Me.PanelModify.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PanelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PanelModify.Controls.Add(Me.ButtonApplyModification)
-        Me.PanelModify.Controls.Add(Me.ButtonRefereshListSecond)
-        Me.PanelModify.Controls.Add(Me.Label7)
-        Me.PanelModify.Controls.Add(Me.ListBox2)
+        Me.PanelModify.Controls.Add(Me.RadioButtonUseBuiltInFormula)
+        Me.PanelModify.Controls.Add(Me.RadioButtonUseExcelWithFormula)
+        Me.PanelModify.Controls.Add(Me.RadioButtonUseBuiltIn)
+        Me.PanelModify.Controls.Add(Me.RadioButtonUseExcel)
         Me.PanelModify.Controls.Add(Me.Label8)
         Me.PanelModify.Controls.Add(Me.ButtonRefereshListFirst)
         Me.PanelModify.Controls.Add(Me.LabelClosePanelModify)
@@ -474,57 +450,52 @@ Partial Class FormGenerateBroadsheet
         Me.PanelModify.TabIndex = 30
         Me.PanelModify.Visible = False
         '
-        'ButtonApplyModification
+        'RadioButtonUseBuiltInFormula
         '
-        Me.ButtonApplyModification.FlatAppearance.BorderColor = System.Drawing.Color.Gray
-        Me.ButtonApplyModification.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonApplyModification.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonApplyModification.ForeColor = System.Drawing.Color.White
-        Me.ButtonApplyModification.Location = New System.Drawing.Point(444, 59)
-        Me.ButtonApplyModification.Name = "ButtonApplyModification"
-        Me.ButtonApplyModification.Size = New System.Drawing.Size(55, 34)
-        Me.ButtonApplyModification.TabIndex = 11
-        Me.ButtonApplyModification.Text = "Apply"
-        Me.ButtonApplyModification.UseVisualStyleBackColor = True
+        Me.RadioButtonUseBuiltInFormula.AutoSize = True
+        Me.RadioButtonUseBuiltInFormula.Location = New System.Drawing.Point(8, 35)
+        Me.RadioButtonUseBuiltInFormula.Name = "RadioButtonUseBuiltInFormula"
+        Me.RadioButtonUseBuiltInFormula.Size = New System.Drawing.Size(153, 17)
+        Me.RadioButtonUseBuiltInFormula.TabIndex = 15
+        Me.RadioButtonUseBuiltInFormula.Text = "UseBuilt-in Ap with Formula"
+        Me.RadioButtonUseBuiltInFormula.UseVisualStyleBackColor = True
         '
-        'ButtonRefereshListSecond
+        'RadioButtonUseExcelWithFormula
         '
-        Me.ButtonRefereshListSecond.FlatAppearance.BorderColor = System.Drawing.Color.Gray
-        Me.ButtonRefereshListSecond.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonRefereshListSecond.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonRefereshListSecond.ForeColor = System.Drawing.Color.White
-        Me.ButtonRefereshListSecond.Location = New System.Drawing.Point(212, 58)
-        Me.ButtonRefereshListSecond.Name = "ButtonRefereshListSecond"
-        Me.ButtonRefereshListSecond.Size = New System.Drawing.Size(55, 34)
-        Me.ButtonRefereshListSecond.TabIndex = 10
-        Me.ButtonRefereshListSecond.Text = "Referesh"
-        Me.ButtonRefereshListSecond.UseVisualStyleBackColor = True
+        Me.RadioButtonUseExcelWithFormula.AutoSize = True
+        Me.RadioButtonUseExcelWithFormula.Location = New System.Drawing.Point(8, 95)
+        Me.RadioButtonUseExcelWithFormula.Name = "RadioButtonUseExcelWithFormula"
+        Me.RadioButtonUseExcelWithFormula.Size = New System.Drawing.Size(154, 17)
+        Me.RadioButtonUseExcelWithFormula.TabIndex = 14
+        Me.RadioButtonUseExcelWithFormula.Text = "Use Excel App with Fomula"
+        Me.RadioButtonUseExcelWithFormula.UseVisualStyleBackColor = True
         '
-        'Label7
+        'RadioButtonUseBuiltIn
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(210, 8)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(78, 13)
-        Me.Label7.TabIndex = 9
-        Me.Label7.Text = "2nd Semenster"
+        Me.RadioButtonUseBuiltIn.AutoSize = True
+        Me.RadioButtonUseBuiltIn.Checked = True
+        Me.RadioButtonUseBuiltIn.Location = New System.Drawing.Point(8, 12)
+        Me.RadioButtonUseBuiltIn.Name = "RadioButtonUseBuiltIn"
+        Me.RadioButtonUseBuiltIn.Size = New System.Drawing.Size(100, 17)
+        Me.RadioButtonUseBuiltIn.TabIndex = 13
+        Me.RadioButtonUseBuiltIn.TabStop = True
+        Me.RadioButtonUseBuiltIn.Text = "Use Built-in App"
+        Me.RadioButtonUseBuiltIn.UseVisualStyleBackColor = True
         '
-        'ListBox2
+        'RadioButtonUseExcel
         '
-        Me.ListBox2.AllowDrop = True
-        Me.ListBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ListBox2.FormattingEnabled = True
-        Me.ListBox2.ItemHeight = 16
-        Me.ListBox2.Items.AddRange(New Object() {"Drag", "CourseCodes", "To", "Sort"})
-        Me.ListBox2.Location = New System.Drawing.Point(289, 8)
-        Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(120, 84)
-        Me.ListBox2.TabIndex = 8
+        Me.RadioButtonUseExcel.AutoSize = True
+        Me.RadioButtonUseExcel.Location = New System.Drawing.Point(8, 71)
+        Me.RadioButtonUseExcel.Name = "RadioButtonUseExcel"
+        Me.RadioButtonUseExcel.Size = New System.Drawing.Size(95, 17)
+        Me.RadioButtonUseExcel.TabIndex = 12
+        Me.RadioButtonUseExcel.Text = "Use Excel App"
+        Me.RadioButtonUseExcel.UseVisualStyleBackColor = True
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 7)
+        Me.Label8.Location = New System.Drawing.Point(209, 5)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(79, 13)
         Me.Label8.TabIndex = 7
@@ -536,7 +507,7 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonRefereshListFirst.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRefereshListFirst.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonRefereshListFirst.ForeColor = System.Drawing.Color.White
-        Me.ButtonRefereshListFirst.Location = New System.Drawing.Point(27, 56)
+        Me.ButtonRefereshListFirst.Location = New System.Drawing.Point(423, 83)
         Me.ButtonRefereshListFirst.Name = "ButtonRefereshListFirst"
         Me.ButtonRefereshListFirst.Size = New System.Drawing.Size(55, 34)
         Me.ButtonRefereshListFirst.TabIndex = 6
@@ -560,9 +531,9 @@ Partial Class FormGenerateBroadsheet
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 16
         Me.ListBox1.Items.AddRange(New Object() {"Drag", "CourseCodes", "To", "Sort"})
-        Me.ListBox1.Location = New System.Drawing.Point(84, 6)
+        Me.ListBox1.Location = New System.Drawing.Point(294, 6)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(120, 84)
+        Me.ListBox1.Size = New System.Drawing.Size(120, 116)
         Me.ListBox1.TabIndex = 0
         '
         'ProgressBarBS
@@ -587,29 +558,29 @@ Partial Class FormGenerateBroadsheet
         '
         'DataGridViewBroadsheetAudit
         '
-        DataGridViewCellStyle22.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle22.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewBroadsheetAudit.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewBroadsheetAudit.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridViewBroadsheetAudit.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridViewBroadsheetAudit.BackgroundColor = System.Drawing.Color.Silver
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle23.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewBroadsheetAudit.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewBroadsheetAudit.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridViewBroadsheetAudit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle24.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle24.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle24.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewBroadsheetAudit.DefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewBroadsheetAudit.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridViewBroadsheetAudit.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewBroadsheetAudit.Location = New System.Drawing.Point(29, 158)
         Me.DataGridViewBroadsheetAudit.Name = "DataGridViewBroadsheetAudit"
@@ -650,47 +621,34 @@ Partial Class FormGenerateBroadsheet
         '
         'DataGridViewTemp
         '
-        DataGridViewCellStyle25.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle25.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTemp.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle13.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle13.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTemp.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle13
         Me.DataGridViewTemp.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridViewTemp.BackgroundColor = System.Drawing.Color.Silver
-        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle26.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewTemp.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewTemp.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle14
         Me.DataGridViewTemp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle27.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle27.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle27.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle27.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewTemp.DefaultCellStyle = DataGridViewCellStyle27
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle15.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewTemp.DefaultCellStyle = DataGridViewCellStyle15
         Me.DataGridViewTemp.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewTemp.Location = New System.Drawing.Point(32, 428)
         Me.DataGridViewTemp.Name = "DataGridViewTemp"
         Me.DataGridViewTemp.Size = New System.Drawing.Size(717, 66)
         Me.DataGridViewTemp.TabIndex = 35
-        '
-        'ButtonClose
-        '
-        Me.ButtonClose.FlatAppearance.BorderSize = 0
-        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(6, 602)
-        Me.ButtonClose.Name = "ButtonClose"
-        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonClose.TabIndex = 36
-        Me.ButtonClose.Text = "Close"
-        Me.ButtonClose.UseVisualStyleBackColor = True
         '
         'FormGenerateBroadsheet
         '
@@ -718,11 +676,13 @@ Partial Class FormGenerateBroadsheet
         Me.Controls.Add(Me.TextBoxDepartment)
         Me.Controls.Add(Me.DataGridViewBroadSheet)
         Me.Controls.Add(Me.DataGridViewBroadsheetAudit)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormGenerateBroadsheet"
-        Me.Text = "Form Generate Broadsheet"
+        Me.Text = "Generate Broadsheet"
         CType(Me.DataGridViewBroadSheet, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip1.ResumeLayout(False)
+        Me.ContextMenuStrip1.PerformLayout()
         Me.SidePanel.ResumeLayout(False)
-        Me.PanelMenu.ResumeLayout(False)
         Me.PanelModify.ResumeLayout(False)
         Me.PanelModify.PerformLayout()
         CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).EndInit()
@@ -758,10 +718,6 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents ButtonRefereshListFirst As Button
     Friend WithEvents LabelClosePanelModify As Label
     Friend WithEvents Label8 As Label
-    Friend WithEvents Label7 As Label
-    Friend WithEvents ListBox2 As ListBox
-    Friend WithEvents ButtonApplyModification As Button
-    Friend WithEvents ButtonRefereshListSecond As Button
     Friend WithEvents ProgressBarBS As ProgressBar
     Friend WithEvents TimerBS As Timer
     Friend WithEvents BgWProcess As System.ComponentModel.BackgroundWorker
@@ -772,13 +728,18 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents bgwExportToExcel As System.ComponentModel.BackgroundWorker
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
-    Friend WithEvents PanelMenu As Panel
-    Friend WithEvents ButtonProcessExcelInteropPlain As Button
-    Friend WithEvents ButtonClosePanelMenu As Button
-    Friend WithEvents ButtonprocessExcelFileFormula As Button
-    Friend WithEvents ButtonprocessExcelInteropFormula As Button
-    Friend WithEvents ButtonprocessExceFilePlain As Button
     Friend WithEvents ButtonExportPDF As Button
     Friend WithEvents DataGridViewTemp As DataGridView
     Friend WithEvents ButtonClose As Button
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents UpgradeTo40ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents UpgradeWith1MarkToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents UpgradeWith2MarksToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ChangeToToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripTextBox1 As ToolStripTextBox
+    Friend WithEvents ApplyChangeToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents RadioButtonUseBuiltInFormula As RadioButton
+    Friend WithEvents RadioButtonUseExcelWithFormula As RadioButton
+    Friend WithEvents RadioButtonUseBuiltIn As RadioButton
+    Friend WithEvents RadioButtonUseExcel As RadioButton
 End Class

@@ -30,6 +30,8 @@ Partial Class FormUploadResult
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonBatchUpload = New System.Windows.Forms.Button()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonCheck = New System.Windows.Forms.Button()
         Me.ButtonResultList = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
@@ -74,7 +76,9 @@ Partial Class FormUploadResult
         Me.DataGridView2 = New System.Windows.Forms.DataGridView()
         Me.CheckBoxCustomOrder = New System.Windows.Forms.CheckBox()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.ButtonClose = New System.Windows.Forms.Button()
+        Me.TextBoxResultsDir = New System.Windows.Forms.TextBox()
+        Me.BackgroundWorkerBatch = New System.ComponentModel.BackgroundWorker()
+        Me.ListBoxBatch = New System.Windows.Forms.ListBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -126,6 +130,7 @@ Partial Class FormUploadResult
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonBatchUpload)
         Me.SidePanel.Controls.Add(Me.ButtonClose)
         Me.SidePanel.Controls.Add(Me.ButtonCheck)
         Me.SidePanel.Controls.Add(Me.ButtonResultList)
@@ -138,6 +143,32 @@ Partial Class FormUploadResult
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 566)
         Me.SidePanel.TabIndex = 6
+        '
+        'ButtonBatchUpload
+        '
+        Me.ButtonBatchUpload.FlatAppearance.BorderSize = 0
+        Me.ButtonBatchUpload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonBatchUpload.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonBatchUpload.ForeColor = System.Drawing.Color.White
+        Me.ButtonBatchUpload.Location = New System.Drawing.Point(3, 20)
+        Me.ButtonBatchUpload.Name = "ButtonBatchUpload"
+        Me.ButtonBatchUpload.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonBatchUpload.TabIndex = 9
+        Me.ButtonBatchUpload.Text = "Upload All..."
+        Me.ButtonBatchUpload.UseVisualStyleBackColor = True
+        '
+        'ButtonClose
+        '
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 508)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 8
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
         '
         'ButtonCheck
         '
@@ -611,18 +642,26 @@ Partial Class FormUploadResult
         'BackgroundWorker1
         '
         '
-        'ButtonClose
+        'TextBoxResultsDir
         '
-        Me.ButtonClose.FlatAppearance.BorderSize = 0
-        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(3, 508)
-        Me.ButtonClose.Name = "ButtonClose"
-        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonClose.TabIndex = 8
-        Me.ButtonClose.Text = "Close"
-        Me.ButtonClose.UseVisualStyleBackColor = True
+        Me.TextBoxResultsDir.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxResultsDir.Location = New System.Drawing.Point(44, 10)
+        Me.TextBoxResultsDir.Name = "TextBoxResultsDir"
+        Me.TextBoxResultsDir.Size = New System.Drawing.Size(541, 20)
+        Me.TextBoxResultsDir.TabIndex = 23
+        '
+        'BackgroundWorkerBatch
+        '
+        '
+        'ListBoxBatch
+        '
+        Me.ListBoxBatch.FormattingEnabled = True
+        Me.ListBoxBatch.Location = New System.Drawing.Point(604, 10)
+        Me.ListBoxBatch.Name = "ListBoxBatch"
+        Me.ListBoxBatch.Size = New System.Drawing.Size(156, 69)
+        Me.ListBoxBatch.TabIndex = 24
         '
         'FormUploadResult
         '
@@ -630,6 +669,8 @@ Partial Class FormUploadResult
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(913, 566)
+        Me.Controls.Add(Me.ListBoxBatch)
+        Me.Controls.Add(Me.TextBoxResultsDir)
         Me.Controls.Add(Me.CheckBoxCustomOrder)
         Me.Controls.Add(Me.DataGridView2)
         Me.Controls.Add(Me.ComboBox6)
@@ -708,4 +749,8 @@ Partial Class FormUploadResult
     Friend WithEvents Button7 As Button
     Friend WithEvents Button6 As Button
     Friend WithEvents ButtonClose As Button
+    Friend WithEvents ButtonBatchUpload As Button
+    Friend WithEvents TextBoxResultsDir As TextBox
+    Friend WithEvents BackgroundWorkerBatch As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ListBoxBatch As ListBox
 End Class

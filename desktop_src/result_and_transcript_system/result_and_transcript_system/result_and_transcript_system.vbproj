@@ -127,6 +127,7 @@
     <Compile Include="ClassExcel.vb" />
     <Compile Include="ClassExcelFile.vb" />
     <Compile Include="ClassExcelResult.vb" />
+    <Compile Include="ClassPDF.vb" />
     <Compile Include="ClassReports.vb" />
     <Compile Include="FormAdmin.Designer.vb">
       <DependentUpon>FormAdmin.vb</DependentUpon>
@@ -308,6 +309,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="female-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Male-Image.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

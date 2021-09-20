@@ -8,6 +8,16 @@ Public Class FormUploadResult
     Dim dsDepts As New DataSet
     Dim dsCourses As New DataSet
     Dim dsSessions As New DataSet
+    'Variable for Batch Upload
+    Dim results As New List(Of String)
+    Dim tmpDept, tmpLevel, tmpSession, tmpCourseCode As String
+
+    Dim arrSessions(1) As String
+    Dim arrLevel(1) As String
+    Dim arrDept(1) As String
+    Dim arrCourseCodes(1) As String
+
+
     Private Sub FormUploadResult_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
         resizeCombosToGrid()
@@ -53,7 +63,7 @@ Public Class FormUploadResult
             ' else
 
 
-            strSQL = SQL_SELECT_ALL_RESULTS_WHERE_MATNO '"INSERT INTO TableResults"
+            strSQL = SQL_SELECT_RESULTS_WHERE_MATNO '"INSERT INTO TableResults"
 
             '#method 1 - creates table and inserts
             Dim dt As DataTable
@@ -338,7 +348,11 @@ Public Class FormUploadResult
                             If Not emptyRowFound Then emptyRow = i
                             emptyRowFound = True
                         End If
-
+                    ElseIf i + 1 <= rowCount - 1 Then 'check successive matno
+                        If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Trim(tmpDT.Rows(i + 1).Item("matno").ToString) = "" Then
+                            If Not emptyRowFound Then emptyRow = i
+                            emptyRowFound = True
+                        End If
                     Else
 
                     End If
@@ -353,10 +367,10 @@ Public Class FormUploadResult
 
                 'if name does not exist in db, create MOCK matno and use it. flag mock matnos
                 'TODO: AUTO040998990 'eg matno auto
-                If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And i <> emptyRow Then tmpDT.Rows(i).Item("matno") = "AUTO" & CStr(CInt(Rnd(Now.Second) * 10000) + i)   ' mappDB.getAutoMATNo
+                If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Not (i = emptyRow) Then tmpDT.Rows(i).Item("matno") = "AUTO" & CStr(CInt(Rnd(Now.Second) * 10000) + i)   ' mappDB.getAutoMATNo
 
                 'score cannot be null
-                If tmpDT.Rows(i).Item("score").ToString = "" Then tmpDT.Rows(i).Item("score") = -4 'moduleGeneral.Settings.ABS
+                If tmpDT.Rows(i).Item("score").ToString = "" And Not (i = emptyRow) Then tmpDT.Rows(i).Item("score") = -4 'moduleGeneral.Settings.ABS
 
 
             Next
@@ -448,15 +462,20 @@ Public Class FormUploadResult
         For Each key In dictCourses.Keys
             ComboBoxCourseCode.Items.Add(dictCourses(key))
         Next
+        ComboBoxCourseCode.SelectedIndex = 0
         ComboBoxDepartments.Items.Clear()
         For Each key In dictDepts.Keys
             ComboBoxDepartments.Items.Add(dictDepts(key))
         Next
+        ComboBoxDepartments.SelectedIndex = 0
         ComboBoxSessions.Items.Clear()
         For Each key In dictSessions.Keys
             ComboBoxSessions.Items.Add(dictSessions(key))
         Next
+        ComboBoxSessions.SelectedIndex = 0
 
+
+        ComboBoxLevel.SelectedIndex = 0
         ''for datasets (NOT WORKING in bgWorker)
         'ComboBoxDepartments.Items.Clear()
         'With ComboBoxDepartments
@@ -495,5 +514,357 @@ Public Class FormUploadResult
 
     Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
+    End Sub
+
+    Private Sub ButtonBatchUpload_Click(sender As Object, e As EventArgs) Handles ButtonBatchUpload.Click
+        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+        Dim resultsDir As String = ""
+
+        ReDim arrSessions(ComboBoxSessions.Items.Count - 1)
+        ReDim arrLevel(ComboBoxLevel.Items.Count - 1)
+        ReDim arrDept(ComboBoxDepartments.Items.Count - 1)
+        ReDim arrCourseCodes(ComboBoxCourseCode.Items.Count - 1)
+
+        ComboBoxSessions.Items.CopyTo(arrSessions, 0)
+        ComboBoxLevel.Items.CopyTo(arrLevel, 0)
+        ComboBoxDepartments.Items.CopyTo(arrDept, 0)
+        ComboBoxCourseCode.Items.CopyTo(arrCourseCodes, 0)
+
+        tmpSession = ComboBoxSessions.Text
+        tmpDept = ComboBoxDepartments.Text
+        tmpLevel = ComboBoxLevel.Text
+        tmpCourseCode = ComboBoxCourseCode.Text
+
+        FileOpenDialogBroadsheet.CheckPathExists = True
+        FileOpenDialogBroadsheet.InitialDirectory = TextBoxResultsDir.Text
+        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+            resultsDir = System.IO.Path.GetDirectoryName(FileOpenDialogBroadsheet.FileName())
+
+            BackgroundWorkerBatch.RunWorkerAsync(resultsDir)
+            'For Each file In My.Computer.FileSystem.GetFiles(resultsDir)
+            '    objExcelFile.excelFileName = file
+            '    TextBoxResultsDir.Text = file
+            'Next
+        End If
+
+
+
+        showButtons("ButtonPreview", True)
+    End Sub
+
+    Private Sub BackgroundWorkerBatch_DoWork(sender As Object, e As DoWorkEventArgs) Handles BackgroundWorkerBatch.DoWork
+        Dim tmpDS As DataSet
+        For Each file In My.Computer.FileSystem.GetFiles(e.Argument)
+            objExcelFile.excelFileName = file
+            '#1. Silent preview
+            tmpDS = objExcelFile.readResultFile()
+            '#2. Do silent check 
+            Dim dt As DataTable = silentCheck(tmpDS.Tables(0))
+            '#3.upload em
+            results.Clear()
+
+            If silentUpload(dt, tmpSession, tmpCourseCode, tmpDept, mappDB.getDeptID(tmpDept)) = True Then
+                results.Add(System.IO.Path.GetFileNameWithoutExtension(file))
+            End If
+
+        Next
+    End Sub
+
+
+
+    Private Sub BackgroundWorkerBatch_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorkerBatch.RunWorkerCompleted
+        MsgBox("Results Uploaded into Database Successfully! Cross check what was uploaded in the list")
+        ListBoxBatch.Items.AddRange(results.ToArray)
+        'DataGridView2.Visible = True
+        'strSQL = "SELECT * from Results WHERE (session_idr = '{0}' AND Course_Code_idr = '{1}' AND department_idr={2})"
+        'DataGridView2.DataSource = mappDB.GetDataWhere(String.Format(strSQL, dSession, dCourse, dDeptID)).Tables(0).DefaultView
+        'DataGridView2.Top = DataGridView1.Top + DataGridView1.Height
+        'DataGridView2.Refresh()
+
+    End Sub
+    Function silentCheck(tmpDT As DataTable) As DataTable
+
+        Dim snRow As Integer
+        Dim emptyRow As Integer = 0
+        Dim emptyRowFound As Boolean = False
+        Dim rowCount As Integer = 0
+        Dim colCount As Integer = 0
+        Dim lstCols As New List(Of Integer)
+        Dim listcolNames As New List(Of String)
+        Dim trialTmpDept As String = ""
+        Dim trialTtmpLevel As String = ""
+        Dim trialTmpSession As String = ""
+        Dim trialTtmpCourseCode = ""
+        '# Detect header row
+        rowCount = tmpDT.Rows.Count
+        For i = 0 To rowCount - 1
+            If tmpDT.Rows(i).ItemArray().Contains("S/N") Or tmpDT.Rows(i).ItemArray().Contains("MAT") Then
+                Debug.Print("ColumnHeader at row: " & i)
+                snRow = i
+                Exit For
+            End If
+        Next
+
+        '# display header rows and change colNames
+        Dim colHeaders(5) As String
+        colCount = tmpDT.Columns.Count
+        ReDim colHeaders(0 To colCount - 1)
+        For i = 0 To colCount - 1
+            colHeaders(i) = tmpDT.Rows(snRow).Item(i).ToString
+        Next
+        '#change column names to match header text
+        For i = 0 To colCount - 1
+            'tmpDT.Columns(i).ColumnName = tmpDT.Rows(snRow).Item(i).ToString
+            If colHeaders(i).ToUpper.Contains("MAT") Then
+                tmpDT.Columns(i).ColumnName = "matno"
+            ElseIf colHeaders(i).ToUpper.Contains("NAME") Then
+                tmpDT.Columns(i).ColumnName = "name"
+            ElseIf colHeaders(i).ToUpper.Contains("S/N") Or colHeaders(i).ToUpper.Contains("SN") Then
+                tmpDT.Columns(i).ColumnName = "sn"
+            ElseIf colHeaders(i).ToUpper.Contains("SCORE") Or colHeaders(i).ToUpper.Contains("TOTAL") Then
+                tmpDT.Columns(i).ColumnName = "score"
+            ElseIf colHeaders(i).ToUpper.Contains("CA") Or colHeaders(i).ToUpper.Contains("TEST") Then
+                tmpDT.Columns(i).ColumnName = "ca"
+            Else
+                'note column to delete
+                lstCols.Add(i)
+                listcolNames.Add(tmpDT.Columns(i).ColumnName)
+            End If
+
+        Next
+
+
+        Try
+            'attempt to get course code dept and other data
+
+
+            For j = 0 To snRow - 1
+                For i = 0 To tmpDT.Columns.Count - 1
+                    'TODO: test for null to avoid errors
+                    If tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("DEPARTMENT") Then
+                        'note it
+                        trialTmpDept = mappDB.getDeptName(tmpDT.Rows(j).Item(i).Value.ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("COURSE") Then
+                        trialTtmpCourseCode = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("LEVEL") Then
+                        trialTtmpLevel = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/") Then
+                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("SESSION") Then
+                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/201") Then '201X eg 2019 2018
+                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+                        'todo: fix millenum kind of bug after 2050. e.g for i=205 to 999 if contains i.tostring
+                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/202") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("203") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("204") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("205") Then '202X eg 2020 2021
+                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+
+                    Else
+                    End If
+                Next
+            Next
+
+            'Validate them without consulting database
+            'For silent mode use arrays of items in conbos
+            'TODO:
+
+            For Each item In arrSessions
+                If trialTmpSession.Contains(item.ToString) Then
+                    tmpSession = item.ToString
+                    Exit For
+                Else
+                    'tmpSession = InputBox("Enter Session")  'TODO
+                End If
+            Next
+
+            For Each item In arrDept
+                If trialTmpDept.Contains(item.ToString) Then
+                    tmpDept = item.ToString
+                    Exit For
+                End If
+            Next
+            For Each item In arrCourseCodes
+                If trialTtmpCourseCode.Contains(item.ToString) Then   'todo: if each word contains
+                    tmpCourseCode = item.ToString
+                    Exit For
+                End If
+            Next
+            For Each item In arrLevel
+                If trialTtmpLevel.Contains(item.ToString) Then
+                    tmpLevel = item.ToString
+                End If
+            Next
+
+            'delete noted useless columns
+            Dim delColCount = 0
+            For Each iName In listcolNames
+                tmpDT.Columns.Remove(iName) 'TODO: its not removing, just moving to the end
+                delColCount += 1 'update count of deleted cols
+            Next
+
+            tmpDT.AcceptChanges()
+
+            'delete header rows 'TODO not deleting
+            For j = snRow To 0 Step -1
+                tmpDT.Rows(0).Delete()
+                tmpDT.AcceptChanges()
+            Next
+
+
+
+
+            'TODO: validate all values
+            'tmpDT.containsNulls
+            'change ABS = moduleGeneral.Settings.ABS '-1
+            'change NR = moduleGeneral.Settings.ABS '-2
+            'change N/A = moduleGeneral.Settings.ABS '-3
+            rowCount = tmpDT.Rows.Count
+            For i = 0 To rowCount - 1
+                For col = 0 To tmpDT.Columns.Count - 1
+                    If tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("NR") Or tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("NR") Then
+                        tmpDT.Rows(i).Item(col) = -2
+                    ElseIf tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("NA") Or tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("N/A") Then
+                        tmpDT.Rows(i).Item(col) = -3
+                    ElseIf tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("ABS") Or tmpDT.Rows(i).Item(col).ToString.ToUpper.Contains("ABS") Then
+                        tmpDT.Rows(i).Item(col) = -1 'moduleGeneral.Settings.ABS
+
+                    Else
+
+                    End If
+
+                Next
+                tmpDT.AcceptChanges()
+
+                'check for empty rows
+                If Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And i > snRow Then
+                    If Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And Trim(tmpDT.Rows(i).Item("score").ToString) = "" Then
+                        If Not emptyRowFound Then emptyRow = i
+                        emptyRowFound = True
+                    ElseIf Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Trim(tmpDT.Rows(i).Item("score").ToString) = "0" Then
+                        If Not emptyRowFound Then emptyRow = i
+                        emptyRowFound = True
+                    ElseIf i + 1 <= rowCount - 1 Then 'check successive sn
+                        If Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And Trim(tmpDT.Rows(i + 1).Item("sn").ToString) = "" Then
+                            If Not emptyRowFound Then emptyRow = i
+                            emptyRowFound = True
+                        End If
+                    ElseIf i + 1 <= rowCount - 1 Then 'check successive matno
+                        If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Trim(tmpDT.Rows(i + 1).Item("matno").ToString) = "" Then
+                            If Not emptyRowFound Then emptyRow = i
+                            emptyRowFound = True
+                        End If
+                    Else
+
+                    End If
+
+                End If
+
+                'special check for matno
+                'validateMATNO(tmpDT.Rows(i).Item("matno"))
+                'if its not a matno store it. prompt the user to insert it into db.students table
+
+                'if matno does not exist, search db for name and suggest the matno
+
+                'if name does not exist in db, create MOCK matno and use it. flag mock matnos
+                'TODO: AUTO040998990 'eg matno auto
+                'If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Not (i = emptyRow) Then tmpDT.Rows(i).Item("matno") = "AUTO" & CStr(CInt(Rnd(Now.Second) * 10000) + i)   ' mappDB.getAutoMATNo
+
+                'score cannot be null
+                'If tmpDT.Rows(i).Item("score").ToString = "" And Not (i = emptyRow) Then tmpDT.Rows(i).Item("score") = -4 'moduleGeneral.Settings.ABS
+
+
+            Next
+
+            'delete empty rows below
+            rowCount = tmpDT.Rows.Count
+            If emptyRow > 0 Then
+                For j = emptyRow To rowCount - 1
+                    tmpDT.Rows(emptyRow).Delete()   'keep deleting the last row
+                Next
+            End If
+            tmpDT.AcceptChanges()
+
+            'remove name its not needed anymore
+            tmpDT.Columns.Remove("name")
+
+            tmpDT.AcceptChanges()
+            Return tmpDT
+        Catch ex As Exception
+            MessageBox.Show("Result is not in the correct format, please correct ant try again")
+            logError(ex.ToString)
+            Return Nothing
+        End Try
+    End Function
+
+    Private Function silentUpload(dt As DataTable, dSession As String, dCourse As String, dDept As String, dDeptID As String) As Boolean
+        Try
+            Dim strSQL As String   'dMATNO, dScore,
+            Dim boolSession, boolDept, boolCourse As Boolean
+
+            strSQL = SQL_SELECT_RESULTS_WHERE_MATNO '"INSERT INTO results
+            '#method 1 - creates table and inserts
+
+            ''TODO: validate inputs
+            If (dSession = mappDB.GetRecordWhere(String.Format("SELECT session_id FROM SESSIONS WHERE session_id='{0}'", dSession))) Then boolSession = True
+            If dDeptID = mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_id={0}", dDeptID)) Then boolDept = True
+            If dCourse = (mappDB.GetRecordWhere(String.Format("SELECT course_code FROM courses WHERE course_code='{0}'", dCourse))) Then boolCourse = True
+
+            If boolSession And boolDept And boolCourse Then
+                mappDB.manualInsertDB(dt, dSession, CInt(dDeptID), dCourse)
+            ElseIf dSession.Length > 10 Then
+                logError("Input correct Session, department and level") 'todo
+            End If
+
+            Return False
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+            Return False
+        End Try
+
+    End Function
+    Private Sub ButtonCloud_Click(sender As Object, e As EventArgs) Handles ButtonCloud.Click
+        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+        Dim resultsDir As String = ""
+
+        ReDim arrSessions(ComboBoxSessions.Items.Count - 1)
+        ReDim arrLevel(ComboBoxLevel.Items.Count - 1)
+        ReDim arrDept(ComboBoxDepartments.Items.Count - 1)
+        ReDim arrCourseCodes(ComboBoxCourseCode.Items.Count - 1)
+
+        ComboBoxSessions.Items.CopyTo(arrSessions, 0)
+        ComboBoxLevel.Items.CopyTo(arrLevel, 0)
+        ComboBoxDepartments.Items.CopyTo(arrDept, 0)
+        ComboBoxCourseCode.Items.CopyTo(arrCourseCodes, 0)
+
+        tmpSession = ComboBoxSessions.Text
+        tmpDept = ComboBoxDepartments.Text
+        tmpLevel = ComboBoxLevel.Text
+        tmpCourseCode = ComboBoxCourseCode.Text
+
+        FileOpenDialogBroadsheet.CheckPathExists = True
+        FileOpenDialogBroadsheet.InitialDirectory = TextBoxResultsDir.Text
+        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+            resultsDir = System.IO.Path.GetDirectoryName(FileOpenDialogBroadsheet.FileName())
+            test_upload(resultsDir)
+        End If
+
+        showButtons("ButtonPreview", True)
+    End Sub
+    Private Sub test_upload(dfile As String)
+        Dim tmpDS As DataSet
+        For Each file In My.Computer.FileSystem.GetFiles(dfile)
+            objExcelFile.excelFileName = file
+            '#1. Silent preview
+            tmpDS = objExcelFile.readResultFile()
+            '#2. Do silent check 
+            Dim dt As DataTable = silentCheck(tmpDS.Tables(0))
+            '#3.upload em
+            results.Clear()
+            DataGridView1.DataSource = dt.DefaultView
+            'If silentUpload(dt, tmpSession, tmpCourseCode, tmpDept, mappDB.getDeptID(tmpDept)) = True Then
+            'results.Add(System.IO.Path.GetFileNameWithoutExtension(file))
+
+            'End If
+            Exit For
+        Next
     End Sub
 End Class

@@ -66,7 +66,7 @@ Public Class FormStudentsRegistration
         Try
             Dim tmpDS As DataSet
             mappDB.MATNO = dMATNO
-            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_SPD_WHERE, mappDB.MATNO), "Courses") 'todo
+            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, mappDB.MATNO), "Courses") 'todo
             dgv_courses.DataSource = tmpDS.Tables("Courses").DefaultView
 
             dgv_courses.Refresh()
@@ -79,14 +79,15 @@ Public Class FormStudentsRegistration
     Private Sub txtStudentMATNO_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentMATNO.TextChanged
         If txtStudentMATNO.Text.Length > 5 Then
             mappDB.MATNO = txtStudentMATNO.Text
-            Dim tmpDS = mappDB.GetDataWhere(String.Format(SQL_SELECT_ALL_RESULTS_WHERE_MATNO, mappDB.MATNO), "Results")
-            dgw.DataSource = tmpDS.Tables("Results").DefaultView
-            UpdateCourses(mappDB.MATNO)
+            Dim tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_WHERE_MATNO, mappDB.Dept), "Students")
+            dgw.DataSource = tmpDS.Tables("Students").DefaultView
+            If tmpDS.Tables("Students").Rows.Count > 0 Then UpdateCourses(mappDB.MATNO)
         End If
     End Sub
 
     Private Sub dgw_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgw.CellContentClick
         updatePix()
+        CaptureCourses()
     End Sub
 
 
@@ -120,12 +121,13 @@ Public Class FormStudentsRegistration
     End Sub
 
     Public Sub CaptureCourses()
-        ''get quantity first and subtract 1
-        Dim units As Integer = CInt(dgw.SelectedRows(0).Cells("units").Value)
-        Dim MATNO As String = dgw.SelectedRows(0).Cells(1).Value.ToString
-        Dim semester As Double = CInt(dgw.SelectedRows(0).Cells("semester").Value)
-        Dim credits As Double = CInt(dgw.SelectedRows(0).Cells("credits").Value)
-        Dim courseCode As Double = CInt(dgw.SelectedRows(0).Cells("courseCode").Value)
+        If dgv_courses.Rows.Count < 1 Then Exit Sub
+        dgv_courses.Rows(0).Selected = True
+        Dim units As Integer = CInt(dgv_courses.SelectedRows(0).Cells("course_units").Value)
+        Dim MATNO As String = dgv_courses.SelectedRows(0).Cells(1).Value.ToString
+        Dim semester As Double = CInt(dgv_courses.SelectedRows(0).Cells("semester").Value)
+        Dim credits As Double = CInt(dgv_courses.SelectedRows(0).Cells("credits").Value)
+        Dim courseCode As Double = CInt(dgv_courses.SelectedRows(0).Cells("courseC_ode").Value)
 
         ''Capture Studennt TODO
         mappDB.MATNO = MATNO
@@ -133,7 +135,8 @@ Public Class FormStudentsRegistration
         Me.TextBoxCourseCode.Text = courseCode.ToString
         Me.TextBoxSemester.Text = semester.ToString
         Me.TextBoxUnits.Text = units.ToString
-        Me.LabelRef.Text = ref.ToString
+
+
         Me.TextBoxTotalCredits.Text = credits.ToString
 
 
@@ -152,13 +155,12 @@ Public Class FormStudentsRegistration
         sS = Me.TextBoxSemester.Text
         sUnits = Me.TextBoxUnits.Text
 
-        sRef = Me.LabelRef.Text
         sTC = 0
 
         sDate = FormatMyDate(Now) & " " & FormatMyTime(Now) '' "2018-10-09 00:00:00" 'mappDB.rDate '
         '    'sell
         mappDB.UpdateRecordWhere(String.Format(STR_SQL_COURSES_WHERE, sUnits, mappDB.MATNO)) 'todo
-        MsgBox("ProduCoursect " & sCC & " updated Successfully!,")
+        MsgBox("Courses " & sCC & " updated Successfully!,")
 
         '    'refresh Datagrid
         UpdateCourses(mappDB.MATNO)
@@ -236,11 +238,11 @@ Public Class FormStudentsRegistration
 
     Private Sub dgw_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgw.CellContentDoubleClick
         updatePix()
-        CaptureCourses()
+
 
     End Sub
 
-    Private Sub dgv_rooms_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_courses.CellContentDoubleClick
+    Private Sub dgv_courses_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_courses.CellContentDoubleClick
         registerStudent(False)
 
     End Sub
@@ -276,13 +278,13 @@ Public Class FormStudentsRegistration
 
     Private Sub dgv_courses_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_courses.CellContentClick
         Dim dLeft As Integer = 0
-        CheckedListBox1.Visible = True
-        CheckedListBox1.Width = dgv_courses.Columns(e.ColumnIndex).Width    'todo: calc the with as only once
+        CheckedListBoxCourses.Visible = True
+        CheckedListBoxCourses.Width = dgv_courses.Columns(e.ColumnIndex).Width    'todo: calc the with as only once
         dLeft = dgv_courses.Left
         For i = 0 To e.ColumnIndex ' dgv_courses.Columns.Count
             dLeft = dLeft + dgv_courses.Columns(i).Width
         Next
-        CheckedListBox1.Left = dLeft
+        CheckedListBoxCourses.Left = dLeft
     End Sub
 
     Private Sub BgWProcess_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BgWProcess.DoWork
@@ -302,7 +304,7 @@ Public Class FormStudentsRegistration
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
         dgw.DataSource = tmpDS.Tables("students").DefaultView
         If dgw.Rows.Count > 0 Then
-            UpdateCourses(dgw.Rows(0).Cells("matno").ToString)
+            UpdateCourses(dgw.Rows(0).Cells("matno").Value.ToString)
         End If
 
         'resize cols

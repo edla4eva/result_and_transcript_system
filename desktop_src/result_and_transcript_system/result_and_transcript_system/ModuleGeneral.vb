@@ -61,11 +61,11 @@ Module ModuleGeneral
     Public SQL_SELECT_RESULTS_WHERE_MATNO As String = " SELECT * FROM results WHERE matno= '{0}'"
     Public SQL_SELECT_ALL_RESULTS As String = "SELECT * FROM results"
     Public STR_SQL_ALL_STUDENTS_IN_DEPT As String = "SELECT * FROM students WHERE student_dept_idr={0}" ' 
-
+    Public STR_SQL_ALL_STUDENTS_WHERE_MATNO As String = "SELECT * FROM students WHERE matno={0}" ' 
 
 
     Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by course_code" ' 
-    Public STR_SQL_COURSES_SPD_WHERE As String = "SELECT * FROM reg WHERE matno='{0}'"
+    Public STR_SQL_COURSES_REG_WHERE As String = "SELECT * FROM reg WHERE matno='{0}'"
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
 
