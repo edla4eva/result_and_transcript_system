@@ -530,7 +530,7 @@ Public Class ClassExcelResult
                 End Try
                 Dim strSQL As String = ""
                 strSQL = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester"
-                strSQL = strSQL & " FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Department On students.student_dept_idr = Department.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code"
+                strSQL = strSQL & " FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Departments On students.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code"
                 strSQL = strSQL & " WHERE results.session_idr=" & dSession & ";"
                 Dim cmd As New OleDbCommand
                 cmd.CommandType = CommandType.Text

@@ -774,19 +774,30 @@ Public Class FormUploadResult
 
             Next
 
+            Dim dgv As New DataGridView
             'delete empty rows below
             rowCount = tmpDT.Rows.Count
             If emptyRow > 0 Then
-                For j = emptyRow To rowCount - 1
+                For j = rowCount - 1 To emptyRow Step -1
                     tmpDT.Rows(emptyRow).Delete()   'keep deleting the last row
+                    tmpDT.AcceptChanges()
                 Next
             End If
+            'TODO: A hack to delete rows
             tmpDT.AcceptChanges()
+            'dgv.DataSource = tmpDT
+            'If emptyRow > 0 Then
+            '    For j = rowCount - 1 To emptyRow Step -1
+            '        dgv.Rows.RemoveAt(emptyRow)   'keep deleting the last row
+            '    Next
+            'End If
+            'dgv.EndEdit()
 
+            'tmpDT = dgv.DataSource
+            tmpDT.AcceptChanges()
             'remove name its not needed anymore
             tmpDT.Columns.Remove("name")
 
-            tmpDT.AcceptChanges()
             Return tmpDT
         Catch ex As Exception
             MessageBox.Show("Result is not in the correct format, please correct ant try again")
