@@ -53,6 +53,7 @@ Module ModuleGeneral
     Public STR_SQL_ALL_RESULTS As String = "SELECT * FROM results order by result_id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
     Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
 
+    Public STR_SQL_ALL_COURSES_ORDER As String = "SELECT * FROM courses_order WHERE (session_idr='{0}' AND dept_idr={1}) order by sn" ' 
     Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments"
     Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
     Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM students" ' 
@@ -246,7 +247,12 @@ Module ModuleGeneral
 
 
                 For i = 0 To ds.Tables(0).Rows.Count - 1
-                    retDict.Add(ds.Tables(0).Rows(i).Item(this_value), ds.Tables(0).Rows(i).Item(this_member))
+                    If IsDBNull(ds.Tables(0).Rows(i).Item(this_value)) Then
+                        'retDict.Add(i.ToString, "") 
+                    Else
+                        retDict.Add(ds.Tables(0).Rows(i).Item(this_value), ds.Tables(0).Rows(i).Item(this_member))  'TODO: avoid nulls
+
+                    End If
                 Next
 
                 xConn.Close()

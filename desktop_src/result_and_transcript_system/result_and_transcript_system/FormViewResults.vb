@@ -23,29 +23,59 @@ Public Class FormViewResults
 
     End Sub
 
-    Private Sub ButtonUpload_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
-        If TextBoxSession.Text = "" Then
-            TextBoxSession.BackColor = Color.Pink
-            MessageBox.Show("Please enter the session and retry again")
-            Exit Sub
-        End If
-        Dim myDataSet As DataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text)
-        DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+    Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
+        '
+        'Dim dv As DataView = DataGridViewBroadSheet.DataSource
+        'Dim dtSource As DataTable
+        'Dim ds As New DataSet ' = dv.ToTable
+
+        'dtSource = dv.ToTable
+        'Using xconn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
+        '    Dim adapter As New OleDb.OleDbDataAdapter("SELECT * FROM Broadsheets", xconn)
+        '    'Dim insert As OleDb.OleDbCommand("INSERT INTO Broadsheet (matno) VALUES (@matno)", xconn)
+        '    Dim builder As New OleDb.OleDbCommandBuilder(adapter)       'easy way for single table
+
+        '    'Dim titleParam As New OleDb.OleDbParameter("@matno", Str)
+        '    'cmd.Parameters.Add(titleParam)
+        '    'adapter.InsertCommand = insert
+
+        '    adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
 
 
-        'TODO: show result summary in listbox
-        Dim rd As DataTableReader
-        Dim rowVals As String() = {}
-        rd = myDataSet.Tables(0).CreateDataReader
-        Try
-            If rd.Read() Then   'while
-                rd.GetValues(rowVals)
-                ListBoxResults.Items.AddRange(rowVals) 'test
-            End If
-            DataGridView2.Visible = True
-        Catch ex As Exception
+        '    'fill it
+        '    adapter.Fill(ds)
+        '    DataGridViewTemp.DataSource = ds.Tables(0).DefaultView
+        '    MsgBox("After fresh fill")
+        '    'edit it
 
-        End Try
+        '    DataGridViewTemp.DataSource = ds.Tables(0).DefaultView
+        '    MsgBox("After add to datatable")
+        '    DataGridViewTemp.Refresh()
+        '    DataGridViewTemp.EndEdit()
+        '    MsgBox("After refresh")
+        '    'save
+        '    adapter.Update(ds)
+        'End Using
+
+
+
+        'Dim myDataSet As DataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text)
+        'DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+
+
+        ''TODO: show result summary in listbox
+        'Dim rd As DataTableReader
+        'Dim rowVals As String() = {}
+        'rd = myDataSet.Tables(0).CreateDataReader
+        'Try
+        '    If rd.Read() Then   'while
+        '        rd.GetValues(rowVals)
+        '        ListBoxResults.Items.AddRange(rowVals) 'test
+        '    End If
+        '    DataGridView2.Visible = True
+        'Catch ex As Exception
+
+        'End Try
 
 
 

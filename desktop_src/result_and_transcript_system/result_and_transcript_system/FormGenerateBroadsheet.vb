@@ -6,7 +6,8 @@ Public Class FormGenerateBroadsheet
     Dim course_level = "300"
 
     Dim dictDepts As New Dictionary(Of String, String)
-    'Dim dictCourses As New Dictionary(Of String, String)
+    Dim dictCourses As New Dictionary(Of String, String)
+    Dim dictAllCourses As New Dictionary(Of String, String)
     Dim dictSessions As New Dictionary(Of String, String)
 
     Private Sub TextBoxDepartment_TextChanged(sender As Object, e As EventArgs) Handles TextBoxDepartment.TextChanged
@@ -24,17 +25,17 @@ Public Class FormGenerateBroadsheet
         ButtonProcessBroadsheet.Enabled = False
         TimerBS.Enabled = True
         TimerBS.Start()
-        course_dept_idr = 1 '  ComboBoxDepartments.SelectedIndex + 1
+        course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
         session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
         course_level = TextBoxLevel.Text '.SelectedItem.ToString  'not databound
-        objBroadsheet.broadsheetSemester = 2
+        objBroadsheet.broadsheetSemester = 1
 
         If RadioButtonUseBuiltIn.Checked = True Then
             objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
             'get broadsheetDatta from result and students table
             BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
         ElseIf RadioButtonUseExcel.Checked = True Then
-            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
+            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xlsm"
             'get broadsheetDatta from result and students table
             BgWProcess.RunWorkerAsync(1)  'runs objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData().Tables(0).DefaultView
         ElseIf RadioButtonUseBuiltInFormula.Checked = True Then
@@ -190,6 +191,7 @@ Public Class FormGenerateBroadsheet
 
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
         ProgressBarBS.Value = CInt(objBroadsheet.progress)
+        Me.LabelProgress.Text = objBroadsheet.progressStr
     End Sub
 
     Private Sub BgWProcess_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BgWProcess.DoWork
@@ -208,10 +210,16 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
-        DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
-        TimerBS.Stop()
-        ButtonProcessBroadsheet.Enabled = True
-        Me.ProgressBarBS.Value = 100
+        Try
+            DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
+            TimerBS.Stop()
+            ButtonProcessBroadsheet.Enabled = True
+            Me.ProgressBarBS.Value = 100
+        Catch ex As Exception
+            MsgBox("An error occured during the creation of the broadsheet" & vbCrLf & ex.Message)
+        End Try
+
+
     End Sub
 
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
@@ -314,8 +322,9 @@ Public Class FormGenerateBroadsheet
     Private Sub ComboBoxDepartments_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDepartments.SelectedIndexChanged
         ' On Error Resume Next 'TextBoxDepartment.Text = ComboBoxDepartments.Items(ComboBoxDepartments.SelectedIndex).ToString()
         Try
-            TextBoxDepartment.Text = ComboBoxDepartments.SelectedItem.ToString 'its a data view
 
+            course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedItem.ToString)
+            TextBoxDepartment.Text = ComboBoxDepartments.SelectedItem.ToString 'its a data view
         Catch ex As Exception
 
         End Try
@@ -324,6 +333,10 @@ Public Class FormGenerateBroadsheet
     Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
         Try
             TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
+
+            ' bgwCourses.RunWorkerAsync()
+
+            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & TextBoxLevel.Text, "FS" & TextBoxLevel.Text)
 
         Catch ex As Exception
 
@@ -340,15 +353,33 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
-        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
+        If e.Argument = "CoursesOnly" Then
+            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
 
-        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
+        Else
 
+            dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
 
+            dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
+
+            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
+
+            dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+
+        End If
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
         'for dictonaries
+        ComboBoxCourses.Items.Clear()
+        For Each key In dictAllCourses.Keys
+            ComboBoxCourses.Items.Add(dictAllCourses(key))
+        Next
+
+        ListBoxCoursesOrder.Items.Clear()
+        For Each key In dictCourses.Keys
+            ListBoxCoursesOrder.Items.Add(dictCourses(key))
+        Next
 
         ComboBoxDepartments.Items.Clear()
         For Each key In dictDepts.Keys
@@ -389,6 +420,60 @@ Public Class FormGenerateBroadsheet
             obj.ExcelPDFLateBinding()
             MsgBox("Saved as PDF in: " & objBroadsheet.processedBroadsheetFileName)
         End If
+    End Sub
+
+    Private Sub ButtonMoveUp_Click(sender As Object, e As EventArgs) Handles ButtonMoveUp.Click
+        Dim indx As Integer = 0
+        Dim itm As New Object
+        indx = ListBoxCoursesOrder.SelectedIndex
+        itm = ListBoxCoursesOrder.SelectedItem
+        If indx >= 0 Then
+            ListBoxCoursesOrder.Items.RemoveAt(indx)
+            If indx - 1 >= 0 And Not itm = Nothing Then
+                ListBoxCoursesOrder.Items.Insert(indx - 1, itm)
+                ListBoxCoursesOrder.SelectedIndex = indx - 1
+            Else
+                ListBoxCoursesOrder.Items.Insert(0, itm)
+                ListBoxCoursesOrder.SelectedIndex = 0
+            End If
+
+        End If
+
+    End Sub
+    Private Sub ButtonMoveDown_Click(sender As Object, e As EventArgs) Handles ButtonMoveDown.Click
+        Dim indx As Integer = 0
+        Dim itm As New Object
+        indx = ListBoxCoursesOrder.SelectedIndex
+        itm = ListBoxCoursesOrder.SelectedItem
+        If indx >= 0 Then
+
+            ListBoxCoursesOrder.Items.RemoveAt(indx)
+            If indx + 1 <= ListBoxCoursesOrder.Items.Count - 1 And Not itm = Nothing Then
+                ListBoxCoursesOrder.Items.Insert(indx + 1, itm)
+                ListBoxCoursesOrder.SelectedIndex = indx + 1
+            Else
+                ListBoxCoursesOrder.Items.Insert(0, itm)
+                ListBoxCoursesOrder.SelectedIndex = 0
+            End If
+        End If
+
+
+    End Sub
+
+    Private Sub ButtonRefereshListFirst_Click(sender As Object, e As EventArgs) Handles ButtonRefereshListFirst.Click
+        bgwLoad.RunWorkerAsync("CoursesOnly")
+    End Sub
+
+    Private Sub ButtonRemoveCourses_Click(sender As Object, e As EventArgs) Handles ButtonRemoveCourses.Click
+        Dim indx As Integer = 0
+        indx = ListBoxCoursesOrder.SelectedIndex
+        If indx >= 0 Then
+            ListBoxCoursesOrder.Items.RemoveAt(indx)
+        End If
+    End Sub
+
+    Private Sub ButtonAddCourse_Click(sender As Object, e As EventArgs) Handles ButtonAddCourse.Click
+        ListBoxCoursesOrder.Items.Add(ComboBoxCourses.SelectedItem)
     End Sub
 End Class
 

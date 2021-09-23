@@ -93,7 +93,7 @@ Partial Class FormUploadResult
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxExcelFilename.Location = New System.Drawing.Point(44, 52)
         Me.TextBoxExcelFilename.Name = "TextBoxExcelFilename"
-        Me.TextBoxExcelFilename.Size = New System.Drawing.Size(541, 20)
+        Me.TextBoxExcelFilename.Size = New System.Drawing.Size(637, 20)
         Me.TextBoxExcelFilename.TabIndex = 1
         '
         'Label1
@@ -124,7 +124,7 @@ Partial Class FormUploadResult
         DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
         Me.DataGridView1.RowsDefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridView1.Size = New System.Drawing.Size(505, 388)
+        Me.DataGridView1.Size = New System.Drawing.Size(601, 388)
         Me.DataGridView1.TabIndex = 3
         '
         'SidePanel
@@ -139,7 +139,7 @@ Partial Class FormUploadResult
         Me.SidePanel.Controls.Add(Me.ButtonPreview)
         Me.SidePanel.Controls.Add(Me.ButtonBrowse)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
-        Me.SidePanel.Location = New System.Drawing.Point(779, 0)
+        Me.SidePanel.Location = New System.Drawing.Point(875, 0)
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 566)
         Me.SidePanel.TabIndex = 6
@@ -256,7 +256,7 @@ Partial Class FormUploadResult
         Me.GroupBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.TextBoxPrefix)
         Me.GroupBox1.Controls.Add(Me.CheckBoxPrefix)
-        Me.GroupBox1.Location = New System.Drawing.Point(571, 118)
+        Me.GroupBox1.Location = New System.Drawing.Point(667, 118)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(189, 65)
         Me.GroupBox1.TabIndex = 7
@@ -284,6 +284,7 @@ Partial Class FormUploadResult
         'GroupBox2
         '
         Me.GroupBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.ListBoxBatch)
         Me.GroupBox2.Controls.Add(Me.Button7)
         Me.GroupBox2.Controls.Add(Me.Button6)
         Me.GroupBox2.Controls.Add(Me.Button4)
@@ -307,9 +308,9 @@ Partial Class FormUploadResult
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.Label2)
         Me.GroupBox2.Controls.Add(Me.TextBoxDepartment)
-        Me.GroupBox2.Location = New System.Drawing.Point(571, 198)
+        Me.GroupBox2.Location = New System.Drawing.Point(667, 198)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(189, 273)
+        Me.GroupBox2.Size = New System.Drawing.Size(189, 368)
         Me.GroupBox2.TabIndex = 8
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Details"
@@ -323,6 +324,7 @@ Partial Class FormUploadResult
         Me.Button7.TabIndex = 40
         Me.Button7.Text = "R"
         Me.Button7.UseVisualStyleBackColor = True
+        Me.Button7.Visible = False
         '
         'Button6
         '
@@ -332,6 +334,7 @@ Partial Class FormUploadResult
         Me.Button6.TabIndex = 39
         Me.Button6.Text = "+"
         Me.Button6.UseVisualStyleBackColor = True
+        Me.Button6.Visible = False
         '
         'Button4
         '
@@ -341,6 +344,7 @@ Partial Class FormUploadResult
         Me.Button4.TabIndex = 38
         Me.Button4.Text = "+"
         Me.Button4.UseVisualStyleBackColor = True
+        Me.Button4.Visible = False
         '
         'Button5
         '
@@ -351,6 +355,7 @@ Partial Class FormUploadResult
         Me.Button5.TabIndex = 37
         Me.Button5.Text = "R"
         Me.Button5.UseVisualStyleBackColor = True
+        Me.Button5.Visible = False
         '
         'Button3
         '
@@ -360,6 +365,7 @@ Partial Class FormUploadResult
         Me.Button3.TabIndex = 36
         Me.Button3.Text = "+"
         Me.Button3.UseVisualStyleBackColor = True
+        Me.Button3.Visible = False
         '
         'Button2
         '
@@ -370,15 +376,16 @@ Partial Class FormUploadResult
         Me.Button2.TabIndex = 35
         Me.Button2.Text = "R"
         Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
         '
         'ComboBoxCourseCode
         '
         Me.ComboBoxCourseCode.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxCourseCode.FormattingEnabled = True
         Me.ComboBoxCourseCode.Items.AddRange(New Object() {"CPE375"})
-        Me.ComboBoxCourseCode.Location = New System.Drawing.Point(79, 212)
+        Me.ComboBoxCourseCode.Location = New System.Drawing.Point(9, 212)
         Me.ComboBoxCourseCode.Name = "ComboBoxCourseCode"
-        Me.ComboBoxCourseCode.Size = New System.Drawing.Size(74, 21)
+        Me.ComboBoxCourseCode.Size = New System.Drawing.Size(121, 21)
         Me.ComboBoxCourseCode.TabIndex = 34
         Me.ComboBoxCourseCode.Text = "CPE375"
         '
@@ -390,14 +397,15 @@ Partial Class FormUploadResult
         Me.Button1.TabIndex = 33
         Me.Button1.Text = "+"
         Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
         '
         'ComboBoxLevel
         '
         Me.ComboBoxLevel.FormattingEnabled = True
         Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
-        Me.ComboBoxLevel.Location = New System.Drawing.Point(30, 162)
+        Me.ComboBoxLevel.Location = New System.Drawing.Point(7, 162)
         Me.ComboBoxLevel.Name = "ComboBoxLevel"
-        Me.ComboBoxLevel.Size = New System.Drawing.Size(100, 21)
+        Me.ComboBoxLevel.Size = New System.Drawing.Size(123, 21)
         Me.ComboBoxLevel.TabIndex = 32
         Me.ComboBoxLevel.Text = "100"
         '
@@ -416,9 +424,9 @@ Partial Class FormUploadResult
         Me.ComboBoxSessions.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxSessions.FormattingEnabled = True
         Me.ComboBoxSessions.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
-        Me.ComboBoxSessions.Location = New System.Drawing.Point(30, 115)
+        Me.ComboBoxSessions.Location = New System.Drawing.Point(7, 115)
         Me.ComboBoxSessions.Name = "ComboBoxSessions"
-        Me.ComboBoxSessions.Size = New System.Drawing.Size(100, 21)
+        Me.ComboBoxSessions.Size = New System.Drawing.Size(123, 21)
         Me.ComboBoxSessions.TabIndex = 30
         Me.ComboBoxSessions.Text = "2018/2019"
         '
@@ -438,6 +446,7 @@ Partial Class FormUploadResult
         Me.TextBoxCourseCode.Name = "TextBoxCourseCode"
         Me.TextBoxCourseCode.Size = New System.Drawing.Size(63, 22)
         Me.TextBoxCourseCode.TabIndex = 11
+        Me.TextBoxCourseCode.Visible = False
         '
         'Label9
         '
@@ -455,6 +464,7 @@ Partial Class FormUploadResult
         Me.TextBoxLevel.Name = "TextBoxLevel"
         Me.TextBoxLevel.Size = New System.Drawing.Size(18, 22)
         Me.TextBoxLevel.TabIndex = 9
+        Me.TextBoxLevel.Visible = False
         '
         'Label8
         '
@@ -472,6 +482,7 @@ Partial Class FormUploadResult
         Me.TextBoxSession.Name = "TextBoxSession"
         Me.TextBoxSession.Size = New System.Drawing.Size(18, 22)
         Me.TextBoxSession.TabIndex = 7
+        Me.TextBoxSession.Visible = False
         '
         'Label6
         '
@@ -625,7 +636,7 @@ Partial Class FormUploadResult
         DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
         Me.DataGridView2.RowsDefaultCellStyle = DataGridViewCellStyle4
-        Me.DataGridView2.Size = New System.Drawing.Size(505, 133)
+        Me.DataGridView2.Size = New System.Drawing.Size(601, 133)
         Me.DataGridView2.TabIndex = 21
         Me.DataGridView2.Visible = False
         '
@@ -649,7 +660,7 @@ Partial Class FormUploadResult
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxResultsDir.Location = New System.Drawing.Point(44, 10)
         Me.TextBoxResultsDir.Name = "TextBoxResultsDir"
-        Me.TextBoxResultsDir.Size = New System.Drawing.Size(541, 20)
+        Me.TextBoxResultsDir.Size = New System.Drawing.Size(637, 20)
         Me.TextBoxResultsDir.TabIndex = 23
         '
         'BackgroundWorkerBatch
@@ -658,18 +669,17 @@ Partial Class FormUploadResult
         'ListBoxBatch
         '
         Me.ListBoxBatch.FormattingEnabled = True
-        Me.ListBoxBatch.Location = New System.Drawing.Point(604, 10)
+        Me.ListBoxBatch.Location = New System.Drawing.Point(7, 290)
         Me.ListBoxBatch.Name = "ListBoxBatch"
-        Me.ListBoxBatch.Size = New System.Drawing.Size(156, 69)
-        Me.ListBoxBatch.TabIndex = 24
+        Me.ListBoxBatch.Size = New System.Drawing.Size(176, 134)
+        Me.ListBoxBatch.TabIndex = 41
         '
         'FormUploadResult
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(913, 566)
-        Me.Controls.Add(Me.ListBoxBatch)
+        Me.ClientSize = New System.Drawing.Size(1009, 566)
         Me.Controls.Add(Me.TextBoxResultsDir)
         Me.Controls.Add(Me.CheckBoxCustomOrder)
         Me.Controls.Add(Me.DataGridView2)
@@ -687,6 +697,7 @@ Partial Class FormUploadResult
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBoxExcelFilename)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormUploadResult"
         Me.Text = "Upload Result"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()

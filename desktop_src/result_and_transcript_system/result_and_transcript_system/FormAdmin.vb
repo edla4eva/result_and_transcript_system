@@ -8,7 +8,14 @@
     End Sub
 
     Private Sub ButtonBrowse_Click(sender As Object, e As EventArgs) Handles ButtonBroadsheets.Click
-        MainForm.ChangeMenu("GenerateBroadsheet")
+        'Show Courses Order
+        'Todo Move
+        Dim strSQLCoursesOrder As String
+        Dim coursesOrderDS As DataSet
+        strSQLCoursesOrder = "SELECT * FROM Courses_order WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
+        coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, "2018/2019", 1), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+
+        DataGridViewCoursesOrder.DataSource = coursesOrderDS.Tables(0).DefaultView
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles ButtonStudents.Click
@@ -33,5 +40,14 @@
 
     Private Sub FormAdmin_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
+    End Sub
+
+    Private Sub DataGridViewCoursesOrder_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCoursesOrder.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridViewCoursesOrder_RowLeave(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCoursesOrder.RowLeave
+        DataGridViewCoursesOrder.Update()
+
     End Sub
 End Class

@@ -367,7 +367,12 @@ Public Class FormUploadResult
 
                 'if name does not exist in db, create MOCK matno and use it. flag mock matnos
                 'TODO: AUTO040998990 'eg matno auto
-                If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Not (i = emptyRow) Then tmpDT.Rows(i).Item("matno") = "AUTO" & CStr(CInt(Rnd(Now.Second) * 10000) + i)   ' mappDB.getAutoMATNo
+
+                If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And Not (i = emptyRow) Then
+                    tmpDT.Rows(i).Item("matno") = "AUTO" & CStr(CInt(Rnd(Now.Second) * 10000) + i)   ' mappDB.getAutoMATNo
+                Else
+                    If CheckBoxPrefix.Checked = True Then tmpDT.Rows(i).Item("matno") = TextBoxPrefix.Text & tmpDT.Rows(i).Item("matno")
+                End If
 
                 'score cannot be null
                 If tmpDT.Rows(i).Item("score").ToString = "" And Not (i = emptyRow) Then tmpDT.Rows(i).Item("score") = -4 'moduleGeneral.Settings.ABS
@@ -497,19 +502,19 @@ Public Class FormUploadResult
     End Sub
 
     Private Sub ComboBoxSessions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSessions.SelectedIndexChanged
-        TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+        If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
     End Sub
 
     Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
-        TextBoxLevel.Text = ComboBoxLevel.SelectedItem.ToString
+        If Not ComboBoxLevel.SelectedItem = Nothing Then TextBoxLevel.Text = ComboBoxLevel.SelectedItem.ToString
     End Sub
 
     Private Sub ComboBoxCourseCode_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxCourseCode.SelectedIndexChanged
-        TextBoxCourseCode.Text = ComboBoxCourseCode.SelectedItem.ToString
+        If Not TextBoxCourseCode.Text = ComboBoxCourseCode.SelectedItem = Nothing Then TextBoxCourseCode.Text = ComboBoxCourseCode.SelectedItem.ToString
     End Sub
 
     Private Sub TextBoxCourseCode_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCourseCode.TextChanged
-        ComboBoxCourseCode.SelectedIndex = ComboBoxCourseCode.FindString(TextBoxCourseCode.Text)
+        'ComboBoxCourseCode.SelectedIndex = ComboBoxCourseCode.FindString(TextBoxCourseCode.Text)
     End Sub
 
     Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click

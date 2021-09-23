@@ -23,6 +23,7 @@ Public Class ClassBroadsheets
     Private _strMATNO As String() = Nothing
     Private _broadsheetFileName As String = Nothing
     Private _progress As Integer = 0
+    Private _progressStr As String = ""
     Private _excelWB As ExcelInterop.Workbook
     Private _regInfoCoursesFirstSem As List(Of String)
     Private _regInfoCoursesSecondSem As List(Of String)
@@ -72,6 +73,14 @@ Public Class ClassBroadsheets
             RaiseEvent myEventOnPrgressChanged(Me, e) 'MATNOChanged
         End Set
     End Property
+    Public Property progressStr() As String
+        Get
+            Return _progressStr
+        End Get
+        Set(ByVal value As String)
+            _progressStr = value
+        End Set
+    End Property
     Public Property broadsheetFileName() As String
         Get
             Return _broadsheetFileName
@@ -119,11 +128,18 @@ Public Class ClassBroadsheets
     End Property
 
 #End Region
-
-    Function createBroadsheetData(course_dept_idr As String, session_idr As String, course_level As String, Optional isInterrop As Boolean = False) As DataSet
+    '
+    ' Summary:
+    '     Creates a Dataset containing the broadsheet processed from results
+    '     obtained from db.
+    '
+    ' Parameters:
+    '   course_dept_idr:
+    '     An integer representing the department ID.
+    Function createBroadsheetData(course_dept_idr As Integer, session_idr As String, course_level As String, Optional isInterrop As Boolean = False) As DataSet
         'Algo
-        '1. count courseCodes in result table = j
-        '2. create dataset with j no of cols
+        '1. create fixed cols datatable
+        '2. use list of ordered couses (check sem to see if it exists) to change namme of col7-51 and56-100
         'for each col.name
         '   query students, left join results (convert null to NA -3
         '   transfer query result col to dataset col
@@ -131,67 +147,47 @@ Public Class ClassBroadsheets
 
         '#1 count courseCodes in result table = j
         Dim countC, countReg, countResultsBS As Integer
-        Dim coursesDS, coursesLevelDS, RegStudentsDS, FSBroadsheetDS As DataSet
-        Dim dictCoursesLevel As New Dictionary(Of Integer, String)
-        Dim strSQL, strSQLJoin As String
+        Dim AllCoursesDS, coursesOrderDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim dictCourseCodeKeyCourseOrderSNVal_1 As New Dictionary(Of Integer, String)
+        Dim dictCourseCodeKeyCourseOrderSNVal_2 As New Dictionary(Of Integer, String)
+        Dim dictCoursesOrder As New Dictionary(Of Integer, String)
+        Dim strSQL, strSQLRegStudents, strSQLAllCourses, strSQLCoursesOrder, strSQLJoin As String
         Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
         Dim tmpInt As Integer = -4
-        Dim scores(110) As String
-        Dim courses(110) As String
-        Dim credits(110) As Integer
-        Dim grades(110) As String
-        Dim gradePoints(110) As Integer
-        Dim passedCourses(110) As Boolean
+        Dim scores(120) As String
+        Dim courses(120) As String
+        Dim credits(120) As Integer
+        Dim grades(120) As String
+        Dim gradePoints(120) As Integer
+        Dim passedCourses(120) As Boolean
         Dim gpa As Double
-        strSQL = "SELECT Courses.course_code, Courses.course_level, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order, Count(Courses.course_order) AS CountOfcourse_order
-                  FROM Courses
-                 GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
-                 HAVING (((Courses.course_semester)=1) AND ((Courses.course_dept_idr)={0}) AND ((Count(Courses.course_order))>0))
-                 ORDER BY Courses.course_level, Courses.course_order;" 'and level
-        'or'strSQL = "SELECT course_code,course_unit FROM QueryFS_Coursers_Ordered"
-        coursesDS = mappDB.GetDataWhere(String.Format(strSQL, course_dept_idr), "Courses")
-        coursesLevelDS = coursesDS
-        coursesLevelDS.Tables(0).DefaultView.RowFilter = "course_level=" & course_level 'do use this for ui/ux
-
-        countC = coursesDS.Tables(0).Rows.Count
-        strSQL = "SELECT reg.matno FROM reg WHERE session_idr='{0}'"    'and level=course_level 
-        RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQL, session_idr), "Reg")
-        countReg = RegStudentsDS.Tables(0).Rows.Count
 
         strSQLJoin = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
                       Results.Session_idr  FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
                       Results.Session_idr HAVING (((Results.course_code_idr)='{0}') AND ((Results.Session_idr)='{1}'));"
+        strSQLAllCourses = "SELECT Courses.course_code, Courses.course_level, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order, Count(Courses.course_order) AS CountOfcourse_order
+                  FROM Courses
+                 GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
+                 HAVING (((Courses.course_semester)>0))
+                 ORDER BY Courses.course_level, Courses.course_order;" 'and level
+        strSQLCoursesOrder = "SELECT * FROM Courses_order WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
+        strSQLRegStudents = "SELECT reg.matno FROM reg WHERE session_idr='{0}'"    'and level=course_level 
 
-
+        RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, session_idr), "Reg")
+        coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+        AllCoursesDS = mappDB.GetDataWhere(String.Format(strSQLAllCourses, course_dept_idr), "Courses")
+        countC = AllCoursesDS.Tables(0).Rows.Count
+        countReg = RegStudentsDS.Tables(0).Rows.Count
 
         '#2 Dataset creation 
-        '--------------------------
-        'Very good!
         Dim ds As New DataSet
         Dim dt As New DataTable
         Dim dr As DataRow
-        Dim tmpCol As DataColumn    'Dim Coulumn, matnoCoulumn, nameCoulumn As DataColumn Dim caCoulumn, scoreCoulumn, examCoulumn, surnameCoulumn, otherNameCoulumn As DataColumn
         Dim dictCol, dictMATNO As New Dictionary(Of String, Integer)
         dt.TableName = "BroadsheetFS"
+        dt = createColS(dt) '## Create Fixed Cols TODO: put in sub
 
-        'Create Fixed Cols TODO: put in sub
-        tmpCol = New DataColumn("sn", Type.GetType("System.String")) '1
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("matno", Type.GetType("System.String")) '2
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("FullName", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("OtherNames", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("Surname", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("RepeatAll", Type.GetType("System.String")) '6
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("RepeatFirstSem", Type.GetType("System.String")) '6 syst
-        dt.Columns.Add(tmpCol)
-
-        'Get mat nos
-        For i = 0 To countReg - 1
+        For i = 0 To countReg - 1   '##'Get mat nos
             dictMATNO.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), -4)   'add disting students
             'add em rows
             dr = dt.NewRow()
@@ -200,93 +196,86 @@ Public Class ClassBroadsheets
             dt.Rows.Add(dr)
         Next
 
-        'worked TODO: let courses iterate like this in next loops
+
+        Dim dictAllCourseCodeKeyAndCourseUnitVal As New Dictionary(Of String, Integer)
+        Dim dictAllCourseCodeKeyAndCourseLevelVal As New Dictionary(Of String, Integer)
+        Dim dictAllCoursesCredtsLevel As New Dictionary(Of String, Integer)
+        'getCourseCredit(tmpstr) Return dictAllCoursesAllCredits(tmpStr)
+
+        'Get All Courses in Array
         For j = 0 To countC - 1 'create columns for courses 'TODO: 1st and second
-            tmpCol = New DataColumn(coursesDS.Tables(0).Rows(j).Item("course_code"), Type.GetType("System.Int32"))
-            dt.Columns.Add(tmpCol)
-            credits(j) = CInt(coursesDS.Tables(0).Rows(j).Item("course_unit").ToString) 'todo: issues <110 courses
-            courses(j) = coursesDS.Tables(0).Rows(j).Item("course_code").ToString 'todo: issues <110 courses
-            If CInt(coursesDS.Tables(0).Rows(j).Item("course_level").ToString) >= CInt(course_level) Then       'level and higer level courses cannot be repeated
-                dictCoursesLevel.Add(j, coursesDS.Tables(0).Rows(j).Item("course_code").ToString)
-            End If
+            dictAllCourseCodeKeyAndCourseUnitVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_unit").ToString))
+            dictAllCourseCodeKeyAndCourseLevelVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_level").ToString))
+        Next
+
+        dictCourseCodeKeyCourseOrderSNVal_1.Clear()
+        dictCourseCodeKeyCourseOrderSNVal_2.Clear()
+
+        objBroadsheet.progressStr = "Creating DataSets " & " ..."
+        '# Rename Cols with Course Code 'Use the Courses_order take one by one and check if it exists.  'If it exists in coursesAllList, add it to courses for each level
+        Dim colStartPos As Integer = 0
+        For i = 0 To 5 - 1
+            colStartPos = 7 + (i * 15)
+            For j = 0 To 15 - 1 'create columns for courses 'TODO: 1st and second
+                tmpStr = "FS" & (i + 1).ToString & "00L"
+                tmpStr = coursesOrderDS.Tables(0).Rows(j).Item(tmpStr).ToString 'e.g coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
+                'tmpStr = coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
+                    'dictCourseCodeKeyCourseOrderSNVal_1.Add(0 + j, tmpStr)
+                    dt.Columns(colStartPos + j).ColumnName = tmpStr
+                End If
+                tmpStr = "SS" & (i + 1).ToString & "00L"
+                tmpStr = coursesOrderDS.Tables(0).Rows(j).Item(tmpStr).ToString 'e.g coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
+                'tmpStr = coursesOrderDS.Tables(0).Rows(j).Item("SS100L").ToString
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
+                    If dictAllCourseCodeKeyAndCourseLevelVal(tmpStr) = 100 Then
+                        'dictCourseCodeKeyCourseOrderSNVal_2.Add(0 + j, tmpStr)
+                        dt.Columns(colStartPos + 55 + j).ColumnName = tmpStr
+                    End If
+                End If
+
+            Next
         Next
 
 
-        'from broadsheet template courses start from col H = 8 (i.e 7 counting from 0)
-        For jCourseCol = 7 To countC - 1 ' for each col(ie course code) put rows in result table in dictC
-            'HINT: this wrong line gave me problem for days strSQLJoin = String.Format(strSQLJoin, dt.Columns(jCourseCol).ColumnName, session_idr) 
-            tmpStr = String.Format(strSQLJoin, dt.Columns(jCourseCol).ColumnName, session_idr)   'SELECT ... LEFT JOIN
 
-            FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
+        'Rename the cols---- from broadsheet template courses start from col H = 8 (i.e 7 counting from 0)
+        Dim inxC As Integer = 0
+        Dim levelPos = 0
 
-            'SELECT Reg.MatNo, Reg.session_idr, Results.total, Results.course_code_idr From Reg LEFT Join Results On Reg.MatNo = Results.matno'Where (((Reg.session_idr) = "2018/2019") And ((Results.course_code_idr) = "CPE301"));
-            'TODO: posible duplicate MATNO in query if duplicate result is in result table
-            'Approach 1: avoid duplicate in result table           'Approach 2: use agregate first or last           'Approach 3: use data structures list, array
-            countResultsBS = FSBroadsheetDS.Tables(0).Rows.Count
-            dictCol.Clear()
-
-            For iBSRow = 0 To countResultsBS - 1
-                tmpStr = FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("matno")
-                'Debug.Print(FSBroadsheetDS.Tables(0).Rows(i).Item(tmpCol.ColumnName))
-                'Debug.Print(FSBroadsheetDS.Tables(0).Rows(i).Item("total"))
-                If Not dictCol.ContainsKey(tmpStr) Then
-                    dictCol.Add(tmpStr, FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("LastOftotal"))   'add disting students
-                Else
-                    'todo: handle these duplicate results somehow
-                End If
-                'OR 'dictCol(tmpStr) = findMATNO(FSBroadsheetDS.Tables(0).Rows(i).Item("matno"), dictCol(i).key.name)   '
-            Next
-
-            'Debug.Print("MATNO: ")
-            'Debug.Print(String.Join(", ", dictMATNO.Values.ToArray.ToString))
-            'Debug.Print("Values: ")
-            'Debug.Print(String.Join(", ", dictCol.Values.ToArray.ToString))
-            'transfer  the matching scores to dictMATNO
-            Dim colKeys() As String = dictMATNO.Keys.ToArray
-            If dictCol.Count > 0 Then
-                For Each colkey In colKeys
-                    Dim tmpVal As Integer = dictMATNO(colkey)
-                    Debug.Print(colkey & ": " & dictMATNO(colkey).ToString & ", score: " & tmpVal) 'dictMATNO.ContainsValue("4"),  dictMATNO.containskey("4")
-
-                    If dictCol.ContainsKey(colkey) Then tmpVal = dictCol(colkey) Else tmpVal = -5 'change the value
-                    dictMATNO(colkey) = tmpVal
-                Next colkey
-
-
+        For inxC = 7 To 7 + 55 - 1
+            If Not dt.Columns(inxC).ColumnName.Contains("ColUNIQUE") Then
+                'Now query db with coursecode
+                tmpStrCourseCode = dt.Columns(inxC).ColumnName
+                objBroadsheet.progressStr = "Generating results for " & tmpStrCourseCode & " ..."
+                tmpStr = String.Format(strSQLJoin, tmpStrCourseCode, session_idr)   'SELECT ... LEFT JOIN
+                FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
+                countResultsBS = FSBroadsheetDS.Tables(0).Rows.Count
+                dictCol.Clear()
+                '|-
+                dictCol = doMATNos(dictCol, FSBroadsheetDS)
+                dictMATNO = doCourses(dictMATNO, dictCol) 'transfer matching score to dictMATNO
+                '|----
                 'Update dataset with result values
-                For iMainDS = 0 To dt.Rows.Count - 1
-                    'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
-                    tmpStrCourseCode = dt.Columns(jCourseCol).ColumnName
-                    tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
-                    If dictMATNO.ContainsKey(tmpStrMATNO) Then
-                        'todo
-                        dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
-                    Else
-                        dt.Rows(iMainDS).Item(tmpStrCourseCode) = -7
-                    End If
-                Next
+                If dictCol.Count > 0 Then
+                    For iMainDS = 0 To dt.Rows.Count - 1
+                        'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
+                        tmpStrCourseCode = dt.Columns(inxC).ColumnName
+                        tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
+                        If dictMATNO.ContainsKey(tmpStrMATNO) Then
+                            'todo
+                            dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
+                        Else
+                            dt.Rows(iMainDS).Item(tmpStrCourseCode) = -7
+                        End If
+                    Next
+                End If
 
-            Else
-                'No need to iterate through scores because no result was found
             End If
-            objBroadsheet.progress = jCourseCol / countC * 80
-        Next    'end for  each col(ie course code)
+            objBroadsheet.progress = (inxC / (7 + 55 - 1)) * 80
+        Next
 
 
-        tmpCol = New DataColumn("RepeatCourses_1", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("TCF_1", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("TCP_1", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("TCR_1", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-
-        'others
-        tmpCol = New DataColumn("Session", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("GPA", Type.GetType("System.String"))
-        dt.Columns.Add(tmpCol)
 
 
         'Now Update result in Dataset
@@ -303,13 +292,42 @@ Public Class ClassBroadsheets
             'compute every thing first
 
 
-            'credits=From db query courses
+            'Update dt Datatable with scores
             Dim countRows As Integer = dt.Rows.Count - 1    'todo: move up
+            Dim iScore As Integer = 0
+            Dim iMarker(5) As Integer
+
+            objBroadsheet.progressStr = "Computing scores " & " ..."
             For i = 0 To countRows - 1
-                For j = 8 To 20 '63
-                    scores(j - 8) = dt.Rows(i).Item(j).ToString
-                    'passedCourses(j - 8) = isPassed(dt.Rows(i).Item(j).ToString)
+                For j = 7 To (7 + 55) - 1 'First Semester
+
+                    'Or scores.add(...)
+                    tmpStr = dt.Columns(j).ColumnName
+                    If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Or Not tmpStr.Contains("ColUNIQUE") Then
+                        scores(j) = dt.Rows(i).Item(j).ToString
+                        credits(i) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStr)
+                        iScore = iScore + 1
+                    Else
+                        scores(j) = 0
+                        If iMarker(0) = Nothing Then iMarker(0) = j   'on off marker
+                    End If
                 Next
+                For j = 66 To 120 - 1
+                    tmpStr = dt.Columns(j).ColumnName
+                    If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Or Not tmpStr.Contains("ColUNIQUE") Then
+                        scores(j) = dt.Rows(i).Item(j).ToString
+                        credits(i) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStr)
+                        dictAllCoursesCredtsLevel.Add(dt.Columns(j).ColumnName, dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(j).ColumnName))
+                        iScore = iScore + 1
+                    Else
+                        scores(j) = 0
+                        If iMarker(1) = Nothing Then iMarker(1) = j
+                    End If
+
+                Next
+
+                'Debug.Print("Check: " & dictAllCoursesCredtsLevel.Count = scores.Count)
+                objBroadsheet.progressStr = "Computing grades, credit passed etc " & " ..."
                 grades = getGRADES(scores, Nothing, Nothing)
                 gradePoints = getGRADESPoints(grades)
                 gpa = CalcGPA(gradePoints, credits)
@@ -317,20 +335,320 @@ Public Class ClassBroadsheets
                 dt.Rows(i).Item("TCR_1") = TCR(grades, credits)
                 dt.Rows(i).Item("TCP_1") = TCP(grades, credits)
 
-                dt.Rows(i).Item("RepeatCourses_1") = getRepeatCourses(scores, credits, CInt(course_level), courses, dictCoursesLevel)
-                dt.Rows(i).Item("RepeatFirstSem") = dt.Rows(i).Item("RepeatCourses_1")
+                dt.Rows(i).Item("RepeatCourses_1") = getRepeatCourses(scores, credits, CInt(course_level), courses, dictCourseCodeKeyCourseOrderSNVal_1)
 
+                dt.Rows(i).Item("RepeatCourses_1") = getRepeatCoursesCompact(scores, dictAllCoursesCredtsLevel, dictCourseCodeKeyCourseOrderSNVal_1)
 
                 objBroadsheet.progress = 80 + (i / countRows * 16)  'max 80+16 = 96%
             Next
 
         End If
-
-
+        objBroadsheet.progressStr = "Done!"
         objBroadsheet.progress = 97 'update progress
         ds.Tables.Add(dt)
 
         Return ds
+    End Function
+    Function createColS(dt As DataTable) As DataTable
+        Dim tmpCol As DataColumn    'Dim Coulumn, matnoCoulumn, nameCoulumn As DataColumn Dim caCoulumn, scoreCoulumn, examCoulumn, surnameCoulumn, otherNameCoulumn As DataColumn
+
+        tmpCol = New DataColumn("sn", Type.GetType("System.String")) '1
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("matno", Type.GetType("System.String")) '2
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("FullName", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("OtherNames", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Surname", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("RepeatAll", Type.GetType("System.String")) '6
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("RepeatCourses_1", Type.GetType("System.String")) '6 syst
+        dt.Columns.Add(tmpCol)
+        For j = 7 To 61 '7 + 55 - 1 'create columns for courses 'TODO: 1st and second
+            tmpCol = New DataColumn("ColUNIQUE" & j, Type.GetType("System.Int32"))
+            dt.Columns.Add(tmpCol)
+        Next
+        tmpCol = New DataColumn("TCF_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCP_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCR_1", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("RepeatCourses_2", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        For j = 66 To 120 '7 + 55 - 1 'create columns for courses 'TODO: 1st and second
+            tmpCol = New DataColumn("ColUNIQUE" & j, Type.GetType("System.Int32"))
+            dt.Columns.Add(tmpCol)
+        Next
+        tmpCol = New DataColumn("TCF_2", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCP_2", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCR_2", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCF", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCP", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("TCR", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        '...
+        tmpCol = New DataColumn("GPA", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Class", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Status", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Failed", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+
+        'others
+        tmpCol = New DataColumn("Session", Type.GetType("System.String"))
+        dt.Columns.Add(tmpCol)
+        Return dt
+    End Function
+    Function doMATNos(dictCol As Dictionary(Of String, Integer), FSBroadsheetDS As DataSet) As Dictionary(Of String, Integer)
+        Dim tmpstr As String
+        For iBSRow = 0 To FSBroadsheetDS.Tables(0).Rows.Count - 1
+            tmpstr = FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("matno")
+            If Not dictCol.ContainsKey(tmpstr) Then
+                dictCol.Add(tmpstr, FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("LastOftotal"))   'add disting students
+            Else
+                'todo: handle these duplicate results somehow
+            End If
+            'OR 'dictCol(tmpStr) = findMATNO(FSBroadsheetDS.Tables(0).Rows(i).Item("matno"), dictCol(i).key.name)   '
+        Next
+        Return dictCol
+    End Function
+    Function doCourses(dictMATNO As Dictionary(Of String, Integer), dictCol As Dictionary(Of String, Integer)) As Dictionary(Of String, Integer)
+        '--transfer  the matching scores to dictMATNO
+        Dim colKeys() As String = dictMATNO.Keys.ToArray
+        If dictCol.Count > 0 Then
+            For Each colkey In colKeys
+                Dim tmpVal As Integer = dictMATNO(colkey)
+                If dictCol.ContainsKey(colkey) Then tmpVal = dictCol(colkey) Else tmpVal = -5 'change the value
+                dictMATNO(colkey) = tmpVal
+            Next colkey
+
+        Else
+            'No need to iterate through scores because no result was found
+        End If
+        Return dictMATNO
+    End Function
+    'renames here as backup in case we screw up the function
+    Function backup_createBroadsheetData(course_dept_idr As Integer, session_idr As String, course_level As String, Optional isInterrop As Boolean = False) As DataSet
+        ''Algo
+        ''1. count courseCodes in result table = j
+        ''2. create dataset with j no of cols
+        ''for each col.name
+        ''   query students, left join results (convert null to NA -3
+        ''   transfer query result col to dataset col
+        ''next
+
+        ''#1 count courseCodes in result table = j
+        'Dim countC, countReg, countResultsBS As Integer
+        'Dim coursesDS, coursesLevelDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        'Dim dictCoursesLevel As New Dictionary(Of Integer, String)
+        'Dim strSQL, strSQLJoin As String
+        'Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
+        'Dim tmpInt As Integer = -4
+        'Dim scores(110) As String
+        'Dim courses(110) As String
+        'Dim credits(110) As Integer
+        'Dim grades(110) As String
+        'Dim gradePoints(110) As Integer
+        'Dim passedCourses(110) As Boolean
+        'Dim gpa As Double
+        'strSQL = "SELECT Courses.course_code, Courses.course_level, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order, Count(Courses.course_order) AS CountOfcourse_order
+        '          FROM Courses
+        '         GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
+        '         HAVING (((Courses.course_semester)=1) AND ((Courses.course_dept_idr)={0}) AND ((Count(Courses.course_order))>0))
+        '         ORDER BY Courses.course_level, Courses.course_order;" 'and level
+        ''or'strSQL = "SELECT course_code,course_unit FROM QueryFS_Coursers_Ordered"
+        'coursesDS = mappDB.GetDataWhere(String.Format(strSQL, course_dept_idr), "Courses")
+        'coursesLevelDS = coursesDS
+        'coursesLevelDS.Tables(0).DefaultView.RowFilter = "course_level=" & course_level 'do use this for ui/ux
+
+        'countC = coursesDS.Tables(0).Rows.Count
+        'strSQL = "SELECT reg.matno FROM reg WHERE session_idr='{0}'"    'and level=course_level 
+        'RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQL, session_idr), "Reg")
+        'countReg = RegStudentsDS.Tables(0).Rows.Count
+
+        'strSQLJoin = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
+        '              Results.Session_idr  FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
+        '              Results.Session_idr HAVING (((Results.course_code_idr)='{0}') AND ((Results.Session_idr)='{1}'));"
+
+
+
+        ''#2 Dataset creation 
+        ''--------------------------
+        ''Very good!
+        'Dim ds As New DataSet
+        'Dim dt As New DataTable
+        'Dim dr As DataRow
+        'Dim tmpCol As DataColumn    'Dim Coulumn, matnoCoulumn, nameCoulumn As DataColumn Dim caCoulumn, scoreCoulumn, examCoulumn, surnameCoulumn, otherNameCoulumn As DataColumn
+        'Dim dictCol, dictMATNO As New Dictionary(Of String, Integer)
+        'dt.TableName = "BroadsheetFS"
+
+        ''Create Fixed Cols TODO: put in sub
+        'tmpCol = New DataColumn("sn", Type.GetType("System.String")) '1
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("matno", Type.GetType("System.String")) '2
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("FullName", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("OtherNames", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("Surname", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("RepeatAll", Type.GetType("System.String")) '6
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("RepeatFirstSem", Type.GetType("System.String")) '6 syst
+        'dt.Columns.Add(tmpCol)
+
+        ''Get mat nos
+        'For i = 0 To countReg - 1
+        '    dictMATNO.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), -4)   'add disting students
+        '    'add em rows
+        '    dr = dt.NewRow()
+        '    dr("matno") = RegStudentsDS.Tables(0).Rows(i).Item("matno")
+        '    dr("sn") = (i + 1).ToString
+        '    dt.Rows.Add(dr)
+        'Next
+
+        ''worked TODO: let courses iterate like this in next loops
+        'For j = 0 To countC - 1 'create columns for courses 'TODO: 1st and second
+        '    tmpCol = New DataColumn(coursesDS.Tables(0).Rows(j).Item("course_code"), Type.GetType("System.Int32"))
+        '    dt.Columns.Add(tmpCol)
+        '    credits(j) = CInt(coursesDS.Tables(0).Rows(j).Item("course_unit").ToString) 'todo: issues <110 courses
+        '    courses(j) = coursesDS.Tables(0).Rows(j).Item("course_code").ToString 'todo: issues <110 courses
+        '    If CInt(coursesDS.Tables(0).Rows(j).Item("course_level").ToString) >= CInt(course_level) Then       'level and higer level courses cannot be repeated
+        '        dictCoursesLevel.Add(j, coursesDS.Tables(0).Rows(j).Item("course_code").ToString)
+        '    End If
+        'Next
+
+
+        ''from broadsheet template courses start from col H = 8 (i.e 7 counting from 0)
+        'For jCourseCol = 7 To countC - 1 ' for each col(ie course code) put rows in result table in dictC
+        '    'HINT: this wrong line gave me problem for days strSQLJoin = String.Format(strSQLJoin, dt.Columns(jCourseCol).ColumnName, session_idr) 
+        '    tmpStr = String.Format(strSQLJoin, dt.Columns(jCourseCol).ColumnName, session_idr)   'SELECT ... LEFT JOIN
+
+        '    FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
+
+        '    'SELECT Reg.MatNo, Reg.session_idr, Results.total, Results.course_code_idr From Reg LEFT Join Results On Reg.MatNo = Results.matno'Where (((Reg.session_idr) = "2018/2019") And ((Results.course_code_idr) = "CPE301"));
+        '    'TODO: posible duplicate MATNO in query if duplicate result is in result table
+        '    'Approach 1: avoid duplicate in result table           'Approach 2: use agregate first or last           'Approach 3: use data structures list, array
+        '    countResultsBS = FSBroadsheetDS.Tables(0).Rows.Count
+        '    dictCol.Clear()
+
+        '    For iBSRow = 0 To countResultsBS - 1
+        '        tmpStr = FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("matno")
+        '        'Debug.Print(FSBroadsheetDS.Tables(0).Rows(i).Item(tmpCol.ColumnName))
+        '        'Debug.Print(FSBroadsheetDS.Tables(0).Rows(i).Item("total"))
+        '        If Not dictCol.ContainsKey(tmpStr) Then
+        '            dictCol.Add(tmpStr, FSBroadsheetDS.Tables(0).Rows(iBSRow).Item("LastOftotal"))   'add disting students
+        '        Else
+        '            'todo: handle these duplicate results somehow
+        '        End If
+        '        'OR 'dictCol(tmpStr) = findMATNO(FSBroadsheetDS.Tables(0).Rows(i).Item("matno"), dictCol(i).key.name)   '
+        '    Next
+
+        '    'Debug.Print("MATNO: ")
+        '    'Debug.Print(String.Join(", ", dictMATNO.Values.ToArray.ToString))
+        '    'Debug.Print("Values: ")
+        '    'Debug.Print(String.Join(", ", dictCol.Values.ToArray.ToString))
+        '    'transfer  the matching scores to dictMATNO
+        '    Dim colKeys() As String = dictMATNO.Keys.ToArray
+        '    If dictCol.Count > 0 Then
+        '        For Each colkey In colKeys
+        '            Dim tmpVal As Integer = dictMATNO(colkey)
+        '            Debug.Print(colkey & ": " & dictMATNO(colkey).ToString & ", score: " & tmpVal) 'dictMATNO.ContainsValue("4"),  dictMATNO.containskey("4")
+
+        '            If dictCol.ContainsKey(colkey) Then tmpVal = dictCol(colkey) Else tmpVal = -5 'change the value
+        '            dictMATNO(colkey) = tmpVal
+        '        Next colkey
+
+
+        '        'Update dataset with result values
+        '        For iMainDS = 0 To dt.Rows.Count - 1
+        '            'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
+        '            tmpStrCourseCode = dt.Columns(jCourseCol).ColumnName
+        '            tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
+        '            If dictMATNO.ContainsKey(tmpStrMATNO) Then
+        '                'todo
+        '                dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
+        '            Else
+        '                dt.Rows(iMainDS).Item(tmpStrCourseCode) = -7
+        '            End If
+        '        Next
+
+        '    Else
+        '        'No need to iterate through scores because no result was found
+        '    End If
+        '    objBroadsheet.progress = jCourseCol / countC * 80
+        'Next    'end for  each col(ie course code)
+
+
+        'tmpCol = New DataColumn("RepeatCourses_1", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("TCF_1", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("TCP_1", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("TCR_1", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+
+        ''others
+        'tmpCol = New DataColumn("Session", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+        'tmpCol = New DataColumn("GPA", Type.GetType("System.String"))
+        'dt.Columns.Add(tmpCol)
+
+
+        ''Now Update result in Dataset
+        'If isInterrop Then  'TODO: impliment condition
+        '    'fml stuff special consideration for excel 
+        '    'add formula
+        '    'Dim fsFml, ssFml As String
+        '    'Dim fml As String()
+        '    'fml = objBroadsheet.generateFormulaCO()
+        '    'fsFml = fml(0)
+        '    'ssFml = fml(1)
+
+        'Else
+        '    'compute every thing first
+
+
+        '    'credits=From db query courses
+        '    Dim countRows As Integer = dt.Rows.Count - 1    'todo: move up
+        '    For i = 0 To countRows - 1
+        '        For j = 8 To 20 '63
+        '            scores(j - 8) = dt.Rows(i).Item(j).ToString
+        '            'passedCourses(j - 8) = isPassed(dt.Rows(i).Item(j).ToString)
+        '        Next
+        '        grades = getGRADES(scores, Nothing, Nothing)
+        '        gradePoints = getGRADESPoints(grades)
+        '        gpa = CalcGPA(gradePoints, credits)
+        '        dt.Rows(i).Item("GPA") = gpa.ToString
+        '        dt.Rows(i).Item("TCR_1") = TCR(grades, credits)
+        '        dt.Rows(i).Item("TCP_1") = TCP(grades, credits)
+
+        '        dt.Rows(i).Item("RepeatCourses_1") = getRepeatCourses(scores, credits, CInt(course_level), courses, dictCoursesLevel)
+        '        dt.Rows(i).Item("RepeatFirstSem") = dt.Rows(i).Item("RepeatCourses_1")
+
+
+        '        objBroadsheet.progress = 80 + (i / countRows * 16)  'max 80+16 = 96%
+        '    Next
+
+        'End If
+
+
+        'objBroadsheet.progress = 97 'update progress
+        'ds.Tables.Add(dt)
+
+        'Return ds
     End Function
 
     Function createDataSetHowTo(strArrayMATNO As String()) As DataSet
@@ -1028,6 +1346,32 @@ Public Class ClassBroadsheets
             End If
         Catch ex As Exception
             Return False
+        End Try
+    End Function
+    Function getRepeatCoursesCompact(scores As String(), dCredits As Dictionary(Of String, Integer), dLevelCourses As Dictionary(Of Integer, String)) As String
+        Dim tmpStr As String = ""
+
+        'dLevelCourses.Add(1, "GST111")
+        'dLevelCourses.Add(2, "GST112")
+        '...
+        'dLevelCourses.Add(3, "MEE211")
+
+        If Not dLevelCourses.ContainsValue("GST111") Then Debug.Print("not there")  'if it is not a level course, it can appear in repeated courses
+
+        Try
+            For i = 0 To scores.Count - 1
+                If IsRegisteredScore(scores(i)) Then    ' And Not dLevelCourses.ContainsValue(dCourses(i)) Then
+                    If tmpStr = "" Then
+                        tmpStr = tmpStr & dCredits.Keys(i) & "/" & dCredits.Values(i) & "/" & scores(i)   'avoid leading ","
+                    Else
+                        tmpStr = tmpStr & ", " & dCredits.Keys(i) & "/" & dCredits.Values(i) & "/" & scores(i)
+                    End If
+
+                End If
+            Next
+            Return tmpStr
+        Catch ex As Exception
+            Return -4
         End Try
     End Function
     Function getRepeatCourses(scores As String(), dCredit As Integer(), dLevel As Integer, dCourses As String(), dLevelCourses As Dictionary(Of Integer, String)) As String
