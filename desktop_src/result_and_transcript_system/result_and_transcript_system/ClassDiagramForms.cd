@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="result_and_transcript_system.FormCourseAdviser">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAABEDAAAAAAAAGAQBgCIQQgYAgAgAAAAAAAAgQ=</HashCode>
+      <FileName>FormCourseAdviser.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="result_and_transcript_system.FormGenerateBroadsheet">
+    <Position X="4.5" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAgBUDAAAAAADwGAECAiACQQAAAIiAAAAEAACgA=</HashCode>
+      <FileName>FormGenerateBroadsheet.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="result_and_transcript_system.FormResultsTranscripts">
+    <Position X="6.75" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAQhAEEiGRCAyAAASAAwAOiAQAAiARIAgAQSCAQAQ=</HashCode>
+      <FileName>FormResultsTranscripts.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="result_and_transcript_system.FormUploadResult">
+    <Position X="2.5" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAhETAgAACAAgGAEAEiAAQwIAEYiAAAACAAQhQ=</HashCode>
+      <FileName>FormUploadResult.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

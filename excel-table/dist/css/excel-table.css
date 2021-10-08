@@ -1,0 +1,21 @@
+.tbl-editable { border-collapse: collapse; }
+.tbl-editable tr td { padding: 5px; position: relative; }
+.tbl-editable input.editable { display: block; box-sizing: content-box; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; border: none; margin: -5px; width: 100%; max-height: 20px; padding: 5px; }
+.tbl-editable .editable.readonly { pointer-events: none; cursor: not-allowed; filter: alpha(opacity=85); -webkit-box-shadow: none; box-shadow: none; opacity: .85; }
+.tbl-editable .editable.updating { background-color: rgba(0,0,0,0.1); border: solid 1px #ccc; }
+.tbl-editable .editable.update-error { border: solid 1px #f00; }
+.tbl-editable input.editable:not(.readonly) { background-color: rgba(254, 255, 200, 0.9); }
+.tbl-editable { /*border-collapse: separate;*/ }
+.tbl-editable tr td > input[disabled] { background: initial; }
+.tbl-editable tr td { position: relative; }
+.tbl-editable tr td > input.editable.editing { }
+.tbl-editable tr td.active { }
+div.et-active { position: absolute; border: solid 2px #0094ff; cursor: crosshair; padding: 4px; box-sizing: content-box; -webkit-box-sizing: content-box; padding-bottom: 4px; margin-top: -1px; }
+.et-wrapper { position: relative; }
+.excel-table { clear: both; }
+.excel-table td { border-left: solid 1px #ccc; border-bottom: solid 1px #ccc; }
+.tbl-editable tr td.range { background: rgba(0, 148, 255, 0.20); }
+.tbl-editable tr td.ranger { background: -moz-linear-gradient(top,rgba(181,209,255,0.34) 0,rgba(181,209,255,0.34) 100%); background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgba(181,209,255,0.34)),color-stop(100%,rgba(181,209,255,0.34))); background: -webkit-linear-gradient(top,rgba(181,209,255,0.34) 0,rgba(181,209,255,0.34) 100%); background: -o-linear-gradient(top,rgba(181,209,255,0.34) 0,rgba(181,209,255,0.34) 100%); background: -ms-linear-gradient(top,rgba(181,209,255,0.34) 0,rgba(181,209,255,0.34) 100%); background: linear-gradient(to bottom,rgba(181,209,255,0.34) 0,rgba(181,209,255,0.34) 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#57b5d1ff',endColorstr='#57b5d1ff',GradientType=0); background-color: #fff; }
+* { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+.tingu { background-color: #0094ff; height: 8px; width: 8px; border: solid 2px #fff; position: absolute; bottom: -5px; right: -5px; cursor: crosshair; }
+.et-dragging { cursor: crosshair; }

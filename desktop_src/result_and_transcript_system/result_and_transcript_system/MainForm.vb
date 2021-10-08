@@ -1,5 +1,5 @@
 ﻿Public Class MainForm
-
+#Region "UI Stuff"
     'This are the variables for the button and panel objects
     Private currentButton As Button
     Private leftBorderButton As Panel
@@ -8,6 +8,7 @@
     Const WM_NCHITTEST As Integer = &H84
     Const HTCLIENT As Integer = 1
     Const HTCAPTION As Integer = 2
+    Private dCurrentForm As String = "User"
 
     'This overrides the WndProc method to control the main form to make it adjustable
     'This was a borrowed code
@@ -89,32 +90,6 @@
         frm.Show()
 
     End Sub
-
-
-    'This method tells the addForm the right form .....
-    'To change to when the right parameter is passed
-    Public Sub ChangeMenu(menu As String)
-        'This is select case statement for every form that needs to be changed to
-        Select Case menu
-            Case "Home"
-                addForm(HomeForm)
-            Case "User"
-                addForm(LoginForm1)
-            Case "CourseAdviser"
-                addForm(FormCourseAdviser)
-            Case "CourseLecturer"
-                addForm(FormCourseLecturer)
-            Case "GenerateBroadsheet"
-                addForm(FormGenerateBroadsheet)
-            Case "CourseAdviser"
-                addForm(FormCourseAdviser)
-            Case "Student"
-                addForm(FormStudent)
-            Case "UploadResult"
-                addForm(FormUploadResult)
-        End Select
-    End Sub
-
     'This is for when the home button is clicked
     Private Sub ButtonHome_Click(sender As Object, e As EventArgs) Handles ButtonHome.Click
         ActiveButton(sender, RGBColors.colorCrimson)
@@ -125,18 +100,6 @@
     Private Sub ButtonUser_Click(sender As Object, e As EventArgs) Handles ButtonUser.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         ChangeMenu("User")
-    End Sub
-
-    Private Sub PanelContainer_Paint(sender As Object, e As PaintEventArgs) Handles PanelContainer.Paint
-
-    End Sub
-
-    Private Sub MainForm_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
-
-    End Sub
-
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
     End Sub
 
     'This variables are used for making the mainForm draggable
@@ -165,6 +128,145 @@
     Private Sub Panel1_MouseUp(sender As Object, e As MouseEventArgs) Handles Panel1.MouseUp
         'when mouse is not pressed then the for should not drag
         draggable = False
+    End Sub
+
+#End Region
+    'This method tells the addForm the right form .....
+    'To change to when the right parameter is passed
+    'TODO: Let all UI actions be handled in this class (i.e seperate UI from functionality
+    Public Sub ChangeMenu(menu As String)
+        'This is select case statement for every form that needs to be changed to
+
+        Select Case menu
+            Case "Home"
+                addForm(HomeForm)
+                Me.WindowState = FormWindowState.Normal
+            Case "User"
+                addForm(LoginForm1)
+                Me.WindowState = FormWindowState.Normal
+            Case "Settings"
+                addForm(FormSettings)
+                Me.WindowState = FormWindowState.Maximized
+            Case "CourseAdviser"
+                addForm(FormCourseAdviser)
+                Me.WindowState = FormWindowState.Maximized
+            Case "CourseLecturer"
+                addForm(FormCourseLecturer)
+                Me.WindowState = FormWindowState.Maximized
+            Case "GenerateBroadsheet"
+                addForm(FormGenerateBroadsheet)
+                Me.WindowState = FormWindowState.Maximized
+            Case "CourseAdviser"
+                addForm(FormCourseAdviser)
+                Me.WindowState = FormWindowState.Maximized
+            Case "Student"
+                addForm(FormStudent)
+                Me.WindowState = FormWindowState.Maximized
+            Case "UploadResult"
+                addForm(FormUploadResult)
+                Me.WindowState = FormWindowState.Maximized
+            Case "StudentsRegistration"
+                addForm(FormStudentsRegistration)
+                Me.WindowState = FormWindowState.Maximized
+            Case "ResultsTranscripts"
+                addForm(FormResultsTranscripts)
+                Me.WindowState = FormWindowState.Maximized
+            Case "admin"
+                addForm(FormAdmin)
+                Me.WindowState = FormWindowState.Maximized
+            Case "ViewResults"
+                addForm(FormViewResults)
+                Me.WindowState = FormWindowState.Maximized
+            Case "viewBroadsheets"
+                addForm(FormViewBroadsheets)
+                Me.WindowState = FormWindowState.Maximized
+        End Select
+    End Sub
+
+    Public Sub status(s As String)
+        Me.TextBoxStatus.Text = Me.TextBoxStatus.Text & vbCrLf & s
+    End Sub
+
+
+    Private Sub ButtonExit_Click(sender As Object, e As EventArgs) Handles ButtonExit.Click
+        ActiveButton(sender, RGBColors.colorCrimson)
+        If MessageBox.Show("Are you sure you want to close this form?", "Close", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
+            End
+        End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Me.ButtonExit.PerformClick()
+    End Sub
+
+    Private Sub LinkLabelMax_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelMax.LinkClicked
+        If Me.WindowState = FormWindowState.Maximized Then
+            Me.WindowState = FormWindowState.Normal
+        Else
+            Me.WindowState = FormWindowState.Maximized
+        End If
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        Me.WindowState = FormWindowState.Minimized
+    End Sub
+
+    Private Sub ButtonCurrent_Click(sender As Object, e As EventArgs) Handles ButtonCurrent.Click
+        ActiveButton(sender, RGBColors.colorCrimson)
+        ChangeMenu(dCurrentForm)
+    End Sub
+    Public Sub setDCurrentForm(s As String)
+        dCurrentForm = s
+        Me.ButtonCurrent.Text = s
+
+    End Sub
+
+    Private Sub ButtonSettings_Click(sender As Object, e As EventArgs) Handles ButtonSettings.Click
+        ActiveButton(sender, RGBColors.colorCrimson)
+        ChangeMenu("Settings")
+    End Sub
+
+    Private Sub PanelBtn_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn.Paint
+
+    End Sub
+
+    Private Sub PanelBtn_Click(sender As Object, e As EventArgs) Handles PanelBtn.Click
+        If SidePanel.Width = PanelBtn.Width Then
+            SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 8
+        Else
+            SidePanel.Width = PanelBtn.Width
+        End If
+
+    End Sub
+
+    Private Sub LinkLabelShowHide_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelShowHide.LinkClicked
+        If SidePanel.Width < ButtonExit.Width Then
+            SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 10  '5% margin left and right
+            LinkLabelShowHide.Text = "<<Hide"
+            'todo show text
+            ButtonHome.Text = "Home"
+        Else
+            SidePanel.Width = LinkLabelShowHide.Width
+            LinkLabelShowHide.Text = " Show>>"
+            'todo
+            'show icons in button
+            'ButtonHome.BackgroundImage = HomeIcon 
+            ButtonHome.Text = "^"
+        End If
+    End Sub
+    Public Sub doCloseForm() 'Todo RemoUI
+        If mappDB.User = "CA" Then
+            Me.ChangeMenu("CourseAdviser")
+        ElseIf mappDB.User = "CL" Then
+            Me.ChangeMenu("CourseLecturer")
+        ElseIf mappDB.User = "ST" Then
+            Me.ChangeMenu("Student")
+        Else
+            Me.ChangeMenu("User")
+        End If
+    End Sub
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
     End Sub
 End Class
 

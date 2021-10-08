@@ -22,5 +22,20 @@ result_and_transcript_system
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="P:result_and_transcript_system.My.Resources.Resources.female_image">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:result_and_transcript_system.My.Resources.Resources.Male_Image">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:result_and_transcript_system.My.Resources.Resources.panel">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 </members>
 </doc>

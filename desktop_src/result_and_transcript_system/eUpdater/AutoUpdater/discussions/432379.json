@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "998159",
+    "ThreadId": "432379",
+    "Html": "&lt;ServerUrl&gt;<a href=\"http://localhost/TVClientService/TVClientAutoupdateService.xml&lt;/ServerUrl\" rel=\"nofollow\">http://localhost/TVClientService/TVClientAutoupdateService.xml</ServerUrl</a>&gt;\r<br />\n<br />\nwhat is a format of that xml? \r<br />\n<br />\nthanks!<br />\n",
+    "PostedDate": "2013-02-07T12:28:37.593-08:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "1173224",
+    "ThreadId": "432379",
+    "Html": "Went through the code and found out that the format of the file is as below:<br />\n<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;\n&lt;Config xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;\n    &lt;LocalFile path=&quot;Program.exe&quot; url=&quot;http://localhost/MyProgram/Program.exe&quot; lastver=&quot;1.0.0.1&quot; size=&quot;4396032&quot; needRestart=&quot;false&quot;/&gt;\n&lt;/Config&gt;</code></pre>\n\nHope this helps. Cheers!<br />\n",
+    "PostedDate": "2014-01-17T02:20:11.71-08:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "1360877",
+    "ThreadId": "432379",
+    "Html": "Hey can you help me understand this project. I didn't understand how to use it in my project..<br />\n",
+    "PostedDate": "2015-03-09T03:00:56.99-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  }
+]

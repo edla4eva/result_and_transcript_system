@@ -1,0 +1,18 @@
+[
+  {
+    "Id": "1341304",
+    "ThreadId": "577568",
+    "Html": "I don't know what i am doing wrong, so i hope you can help me to implement your solution.\r<br />\n<br />\ni got this  on UpdateService.xml<br />\n<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;\n&lt;Config xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;\n    &lt;LocalFile path=&quot;program.exe&quot; url=&quot;http://MyUrl.com/1507/program.exe&quot; lastver=&quot;1.5.0.7&quot; size=&quot;4843520&quot; needRestart=&quot;true&quot;/&gt;\n&lt;/Config&gt;</code></pre>\n\nand this on Autoupdater.config<br />\n<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;\n&lt;Config xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;\n  &lt;Enabled&gt;true&lt;/Enabled&gt;\n  &lt;ServerUrl&gt;http://MyUrl.com/UpdateService.xml&lt;/ServerUrl&gt;\n  &lt;UpdateFileList&gt;\n    &lt;LocalFile path=&quot;program.exe&quot; lastver=&quot;1.5.0.6&quot; size=&quot;4843008&quot; /&gt;\n  &lt;/UpdateFileList&gt;\n&lt;/Config&gt;</code></pre>\n\nso it fires the auto update mechanism, and download the file making a folder with the updated file, and re-run the app but the old version.\r<br />\n<br />\nto be more specific, before the update, i have: \r<br />\n<br />\nin C:\\path\\to\\my\\app\r<br />\n<br />\nprogram.exe\r<br />\nAutoupdate.dll\r<br />\nautoupdate.config\r<br />\n<br />\nand then after :\r<br />\n<br />\n1507\\program.exe &lt;-------------------- updated file\r<br />\nprogram.exe\r<br />\nAutoupdate.dll\r<br />\nautoupdate.config &lt;-------------------- updated config\r<br />\n<br />\n<br />\nso please tell me, what i am doing wrong?\r<br />\n<br />\nhope you can helpme.<br />\n",
+    "PostedDate": "2015-01-12T19:28:48.637-08:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "1360874",
+    "ThreadId": "577568",
+    "Html": "Hey hi..\r<br />\n<br />\n<br />\nDid it work please can you help me? I didn't understand how it works?\r<br />\n<br />\nPlease you can contact me...<br />\n",
+    "PostedDate": "2015-03-09T02:57:55.017-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  }
+]
