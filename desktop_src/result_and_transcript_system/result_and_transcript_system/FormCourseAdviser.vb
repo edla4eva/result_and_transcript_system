@@ -45,6 +45,10 @@ Public Class FormCourseAdviser
         ButtonStudents.PerformClick()
     End Sub
 
+    Private Sub ButtonSenate_Click(sender As Object, e As EventArgs) Handles ButtonSenate.Click
+        FormReport.ShowDialog()
+    End Sub
+
     Private Sub ButtonNoOfBroadsheets_Click(sender As Object, e As EventArgs) Handles ButtonNoOfBroadsheets.Click
         ButtonBroadsheets.PerformClick()
     End Sub

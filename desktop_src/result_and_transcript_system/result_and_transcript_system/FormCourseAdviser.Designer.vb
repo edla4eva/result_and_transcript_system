@@ -57,7 +57,8 @@ Partial Class FormCourseAdviser
         'ButtonResultsSubmitted
         '
         Me.ButtonResultsSubmitted.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonResultsSubmitted.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonResultsSubmitted.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonResultsSubmitted.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonResultsSubmitted.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonResultsSubmitted.ForeColor = System.Drawing.Color.Silver
         Me.ButtonResultsSubmitted.Location = New System.Drawing.Point(17, 19)
@@ -70,7 +71,8 @@ Partial Class FormCourseAdviser
         'ButtonNoOfStudents
         '
         Me.ButtonNoOfStudents.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonNoOfStudents.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonNoOfStudents.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonNoOfStudents.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNoOfStudents.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonNoOfStudents.ForeColor = System.Drawing.Color.Silver
         Me.ButtonNoOfStudents.Location = New System.Drawing.Point(12, 21)
@@ -174,17 +176,17 @@ Partial Class FormCourseAdviser
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Arial Narrow", 24.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(18, 20)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(381, 37)
+        Me.Label1.Size = New System.Drawing.Size(454, 37)
         Me.Label1.TabIndex = 8
         Me.Label1.Text = "Course Adviser's DashBoard"
         '
         'GroupBox2
         '
-        Me.GroupBox2.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.ButtonStudents)
         Me.GroupBox2.Controls.Add(Me.ButtonNoOfStudents)
@@ -201,7 +203,7 @@ Partial Class FormCourseAdviser
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.Color.Silver
-        Me.Label5.Location = New System.Drawing.Point(6, 185)
+        Me.Label5.Location = New System.Drawing.Point(3, 185)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(200, 24)
         Me.Label5.TabIndex = 12
@@ -210,7 +212,7 @@ Partial Class FormCourseAdviser
         '
         'GroupBox3
         '
-        Me.GroupBox3.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.GroupBox3.Controls.Add(Me.ButtonResults)
         Me.GroupBox3.Controls.Add(Me.Label4)
         Me.GroupBox3.Controls.Add(Me.ButtonResultsSubmitted)
@@ -249,7 +251,7 @@ Partial Class FormCourseAdviser
         '
         'GroupBox1
         '
-        Me.GroupBox1.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.ButtonNoOfBroadsheets)
         Me.GroupBox1.Controls.Add(Me.ButtonBroadsheets)
@@ -276,7 +278,8 @@ Partial Class FormCourseAdviser
         'ButtonNoOfBroadsheets
         '
         Me.ButtonNoOfBroadsheets.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonNoOfBroadsheets.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonNoOfBroadsheets.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonNoOfBroadsheets.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNoOfBroadsheets.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonNoOfBroadsheets.ForeColor = System.Drawing.Color.Silver
         Me.ButtonNoOfBroadsheets.Location = New System.Drawing.Point(12, 21)
@@ -288,6 +291,8 @@ Partial Class FormCourseAdviser
         '
         'TextBoxStatus1
         '
+        Me.TextBoxStatus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
+        Me.TextBoxStatus1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TextBoxStatus1.Font = New System.Drawing.Font("Arial", 15.75!)
         Me.TextBoxStatus1.ForeColor = System.Drawing.Color.Silver
         Me.TextBoxStatus1.Location = New System.Drawing.Point(26, 379)
@@ -300,6 +305,8 @@ Partial Class FormCourseAdviser
         '
         'TextBoxStatus2
         '
+        Me.TextBoxStatus2.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
+        Me.TextBoxStatus2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TextBoxStatus2.Font = New System.Drawing.Font("Arial", 15.75!)
         Me.TextBoxStatus2.ForeColor = System.Drawing.Color.Silver
         Me.TextBoxStatus2.Location = New System.Drawing.Point(25, 458)
@@ -312,7 +319,7 @@ Partial Class FormCourseAdviser
         '
         'GroupBox4
         '
-        Me.GroupBox4.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox4.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.GroupBox4.Controls.Add(Me.Label2)
         Me.GroupBox4.Controls.Add(Me.ButtonNoOfSenate)
         Me.GroupBox4.Controls.Add(Me.ButtonSenate)
@@ -339,7 +346,8 @@ Partial Class FormCourseAdviser
         'ButtonNoOfSenate
         '
         Me.ButtonNoOfSenate.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonNoOfSenate.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonNoOfSenate.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonNoOfSenate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNoOfSenate.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonNoOfSenate.ForeColor = System.Drawing.Color.Silver
         Me.ButtonNoOfSenate.Location = New System.Drawing.Point(12, 21)

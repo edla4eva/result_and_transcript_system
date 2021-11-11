@@ -89,6 +89,7 @@ Public Class ClassExcelFile
         Dim cR As CellRangeAddress = New CellRangeAddress(1, 3, 1, 120)
 
         Dim style As ICellStyle
+        Dim styleSignfooter As ICellStyle
         Dim styleCenter As ICellStyle '= changeStyle(workbook)
         Dim styleWrap As ICellStyle '= changeStyle(workbook)
         Dim styleMediumBorder As ICellStyle '= changeStyle(workbook)
@@ -147,19 +148,19 @@ Public Class ClassExcelFile
         'mergeCells(sheet1, sheet1.GetRow(4).Cells(0), sheet1.GetRow(4).RowNum, sheet1.GetRow(4).RowNum, 1, 120)
 
         '#STYLE: Special case of merged cells border
-        cR = New CellRangeAddress(1, 1, 0, 120 - 1 + 9)
+        cR = New CellRangeAddress(1, 1, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(2, 2, 0, 120 - 1 + 9)
+        cR = New CellRangeAddress(2, 2, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(3, 3, 0, 120 - 1 + 9)
+        cR = New CellRangeAddress(3, 3, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(4, 4, 0, 120 - 1 + 9)
+        cR = New CellRangeAddress(4, 4, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(5, 5, 0, 120 - 1 + 9)
+        cR = New CellRangeAddress(5, 5, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
         ' applyDBorderToMergedReg(cR, sheet1)
         'sets the border of the merged cells
-        cR = New CellRangeAddress(1, 5, 0, 120 - 1 + 9)
+        cR = New CellRangeAddress(1, 5, 0, LAST_COL)
         RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
         RegionUtil.SetBorderBottom(BorderStyle.Medium, cR, sheet1)
         RegionUtil.SetBorderLeft(BorderStyle.Medium, cR, sheet1)
@@ -188,6 +189,8 @@ Public Class ClassExcelFile
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("SN") Then row1.GetCell(jCol).SetCellValue("S/N")
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO.")
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_1") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (FIRST SEMESTER)")
+            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATALL") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS")
+
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FULLNAME") Then row1.GetCell(jCol).SetCellValue("NAME OF CANDIDATE (SURNAME LAST AND IN BLOCK LETTERS)")
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then row1.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
@@ -205,6 +208,9 @@ Public Class ClassExcelFile
             RegionUtil.SetBorderLeft(BorderStyle.Medium, cR, sheet1)
             RegionUtil.SetBorderRight(BorderStyle.Medium, cR, sheet1)
         Next
+        'Style Special cases 
+        row1.GetCell(COURSE_FAIL_COL).CellStyle = styleMediumBorder 'horzontal
+
 
         '#### Credits 
 
@@ -244,7 +250,7 @@ Public Class ClassExcelFile
         "(G)              EXPELLED/RUSTICATED/SUSPENDED STUDENTS:",
         "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
         "(I)              UNREGISTERED STUDENTS:", "", ""}
-        Dim strFooterVal As Integer() = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+
         Dim strFooter500 As String() = {
         "(A)              SUCCESSFUL STUDENTS:",
         "(B)              STUDENTS WITH CARRY-OVER COURSES",
@@ -255,8 +261,10 @@ Public Class ClassExcelFile
         "(G)              EXPELLED/RUSTICATED/SUSPENDED STUDENTS:",
         "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
         "(I)              UNREGISTERED STUDENTS:", "", ""}
-        'Footers
-        doFooters(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers)
+
+        Dim strFooterVal As Integer() = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+
+        doFooters(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
         'OR
         Dim rowFooter As IRow
         For i = 0 To 9
@@ -267,24 +275,6 @@ Public Class ClassExcelFile
             rowFooter.GetCell(3).CellStyle = (style)
         Next
 
-        'Hide unused columns such as extra cols for courses '0=A, 1=B, 2=C, 3=D but the Enum has a base of 1
-        hideCols(sheet1, ExcelColumns.colD - 1) 'Name
-        hideCols(sheet1, ExcelColumns.colE - 1)
-        hideCols(sheet1, ExcelColumns.colF - 1)
-        'ColG is repeated course wrap
-        'col H to AG 100-400L courses
-        'colAG = colz+colg
-        'colBJ = colz + colz + colj
-        For x = COURSE_START_COL To LAST_COL    ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
-            If sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
-                hideCols(sheet1, x)
-            Else
-                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) Then
-                    If Not dictAllCourseCodeKeyAndCourseLevelVal(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) = objBS.Level Then hideCols(sheet1, x)
-                End If
-            End If
-        Next
-
         ''set formula
         'row1 = sheet1.CreateRow(dt.Rows.Count)
         'cell = row1.CreateCell(0)
@@ -292,13 +282,38 @@ Public Class ClassExcelFile
 
         setWidthHeight(sheet1)   'todo test
 
+        setFormatPerLevel(sheet1, objBS.Level)
+        setFormatPerSemester(sheet1, objBS.broadsheetSemester)
+
+        'sheet1.setRepeatingRows(CellRangeAddress.ValueOf("1:2")) ' Set repeating rows For printing
+        '        // set print setup; fit all columns to one page width
+        'sheet.setAutobreaks(True);
+        'sheet.setFitToPage(True);
+        'PrintSetup printSetup = sheet.getPrintSetup();
+        'printSetup.setFitHeight((Short)0);
+        'printSetup.setFitWidth((Short)1);
+
         'save work
         'todo: if file exists(fileName) create new filename
         If System.IO.File.Exists(fileName) Then
             fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
             'System.IO.File.Delete(fileName)
             If System.IO.File.Exists(fileName) Then fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
-            writeToFile(workbook, fileName)
+            Try
+                writeToFile(workbook, fileName)
+            Catch ex As Exception
+
+                'hanle
+                MsgBox("The Excel file is Open , close it and click ok")
+
+                Try
+                        writeToFile(workbook, fileName)
+                    Catch ex2 As Exception
+                        Return ""
+                    End Try
+
+            End Try
+
             'Throw New Exception("RTPS Error: Excel File Already Exists!")
         Else
             writeToFile(workbook, fileName)
@@ -307,69 +322,136 @@ Public Class ClassExcelFile
         Return fileName
     End Function
 
-    Public Sub doFooters(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String())
+    Public Sub doFooters(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String(), styleSignFooter As ICellStyle)
         Dim rowFooter As IRow
         rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 1)
-        rowFooter.CreateCell(1).SetCellValue("CATEGORY")   'row1.CreateCell(jCol).SetCellValue("S/N")
+        rowFooter.CreateCell(1) _
+                 .SetCellValue("CATEGORY")   'row1.CreateCell(jCol).SetCellValue("S/N")
 
 
         rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 2)    'account for 9 header rows
         rowFooter.CreateCell(2).SetCellValue(strFooter(0))
-        rowFooter.CreateCell(3).SetCellValue("=COUNTIF(EA10:EA175,'')") 'todo: dblquote
+        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=COUNTIF(EA10:EA175,'')") 'todo: dblquote
         rowFooter.GetCell(2).CellStyle = (style)
-        rowFooter.GetCell(3).CellStyle = (style)
+        rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
 
         rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 3)    'account for 9 header rows
         rowFooter.CreateCell(2).SetCellValue(strFooter(1))   'row1.CreateCell(jCol).SetCellValue("S/N")
-        rowFooter.CreateCell(3).SetCellValue("=BM186-BM177")  '"=COUNT()"  'total-successful
+        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=BM186-BM177")  '"=COUNT()"  'total-successful
         rowFooter.GetCell(2).CellStyle = (style)
-        rowFooter.GetCell(3).CellStyle = (style)
+        rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
 
 
         For i = 0 To 9
             rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + i + 1)    'account for 9 header rows
             rowFooter.CreateCell(2).SetCellValue(strFooter(i))
-            rowFooter.CreateCell(3).SetCellValue(strFooterVal(i))  '"=COUNT()"  'total-successful
-            rowFooter.GetCell(2).CellStyle = (style)
-            rowFooter.GetCell(3).CellStyle = (style)
+            rowFooter.CreateCell(COURSE_START_COL).SetCellValue(strFooterVal(i))
+            rowFooter.CreateCell(8).SetCellValue(strFooterVal(i))
+            If Len(strFooter(i)) > 0 Then rowFooter.GetCell(2).CellStyle = (style)  'conditional formatting
+            If Len(strFooterVal(i)) > 0 Then rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
         Next
         'firstclass=COUNTIFS(DY10:DY175,"1")    seconclass =COUNTIFS(DY10:DY175,"2.1") 
 
         'final footers HOD, dean etc
-        rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 11)    'account for 9 header rows
+        Dim footerRowount As Integer = rowCount + ALL_HEADERS_COUNT + 11 + 3
+        Dim cRFooter As CellRangeAddress = New CellRangeAddress(footerRowount, footerRowount, 2, 6)
+
+        rowFooter = sheet1.CreateRow(footerRowount)    'account for 9 header rows
         rowFooter.CreateCell(2).SetCellValue(footers(0))
-        rowFooter.CreateCell(8).SetCellValue(footers(1))
-        rowFooter.CreateCell(16).SetCellValue(footers(3))
-        rowFooter.GetCell(2).CellStyle = (style)
-        rowFooter.GetCell(8).CellStyle = (style)
-        rowFooter.GetCell(16).CellStyle = (style)
+        rowFooter.CreateCell(COURSE_START_COL).SetCellValue(footers(1))
+        rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue(footers(2))
+
+        'Style
+        cRFooter = New CellRangeAddress(footerRowount, footerRowount, FULLNAME_COL, FULLNAME_COL + 1)
+        sheet1.AddMergedRegion(cRFooter)
+        RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
+        'todo center text
+        cRFooter = New CellRangeAddress(footerRowount, footerRowount, COURSE_START_COL, COURSE_START_COL + 10)  'merge 10 small cols
+        sheet1.AddMergedRegion(cRFooter)
+        RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
+        cRFooter = New CellRangeAddress(footerRowount, footerRowount, COURSE_FAIL_COL, COURSE_FAIL_COL + 1)
+        sheet1.AddMergedRegion(cRFooter)
+        RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
+
+
     End Sub
+    'TODO: Create UI settings form and mae all these configurations accessible to user
+    'on apply settings, objects are created with these settings appled
+    Public Function setFormatPerSemester(sheet1 As ISheet, dSem As Integer) As Boolean
+        Select Case dSem
+            Case 1
+                'hide first sem repeat
+                'hide all second semester courses
+                For i = COURSE_END_COL_2 To COURSE_END_COL_2
+                    'hideCols(sheet1, i)
+                Next
+            Case 2
+                'show first sem repeat
+
+        End Select
+    End Function
+    Public Function setFormatPerLevel(sheet1 As ISheet, dLevel As Integer) As Boolean
+
+        'Hide unused columns such as extra cols for courses '0=A, 1=B, 2=C, 3=D but the Enum has a base of 1
+        hideCols(sheet1, OTHER_NAMES_COL)
+        hideCols(sheet1, SURNAME_COL)
+        hideCols(sheet1, REPEATED_1_COL)
+        'ColG is repeated course wrap;  'col H to AG 100-400L courses; 'colAG = colz+colg; 'colBJ = colz + colz + colj
+        For x = COURSE_START_COL To LAST_COL    ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
+            If sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
+                hideCols(sheet1, x)
+            Else
+                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) Then
+                    If Not dictAllCourseCodeKeyAndCourseLevelVal(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) = dLevel Then hideCols(sheet1, x)
+                End If
+            End If
+        Next
+        hideCols(sheet1, REPEATED_2_COL)
+        sheet1.SetColumnHidden(GPA_COL, False)
+        sheet1.SetColumnHidden(CLASS_COL, False)
+        sheet1.SetColumnHidden(GPA_COL, False)
+        sheet1.SetColumnHidden(SESSION_COL, False)
+
+        Select Case dLevel
+            Case 100
+                sheet1.SetColumnHidden(REPEATED_ALL_COL, False)
+            Case 200
+
+            Case 300
+            Case 400
+                'all 2nd sem
+
+            Case 500
+                sheet1.SetColumnHidden(GPA_COL, True)
+                sheet1.SetColumnHidden(CLASS_COL, True)
+                sheet1.SetColumnHidden(GPA_COL, True)
+
+        End Select
+    End Function
     Public Function setWidthHeight(sheet1 As ISheet) As Boolean
         'set the width of columns
-        sheet1.SetColumnWidth(0, 5 * 256)   'colA   sn
+        sheet1.SetColumnWidth(SN_COL, 5 * 256)   'colA   sn
         sheet1.SetColumnWidth(MATNO_COL, 15 * 256)  'colB   matno   =14.29
         sheet1.SetColumnWidth(FULLNAME_COL, 45 * 256)  'ColC   Full Name
-        sheet1.SetColumnWidth(REPEATED_1_COL, 60 * 256)  'repeated Fist Semester
-        sheet1.SetColumnWidth(REPEATED_1_COL - 1, 60 * 256)  'repeated All
-        sheet1.SetColumnWidth(REPEATED_1_COL - 2, 60 * 256)  'surname
-        sheet1.SetColumnWidth(REPEATED_1_COL - 3, 60 * 256)  'Other Names
+        sheet1.SetColumnWidth(OTHER_NAMES_COL, 45 * 256)
+        sheet1.SetColumnWidth(SURNAME_COL, 45 * 256)
+        sheet1.SetColumnWidth(REPEATED_ALL_COL, 60 * 256)  'repeated All
 
-        sheet1.SetColumnWidth(REPEATED_2_COL, 60 * 256)  'repeated 2nd Sem
-        sheet1.SetColumnWidth((ExcelColumns.colZ - 1) * 3 + ExcelColumns.colAH - 1, 60 * 256)  'repeated 2nd Sem col CH
+        sheet1.SetColumnWidth(REPEATED_1_COL, 60 * 256)  'repeated Fist Semester
         For j = COURSE_START_COL To LAST_COL + 6
             sheet1.SetColumnWidth(j, 4 * 256)  '3.71 or approx 4 for Result cols
         Next
 
         For j = LAST_COL To LAST_COL + 6
-            sheet1.SetColumnWidth(j, 4 * 256)  '5 gor GPA ...
+            sheet1.SetColumnWidth(j, 4 * 256)  '5 for GPA ...
         Next
-        'ExcelColumns.colZ+ExcelColumns.colZ + ExcelColumns.colZ + ExcelColumns.colZ + ExcelColumns.colW=dw 26*4+23
-        sheet1.SetColumnWidth(LAST_COL - 3, 4 * 256)  'GPA DW
-        'set the width of height
-        'row.Height = 100 * 20
 
-        'sheet1.SetRowBreak = LinkLabelLinkClickedEventArgs
-        sheet1.GetRow(ROW_HEADER).Height = (4 * 256)    'row8 bcos its vertically aligned NOTE different scale from width
+        sheet1.SetColumnWidth(REPEATED_2_COL, 60 * 256)  'repeated 2nd Sem
+        sheet1.SetColumnWidth(COURSE_FAIL_COL, 60 * 256)
+        sheet1.SetColumnWidth(GPA_COL, 6 * 256)  'GPA
+        sheet1.SetColumnWidth(SESSION_COL, 12 * 256)  'GPA
+
+        sheet1.GetRow(ROW_HEADER).Height = (6 * 256)    'row8 bcos its vertically aligned NOTE different scale from width
         Return True
     End Function
     Public Function mergeCells(sheet As ISheet, cell As ICell, fRow As Integer, lRow As Integer, fCol As Integer, lCol As Integer) As Boolean
@@ -409,10 +491,16 @@ Public Class ClassExcelFile
     Public Function writeToFile(workbook As IWorkbook, fileName As String) As Boolean
         'TODO: Handle error
         'System.UnauthorizedAccessException: 'Access to the path 'C:\ProgramData\result_and_transcript_system\result_and_transcript_system\1.0.0.0\GeneratedResultBroadsheet3000.705547525.xlsx' is denied
-        Dim File As FileStream = New FileStream(fileName, FileMode.Create)
-        workbook.Write(File)
-        File.Close()
-        Return True
+        Try
+            Dim File As FileStream = New FileStream(fileName, FileMode.Create)
+            workbook.Write(File)
+            File.Close()
+            Return True
+        Catch ex As Exception
+            Throw ex
+            Return False
+        End Try
+
     End Function
     Public Function modifyExcelFile_NPOI(fileName As String, dv As DataView) As Boolean
         Dim xssfwb As XSSFWorkbook 'HSSFWorkbook for xls xSSFWorkbook for xlsx

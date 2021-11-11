@@ -16,7 +16,7 @@ Public Class FormViewResults
         TextBoxExcelFilename.Text = resultFileName
         objExcelFile.excelFileName = resultFileName
 
-
+        If Not resultFileName.Contains("\") Then Exit Sub
         Dim fns As String() = FileIO.FileSystem.GetFiles(System.IO.Directory.GetParent(FileOpenDialogBroadsheet.FileName).ToString).ToArray()
         ListBoxFileNames.Items.Clear()
         For Each fn In fns

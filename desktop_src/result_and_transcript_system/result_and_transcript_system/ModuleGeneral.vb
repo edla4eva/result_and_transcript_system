@@ -93,20 +93,38 @@ Module ModuleGeneral
     Public ROW_CREDIT As Integer = 8
     Public ALL_HEADERS_COUNT As Integer = 9
 
+    Public SN_COL As Integer = 0    'ExcelColumns.colA-1
     Public MATNO_COL As Integer = 1
     Public FULLNAME_COL As Integer = 2
+    Public OTHER_NAMES_COL = 3 ' Othernmes
+    Public SURNAME_COL = 4
+    Public REPEATED_ALL_COL As Integer = 5
     Public REPEATED_1_COL As Integer = 6
+
     Public COURSE_START_COL As Integer = 7
+    '...courses
     Public COURSE_END_COL As Integer = COURSE_START_COL + MAX_COURSES_1 - 1 '=7+75-1=81
-    Public TCF_COL As Integer = COURSE_END_COL + 1 ' 81+1=82
 
+    Public TCF_1_COL As Integer = COURSE_END_COL + 1
+    Public TCP_1_COL As Integer = COURSE_END_COL + 2
+    Public TCR_1_COL As Integer = COURSE_END_COL + 3
+
+    Public REPEATED_2_COL As Integer = COURSE_END_COL + 3 + 1
     Public COURSE_START_COL_2 As Integer = COURSE_END_COL + NUM_COLS_BETWEEN_COURSES_1_AND_COURSES_2 + 1    '= 81+4+1=86    'first dont -1 last do -1
-    Public REPEATED_2_COL As Integer = COURSE_START_COL_2 - 1
     Public COURSE_END_COL_2 As Integer = COURSE_START_COL_2 + MAX_COURSES_2 - 1    '= 86 + 75 - 1  '=160
-    Public TCF_2_COL As Integer = COURSE_END_COL_2 + 1    '161
-
+    Public TCF_2_COL As Integer = COURSE_END_COL_2 + 1
+    Public TCP_2_COL As Integer = COURSE_END_COL_2 + 2
+    Public TCR_2_COL As Integer = COURSE_END_COL_2 + 3
+    Public TCF_COL As Integer = COURSE_END_COL_2 + 4
+    Public TCP_COL As Integer = COURSE_END_COL_2 + 5
+    Public TCR_COL As Integer = COURSE_END_COL_2 + 6
+    Public GPA_COL As Integer = COURSE_END_COL_2 + 7
+    Public CLASS_COL As Integer = COURSE_END_COL_2 + 8
+    Public STATUS_COL As Integer = COURSE_END_COL_2 + 9
+    Public COURSE_FAIL_COL As Integer = COURSE_END_COL_2 + 10
+    Public SESSION_COL As Integer = COURSE_END_COL_2 + 11
     Public LAST_COL As Integer = COURSE_END_COL_2 + 11 - 1   '=160 + 11 - 1 '=170
-    Public SESSION_COL As Integer = 169
+
 
 
     'Queries
@@ -278,6 +296,12 @@ Module ModuleGeneral
     "EG", "EH", "EI", "EJ", "EK", "EL", "EM", "EN", "EO", "EP", "EQ", "ER", "ES", "ET", "EU", "EV",
     "EW", "EX", "EY", "EZ"}
 
+    Public Function LastColInSem_1_ForLevel(dLevel As Integer) As Integer
+        Return COURSE_START_COL + (dLevel / 100) * NUM_COURSES_PER_LEVEL_1
+    End Function
+    Public Function LastColInSem_2_ForLevel(dLevel As Integer) As Integer
+        Return COURSE_START_COL_2 + (dLevel / 100) * NUM_COURSES_PER_LEVEL_2
+    End Function
     Public Sub combolist(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, ByVal this_cbo As ComboBox, Optional dConnMode As String = "local")
         Try
             Dim oad As Object
@@ -332,7 +356,7 @@ Module ModuleGeneral
                     xConn.Open()
                 Catch ex1 As Exception
                     Try
-                        xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                        xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                         xConn.Open()
                     Catch ex As Exception
                         'Todo: Handle shared memory access issues

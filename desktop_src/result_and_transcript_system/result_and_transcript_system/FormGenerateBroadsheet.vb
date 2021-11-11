@@ -306,10 +306,10 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
-
+        'TODO: create UI to configure order
         footers(0) = TextBoxCourseAdviser.Text
         footers(1) = TextBoxDean.Text
-        footers(2) = TextBoxDean.Text
+        footers(2) = TextBoxHOD.Text
         Select Case CInt(e.Argument)
             Case 1
                 'interop
@@ -404,7 +404,7 @@ Public Class FormGenerateBroadsheet
 
             'objResult.resultTemplateFileName
             If SaveFileDialog1.ShowDialog = DialogResult.OK Then
-                My.Computer.FileSystem.CopyFile(TextBoxTemplateFileName.Text, SaveFileDialog1.FileName & ".xlmx")
+                My.Computer.FileSystem.CopyFile(TextBoxTemplateFileName.Text, SaveFileDialog1.FileName)
             End If
         Catch ex As Exception
             MsgBox(ex.Message)

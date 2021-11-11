@@ -125,7 +125,7 @@ Public Class ClassDB
         Dim tmpConnRemote As New MySqlConnection
         'if AutoDetect Server is check
         If AutoDetect Then
-            connStr = My.Settings.dbConnectionString 'server=localhost;user id=root;Password=1tl3ola8;database=mysql;pooling=false
+            connStr = My.Settings.dbConnectionString 'server=localhost;user id=root;Password=;database=mysql;pooling=false
         Else
             connStr = String.Format("server={0};user id={1}; password={2}; database=result_and_transript_db; pooling=false; convert zero datetime=true", txtIP, txtMySQLUserName, txtMySQLPassword)
             'ensure forms can connect to data
@@ -204,7 +204,7 @@ Public Class ClassDB
                 Try
                     xConn.Open()
                 Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
@@ -235,7 +235,7 @@ Public Class ClassDB
                 Try
                     xConn.Open()
                 Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
@@ -256,7 +256,7 @@ Public Class ClassDB
                 Try
                     xConn.Open()
                 Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
@@ -281,7 +281,7 @@ Public Class ClassDB
                 Try
                     xConn.Open()
                 Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
@@ -303,7 +303,7 @@ Public Class ClassDB
                 Try
                     xConn.Open()
                 Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
                 Dim Table As DataTable = New DataTable()
@@ -376,7 +376,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
             Dim cmd As OleDbCommand = New OleDbCommand(strSQL, xConn)
@@ -403,7 +403,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
             '1. check for duplicates and delete
@@ -438,7 +438,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
             '1. check for duplicates and delete
@@ -469,7 +469,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
             '1. check for duplicates and delete
@@ -504,7 +504,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
             '1. check for duplicates and delete
@@ -578,7 +578,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
 
@@ -638,7 +638,7 @@ Public Class ClassDB
             Try
                 xConn.Open()
             Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 xConn.Open()
             End Try
             'get the firt record  and add 1
