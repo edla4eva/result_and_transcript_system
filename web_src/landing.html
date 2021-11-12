@@ -1,0 +1,214 @@
+<!DOCTYPE html>  <!--HTML 5.0-->
+<html>
+<head>
+    <title>RTPs Web Applicaion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style-overide.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+   
+
+
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span> 
+            </button>
+            <a class="navbar-brand" href="#">RTPS</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Product </a></li> 
+              <li><a href="#">Contact</a></li> 
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+
+    <div class="page-header">
+        <div id= "logo" class="logo-secion">
+            
+        </div>
+
+        <svg width="5" height="5">
+          <circle cx="5" cy="5" r="4" stroke="darkgrey" stroke-width="4" fill="grey" />
+        </svg> 
+
+    </div>
+    <!-- Main content-->
+    <div id="conainer-body"  class="container">
+
+
+
+    <div id="banner-section"  class="jumbotron">
+        <!-- <img src="images/banner.jpg"  alt="banner" ></img> -->
+        <!-- carousel slides -->
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+              <li data-target="#myCarousel" data-slide-to="2"></li>
+              <li data-target="#myCarousel" data-slide-to="3"></li>
+            </ol>
+          
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <img src="images/banner3.jpg" alt="Chania">
+              </div>
+          
+              <div class="item">
+                <img src="images/banner2.jpg" alt="Chania">
+              </div>
+          
+              <div class="item">
+                <img src="images/banner.jpg" alt="Flower">
+              </div>
+          
+              <div class="item">
+                <img src="images/logo.jpg" alt="Flower">
+              </div>
+            </div>
+          
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+    </div>
+
+
+
+        <div id="row-section"  class="row">
+        <h1> About RTPS </h1>
+        <p>RTPS offers a number of innovative solutions for your delight. It caters for your 
+            comfort and productivity. 
+        </p>
+        <p>Time saving 
+        </p>
+        <nav>
+            <div class="side-bar">
+                <ul id="side-bar-ul">
+                    <li>Home</li>
+                    <li >About Us</li>
+                    <li >Products</li>
+                    <li>Agents</li>
+                    <li>Contact Us</li>
+                </ul>
+            </div>
+            </nav>
+            <button type="submit" id="btn-products" class="btn btn-default" onclick="loadProducts()">Load Products</button>
+        <h1> Products One </h1>
+        <div class="products">
+            <h2 id ="product1-header"> Fully Automated </h2>
+            <p id ="product1-body"> Fully automated software fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets
+			 fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets
+			  fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets
+			   fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets
+			    fully automated software with single click to enerate result brodsheets fully automated software with single click to enerate result brodsheets
+            </p>
+			 <img src="images/banner3.jpg" alt="Chania">
+        </div>
+        <div class="products">
+            <h2 id ="product2-header"> Export to Excel </h2>
+            <p> Export to excel with single click
+            </p>
+			 <img src="images/banner3.jpg" alt="Chania">
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 id ="product3-header">Excel Formats</h3></div>
+            <div class="panel-body">
+                Macro Enabled Workbook
+            </div>
+			        <div class="panel-body"> 
+            Excel Workbook (.xlsx) 
+        </div>
+		        <div class="panel-body"> 
+            Excel Workbook (.xlsx) 
+        </div>
+		        <div class="panel-body"> 
+            Excel Workbook (.xlsx) 
+        </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"> "><h3 id ="product3-header">Configuration Options</h3></</div>
+		<div class="panel-body"> 
+            Order of Courses in First and second Semester 
+        </div>
+        <div class="panel-body"> 
+            Name of HD, Dean and Course Adviser 
+        </div>
+        </div>
+
+    </div>
+        <hr>
+
+            <!-- form-->
+    <h1>Contact Us</h1>
+    <form role="form">
+        <div class="form-group">
+          <label for="email">Email address:</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="pwd">
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+       </form>
+
+
+
+
+
+    </div>
+
+    <!-- Dialog-->
+    <div id="user-dialog" class="dialog">
+        
+        <div id="dialog-header"><h3>Dialog header</h3> </br> </div>
+        <div> This is a dialog box (show/hide) </br>
+        press Ok</div>
+    </div>
+        <!-- fooer-->
+    <div id="container-footer"  class="container-fluid bg-4 "> 
+        <p> email: <a href="">admin@sample.com</a> </p>
+        <p>Copyright 2020</p>
+    </div>
+    <!-- Custom theme Style-->
+    <style>
+        .bg-4 {
+            background-color: #2f2f2f;
+            color: #ffffff;
+        }
+        </style>
+
+        <!-- Bootstrap-->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.min.js"></script>
+    <script src="js/func.js"></script>
+</body>
+
+
+</html>

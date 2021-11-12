@@ -1,0 +1,155 @@
+body {
+
+    background-color: darkgray;
+    padding: 0%;
+    color: darkgray;
+    margin: 0%;
+
+}
+
+.header {
+
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background-color: whitesmoke;
+    margin: 0%;
+
+    height: 30%;
+    top: 0%;
+    border-color: thistle;
+    border-style: solid;
+    border-width: thin;
+}
+#header-text {
+    padding: 0%;
+    color: darkgray;
+    display: inline;
+    margin: 0%;
+    font-size: 14pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.container {
+
+    padding: 4%;
+    background-color: floralwhite;
+
+    margin-left: 10%;
+    margin-right: 10%; 
+
+}
+.banner img /* all img inside class .banner (div) */
+ { 
+
+    opacity: 0.8;
+    margin: auto; /* alin center */
+
+}
+.usr-section {
+    display: block; 
+    position: absolute; 
+    
+    left: 80%; 
+    top: 2%;
+    width: 100px;
+    height:80px ;
+    border-width: 0pt;
+    border: rgb(234, 222, 245);
+    border-style: solid;
+    display: inline-flex;
+
+}
+#usr-name {
+    position: relative;
+    top: 10px;
+    align-items: center;
+}
+#user-staus {
+    color: blue; 
+    font-size: 8pt;
+    
+}
+
+
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14pt;
+    color: gray;
+
+}
+.dialog {
+    display: block; 
+    position: fixed; 
+    left: 80%; 
+    top:    80%;
+    width: 200px;
+    border-width: 0pt;
+    border: rgb(234, 222, 245);
+    border-style: solid;
+    display: none;
+
+}
+
+.container a {
+    display: contents;
+    color: teal;
+}
+nav {
+     /* horizonal*/
+     margin-left: 10%;
+     margin-right: 10%;
+
+
+}
+ul {
+    list-style-type: none;
+    background-color: lightgray
+}
+a {
+    display: block;
+    text-decoration: none;
+    color: darkgreen;
+}
+li {
+    float: left; /* horizonal*/
+    /* width: 100pt;  vertical*/ 
+    padding: 4px;
+    /* border-style: solid;  border-width: thin;  border-color: gray; */
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 14pt;
+    text-align: center;
+}
+li:hover {
+    /* // hover */
+    border-bottom: black;
+    border-width: medium;
+    border-style: solid;
+    border-top: black;
+    border-right: none;
+    border-left: none;
+    color: cornsilk;
+}
+
+#side-bar-ul{
+    width: 150px; /*verical */
+    margin: 0px;
+    left: 0%;
+    position: fixed;
+    top: 60%;
+    padding: 0%;
+}
+.products {
+    display: inline;
+    
+}
+.footer{
+    background-color: darkolivegreen;
+    text-align: center;
+    padding: 4%;
+}
+.footer a {
+    display: contents;
+    color: teal;
+}
