@@ -35,10 +35,10 @@ Partial Class MainForm
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonHome = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabelMax = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.PanelContainer.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -204,6 +204,17 @@ Partial Class MainForm
         Me.Panel1.Size = New System.Drawing.Size(790, 30)
         Me.Panel1.TabIndex = 3
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.Location = New System.Drawing.Point(21, 1)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(513, 24)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "RTPS - Result and Transcript Processing Sysem Version 1.0"
+        '
         'LinkLabel3
         '
         Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.DimGray
@@ -242,17 +253,6 @@ Partial Class MainForm
         Me.LinkLabel1.TabIndex = 0
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Close (X)"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.White
-        Me.Label1.Location = New System.Drawing.Point(21, 1)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(182, 24)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "RTPS - Beta Version"
         '
         'MainForm
         '

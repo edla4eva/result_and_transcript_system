@@ -6,6 +6,7 @@
 
 # third party files 
 /third_party
+/local_dev
 # User-specific files
 *.rsuser
 *.suo

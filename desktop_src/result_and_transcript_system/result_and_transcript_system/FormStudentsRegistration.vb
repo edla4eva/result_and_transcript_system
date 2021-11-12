@@ -577,7 +577,46 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
+    Sub exportReg()
+        Try
+            'Algorithm
+            'Check database if result already exist to avoid duplicates
+            'Write into Database
+            'Get dataset from displayed datagrid
+            'parse dataset record by record
+            'insert record by record
 
+            Dim dt As DataTable
+            'Dim dv As DataView
+            dgvImportCourses.EndEdit()
+            dgvImportCourses.Update()
+            If Not (IsDBNull(dgvImportCourses.DataSource) Or (dgvImportCourses.Rows.Count = 0)) Then
+                dgvImportCourses.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
+                dt = dgvImportCourses.DataSource 'causes error if dirty
+            Else
+                MsgBox("Empty Registration Records")
+                Exit Sub
+            End If
+
+            '#method 1 manual Insert or bulkInsert
+
+            'If boolSession And boolDept And boolCourse Then
+            mappDB.manualRegExportToAccessList(dt)
+            'ElseIf dSession.Length > 10 Then
+            'MsgBox("Import file with the right format")
+
+            'End If
+            MsgBox("Reg Uploaded into Database Successfully! Cross check what was uploaded below")
+            'dgvImportCourses.Visible = True
+            'strSQL = "SELECT * from Reg WHERE (session_idr = '{0}'  AND department_idr={1})"
+            'dgvImportCourses.DataSource = mappDB.GetDataWhere(String.Format(strSQL, dSession, dDeptID)).Tables(0).DefaultView
+            'dgvImportCourses.Top = dgvImportCourses.Top + dgvImportCourses.Height
+            'dgvImportCourses.Refresh()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+    End Sub
     Private Sub dgvStudents_Click(sender As Object, e As EventArgs) Handles dgvStudents.Click
         If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
             filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
@@ -608,4 +647,11 @@ Public Class FormStudentsRegistration
         retFileName = objExcelFile.exportStudentsToExcelFile_NPOI(dgvStudents.DataSource, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\ExportedStudents" & ComboBoxLevel.Text & ".xlsx")
         MsgBox("File exported to: " & retFileName)
     End Sub
+
+    Private Sub ButtonRegUtil_Click(sender As Object, e As EventArgs) Handles ButtonRegUtil.Click
+        exportReg()
+        MsgBox("Exported")
+    End Sub
+
+
 End Class

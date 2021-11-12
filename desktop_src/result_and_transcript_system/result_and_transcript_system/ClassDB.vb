@@ -432,6 +432,38 @@ Public Class ClassDB
         End Using
         Return True
     End Function
+    Public Function manualRegExportToAccessList(dt As DataTable) As Boolean
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+            Try
+                xConn.Open()
+            Catch ex1 As Exception
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
+                xConn.Open()
+            End Try
+            '1. check for duplicates and delete
+            Dim sql As String = ""  'todo: move sql to module
+            'access
+            Dim cmd As New OleDbCommand
+            For Each row As DataRow In dt.Rows
+                'todo: use parameters
+                sql = "INSERT INTO SPD (matno,Surname,Other_Names,Department,Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2, Fees_Status,Pix,txtImageName1) "
+                sql = sql & "VALUES (" & row.Item("matno") & ",'Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam" & "','" & row.Item("CourseCode_1") & "," & row.Item("CourseCode_2") & ",'" & row.Item("Fees_Status") & "','" & row.Item("level") & "','Computer Engineering' " ');"
+                'Debug.Print(sql)
+                cmd = New OleDbCommand(sql, xConn)
+                'cmd.Transaction.Begin()
+                'da = New OleDbDataAdapter(cmd)
+                'da.Update(dt) 'da.fill() this is a promising mthd
+                cmd.ExecuteNonQuery()
+                'TODO: Show progress (trigger event)
+            Next
+
+            'cmd.Transaction.Commit()
+
+            closeConn(xConn)
+            cmd.Dispose()
+        End Using
+        Return True
+    End Function
 
     Public Function genericManualInsertDB(dt As DataTable, sql As String, values As String()) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
