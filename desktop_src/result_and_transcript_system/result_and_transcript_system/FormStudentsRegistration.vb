@@ -587,17 +587,33 @@ Public Class FormStudentsRegistration
             'insert record by record
 
             Dim dt As DataTable
+            Dim dv As DataView
             'Dim dv As DataView
             dgvImportCourses.EndEdit()
             dgvImportCourses.Update()
             If Not (IsDBNull(dgvImportCourses.DataSource) Or (dgvImportCourses.Rows.Count = 0)) Then
-                dgvImportCourses.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
-                dt = dgvImportCourses.DataSource 'causes error if dirty
+                If TypeOf (dgvImportCourses.DataSource) Is DataTable Then
+                    ' dgvImportCourses.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
+                    dt = dgvImportCourses.DataSource 'causes error if dirty
+                ElseIf TypeOf (dgvImportCourses.DataSource) Is DataView Then
+
+                    dv = dgvImportCourses.DataSource
+                    dt = dv.ToTable
+                End If
+
+
+
             Else
                 MsgBox("Empty Registration Records")
                 Exit Sub
             End If
 
+            'Do some check
+
+            For j = 0 To dt.Columns.Count - 1
+                dt.Columns(0).ColumnName = dt.Rows(0).Item(j).ToString
+            Next
+            If dt.Rows(0).Item("Matno") = "MatNo" Then dt.Rows(0).Delete()
             '#method 1 manual Insert or bulkInsert
 
             'If boolSession And boolDept And boolCourse Then

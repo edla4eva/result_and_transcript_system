@@ -227,8 +227,11 @@ Public Class ClassExcelFile
             row1 = sheet1.CreateRow(iRow + ALL_HEADERS_COUNT)
             For jCol = 0 To dt.Columns.Count - 1
                 row1.CreateCell(jCol).SetCellValue(dt.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
-                If dt.Rows(iRow).Item(jCol).ToString = "-2" Then row1.CreateCell(jCol).SetCellValue("NR")
-                If dt.Rows(iRow).Item(jCol).ToString = "-1" Then row1.CreateCell(jCol).SetCellValue("ABS")
+                If dt.Rows(iRow).Item(jCol).ToString = DEFAULT_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(DEFAULT_DISP)
+                If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(NA_DISP)
+                If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(NR_DISP)
+                If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(ABS_DISP)
+                'todo handle robatin: *87, *56 etc
                 row1.Cells(jCol).CellStyle = (style)
                 If jCol >= COURSE_START_COL Then row1.Cells(jCol).CellStyle = styleCenter
             Next
@@ -337,8 +340,8 @@ Public Class ClassExcelFile
 
         rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 3)    'account for 9 header rows
         rowFooter.CreateCell(2).SetCellValue(strFooter(1))   'row1.CreateCell(jCol).SetCellValue("S/N")
-        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=BM186-BM177")  '"=COUNT()"  'total-successful
-        rowFooter.GetCell(2).CellStyle = (style)
+        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=BM186-BM177")  'TODO: call numtoCellAddress"  'total-successful
+        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=" & numToLetter(COURSE_START_COL) & COURSE_START_COL & "-" & numToLetter(COURSE_START_COL) & COURSE_START_COL)
         rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
 
 
@@ -360,6 +363,11 @@ Public Class ClassExcelFile
         rowFooter.CreateCell(2).SetCellValue(footers(0))
         rowFooter.CreateCell(COURSE_START_COL).SetCellValue(footers(1))
         rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue(footers(2))
+        'titles/position
+        rowFooter = sheet1.CreateRow(footerRowount + 1)    'account for 9 header rows
+        rowFooter.CreateCell(2).SetCellValue("Course Adviser")
+        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("Dean")
+        rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue("Head of Department")
 
         'Style
         cRFooter = New CellRangeAddress(footerRowount, footerRowount, FULLNAME_COL, FULLNAME_COL + 1)

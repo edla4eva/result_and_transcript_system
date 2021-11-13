@@ -513,9 +513,13 @@ Public Class ClassBroadsheets
         If dictCol.Count > 0 Then
             For Each colkey In colKeys
                 Dim tmpVal As Integer = dictMATNO(colkey)
-                If dictCol.ContainsKey(colkey) Then tmpVal = dictCol(colkey) Else tmpVal = -3 'change the value
-                If (IsRegistered(tmpStrCourseCode, dictRegistered_1, colkey) = False Or (IsRegistered(tmpStrCourseCode, dictRegistered_2, colkey) = False)) Then tmpVal = -2  'ignore not registered NR courses
-
+                If dictCol.ContainsKey(colkey) Then tmpVal = dictCol(colkey) Else tmpVal = DEFAULT_CODE 'change the value
+                If (IsRegistered(tmpStrCourseCode, dictRegistered_1, colkey) = False And (IsRegistered(tmpStrCourseCode, dictRegistered_2, colkey) = False)) Then
+                    tmpVal = NR_CODE  'ignore not registered NR courses
+                Else 'it is a registered course
+                    If tmpVal < 0 Then tmpVal = ABS_CODE  'ABS 'if no score for registered then it is absent
+                End If
+                'todo: check if probated and handle by gettig prvious result *67, *45 etc
                 dictMATNO(colkey) = tmpVal
             Next colkey
 
@@ -530,7 +534,7 @@ Public Class ClassBroadsheets
         Dim countRows As Integer = dt.Rows.Count - 1    'todo: move up
         Dim iScore As Integer = 0
         Dim iMarker(5) As Integer
-        Dim tmpStr As String = ""
+        Dim tmpStrColName As String = ""
         Dim tmpStrR As String = ""
         Dim scores(160) As String
         Dim grades(160) As String
@@ -546,22 +550,22 @@ Public Class ClassBroadsheets
         Dim gradePoints(160) As Integer
         Dim passedCourses(160) As Boolean
         Dim gpa As Double
-        Dim TCRs As Integer()
-        Dim TCPs As Integer()
+        Dim TCRs(3) As Integer
+        Dim TCPs(3) As Integer
         objBroadsheet.progressStr = "Computing scores " & " ..."
         For i = 0 To countRows - 1
             For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
-                tmpStr = dt.Columns(j).ColumnName
+                tmpStrColName = dt.Columns(j).ColumnName
                 scores(j) = -4.ToString 'initialize on the fly  'TODO
                 credits(j) = 0 'initialize on the fly  'TODO
                 ''Attempt to seperate 1st nd nd semester scores/credits
                 'If j <= scores_1.Length - 1 Then scores_1(j) = scores(j)
                 'If j <= credits_1.Length - 1 Then credits_1(j) = credits(j)
 
-                courses(j) = tmpStr
-                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) And Not tmpStr.Contains("ColUNIQUE") Then
+                courses(j) = tmpStrColName
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStrColName) And Not tmpStrColName.Contains("ColUNIQUE") Then
                     scores(j) = dt.Rows(i).Item(j).ToString
-                    credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStr)
+                    credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStrColName)
                     ''Attempt to seperate 1st nd nd semester scores/credits
                     'If j <= scores_1.Length - 1 Then scores_1(j) = scores(j)
                     'If j <= credits_1.Length - 1 Then credits_1(j) = credits(j)
@@ -583,16 +587,16 @@ Public Class ClassBroadsheets
 
             tmpStrR = ""
             For j = COURSE_START_COL_2 To COURSE_END_COL_2 - 1  'Second semester
-                tmpStr = dt.Columns(j).ColumnName
+                tmpStrColName = dt.Columns(j).ColumnName
                 scores(j) = -4.ToString 'initialize on the fly  'TODO
                 credits(j) = 0 'initialize on the fly  'TODO
                 ''attempt to seperate 1st and 2nd sem courses
                 'If j - COURSE_START_COL_2 <= scores_2.Length - 1 Then scores_1(j - COURSE_START_COL_2) = scores(j)
                 'If j - COURSE_START_COL_2 <= scores_2.Length - 1 Then credits_2(j - COURSE_START_COL_2) = 0
-                courses(j) = tmpStr
-                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) And Not tmpStr.Contains("ColUNIQUE") Then
+                courses(j) = tmpStrColName
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStrColName) And Not tmpStrColName.Contains("ColUNIQUE") Then
                     scores(j) = dt.Rows(i).Item(j).ToString
-                    credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStr)
+                    credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStrColName)
                     ''Attempt to seperate 1st and 2nd semester scores/credits
                     'If j - COURSE_START_COL_2 <= scores_2.Length - 1 Then scores_1(j - COURSE_START_COL_2) = scores(j)
                     'If j - COURSE_START_COL_2 <= credits_2.Length - 1 Then scores_1(j - COURSE_START_COL_2) = credits(j)
@@ -611,6 +615,8 @@ Public Class ClassBroadsheets
                 objBroadsheet.progress = (j / COURSE_END_COL_2 * 95)
             Next
             dt.Rows(i).Item("RepeatCourses_2") = tmpStrR
+
+            dt.Rows(i).Item("RepeatAll") = dt.Rows(i).Item("RepeatCourses_1") & " " & dt.Rows(i).Item("RepeatCourses_2")
 
             objBroadsheet.progressStr = "Computing grades " & " ..."
             grades = getGRADES(scores, Nothing, Nothing)
@@ -1038,12 +1044,12 @@ Public Class ClassBroadsheets
         Dim strRet(2) As String
         'iterate formula
 
-        Dim Col As String = lettersToNum(startCol)
+        Dim Col As String = numToLetter(startCol)
 
         'First Semester
         Dim strFml As String = "="
         For j = startCol To startCol + maxCoursesFS
-            Col = lettersToNum(j)
+            Col = numToLetter(j)
             strFml = strFml & String.Format("IF({0}{1}<>``, ${0}${2} & `/` & ${0}${3} & `/` & {0}{1} & `, `,``)", Col, startRow, headRowCourse, headRowCredit) & " & "
         Next
         strFml = strFml.Replace("`"c, """"c)
@@ -1059,7 +1065,7 @@ Public Class ClassBroadsheets
         strFml = "="
         startCol = (startCol + maxCoursesFS + 4) - 1    'excellent
         For j = startCol To startCol + maxCoursesSS
-            Col = lettersToNum(j)
+            Col = numToLetter(j)
             strFml = strFml & String.Format("IF({0}{1}<>``, ${0}${2} & `/` & ${0}${3} & `/` & {0}{1} & `, `,``)", Col, startRow, headRowCourse, headRowCredit) & " & "
         Next
         strFml = strFml.Replace("`"c, """"c)
@@ -1076,7 +1082,7 @@ Public Class ClassBroadsheets
         '=SUM(IF(BO10>data!$I$9,Broadsheet!$BO$9,0),
         strFml = "="
         For j = startCol To startCol + maxCoursesFS
-            Col = lettersToNum(j)
+            Col = numToLetter(j)
             strFml = strFml & String.Format("IF({0}{1}>data!$I$9, ${0}${2}, 0)+", Col, startRow, headRowCourse, headRowCredit) & " & "
         Next
         strFml = strFml.Replace("+"c, """"c)
@@ -1456,14 +1462,14 @@ Public Class ClassBroadsheets
                 dGrade = "E"
             ElseIf score >= fmin And score <= fmax Then
                 dGrade = "F"
-            ElseIf score = -1 Then
-                dGrade = "ABS"
-            ElseIf score = -2 Then
-                dGrade = "NR"
-            ElseIf score = -3 Then
-                dGrade = "NA"
-            ElseIf score < -3 Then
-                dGrade = ""
+            ElseIf score = abs_code Then
+                dGrade = ABS_DISP
+            ElseIf score = NR_CODE Then
+                dGrade = NR_DISP
+            ElseIf score = NA_CODE Then
+                dGrade = NA_DISP
+            ElseIf score < DEFAULT_CODE Then
+                dGrade = DEFAULT_DISP
             Else
                 dGrade = ""
             End If
@@ -1480,31 +1486,31 @@ Public Class ClassBroadsheets
         Dim tmpGradePoints As Integer()
         ReDim tmpGradePoints(strGrades.Count - 1)
         For i = 0 To strGrades.Count - 1
-            tmpGradePoints(i) = getGradePoint(strGrades(i))
+            tmpGradePoints(i) = getGradePointFromGrade(strGrades(i))
         Next
         Return tmpGradePoints
 
     End Function
-    Function getGradePoint(strScore As String) As Integer
-        Dim score As Integer
+    Function getGradePointFromGrade(strGrade As String) As Integer
+
         Dim dPoint As String
         ' score = strScore
         Try
-            If strScore = "A" Then
+            If strGrade = "A" Then
                 dPoint = "5"
-            ElseIf strScore = "B" Then
+            ElseIf strGrade = "B" Then
                 dPoint = "4"
-            ElseIf strScore = "C" Then
+            ElseIf strGrade = "C" Then
                 dPoint = "3"
-            ElseIf strScore = "D" Then
+            ElseIf strGrade = "D" Then
                 dPoint = "2"
-            ElseIf strScore = "E" Then
+            ElseIf strGrade = "E" Then
                 dPoint = "1"
-            ElseIf strScore = "F" Then
+            ElseIf strGrade = "F" Then
                 dPoint = "0"
-            ElseIf strScore = "ABS" Or strScore = "NR" Or strScore = "NA" Then
+            ElseIf strGrade = "ABS" Or strGrade = "NR" Or strGrade = "NA" Then
                 dPoint = "0"
-            ElseIf strScore < "" Then
+            ElseIf strGrade < "" Then
                 dPoint = "0"
             Else
                 dPoint = "0"
@@ -1514,7 +1520,7 @@ Public Class ClassBroadsheets
 
 
         Catch ex As Exception
-
+            Return -1
         End Try
 
     End Function
@@ -1556,17 +1562,20 @@ Public Class ClassBroadsheets
                 Return True
             End If
         Catch ex As Exception
-
+            Return False
         End Try
     End Function
-    Function IsRegisteredScore(dscore As String, Optional NRCode As Integer = -2) As Boolean
+    'Used to compile CA courses or 1st and 2nd semester
+    'used to calc TCP
+    Function IsRegisteredScore(dscore As String, Optional NRCode As Integer = Nothing) As Boolean
+        If NRCode = Nothing Then NRCode = NR_CODE
         Try
             Return CInt(dscore) > NRCode
         Catch ex As Exception
             Return False
         End Try
     End Function
-    Function isPassed(dScore As Integer, Optional passScore As Integer = 40) As Boolean
+    Function isPassed(dScore As Integer, Optional passScore As Integer = 40) As Boolean 'todo: const PASS_SCORE
         Try
             If dScore < 0 Then
                 Return False        'error
@@ -1684,19 +1693,19 @@ Public Class ClassBroadsheets
         End Try
     End Function
 
-    Function getTCR(dScore As String(), dCredit As Integer()) As Integer
-        Dim sumTCP As Integer
-        Try
-            sumTCP = 0
-            For i = 0 To dScore.Count - 1
-                If IsRegisteredScore(toNum(dScore(i))) Then sumTCP = sumTCP + dCredit(i)
-            Next
-            Return sumTCP
+    'Function getTCR(dScore As String(), dCredit As Integer()) As Integer
+    '    Dim sumTCP As Integer
+    '    Try
+    '        sumTCP = 0
+    '        For i = 0 To dScore.Count - 1
+    '            If IsRegisteredScore(toNum(dScore(i))) Then sumTCP = sumTCP + dCredit(i)
+    '        Next
+    '        Return sumTCP
 
-        Catch ex As Exception
-            Return -4
-        End Try
-    End Function
+    '    Catch ex As Exception
+    '        Return -4
+    '    End Try
+    'End Function
 
     Function CalcGPA(gradePoints As Integer(), credits As Integer(), dlevel As Integer, levelPercentages As Double()) As Double
         Dim tmpGP As Double = 0

@@ -432,6 +432,7 @@ Public Class ClassDB
         End Using
         Return True
     End Function
+    'TODO: incomplete
     Public Function manualRegExportToAccessList(dt As DataTable) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             Try

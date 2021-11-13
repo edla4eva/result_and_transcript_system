@@ -126,6 +126,17 @@ Module ModuleGeneral
     Public LAST_COL As Integer = COURSE_END_COL_2 + 11 - 1   '=160 + 11 - 1 '=170
 
 
+    Public ABS_CODE As Integer = -1
+    Public NR_CODE As Integer = -2
+    Public NA_CODE As Integer = -3
+    Public DEFAULT_CODE As Integer = -4
+    Public RESULT_NOT_IN_R_CODE As Integer = -5
+
+    Public ABS_DISP As String = "ABS"
+    Public NR_DISP As String = "NR"
+    Public NA_DISP As String = "NA"
+    Public DEFAULT_DISP As String = ""
+    Public RESULT_NOT_IN_R_DISP As String = ""
 
     'Queries
     'FormResult
@@ -282,7 +293,7 @@ Module ModuleGeneral
         colAO = 41
         colAP = 42
     End Enum
-    Public lettersToNum As String() = {"0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    Public numToLetter As String() = {"0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
     "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
     "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP",
     "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "BA", "BB", "BC", "BD", "BE", "BF",
@@ -297,10 +308,10 @@ Module ModuleGeneral
     "EW", "EX", "EY", "EZ"}
 
     Public Function LastColInSem_1_ForLevel(dLevel As Integer) As Integer
-        Return COURSE_START_COL + (dLevel / 100) * NUM_COURSES_PER_LEVEL_1
+        Return (COURSE_START_COL + (dLevel / 100) * NUM_COURSES_PER_LEVEL_1) - 1
     End Function
     Public Function LastColInSem_2_ForLevel(dLevel As Integer) As Integer
-        Return COURSE_START_COL_2 + (dLevel / 100) * NUM_COURSES_PER_LEVEL_2
+        Return (COURSE_START_COL_2 + (dLevel / 100) * NUM_COURSES_PER_LEVEL_2) - 1
     End Function
     Public Sub combolist(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, ByVal this_cbo As ComboBox, Optional dConnMode As String = "local")
         Try
