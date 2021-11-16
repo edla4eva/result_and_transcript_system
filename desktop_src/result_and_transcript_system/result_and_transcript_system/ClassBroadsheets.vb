@@ -295,7 +295,7 @@ Public Class ClassBroadsheets
         strSQLAllCourses = STR_ALL_COURSES_ORDERED
         strSQLCoursesOrder = STR_COURSES_ORDER_GENERAL
         strSQLRegStudents = STR_SQL_REGISTERED_STUDENTS
-        RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, session_idr, course_dept_idr), "Reg")
+        RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, session_idr, course_dept_idr, course_level), "Reg")
         coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
         AllCoursesDS = mappDB.getAllCourses()   'Get All Courses in Array
         If coursesOrderDS.Tables(0).Rows.Count < 1 Then
@@ -673,8 +673,10 @@ Public Class ClassBroadsheets
         Next
 
         For i = 0 To countRows - 1
-            For j = COURSE_START_COL To dt.Columns.Count - 1
-                If j >= COURSE_START_COL Then
+            For j = 0 To dt.Columns.Count - 1
+                If j >= COURSE_START_COL And j <= COURSE_END_COL Then
+                    dScores(j) = toNum(dt.Rows(i).Item(j).ToString)
+                ElseIf j >= COURSE_START_COL_2 And j <= COURSE_END_COL_2 Then
                     dScores(j) = toNum(dt.Rows(i).Item(j).ToString)
                 Else
 
@@ -683,9 +685,47 @@ Public Class ClassBroadsheets
             dGrades = getGRADES(dScores, Nothing, Nothing)  'todo dont get graes for tcp
             dtNew.Rows.Add(dGrades)
         Next
+        'Now overwrite matno name etc
+        For i = 0 To countRows - 1
+            For j = 0 To dt.Columns.Count - 1
+                If j < COURSE_START_COL Then
+                    dtNew.Rows(i).Item(j) = dt.Rows(i).Item(j)
+                ElseIf j > COURSE_END_COL And j < COURSE_start_COL_2 Then
+                    dtNew.Rows(i).Item(j) = dt.Rows(i).Item(j)
+                ElseIf j > COURSE_END_COL_2 And j <= dt.Columns.Count - 1 Then
+                    dtNew.Rows(i).Item(j) = dt.Rows(i).Item(j)
+                Else
+                End If
+            Next
+        Next
 
-        ' If Not (dt.Columns(j).ColumnName.toupper.contains("ColUnique") Or dt.Columns(j).ColumnName.toupper.contains("TCP")) Then
-        'Exclude TCP...., regenerate repeated 
+        ''todo: handle repeated and ailed
+        'Dim tmpStrColName As String
+        'Dim tmpStrR As String = ""
+        'Dim courses(LAST_COL) As String
+        'Dim scores(LAST_COL) As String
+        'Dim credits(LAST_COL) As Integer
+        'For i = 0 To countRows - 1
+        '    For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
+        '        tmpStrColName = dt.Columns(j).ColumnName
+        '        scores(j) = -4.ToString 'initialize on the fly  'TODO
+        '        credits(j) = 0 'initialize on the fly  'TOD
+
+        '        courses(j) = tmpStrColName
+        '        If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStrColName) And Not tmpStrColName.Contains("ColUNIQUE") Then
+        '            scores(j) = dt.Rows(i).Item(j).ToString
+        '            credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStrColName)
+        '            'compile repeated registered courses for 1st semester
+        '            If tmpStrR = "" And dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then    'only lower level courses
+        '                If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & scores(j)   'avoid leading ","
+        '            ElseIf dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then
+        '                If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & scores(j)
+        '            End If
+        '        Else
+        '            scores(j) = 0
+        '        End If
+        '    Next
+        'Next
         Return dtNew
     End Function
     Function updateDatasetWithFomula(dt As DataTable, dictAllCourseCodeKeyAndCourseUnitVal As Dictionary(Of String, Integer), courses As String(), credits As Integer()) As DataTable
@@ -1652,8 +1692,8 @@ Public Class ClassBroadsheets
                 End If
             Next
             retVal(0) = sumTCP_1
-            retVal(0) = sumTCP_2
-            retVal(0) = sumTCP_1 + sumTCP_2
+            retVal(1) = sumTCP_2
+            retVal(2) = sumTCP_1 + sumTCP_2
             Return retVal
 
         Catch ex As Exception
@@ -1678,14 +1718,14 @@ Public Class ClassBroadsheets
 
                 If i >= COURSE_START_COL And i <= nLastColInSem_1_ForLevel Then 'dScore_1.lenght - 1 Then
                     If IsRegisteredScore(toNum(dScore(i))) Then sumTCR_1 = sumTCR_1 + dCredit(i)
-                ElseIf i <= COURSE_START_COL_2 And i <= nLastColInSem_2_ForLevel Then
+                ElseIf i >= COURSE_START_COL_2 And i <= nLastColInSem_2_ForLevel Then
                     If IsRegisteredScore(toNum(dScore(i))) Then sumTCR_2 = sumTCR_2 + dCredit(i)
                 End If
             Next
             sumTCR = sumTCR_1 + sumTCR_2
             retVal(0) = sumTCR_1
-            retVal(0) = sumTCR_2
-            retVal(0) = sumTCR
+            retVal(1) = sumTCR_2
+            retVal(2) = sumTCR
             Return retVal
 
         Catch ex As Exception

@@ -2,7 +2,7 @@
 ; Setup script
 ;my custom perl code/directive
 [Code]
-#define MyAppName "Result and Trascript Processing System"
+#define MyAppName "RTPS Result Software"
 #define MyAppVersion "1.0.Beta"
 #define MyAppPublisher "Olaye, E."
 #define MyAppURL "https://www.software.keminkreative.site.com/"
@@ -10,6 +10,7 @@
 #define MyDir "RTPS Result Soft"
 
 [Setup]
+PrivilegesRequired=admin
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 DefaultDirName={commonpf}\{#MyDir}
@@ -23,7 +24,9 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 
 
-
+;optional to run as admin
+;[Run]
+;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,MyApp}"; Flags: runascurrentuser nowait postinstall skipifsilent; Check: returnTrue()
 
 
 
@@ -80,7 +83,8 @@ Source: "..\bin\debug\templates\senate.xltx"; DestDir: "{userdocs}\{#Mydir}\temp
  Source: "..\bin\debug\templates\courses.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\templates\students.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\templates\registration.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
-
+Source: "..\bin\debug\photos\ENG1503585.jpg"; DestDir: "{userdocs}\{#Mydir}\photos"
+Source: "..\bin\debug\photos\photo_female.jpg"; DestDir: "{userdocs}\{#Mydir}\photos"
 
 
 ;Save templates in prog path as backup

@@ -8,6 +8,9 @@ Public Class FormGenerateBroadsheet
     Dim footers(3) As String
     Dim retFileName As String = ""
 
+    Dim dtScores, dtGrades As DataTable
+    Dim dvScores, dvGrades As DataView
+
     'Dim dictDepts As New Dictionary(Of String, String)
     'Dim dictCourses As New Dictionary(Of String, String)
     'Dim dictAllCourses As New Dictionary(Of String, String)
@@ -217,11 +220,10 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonGrades_Click(sender As Object, e As EventArgs) Handles ButtonGrades.Click
-        Dim dtScores, dtGrades As DataTable
-        Dim dvScores As DataView
         dvScores = DataGridViewBroadSheet.DataSource
         dtScores = dvScores.ToTable
         dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
+        dvGrades = dtGrades.DefaultView    'TODO: Fix
         DataGridViewBroadSheet.DataSource = dtGrades.DefaultView    'TODO: Fix
         'DataGridViewBroadSheet.AllowUserToAddRows = True
         'DataGridViewBroadSheet.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
@@ -274,6 +276,8 @@ Public Class FormGenerateBroadsheet
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
         Try
             DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
+            dvScores = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
+            dtScores = dvScores.ToTable
             'HIDE UNECESSARY COLS
             For Each col In DataGridViewBroadSheet.Columns
                 If col.name.contains("ColUNIQUE") Then col.visible = False
@@ -287,11 +291,22 @@ Public Class FormGenerateBroadsheet
                 End If
             Next
             DataGridViewBroadSheet.Columns(0).Width = 25   's/N
-            DataGridViewBroadSheet.Columns(1).Width = 60   'Mat
+            DataGridViewBroadSheet.Columns(1).Width = 100   'Mat
             DataGridViewBroadSheet.Columns(2).Width = 150   'Name
             DataGridViewBroadSheet.Columns(3).Visible = False   'hide
             DataGridViewBroadSheet.Columns(4).Visible = False   'hide
             DataGridViewBroadSheet.Columns(5).Visible = False   'hide
+            If RadioButtonScores.Checked = True Then
+
+            Else
+                Me.ButtonGrades.PerformClick()
+            End If
+
+            If CheckBoxFirsrSemester.Checked = False Then
+                'hide em
+            ElseIf CheckBoxSecondSemester.Checked = False Then
+                'Hide em
+            End If
 
             TextBoxTemplateFileName.Text = retFileName
             Me.ProgressBarBS.Value = 100
@@ -317,7 +332,12 @@ Public Class FormGenerateBroadsheet
 
             Case 2
                 'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
-                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(DataGridViewBroadSheet.DataSource, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers)
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
+            Case -2     'grades
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, True, dvGrades)
+
+
+
             Case Else
 
         End Select
@@ -367,11 +387,12 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonExportToExcel_Click(sender As Object, e As EventArgs) Handles ButtonExportToExcel.Click
-        If MessageBox.Show("Are you sure you want to expoer to excel?", "Export", MessageBoxButtons.YesNoCancel) = MsgBoxResult.Yes Then
+        If MessageBox.Show("Are you sure you want to export to excel?", "Export", MessageBoxButtons.YesNoCancel) = MsgBoxResult.Yes Then
         Else
             Exit Sub
         End If
         If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
+
         ButtonExportToExcel.Enabled = False
         ButtonProcessBroadsheet.Enabled = False
 
@@ -383,8 +404,18 @@ Public Class FormGenerateBroadsheet
 
         If Me.RadioButtonUseBuiltIn.Checked = True Or RadioButtonUseBuiltInFormula.Checked = True Then
             objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx"
+            If RadioButtonScores.Checked = True Then
+                bgwExportToExcel.RunWorkerAsync(2)
+            Else
+                If CheckBoxFirsrSemester.Checked = False Then
+                    'hide em
+                ElseIf CheckBoxSecondSemester.Checked = False Then
+                    'Hide em
+                End If
+                If dvGrades Is Nothing Then ButtonGrades.PerformClick() Else 'todo: call function computeGrades
+                bgwExportToExcel.RunWorkerAsync(-2)
+            End If
 
-            bgwExportToExcel.RunWorkerAsync(2)
 
         ElseIf Me.RadioButtonUseExcel.Checked = True Or Me.RadioButtonUseExcelWithFormula.Checked = True Then
             objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm"

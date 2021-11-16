@@ -525,7 +525,7 @@ Public Class ClassExcelResult
                 Try
                     xConn.Open()
                 Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
                 Dim strSQL As String = String.Format(STR_SQL_QUERY_RESULT_STUDENT_COURSE_WHERE_SESSION, dSession)

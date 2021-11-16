@@ -16,6 +16,10 @@ Public Class FormStudentsRegistration
         Me.dgvStudents.BackgroundColor = RGBColors.colorBlack2
         Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
         Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+
+        Me.dgvImportCourses.BackgroundColor = RGBColors.colorBlack2
+        Me.dgvImportCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
+        Me.dgvImportCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
     End Sub
     Private Sub FormStudentsRegistration_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
@@ -30,10 +34,6 @@ Public Class FormStudentsRegistration
             TextBoxDeptID.Text = dictDepts.Keys(0)
         End If
         BgWProcess.RunWorkerAsync(1)  'runs GetData()
-
-        'CheckedListBoxCourses.Items.AddRange(dictAllCourses.ToArray)
-
-
     End Sub
 
     Public Sub GetData()
@@ -88,12 +88,12 @@ Public Class FormStudentsRegistration
             Next
         End If
     End Sub
-    Public Sub UpdateCourses(dMATNO As String)
+    Public Sub getRegisteredCoursesForStudent(dMATNO As String)
         Try
-            Dim tmpDS As DataSet
+            Dim tmpDSCourses As DataSet
             mappDB.MATNO = dMATNO
-            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
-            dgvCourses.DataSource = tmpDS.Tables("Courses").DefaultView
+            tmpDSCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
+            dgvCourses.DataSource = tmpDSCourses.Tables("Courses").DefaultView
 
             dgvCourses.Refresh()
             resizeDatagrids("courses")
@@ -104,54 +104,32 @@ Public Class FormStudentsRegistration
 
     Private Sub txtStudentMATNO_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentMATNO.TextChanged
         Dim strSearch As String = txtStudentMATNO.Text
-        If txtStudentMATNO.Text.Length > 6 Then
-
-            Dim tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_SEARCH_STUDENTS_BY_MATNO_SURNAME_FIRSTNAME, strSearch, strSearch, strSearch), "Students")
-            dgvStudents.DataSource = tmpDS.Tables("Students").DefaultView
-            If tmpDS.Tables("Students").Rows.Count > 0 Then
-
-                UpdateCourses(tmpDS.Tables("Students").Rows(0).Item("matno"))
+        If txtStudentMATNO.Text.Length > 3 And dgvStudents.Rows.Count = 0 Then
+            'Dim tmpDSStudents = mappDB.GetDataWhere(String.Format(STR_SQL_SEARCH_STUDENTS_BY_MATNO_SURNAME_FIRSTNAME, strSearch, strSearch, strSearch), "Students")
+            'dgvStudents.DataSource = tmpDSStudents.Tables("Students").DefaultView
+        ElseIf dgvStudents.Rows.Count > 0 Then
+            'just filter
+            On Error Resume Next
+            If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
+                filterStudents(strSearch)
             End If
         End If
-        ' dgvStudents.Rows.AddCopy(dgvStudents.SelectedRows(0).Index)
-        'Dim dt As DataTable
-        'Dim dv As DataView
-        'dv = dgvStudents.DataSource
-        'dt = dv.ToTable
-        'dt.DefaultView.RowFilter = String.Format("matno='{0}' OR student_surname='{0}' OR student_surname='{0}'  OR student_firstname='{0}' ", txtStudentMATNO)
-        dgvStudents.DataSource.RowFilter = String.Format(STR_FILTER_STUDENTS, strSearch, strSearch, strSearch)
-        'DirectCast(dgvStudents.DataSource, DataTable).DefaultView.RowFilter = String.Format("matno='{0}' OR student_surname='{0}' OR student_surname='{0}'  OR student_firstname='{0}' ", txtStudentMATNO)
-
-        'dgvStudents.DataSource = dt.AsDataView
-
-
-
     End Sub
 
     Private Sub dgvStudents_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentClick
-        updatePix()
-        CaptureCourses()
-        If tmpDS.Tables("Students").Rows.Count > 0 Then
+        If tmpDS.Tables("Students").Rows.Count > 0 And dgvStudents.SelectedRows.Count > 0 Then
+            If dgvCourses.Rows.Count = 0 Then
+                getRegisteredCoursesForStudent(dgvStudents.SelectedRows(0).Cells("matno").Value)
+            Else
+                filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
+                CaptureCourses()
+            End If
 
-            UpdateCourses(tmpDS.Tables("Students").Rows(0).Item("matno"))
+            updatePix()
         End If
     End Sub
 
 
-    Private Sub dgvStudents_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvStudents.RowsAdded
-        On Error Resume Next
-        For Each row As DataGridViewRow In Me.dgvStudents.Rows
-
-            If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
-                row.DefaultCellStyle.BackColor = Color.White
-
-            ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
-                row.DefaultCellStyle.BackColor = Color.PaleVioletRed
-            End If
-        Next
-
-
-    End Sub
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         btnReset.Enabled = False
@@ -202,7 +180,11 @@ Public Class FormStudentsRegistration
             dgvCourses.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO, dMATNO)
         End If
     End Sub
-
+    Sub filterStudents(dMATNO As String)
+        If dgvStudents.Rows.Count > 0 Then
+            dgvStudents.DataSource.RowFilter = String.Format(STR_FILTER_STUDENTS, dMATNO, dMATNO, dMATNO)
+        End If
+    End Sub
     Public Sub unregisterStudent()
 
 
@@ -212,21 +194,25 @@ Public Class FormStudentsRegistration
     End Sub
 
     Public Sub updatePix()
-        'Try
-        '    UpdateRecordWhere(String.Format(SQL_UPDATE_ROOMS, "booked", CInt(dgvStudents.SelectedRows(0).Cells(6).Value) + 1))
-        '    mappDB.ProductCode = CStr(dgvStudents.SelectedRows(0).Cells(0).Value)
-        '    'MsgBox(Application.StartupPath & "\images\")
+        'todo: get from ser doc
+        Dim tmpileName As String = Application.StartupPath & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
+        Dim tmpileName2 As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
+        Dim tmpileName3 As String = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
 
-        '    If My.Computer.FileSystem.FileExists(Application.StartupPath & "\images\" & mappDB.ProductCode & ".jpg") Then
-        '        PictureBox1.Image = Image.FromFile(Application.StartupPath & "\images\" & mappDB.ProductCode & ".jpg")
-        '    Else
-        '        PictureBox1.Image = Image.FromFile(Application.StartupPath & "\images\" & "img.jpg")
 
-        '    End If
+        Try
 
-        'Catch ex As Exception
+            If My.Computer.FileSystem.FileExists(tmpileName) Then
+                PictureBox1.Image = Image.FromFile(tmpileName)
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName2) Then
+                PictureBox1.Image = Image.FromFile(tmpileName2)
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
+                PictureBox1.Image = Image.FromFile(tmpileName3)
+            End If
 
-        'End Try
+        Catch ex As Exception
+
+        End Try
 
     End Sub
     Public Function UpdateRecordWhere(s As String) As String
@@ -255,29 +241,35 @@ Public Class FormStudentsRegistration
         End Try
         Return returnVal
     End Function
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonUnregister.Click
+    Private Sub ButtonUnregister_Click(sender As Object, e As EventArgs) Handles ButtonUnregister.Click
         unregisterStudent()
     End Sub
 
     Private Sub dgvStudents_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentDoubleClick
-        updatePix()
+        dgvStudents_CellContentClick(sender, e)
     End Sub
 
     Private Sub dgv_courses_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCourses.CellContentDoubleClick
         showCoursesList(e.ColumnIndex)
     End Sub
 
+    Private Sub dgvStudents_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvStudents.RowsAdded
+        On Error Resume Next
+        For Each row As DataGridViewRow In Me.dgvStudents.Rows
+            If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
+                row.DefaultCellStyle.BackColor = Color.White
+
+            ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
+                row.DefaultCellStyle.BackColor = Color.PaleVioletRed
+
+            End If
+        Next
+    End Sub
     Private Sub dgvStudents_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.RowEnter
         On Error Resume Next
-        'MsgBox(sender.ToString)
-        updatePix()
-        'If tmpDS.Tables("Students").Rows.Count > 0 Then
-        '    UpdateCourses(tmpDS.Tables("Students").Rows(0).Item("matno"))
-        'End If
         If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
             filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
         End If
-        'CaptureCourses()
     End Sub
 
     Private Function computeCredits() As Integer
@@ -355,13 +347,18 @@ Public Class FormStudentsRegistration
     End Sub
     Sub showCoursesList(dColumnIndex As Integer)
         Dim dLeft As Integer = 0
-        CheckedListBoxCourses.Visible = True
-        CheckedListBoxCourses.Width = dgvCourses.Columns(dColumnIndex).Width    'todo: calc the with as only once
+        If CheckedListBoxCourses.Visible = True Then CheckedListBoxCourses.Visible = False Else CheckedListBoxCourses.Visible = True
+        CheckedListBoxCourses.Width = dgvCourses.Columns("CourseCode_1").Width + 10   'todo: calc the with as only once
         dLeft = dgvCourses.Left
-        For i = 0 To dColumnIndex ' dgv_courses.Columns.Count
-            dLeft = dLeft + dgvCourses.Columns(i).Width
-        Next
-        CheckedListBoxCourses.Left = dLeft
+        'For i = 0 To dColumnIndex ' dgv_courses.Columns.Count  'no need to calculate this bcos it will hide the listbox in the panel
+        '    dLeft = dLeft + dgvCourses.Columns(i).Width
+        'Next
+        If dColumnIndex > 0 Then
+            dLeft = dLeft + dgvCourses.Columns(1).Width
+        Else
+            CheckedListBoxCourses.Left = dLeft
+        End If
+
     End Sub
     Private Sub CheckedListBoxCourses_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxCourses.SelectedIndexChanged
 
@@ -372,25 +369,29 @@ Public Class FormStudentsRegistration
 
     End Sub
 
-    Private Sub ButtonImportReg_Click(sender As Object, e As EventArgs) Handles ButtonImportReg.Click
+    Private Sub ButtonImportRegFERMA_Click(sender As Object, e As EventArgs) Handles ButtonImportRegFERMA.Click
         Dim FileOpenDialogBroadsheet As New OpenFileDialog()
         Dim resultFileName As String = ""
-
+        Dim tmpDS As New DataSet
+        Dim dt As DataTable
         If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
             resultFileName = FileOpenDialogBroadsheet.FileName()
             objExcelFile.excelFileName = resultFileName
-            PreviewReg(resultFileName)
+            tmpDS = objExcelFile.readResultFile()
+            'Do some check
+            dt = tmpDS.Tables(0)
+            If dt.Rows(0).Item(0) = "MatNo" Then
+                For j = 0 To dt.Columns.Count - 1
+                    dt.Columns(j).ColumnName = dt.Rows(0).Item(j).ToString
+                Next
+                dt.Rows(0).Delete()
+            End If
+            dgvImportCourses.DataSource = dt.DefaultView
+            dgvImportCourses.Tag = "FERMA"
+            dgvImportCourses.BringToFront()
         End If
-
-
     End Sub
-    Private Sub PreviewReg(resultFileName As String)
 
-        Dim tmpDS As DataSet = objExcelFile.readResultFile()
-        'TODO: reset datagrid
-        dgvImportCourses.DataSource = tmpDS.Tables(0).DefaultView
-        dgvImportCourses.bringtofront
-    End Sub
 
     Private Sub ComboBoxDepartments_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDepartments.SelectedIndexChanged
         Try
@@ -437,7 +438,7 @@ Public Class FormStudentsRegistration
 
         dgvStudents.DataSource = tmpDS.Tables("students").DefaultView
         If dgvStudents.Rows.Count > 0 Then
-            UpdateCourses(dgvStudents.Rows(0).Cells("matno").Value.ToString)
+            getRegisteredCoursesForStudent(dgvStudents.Rows(0).Cells("matno").Value.ToString)
             'resize cols
             resizeDatagrids("students")
         End If
@@ -450,11 +451,15 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonSaveReg_Click(sender As Object, e As EventArgs) Handles ButtonSaveReg.Click
         'save to db
-        checkReg()
-        MsgBox("Registration data will now be inserter into database")
-        importReg()
-        CaptureCourses()
-        dgvImportCourses.SendToBack()
+        If dgvImportCourses.Tag = "RTPS" Then
+
+            MsgBox("Registration data will now be inserted into database")
+            importReg()
+            CaptureCourses()
+            dgvImportCourses.SendToBack()
+        ElseIf dgvImportCourses.Tag = "RTPS" Then
+            MsgBox("A lot has to be done to convert from this format to the required dormat for Registration")
+        End If
     End Sub
     Sub checkReg()
         Dim tmpDV As DataView
@@ -577,7 +582,7 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
-    Sub exportReg()
+    Function exportReg() As Boolean
         Try
             'Algorithm
             'Check database if result already exist to avoid duplicates
@@ -585,9 +590,8 @@ Public Class FormStudentsRegistration
             'Get dataset from displayed datagrid
             'parse dataset record by record
             'insert record by record
-
-            Dim dt As DataTable
-            Dim dv As DataView
+            Dim dt As New DataTable
+            Dim dv As New DataView
             'Dim dv As DataView
             dgvImportCourses.EndEdit()
             dgvImportCourses.Update()
@@ -600,20 +604,13 @@ Public Class FormStudentsRegistration
                     dv = dgvImportCourses.DataSource
                     dt = dv.ToTable
                 End If
-
-
-
             Else
                 MsgBox("Empty Registration Records")
-                Exit Sub
+                Return False
+                Exit Function
             End If
 
-            'Do some check
 
-            For j = 0 To dt.Columns.Count - 1
-                dt.Columns(0).ColumnName = dt.Rows(0).Item(j).ToString
-            Next
-            If dt.Rows(0).Item("Matno") = "MatNo" Then dt.Rows(0).Delete()
             '#method 1 manual Insert or bulkInsert
 
             'If boolSession And boolDept And boolCourse Then
@@ -628,11 +625,13 @@ Public Class FormStudentsRegistration
             'dgvImportCourses.DataSource = mappDB.GetDataWhere(String.Format(strSQL, dSession, dDeptID)).Tables(0).DefaultView
             'dgvImportCourses.Top = dgvImportCourses.Top + dgvImportCourses.Height
             'dgvImportCourses.Refresh()
+            Return True
         Catch ex As Exception
             MessageBox.Show(ex.Message)
+            Return False
         End Try
 
-    End Sub
+    End Function
     Private Sub dgvStudents_Click(sender As Object, e As EventArgs) Handles dgvStudents.Click
         If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
             filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
@@ -664,10 +663,96 @@ Public Class FormStudentsRegistration
         MsgBox("File exported to: " & retFileName)
     End Sub
 
-    Private Sub ButtonRegUtil_Click(sender As Object, e As EventArgs) Handles ButtonRegUtil.Click
-        exportReg()
-        MsgBox("Exported")
+
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
+        'TODO: create a user control for these combo box. it should have events that are aware o dictionary storing sessions, new session added, auto load, auto update etc
+        Try
+            TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+
+        Catch ex As Exception
+
+        End Try
     End Sub
 
+    Private Sub ButtonImportFromAccess_Click(sender As Object, e As EventArgs) Handles ButtonImportFromAccess.Click
+        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+        Dim resultFileName As String = ""
+        Dim dDept As String = "Computer Engineering"
+        Dim dLevel As Integer = 100
+        Dim dSession As String = "2018/2019"
 
+        dDept = ComboBoxDepartments.Text
+        dLevel = CInt(ComboBoxLevel.Text)
+        dSession = ComboBoxSessions.Text
+        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+            resultFileName = FileOpenDialogBroadsheet.FileName()
+
+            objExcelFile.excelFileName = resultFileName
+
+            'todo: PreviewReg(resultFileName,"ACCESS/EXCEL")
+
+            Dim tmpDS As DataSet = mappDB.ImportFromAccess(resultFileName, String.Format(STR_SQL_ACCESS_IMPORT_REGISTERED_STUDENTS_INPUT_DEPT_LEVEL, dDept, dLevel)) 'objExcelFile.readResultFile()
+            'TODO: reset datagrid
+            dgvImportCourses.DataSource = tmpDS.Tables(0).DefaultView
+            dgvImportCourses.BringToFront()
+            For i = 0 To dgvImportCourses.Rows.Count - 1
+                dgvImportCourses.Rows(i).Cells("session_idr").Value = dSession
+                dgvImportCourses.Rows(i).Cells("status").Value = "successful"
+                dgvImportCourses.Rows(i).Cells("student_othernames").Value = ""
+                dgvImportCourses.Rows(i).Cells("dept_idr").Value = mappDB.getDeptID(ComboBoxDepartments.SelectedItem.ToString)
+
+
+            Next
+        End If
+
+    End Sub
+
+    Private Sub ButtonRegToExcel_Click(sender As Object, e As EventArgs) Handles ButtonRegToExcel.Click
+        Dim retFileName As String
+        retFileName = objExcelFile.exportRegToExcelFile_NPOI(dgvStudents.DataSource, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\ExportedStudents" & ComboBoxLevel.Text & ".xlsx")
+        MsgBox("File exported to: " & retFileName)
+    End Sub
+
+    Private Sub ButtonAccess_Click(sender As Object, e As EventArgs) Handles ButtonAccess.Click
+        If exportReg() Then
+            MsgBox("Exported")
+        Else
+            MsgBox("Something went wrong")
+        End If
+    End Sub
+
+    Private Sub ButtonImportRegRTPS_Click(sender As Object, e As EventArgs) Handles ButtonImportRegRTPS.Click
+        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+        Dim resultFileName As String = ""
+        Dim tmpDS As New DataSet
+        Dim dt As DataTable
+        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+            resultFileName = FileOpenDialogBroadsheet.FileName()
+            objExcelFile.excelFileName = resultFileName
+            tmpDS = objExcelFile.readResultFile()
+            'Do some check
+            dt = tmpDS.Tables(0)
+            If dt.Rows(0).Item(0) = "MatNo" Then
+                For j = 0 To dt.Columns.Count - 1
+                    dt.Columns(j).ColumnName = dt.Rows(0).Item(j).ToString
+                Next
+                dt.Rows(0).Delete()
+            End If
+            dgvImportCourses.DataSource = dt.DefaultView
+            dgvImportCourses.Tag = "RTPS"
+            checkReg()
+            dgvImportCourses.BringToFront()
+        End If
+    End Sub
+
+    Private Sub ComboBoxCourseCode_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxCourseCode.SelectedIndexChanged
+        If Not ComboBoxCourseCode.SelectedItem = Nothing Then TextBoxCourseCode.Text = ComboBoxCourseCode.SelectedItem.ToString
+
+    End Sub
+
+    Private Sub ComboBoxSessions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSessions.SelectedIndexChanged
+        If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+
+    End Sub
 End Class

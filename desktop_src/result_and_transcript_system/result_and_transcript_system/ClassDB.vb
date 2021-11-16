@@ -372,7 +372,6 @@ Public Class ClassDB
 
     Public Function bulkInsertDB(dt As DataTable, strSQL As String, tmpTableName As String) As DataTable
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-
             Try
                 xConn.Open()
             Catch ex1 As Exception
@@ -447,9 +446,12 @@ Public Class ClassDB
             Dim cmd As New OleDbCommand
             For Each row As DataRow In dt.Rows
                 'todo: use parameters
-                sql = "INSERT INTO SPD (matno,Surname,Other_Names,Department,Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2, Fees_Status,Pix,txtImageName1) "
-                sql = sql & "VALUES (" & row.Item("matno") & ",'Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam" & "','" & row.Item("CourseCode_1") & "," & row.Item("CourseCode_2") & ",'" & row.Item("Fees_Status") & "','" & row.Item("level") & "','Computer Engineering' " ');"
-                'Debug.Print(sql)
+                sql = "INSERT INTO SPD (matno,Surname,Other_Names,dept,SPD.Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2,Fees_Status,Pix,txtImageName1) "
+                sql = sql & "VALUES ('" & row.Item("matno") & "','Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam" & "','" & row.Item("CourseCode_1") & "','" & row.Item("CourseCode_2") & "','" & row.Item("Fees_Status") & "','" & row.Item("level") & "','Computer Engineering');"
+                Debug.Print(sql)
+                'INSERT INTO SPD (matno,Surname,Other_Names,Department,Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2, 
+                'Fees_Status, Pix, txtImageName1) VALUES (ENG1704248,'Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam','CHM111;CHM113;GST111;GST112;MTH110;MTH112;PHY111;PHY113,CHM122;CHM124;GST121;GST122;GST123;MTH123;MTH125;PHY109;PHY124,'False','100','Computer Engineering' 
+
                 cmd = New OleDbCommand(sql, xConn)
                 'cmd.Transaction.Begin()
                 'da = New OleDbDataAdapter(cmd)
@@ -712,6 +714,34 @@ Public Class ClassDB
 
         Return AllCoursesDS
     End Function
+
+
+    Public Function ImportFromAccess(dfileName As String, dstrSQL As String, Optional dTableName As String = "Table") As DataSet
+        Debug.Print(dstrSQL)
+        Try
+            Using xConn As New OleDb.OleDbConnection(buildConnectionStringFromAccessFile(dfileName, False))
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = buildConnectionStringFromAccessFile(dfileName, True)
+                    xConn.Open()
+                End Try
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+                Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
+                Dim myDataSet As DataSet = New DataSet()
+                myDA.Fill(myDataSet, dTableName)
+                'dgw.DataSource = myDataSet.Tables("Result").DefaultView
+                Return myDataSet
+                xConn.Close()
+            End Using
+        Catch ex As Exception
+
+            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
+            'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return Nothing
+        End Try
+    End Function
+
     Public Sub logDBError(str As String)
         On Error Resume Next
         Dim fileExists As Boolean

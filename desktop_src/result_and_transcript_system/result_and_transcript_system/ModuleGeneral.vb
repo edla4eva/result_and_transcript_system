@@ -179,7 +179,16 @@ Module ModuleGeneral
                             students.mode_of_entry, students.session_idr_of_entry, students.year_of_entry, 
                             students.status
                             FROM Reg INNER JOIN students ON Reg.MatNo = students.matno 
-                            WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1}));"
+                            WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1} AND (Reg.level)={2}));"
+
+    'Import reg students from existing Access sofware
+    'Note table name is SPD
+    Public STR_SQL_ACCESS_IMPORT_REGISTERED_STUDENTS_INPUT_DEPT_LEVEL As String = "SELECT MatNo, year as session_idr, CourseCode_1, CourseCode_2, Fees_Status, SPD.level, year as dept_idr,   
+                            othernames as student_firstname, surname as student_surname, othernames as student_othernames, 
+                            mode as mode_of_entry, year as session_idr_of_entry, year as year_of_entry, 
+                            year as status
+                            FROM SPD
+                            WHERE (((dept='{0}') AND (SPD.level='{1}')));"
 
     'search
     Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_PARAM="SELECT * FROM students WHERE matno like @STR)"
@@ -244,7 +253,18 @@ Module ModuleGeneral
     'Public STR_SQL_EDIT_ROOMS As String = "UPDATE `crimpsof_ehotel`.`rooms` SET `room_status` = '{0}' WHERE `rooms`.`room_id` = {1};"
     'Public SQL_UPDATE_ROOMS As String = "UPDATE rooms set room_status='{0}' where room_id='{1}'"
 
+    Public Function buildConnectionStringFromAccessFile(dfileName As String, Is32bit As Boolean) As String
+        ' '32 bit Access
+        Dim connectionString32 As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};" '& "User ID=admin;" & "Password=" & m_password
+        '64 bits
+        Dim connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};" ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\db.mdb"
 
+        If Is32bit Then
+            Return String.Format(connectionString32, dfileName)
+        Else
+            Return String.Format(connectionString, dfileName)
+        End If
+    End Function
     Public Function dblQuoted(dStr As String) As String
         Return dblQuote & dStr & dblQuote
     End Function

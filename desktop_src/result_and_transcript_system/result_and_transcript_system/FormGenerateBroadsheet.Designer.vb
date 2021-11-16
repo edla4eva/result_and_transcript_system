@@ -81,12 +81,18 @@ Partial Class FormGenerateBroadsheet
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.DataGridViewTemp = New System.Windows.Forms.DataGridView()
         Me.ButtonOpen = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonGrades = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonScores = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxFirsrSemester = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxSecondSemester = New System.Windows.Forms.CheckBox()
         CType(Me.DataGridViewBroadSheet, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
         CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridViewTemp, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridViewBroadSheet
@@ -399,6 +405,7 @@ Partial Class FormGenerateBroadsheet
         Me.PanelModify.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PanelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelModify.Controls.Add(Me.GroupBox1)
         Me.PanelModify.Controls.Add(Me.Button1)
         Me.PanelModify.Controls.Add(Me.TextBoxDean)
         Me.PanelModify.Controls.Add(Me.TextBoxHOD)
@@ -505,7 +512,7 @@ Partial Class FormGenerateBroadsheet
         'TimerBS
         '
         Me.TimerBS.Enabled = True
-        Me.TimerBS.Interval = 1000
+        Me.TimerBS.Interval = 500
         '
         'BgWProcess
         '
@@ -616,6 +623,65 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonOpen.Text = "Open"
         Me.ButtonOpen.UseVisualStyleBackColor = False
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.CheckBoxSecondSemester)
+        Me.GroupBox1.Controls.Add(Me.CheckBoxFirsrSemester)
+        Me.GroupBox1.Controls.Add(Me.RadioButtonGrades)
+        Me.GroupBox1.Controls.Add(Me.RadioButtonScores)
+        Me.GroupBox1.Location = New System.Drawing.Point(381, 11)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(114, 100)
+        Me.GroupBox1.TabIndex = 38
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Export Options"
+        '
+        'RadioButtonGrades
+        '
+        Me.RadioButtonGrades.AutoSize = True
+        Me.RadioButtonGrades.Location = New System.Drawing.Point(8, 35)
+        Me.RadioButtonGrades.Name = "RadioButtonGrades"
+        Me.RadioButtonGrades.Size = New System.Drawing.Size(59, 17)
+        Me.RadioButtonGrades.TabIndex = 17
+        Me.RadioButtonGrades.Text = "Grades"
+        Me.RadioButtonGrades.UseVisualStyleBackColor = True
+        '
+        'RadioButtonScores
+        '
+        Me.RadioButtonScores.AutoSize = True
+        Me.RadioButtonScores.Checked = True
+        Me.RadioButtonScores.Location = New System.Drawing.Point(8, 16)
+        Me.RadioButtonScores.Name = "RadioButtonScores"
+        Me.RadioButtonScores.Size = New System.Drawing.Size(58, 17)
+        Me.RadioButtonScores.TabIndex = 16
+        Me.RadioButtonScores.TabStop = True
+        Me.RadioButtonScores.Text = "Scores"
+        Me.RadioButtonScores.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFirsrSemester
+        '
+        Me.CheckBoxFirsrSemester.AutoSize = True
+        Me.CheckBoxFirsrSemester.Checked = True
+        Me.CheckBoxFirsrSemester.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxFirsrSemester.Location = New System.Drawing.Point(8, 59)
+        Me.CheckBoxFirsrSemester.Name = "CheckBoxFirsrSemester"
+        Me.CheckBoxFirsrSemester.Size = New System.Drawing.Size(92, 17)
+        Me.CheckBoxFirsrSemester.TabIndex = 18
+        Me.CheckBoxFirsrSemester.Text = "First Semester"
+        Me.CheckBoxFirsrSemester.UseVisualStyleBackColor = True
+        '
+        'CheckBoxSecondSemester
+        '
+        Me.CheckBoxSecondSemester.AutoSize = True
+        Me.CheckBoxSecondSemester.Checked = True
+        Me.CheckBoxSecondSemester.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxSecondSemester.Location = New System.Drawing.Point(8, 77)
+        Me.CheckBoxSecondSemester.Name = "CheckBoxSecondSemester"
+        Me.CheckBoxSecondSemester.Size = New System.Drawing.Size(110, 17)
+        Me.CheckBoxSecondSemester.TabIndex = 19
+        Me.CheckBoxSecondSemester.Text = "Second Semester"
+        Me.CheckBoxSecondSemester.UseVisualStyleBackColor = True
+        '
         'FormGenerateBroadsheet
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -653,6 +719,8 @@ Partial Class FormGenerateBroadsheet
         Me.PanelModify.PerformLayout()
         CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridViewTemp, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -706,4 +774,9 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents TextBoxCourseAdviser As TextBox
     Friend WithEvents ButtonOpen As Button
     Friend WithEvents Button1 As Button
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents CheckBoxSecondSemester As CheckBox
+    Friend WithEvents CheckBoxFirsrSemester As CheckBox
+    Friend WithEvents RadioButtonGrades As RadioButton
+    Friend WithEvents RadioButtonScores As RadioButton
 End Class

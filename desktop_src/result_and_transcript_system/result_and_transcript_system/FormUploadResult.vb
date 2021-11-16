@@ -133,7 +133,7 @@ Public Class FormUploadResult
         objResult.excelVersion = "2013"
         Dim tmpDS As DataSet = objExcelFile.readResultFile()
         'TODO: reset datagrid
-        DataGridView1.DataSource = tmpDS.Tables(0).DefaultView
+        DataGridView1.DataSource = tmpDS.Tables(0).DefaultView  'todo: error if cancel file diag
         showButtons("ButtonCheck", True)
         resizeCombosToGrid()
     End Sub

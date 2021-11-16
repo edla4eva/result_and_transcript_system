@@ -80,8 +80,9 @@ Public Class ClassExcelFile
         End Try
 
     End Function
-    Public Function exportBroadsheettoExcelFile_NPOI(dv As DataView, fileName As String, objBS As ClassBroadsheets, dictCr As Dictionary(Of String, Integer), footers As String()) As String
+    Public Function exportBroadsheettoExcelFile_NPOI(dv As DataView, fileName As String, objBS As ClassBroadsheets, dictCr As Dictionary(Of String, Integer), footers As String(), Optional showGrades As Boolean = False, Optional dvGrades As DataView = Nothing) As String
         Dim dt As DataTable = dv.ToTable
+        Dim dtGrades As DataTable = Nothing
         Dim workbook As IWorkbook = New XSSFWorkbook()
         Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
         Dim row1, rowCredits As IRow
@@ -97,9 +98,6 @@ Public Class ClassExcelFile
         Dim styleMediumBorderCenter As ICellStyle '= changeStyle(workbook)
         If fileName = "" Then fileName = My.Application.Info.DirectoryPath & "\broadsheets\GeneratedBroadsheet.xlsx"
 
-
-
-
         'headers
         Dim dFont As New XSSFFont()
         dFont.IsBold = True
@@ -109,9 +107,6 @@ Public Class ClassExcelFile
         styleMediumBorderCenter = workbook.CreateCellStyle()
         styleMediumBorderCenter.Alignment = HorizontalAlignment.Center
         styleMediumBorderCenter.SetFont(dFont)
-
-        'styleMediumBorder.CloneStyleFrom(style)
-
 
         '# Insert values for header
         row1 = sheet1.CreateRow(0)  'row1
@@ -140,12 +135,6 @@ Public Class ClassExcelFile
         row1 = sheet1.CreateRow(6)  'row7
         row1.CreateCell(0).SetCellValue("")
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
-
-        'Merge headers dept name etc
-        'mergeCells(sheet1, sheet1.GetRow(1).Cells(0), sheet1.GetRow(1).RowNum, sheet1.GetRow(1).RowNum, 1, 120)
-        'mergeCells(sheet1, sheet1.GetRow(2).Cells(0), sheet1.GetRow(2).RowNum, sheet1.GetRow(2).RowNum, 1, 120)
-        'mergeCells(sheet1, sheet1.GetRow(3).Cells(0), sheet1.GetRow(3).RowNum, sheet1.GetRow(3).RowNum, 1, 120)
-        'mergeCells(sheet1, sheet1.GetRow(4).Cells(0), sheet1.GetRow(4).RowNum, sheet1.GetRow(4).RowNum, 1, 120)
 
         '#STYLE: Special case of merged cells border
         cR = New CellRangeAddress(1, 1, 0, LAST_COL)
@@ -195,7 +184,6 @@ Public Class ClassExcelFile
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then row1.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
 
-
             '
             If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then Exit Function 'no need '
             If jCol >= COURSE_START_COL And dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dt.Columns(jCol).ColumnName.ToString) Then rowCredits.CreateCell(jCol).SetCellValue(dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(jCol).ColumnName.ToString))
@@ -211,16 +199,11 @@ Public Class ClassExcelFile
         'Style Special cases 
         row1.GetCell(COURSE_FAIL_COL).CellStyle = styleMediumBorder 'horzontal
 
-
-        '#### Credits 
-
-
         style = changeStyle(workbook)
         styleCenter = changeStyle(workbook)
         styleCenter.Alignment = HorizontalAlignment.Center
         styleWrap = changeStyle(workbook)
         styleWrap.WrapText = True
-
 
         '###The results
         For iRow = 0 To dt.Rows.Count - 1
@@ -231,7 +214,7 @@ Public Class ClassExcelFile
                 If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(NA_DISP)
                 If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(NR_DISP)
                 If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then row1.CreateCell(jCol).SetCellValue(ABS_DISP)
-                'todo handle robatin: *87, *56 etc
+                'todo handle probating: *87, *56 etc
                 row1.Cells(jCol).CellStyle = (style)
                 If jCol >= COURSE_START_COL Then row1.Cells(jCol).CellStyle = styleCenter
             Next
@@ -296,6 +279,31 @@ Public Class ClassExcelFile
         'printSetup.setFitHeight((Short)0);
         'printSetup.setFitWidth((Short)1);
 
+        If showGrades = True Then
+            dtGrades = dvGrades.ToTable
+            'TODO: convert all scores to grades
+            '###The results
+            For iRow = 0 To dt.Rows.Count - 1
+                row1 = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
+                For jCol = 0 To dt.Columns.Count - 1
+                    If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL_2 Then
+                        row1.GetCell(jCol).SetCellValue(dtGrades.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
+                        If dt.Rows(iRow).Item(jCol).ToString = DEFAULT_CODE.ToString Then row1.GetCell(jCol).SetCellValue(DEFAULT_DISP)
+                        If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then row1.GetCell(jCol).SetCellValue(NA_DISP)
+                        If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then row1.GetCell(jCol).SetCellValue(NR_DISP)
+                        If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then row1.GetCell(jCol).SetCellValue(ABS_DISP)
+                        'todo handle probating: *87, *56 etc
+                    End If
+                    'handle repeated
+                    If jCol = REPEATED_ALL_COL Then
+                        row1.GetCell(jCol).SetCellValue(dtGrades.Rows(iRow).Item(jCol).ToString)
+                    End If
+
+                Next
+
+            Next
+        End If
+
         'save work
         'todo: if file exists(fileName) create new filename
         If System.IO.File.Exists(fileName) Then
@@ -310,10 +318,10 @@ Public Class ClassExcelFile
                 MsgBox("The Excel file is Open , close it and click ok")
 
                 Try
-                        writeToFile(workbook, fileName)
-                    Catch ex2 As Exception
-                        Return ""
-                    End Try
+                    writeToFile(workbook, fileName)
+                Catch ex2 As Exception
+                    fileName = ""
+                End Try
 
             End Try
 
@@ -397,6 +405,7 @@ Public Class ClassExcelFile
                 'show first sem repeat
 
         End Select
+        Return True
     End Function
     Public Function setFormatPerLevel(sheet1 As ISheet, dLevel As Integer) As Boolean
 
@@ -435,6 +444,7 @@ Public Class ClassExcelFile
                 sheet1.SetColumnHidden(GPA_COL, True)
 
         End Select
+        Return True
     End Function
     Public Function setWidthHeight(sheet1 As ISheet) As Boolean
         'set the width of columns
@@ -510,6 +520,44 @@ Public Class ClassExcelFile
         End Try
 
     End Function
+    Public Function exportDataGridViewToExcelFile_NPOI(dv As DataView, fileName As String) As String
+        Dim dt As DataTable = dv.ToTable
+        Dim workbook As IWorkbook = New XSSFWorkbook()
+        Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
+        Dim row1 As IRow
+        'Dim cell As ICell
+        Dim cR As CellRangeAddress = New CellRangeAddress(1, 3, 1, 120)
+
+
+        row1 = sheet1.CreateRow(0)   'headers
+        For jCol = 0 To dt.Columns.Count - 1
+            row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName)
+        Next
+
+        For jRow = 0 To dt.Rows.Count - 1
+            row1 = sheet1.CreateRow(jRow + 1)
+            For jCol = 0 To dt.Columns.Count - 1
+                'data
+                row1.CreateCell(jCol).SetCellValue(dt.Rows(jRow).ItemArray(jCol).ToString)
+            Next
+        Next
+
+
+
+        'save work
+        'todo: if file exists(fileName) create new filename
+        If System.IO.File.Exists(fileName) Then
+            fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
+            'System.IO.File.Delete(fileName)
+            If System.IO.File.Exists(fileName) Then fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
+            writeToFile(workbook, fileName)
+            'Throw New Exception("RTPS Error: Excel File Already Exists!")
+        Else
+            writeToFile(workbook, fileName)
+        End If
+
+        Return fileName
+    End Function
     Public Function modifyExcelFile_NPOI(fileName As String, dv As DataView) As Boolean
         Dim xssfwb As XSSFWorkbook 'HSSFWorkbook for xls xSSFWorkbook for xlsx
         Dim dt As New DataTable("Broadsheet")
@@ -556,39 +604,22 @@ Public Class ClassExcelFile
         End Using
         Return True
     End Function
+    Public Function exportRegToExcelFile_NPOI(dv As DataView, fileName As String) As String
+        Dim retFilename
+
+        If fileName = "" Then fileName = My.Application.Info.DirectoryPath & "\broadsheets\SavedRegistration.xlsx"
+        retFilename = exportDataGridViewToExcelFile_NPOI(dv, fileName)
+
+        Return retFilename
+    End Function
     Public Function exportStudentsToExcelFile_NPOI(dv As DataView, fileName As String) As String
-        Dim dt As DataTable = dv.ToTable
-        Dim workbook As IWorkbook = New XSSFWorkbook()
-        Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
-        Dim row1 As IRow
-        'Dim cell As ICell
-        Dim cR As CellRangeAddress = New CellRangeAddress(1, 3, 1, 120)
 
+
+        Dim retFilename
         If fileName = "" Then fileName = My.Application.Info.DirectoryPath & "\broadsheets\SavedStudents.xlsx"
+        retFilename = exportDataGridViewToExcelFile_NPOI(dv, fileName)
 
-        For jRow = 0 To dt.Rows.Count - 1
-            row1 = sheet1.CreateRow(jRow)
-            For jCol = 0 To dt.Columns.Count - 1
-                'data
-                row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
-            Next
-        Next
-
-
-
-        'save work
-        'todo: if file exists(fileName) create new filename
-        If System.IO.File.Exists(fileName) Then
-            fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
-            'System.IO.File.Delete(fileName)
-            If System.IO.File.Exists(fileName) Then fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
-            writeToFile(workbook, fileName)
-            'Throw New Exception("RTPS Error: Excel File Already Exists!")
-        Else
-            writeToFile(workbook, fileName)
-        End If
-
-        Return fileName
+        Return retFilename
     End Function
 
     Public Property excelFileName() As String
@@ -612,8 +643,13 @@ Public Class ClassExcelFile
         colNum = 1
         Dim excelReader As IExcelDataReader
         Dim resultDS As DataSet
-        Try 'step 1
+        Try
             stream = File.Open(objExcelFile.excelFileName, FileMode.Open, FileAccess.Read)
+        Catch ex As Exception
+            MsgBox("The file is already open. To resolve this issue" & vbCrLf & "1. Close the file" & vbCrLf & "2. Click OK")
+        End Try
+        Try 'step 1
+            If stream Is Nothing Then stream = File.Open(objExcelFile.excelFileName, FileMode.Open, FileAccess.Read)
             'read from xml excel .xlsx
 
             Try 'step 2
@@ -633,13 +669,7 @@ Public Class ClassExcelFile
             Exit Function
         End Try
 
-
-
-
-
         Return resultDS
-
-
     End Function
     Public Function readBroadSheetTemplateFile() As DataSet
 
