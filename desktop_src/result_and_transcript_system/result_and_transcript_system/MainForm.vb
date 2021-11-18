@@ -148,7 +148,7 @@
                 Me.StartPosition = FormStartPosition.CenterScreen
                 Me.CenterToScreen()
             Case "Home"
-                addForm(LoginForm1)
+                addForm(HomeForm)
                 Me.WindowState = FormWindowState.Normal
                 Me.AutoScroll = False
                 Me.AutoScrollMinSize = New Size(0, 0) 'normal

@@ -517,6 +517,8 @@ Public Class FormGenerateBroadsheet
             ComboBoxSessions.Items.Add(dictSessions(key))
         Next
         TextBoxSession.Text = ComboBoxSessions.Items(0).ToString
+
+
     End Sub
 
 

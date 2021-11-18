@@ -518,7 +518,7 @@ Public Class ClassExcelResult
         End Try
     End Function
 
-    Function getFromDBResultssDataset(dSession As String) As DataSet
+    Function getFromDBResultssDataset(dSession As String, dCourse As String) As DataSet
         Dim myDataSet As DataSet = New DataSet()
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
@@ -528,12 +528,15 @@ Public Class ClassExcelResult
                     xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
-                Dim strSQL As String = String.Format(STR_SQL_QUERY_RESULT_STUDENT_COURSE_WHERE_SESSION, dSession)
+                Dim strSQL As String = String.Format(STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE, dSession, dCourse)
+                If dSession = "" Then
 
+                End If
                 Dim cmd As New OleDbCommand
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = strSQL
                 cmd.Connection = xConn
+                Debug.Print(strSQL)
                 Dim myDA As OleDbDataAdapter = New OleDbDataAdapter(cmd)
 
                 myDA.Fill(myDataSet, "results")

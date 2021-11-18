@@ -71,7 +71,9 @@ Public Class FormCourseAdviser
         Dim tmpDS As DataSet
         'dCountResult1, dCountResult2, dCountBS1, dCountBS2, dCountStudents,dCountSenate
         'ButtonResultsSubmitted.Text = "#/##"
+        'Debug.Print(STR_SQL_ALL_RESULTS_SUMMARY)
         tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_RESULTS_SUMMARY)
+
         dCountResult1 = tmpDS.Tables(0).Rows.Count
         tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_COURSES)
         dCountResult2 = tmpDS.Tables(0).Rows.Count

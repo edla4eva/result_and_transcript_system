@@ -543,7 +543,8 @@ Public Class ClassDB
                 xConn.Open()
             End Try
             '1. check for duplicates and delete
-            Dim sql As String = "INSERT INTO results (result_id, student_idr, total) "  'todo: move sql to module
+            Dim sql As String = "INSERT INTO results (result_id, student_idr, total, timestamp) "  'todo: move sql to module
+            Dim strTimestmp As String = Now.ToString
             'access
             Dim cmd As New OleDbCommand
             'Dim da As OleDbDataAdapter
@@ -553,8 +554,8 @@ Public Class ClassDB
             For Each row As DataRow In dt.Rows
                 id = id + 1
                 'todo: use parameters
-                sql = "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr) "
-                sql = sql & "VALUES (" & id & "," & row.Item("sn") & ",'" & row.Item("matno") & "','" & row.Item("name") & "'," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "');"
+                sql = "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,resut_timestamp) "
+                sql = sql & "VALUES (" & id & "," & row.Item("sn") & ",'" & row.Item("matno") & "','" & row.Item("name") & "'," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "','" & strTimestmp & "');"   '
 
                 'Debug.Print(sql)
                 cmd = New OleDbCommand(sql, xConn)

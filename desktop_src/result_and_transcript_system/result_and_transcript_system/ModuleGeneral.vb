@@ -142,17 +142,17 @@ Module ModuleGeneral
     'FormResult
     'all
     Public STR_SQL_ALL_RESULTS As String = "SELECT * FROM results order by result_id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
-    Public STR_SQL_ALL_RESULTS_SUMMARY As String = "SELECT Results.Session_idr, Results.course_code_idr, Count(Results.matno) AS NumStudents, Avg(Results.total) AS Average
+    Public STR_SQL_ALL_RESULTS_SUMMARY As String = "SELECT Results.Session_idr, Results.course_code_idr,Results.result_timestamp, Count(Results.matno) AS NumStudents, Avg(Results.total) AS Average 
                                                     FROM Results
-                                                    GROUP BY Results.Session_idr, Results.course_code_idr;"
+                                                    GROUP BY Results.Session_idr, Results.course_code_idr, Results.result_timestamp;"
 
     Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col175,count(broadsheets_all.Col2) AS NumStudents, first(broadsheets_all.ColNames) AS CourseCodes
                                                     FROM broadsheets_all
                                                     GROUP BY broadsheets_all.Col175;"
 
-    Public STR_SQL_QUERY_RESULT_STUDENT_COURSE_WHERE_SESSION As String = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Department.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
+    Public STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE As String = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Departments.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
                  FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Departments On students.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code 
-                 WHERE results.session_idr='{0}';"
+                 WHERE results.session_idr='{0}' AND results.course_code_idr='{1}';"
 
     Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
 
@@ -197,6 +197,7 @@ Module ModuleGeneral
     ''TIP: Problem with OLEDB and Access. canot use Like  in query ...''FIXED: use % wildcard instead of *
     Public STR_FILTER_STUDENTS = "matno like '%{0}%' OR student_surname='%{1}%'  OR student_firstname='%{2}%'"
     Public STR_FILTER_RESULTS_BYCOURSECODE = "Course_code_idr like '%{0}%'"
+    Public STR_FILTER_RESULTS_BYSESSION = "session_idr like '%{0}%'"
     Public STR_FILTER_REG_BY_MATNO = "matno = '{0}'"
     Public STR_FILTER_GEENERIC = "{0} like '%{1}%'"
 

@@ -347,25 +347,25 @@ Public Class FormStudentsRegistration
     End Sub
     Sub showCoursesList(dColumnIndex As Integer)
         Dim dLeft As Integer = 0
-        If CheckedListBoxCourses.Visible = True Then CheckedListBoxCourses.Visible = False Else CheckedListBoxCourses.Visible = True
-        CheckedListBoxCourses.Width = dgvCourses.Columns("CourseCode_1").Width + 10   'todo: calc the with as only once
-        dLeft = dgvCourses.Left
-        'For i = 0 To dColumnIndex ' dgv_courses.Columns.Count  'no need to calculate this bcos it will hide the listbox in the panel
-        '    dLeft = dLeft + dgvCourses.Columns(i).Width
-        'Next
-        If dColumnIndex > 0 Then
-            dLeft = dLeft + dgvCourses.Columns(1).Width
-        Else
-            CheckedListBoxCourses.Left = dLeft
-        End If
+        If PanelCourses.Visible = True Then PanelCourses.Visible = False Else PanelCourses.Visible = True
+        'CheckedListBoxCourses.Width = dgvCourses.Columns("CourseCode_1").Width + 10   'todo: calc the with as only once
+        'dLeft = dgvCourses.Left
+        ''For i = 0 To dColumnIndex ' dgv_courses.Columns.Count  'no need to calculate this bcos it will hide the listbox in the panel
+        ''    dLeft = dLeft + dgvCourses.Columns(i).Width
+        ''Next
+        'If dColumnIndex > 0 Then
+        '    dLeft = dLeft + dgvCourses.Columns(1).Width
+        'Else
+        '    CheckedListBoxCourses.Left = dLeft
+        'End If
 
     End Sub
-    Private Sub CheckedListBoxCourses_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxCourses.SelectedIndexChanged
+    Private Sub CheckedListBoxCourses_SelectedIndexChanged(sender As Object, e As EventArgs)
 
 
     End Sub
 
-    Private Sub CheckedListBoxCourses_KeyPress(sender As Object, e As KeyPressEventArgs) Handles CheckedListBoxCourses.KeyPress
+    Private Sub CheckedListBoxCourses_KeyPress(sender As Object, e As KeyPressEventArgs)
 
     End Sub
 
@@ -434,7 +434,16 @@ Public Class FormStudentsRegistration
         For Each key In dictSessions.Keys
             ComboBoxSessions.Items.Add(dictSessions(key))
         Next
+
         If ComboBoxSessions.Items.Count > 0 Then ComboBoxSessions.SelectedIndex = 0
+        ComboBoxCourseCode.Items.Clear()
+        CheckedListBoxCourses.Items.Clear()
+        For Each key In dictCourses.Keys
+            ComboBoxCourseCode.Items.Add(dictCourses(key))
+            CheckedListBoxCourses.Items.Add(dictCourses(key))
+        Next
+        ComboBoxCourseCode.SelectedIndex = 0
+
 
         dgvStudents.DataSource = tmpDS.Tables("students").DefaultView
         If dgvStudents.Rows.Count > 0 Then
@@ -638,7 +647,7 @@ Public Class FormStudentsRegistration
         End If
     End Sub
 
-    Private Sub CheckedListBoxCourses_Leave(sender As Object, e As EventArgs) Handles CheckedListBoxCourses.Leave
+    Private Sub CheckedListBoxCourses_Leave(sender As Object, e As EventArgs)
         Dim strReg1 As String = ""
         Dim strReg2 As String = ""
         'Dim col As Collection
@@ -754,5 +763,13 @@ Public Class FormStudentsRegistration
     Private Sub ComboBoxSessions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSessions.SelectedIndexChanged
         If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
 
+    End Sub
+
+    Private Sub BgWProcess_DoWork(sender As Object, e As DoWorkEventArgs) Handles BgWProcess.DoWork
+
+    End Sub
+
+    Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
+        'TODO: ComboBoxCourseCode.filter(level)
     End Sub
 End Class

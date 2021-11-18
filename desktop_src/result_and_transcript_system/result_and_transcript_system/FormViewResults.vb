@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 
 Public Class FormViewResults
+    Dim resultSummarryDV As New DataView
     Private Sub FormViewResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
 
@@ -28,14 +29,9 @@ Public Class FormViewResults
     End Sub
 
     Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
-        Dim strSQL As String = STR_SQL_ALL_RESULTS_SUMMARY
-        Try
-            DataGridView2.DataSource = mappDB.GetDataWhere(strSQL).Tables(0).DefaultView
-        Catch ex As Exception
+        Me.ButtonShowAll.Enabled = False
 
-        End Try
-
-
+        bgwLoad.RunWorkerAsync()
     End Sub
 
 
@@ -65,13 +61,23 @@ Public Class FormViewResults
     End Sub
 
     Private Sub ButtonSearch_Click(sender As Object, e As EventArgs) Handles ButtonSearch.Click
-        If TextBoxCourseCode.Text = "" Then
+        Dim myDataSet As DataSet
+        If TextBoxCourseCode.Text = "" And TextBoxSession.Text = "" Then
+            TextBoxSession.BackColor = Color.Pink
             TextBoxCourseCode.BackColor = Color.Pink
-            MessageBox.Show("Please enter the session and retry again")
+            MessageBox.Show("Please enter the Session or CourseCode and retry again")
             Exit Sub
+        ElseIf Not TextBoxCourseCode.Text = "" Then
+            myDataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text, TextBoxCourseCode.Text)
+            DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+            TextBoxCourseCode.BackColor = Color.White
+            TextBoxCourseCode.BackColor = Color.White
+        ElseIf Not TextBoxSession.Text = "" Then
+            myDataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text, TextBoxCourseCode.Text)
+            DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+            TextBoxSession.BackColor = Color.White
+            TextBoxCourseCode.BackColor = Color.White
         End If
-        Dim myDataSet As DataSet = objResult.getFromDBResultssDataset(TextBoxCourseCode.Text)
-        DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
     End Sub
 
     Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
@@ -126,7 +132,9 @@ Public Class FormViewResults
     End Sub
 
     Private Sub ButtonDelete_Click(sender As Object, e As EventArgs) Handles ButtonDelete.Click
-        If DataGridView2.SelectedRows Is Nothing Then Exit Sub
+        If DataGridView2.SelectedRows Is Nothing Or DataGridView2.Columns.Contains("matno") Then
+            Exit Sub
+        End If
         Dim strSQL As String = "DELETE * FROM results WHERE session_idr='{0}' AND course_code_idr='{1}'"
         Dim dSession As String = DataGridView2.SelectedRows(0).Cells("session_idr").Value.ToString
         Dim dCourse As String = DataGridView2.SelectedRows(0).Cells("course_code_idr").Value.ToString
@@ -139,5 +147,65 @@ Public Class FormViewResults
                 MsgBox("Results deleted sucessfully")
             End If
         End If
+    End Sub
+
+    Private Sub TextBoxSession_TextChanged_1(sender As Object, e As EventArgs) Handles TextBoxSession.TextChanged
+        On Error Resume Next
+        If DataGridView2.Rows.Count > 0 Then
+            DataGridView2.DataSource.RowFilter = String.Format(STR_FILTER_RESULTS_BYSESSION, TextBoxSession.Text)
+        End If
+    End Sub
+
+    Private Sub DataGridView2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridView2_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentDoubleClick
+        Dim txtCC, txtS As String
+        Dim myDataSet As DataSet
+        If DataGridView2.SelectedRows.Count > 0 And
+            DataGridView2.Columns.Contains("course_code_idr") And
+            DataGridView2.Columns.Contains("session_idr") Then
+            txtCC = DataGridView2.SelectedRows(0).Cells("course_code_idr").Value
+            txtS = DataGridView2.SelectedRows(0).Cells("session_idr").Value
+            myDataSet = objResult.getFromDBResultssDataset(txtS, txtCC)
+            DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+        End If
+    End Sub
+
+    Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
+        TimerBS.Start()
+        bgwLoad.ReportProgress(20)
+        getResultSummary()
+        bgwLoad.ReportProgress(90)
+    End Sub
+
+    Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
+        DataGridView2.DataSource = resultSummarryDV
+        Me.ButtonShowAll.Enabled = True
+        TimerBS.Stop()
+        ProgressBarBS.Value = 100
+    End Sub
+
+    Private Sub bgwLoad_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles bgwLoad.ProgressChanged
+        ProgressBarBS.Value = e.ProgressPercentage
+    End Sub
+    Private Function getResultSummary() As DataView
+
+        Try
+            resultSummarryDV = mappDB.GetDataWhere(STR_SQL_ALL_RESULTS_SUMMARY).Tables(0).DefaultView
+
+        Catch ex As Exception
+
+        End Try
+        Return resultSummarryDV
+    End Function
+
+    Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
+        ProgressBarBS.Value = ProgressBarBS.Value + 1
+    End Sub
+
+    Private Sub FormViewResults_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        bgwLoad.RunWorkerAsync()
     End Sub
 End Class

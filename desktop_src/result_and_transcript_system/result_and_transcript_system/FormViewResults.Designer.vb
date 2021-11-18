@@ -22,6 +22,7 @@ Partial Class FormViewResults
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -36,15 +37,19 @@ Partial Class FormViewResults
         Me.ButtonSearch = New System.Windows.Forms.Button()
         Me.ButtonBrowse = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.TextBoxSession = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TextBoxCourseCode = New System.Windows.Forms.TextBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.ListBoxResults = New System.Windows.Forms.ListBox()
         Me.ListBoxFileNames = New System.Windows.Forms.ListBox()
         Me.DataGridView2 = New System.Windows.Forms.DataGridView()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.ListBoxResults = New System.Windows.Forms.ListBox()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
+        Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
+        Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
         Me.SidePanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -182,6 +187,8 @@ Partial Class FormViewResults
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.Label2)
+        Me.GroupBox1.Controls.Add(Me.TextBoxSession)
         Me.GroupBox1.Controls.Add(Me.Label8)
         Me.GroupBox1.Controls.Add(Me.TextBoxCourseCode)
         Me.GroupBox1.Location = New System.Drawing.Point(601, 118)
@@ -191,10 +198,27 @@ Partial Class FormViewResults
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Search DataBase"
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(9, 85)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(44, 13)
+        Me.Label2.TabIndex = 10
+        Me.Label2.Text = "Session"
+        '
+        'TextBoxSession
+        '
+        Me.TextBoxSession.Location = New System.Drawing.Point(9, 104)
+        Me.TextBoxSession.Multiline = True
+        Me.TextBoxSession.Name = "TextBoxSession"
+        Me.TextBoxSession.Size = New System.Drawing.Size(146, 22)
+        Me.TextBoxSession.TabIndex = 9
+        '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(9, 43)
+        Me.Label8.Location = New System.Drawing.Point(9, 24)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(68, 13)
         Me.Label8.TabIndex = 8
@@ -202,7 +226,7 @@ Partial Class FormViewResults
         '
         'TextBoxCourseCode
         '
-        Me.TextBoxCourseCode.Location = New System.Drawing.Point(9, 62)
+        Me.TextBoxCourseCode.Location = New System.Drawing.Point(9, 43)
         Me.TextBoxCourseCode.Multiline = True
         Me.TextBoxCourseCode.Name = "TextBoxCourseCode"
         Me.TextBoxCourseCode.Size = New System.Drawing.Size(146, 22)
@@ -219,6 +243,14 @@ Partial Class FormViewResults
         Me.GroupBox2.TabIndex = 8
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Scanned Results"
+        '
+        'ListBoxResults
+        '
+        Me.ListBoxResults.FormattingEnabled = True
+        Me.ListBoxResults.Location = New System.Drawing.Point(9, 146)
+        Me.ListBoxResults.Name = "ListBoxResults"
+        Me.ListBoxResults.Size = New System.Drawing.Size(144, 121)
+        Me.ListBoxResults.TabIndex = 25
         '
         'ListBoxFileNames
         '
@@ -280,13 +312,25 @@ Partial Class FormViewResults
         Me.PictureBox2.TabStop = False
         Me.PictureBox2.Visible = False
         '
-        'ListBoxResults
+        'bgwLoad
         '
-        Me.ListBoxResults.FormattingEnabled = True
-        Me.ListBoxResults.Location = New System.Drawing.Point(9, 146)
-        Me.ListBoxResults.Name = "ListBoxResults"
-        Me.ListBoxResults.Size = New System.Drawing.Size(144, 121)
-        Me.ListBoxResults.TabIndex = 25
+        Me.bgwLoad.WorkerReportsProgress = True
+        '
+        'ProgressBarBS
+        '
+        Me.ProgressBarBS.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProgressBarBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
+        Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
+        Me.ProgressBarBS.Location = New System.Drawing.Point(44, 100)
+        Me.ProgressBarBS.Name = "ProgressBarBS"
+        Me.ProgressBarBS.Size = New System.Drawing.Size(544, 23)
+        Me.ProgressBarBS.TabIndex = 76
+        Me.ProgressBarBS.Value = 1
+        '
+        'TimerBS
+        '
+        Me.TimerBS.Interval = 1000
         '
         'FormViewResults
         '
@@ -295,6 +339,7 @@ Partial Class FormViewResults
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(913, 556)
         Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.ProgressBarBS)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.DataGridView2)
         Me.Controls.Add(Me.GroupBox2)
@@ -337,4 +382,8 @@ Partial Class FormViewResults
     Friend WithEvents ButtonClose As Button
     Friend WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
     Friend WithEvents ButtonDelete As Button
+    Friend WithEvents Label2 As Label
+    Friend WithEvents TextBoxSession As TextBox
+    Friend WithEvents ProgressBarBS As ProgressBar
+    Friend WithEvents TimerBS As Timer
 End Class
