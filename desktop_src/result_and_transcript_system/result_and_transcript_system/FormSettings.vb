@@ -120,4 +120,8 @@ Public Class FormSettings
     Private Sub ButtonAddCourse_Click(sender As Object, e As EventArgs)
         ListBoxCoursesOrder.Items.Add(ComboBoxCourses.SelectedItem)
     End Sub
+
+    Private Sub FormSettings_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        MainForm.doCloseForm()
+    End Sub
 End Class

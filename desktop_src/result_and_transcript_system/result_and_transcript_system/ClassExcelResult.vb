@@ -517,7 +517,20 @@ Public Class ClassExcelResult
             'can cause error
         End Try
     End Function
-
+    '
+    ' Summary:
+    '     Gets result from database.
+    '
+    ' Parameters:
+    '   dSession:
+    '     The result session eg 2018/2019.
+    '
+    '   dCourse:
+    '     The course code of the result to be extracted. this is the creteria expressin of the underlyin table.
+    '
+    ' Exceptions:
+    '   T:System.Exception:
+    '     general Exception is thrown when there is an error (todo).
     Function getFromDBResultssDataset(dSession As String, dCourse As String) As DataSet
         Dim myDataSet As DataSet = New DataSet()
         Try

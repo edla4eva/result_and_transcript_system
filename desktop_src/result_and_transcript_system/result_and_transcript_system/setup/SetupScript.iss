@@ -85,6 +85,7 @@ Source: "..\bin\debug\templates\students.xltx"; DestDir: "{userdocs}\{#Mydir}\te
 Source: "..\bin\debug\templates\registration.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\photos\ENG1503585.jpg"; DestDir: "{userdocs}\{#Mydir}\photos"
 Source: "..\bin\debug\photos\photo_female.jpg"; DestDir: "{userdocs}\{#Mydir}\photos"
+Source: "..\bin\debug\scans\result_2018_2019_ecp281.jpg"; DestDir: "{userdocs}\{#Mydir}\scans"
 
 
 ;Save templates in prog path as backup

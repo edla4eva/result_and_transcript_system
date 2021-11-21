@@ -5,6 +5,8 @@ Imports MySql.Data.MySqlClient
 Imports ExcelInterop = Microsoft.Office.Interop.Excel
 'Imports Microsoft.Office.Core
 Imports System.Data.OleDb
+Imports System.Security.Cryptography
+Imports System.Text
 
 Module ModuleGeneral
 
@@ -138,6 +140,8 @@ Module ModuleGeneral
     Public DEFAULT_DISP As String = ""
     Public RESULT_NOT_IN_R_DISP As String = ""
 
+
+
     'Queries
     'FormResult
     'all
@@ -146,9 +150,9 @@ Module ModuleGeneral
                                                     FROM Results
                                                     GROUP BY Results.Session_idr, Results.course_code_idr, Results.result_timestamp;"
 
-    Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col175,count(broadsheets_all.Col2) AS NumStudents, first(broadsheets_all.ColNames) AS CourseCodes
+    Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col171 As Session,count(broadsheets_all.Col2) AS NumStudents, first(broadsheets_all.ColNames) AS ColNames
                                                     FROM broadsheets_all
-                                                    GROUP BY broadsheets_all.Col175;"
+                                                    GROUP BY broadsheets_all.Col171;"   'todo "Col" & LAST_COL
 
     Public STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE As String = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Departments.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
                  FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Departments On students.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code 
@@ -172,9 +176,9 @@ Module ModuleGeneral
                  GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
                  HAVING (((Courses.course_semester)>0))
                  ORDER BY Courses.course_level, Courses.course_order;" 'and level
-    Public STR_COURSES_ORDER_GENERAL As string = "SELECT * FROM Courses_order WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
+    Public STR_COURSES_ORDER_GENERAL As String = "SELECT * FROM Courses_order WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
 
-    Public STR_SQL_REGISTERED_STUDENTS As string = "SELECT Reg.MatNo, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr,   
+    Public STR_SQL_REGISTERED_STUDENTS As String = "SELECT Reg.MatNo, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr,   
                             students.student_firstname, students.student_surname, students.student_othernames, 
                             students.mode_of_entry, students.session_idr_of_entry, students.year_of_entry, 
                             students.status
@@ -191,7 +195,7 @@ Module ModuleGeneral
                             WHERE (((dept='{0}') AND (SPD.level='{1}')));"
 
     'search
-    Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_PARAM="SELECT * FROM students WHERE matno like @STR)"
+    Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_PARAM = "SELECT * FROM students WHERE matno like @STR)"
     'Dim strParam As New OleDbParameter("@STR", "%" & str & "%")
     Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_SURNAME_FIRSTNAME = "SELECT * FROM students WHERE matno like '%{0}%' OR student_surname like '%{1}%' OR student_firstname like '%{2}%'"
     ''TIP: Problem with OLEDB and Access. canot use Like  in query ...''FIXED: use % wildcard instead of *
@@ -240,7 +244,7 @@ Module ModuleGeneral
 
 
     'BroadSheets
-    Public STR_SQL_ALL_BROADSHEET As String = "SELECT * FROM results WHERE( (session='{0}') And (level={1}));"
+    Public STR_SQL_ALL_BROADSHEET As String = "SELECT * FROM broadsheets_all" ' WHERE( (session='{0}') And (level={1}));"
     Public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';"
 
     'Public STR_SQL_ALL_USERS As String = "SELECT user_id, username, status as STATUS from tblusers order by status"
@@ -259,6 +263,8 @@ Module ModuleGeneral
         Dim connectionString32 As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};" '& "User ID=admin;" & "Password=" & m_password
         '64 bits
         Dim connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};" ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\db.mdb"
+        connectionString = "Provider = Microsoft.ACE.OLEDB.16.0;Data Source={0};"
+        connectionString32 = "Provider = Microsoft.ACE.OLEDB.16.0;Data Source={0};"
 
         If Is32bit Then
             Return String.Format(connectionString32, dfileName)
@@ -530,7 +536,22 @@ Module ModuleGeneral
             mappDB.closeConn(oadDataGridLocal.SelectCommand.Connection)
         End Try
     End Sub
+    'Inspired by Hamid (StackOverflow)
+    'Ported from C# to VB.NET
+    Public Function getMD5HashCode(strPass As String) As String
+        Dim dMD5Hsh As String = ""
 
+        Using md5Hash As MD5 = MD5.Create
+
+            Dim data As Byte() = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(strPass))
+            Dim sBuilder As StringBuilder = New StringBuilder
+            For i = 0 To data.Length - 1
+                sBuilder.Append(data(i).ToString("x2"))
+            Next
+            dMD5Hsh = sBuilder.ToString
+        End Using
+        Return dMD5Hsh
+    End Function
 
     Public Sub showError(ByVal _msg As String)
         MessageBox.Show("WARNING : " & _msg & Chr(13) & " Click OK to continue.", strApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Information)

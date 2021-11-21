@@ -23,17 +23,15 @@ Partial Class FormStudentsRegistration
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.dgvStudents = New System.Windows.Forms.DataGridView()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -42,10 +40,10 @@ Partial Class FormStudentsRegistration
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
+        Me.TextBoxSession = New System.Windows.Forms.TextBox()
         Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
         Me.ComboBoxLevel = New System.Windows.Forms.ComboBox()
-        Me.ButtonImportFromAccess = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ButtonImportStudentsFromExcel = New System.Windows.Forms.Button()
         Me.btnExportExcel = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -66,7 +64,6 @@ Partial Class FormStudentsRegistration
         Me.ButtonSaveReg = New System.Windows.Forms.Button()
         Me.ButtonRegToExcel = New System.Windows.Forms.Button()
         Me.ButtonImportRegFERMA = New System.Windows.Forms.Button()
-        Me.BgWProcess = New System.ComponentModel.BackgroundWorker()
         Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
         Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -74,7 +71,7 @@ Partial Class FormStudentsRegistration
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.ButtonShowAllReg = New System.Windows.Forms.Button()
         Me.Panel7 = New System.Windows.Forms.Panel()
-        Me.TextBoxSession = New System.Windows.Forms.TextBox()
+        Me.ComboBoxCourseCode = New System.Windows.Forms.ComboBox()
         Me.TextBoxSemester = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxTotalCredits = New System.Windows.Forms.TextBox()
@@ -84,11 +81,11 @@ Partial Class FormStudentsRegistration
         Me.ButtonUnregister = New System.Windows.Forms.Button()
         Me.ButtonRegister = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.ComboBoxCourseCode = New System.Windows.Forms.ComboBox()
         Me.PanelCourses = New System.Windows.Forms.Panel()
-        Me.CheckedListBoxCourses = New System.Windows.Forms.CheckedListBox()
         Me.ButtonCancelReg = New System.Windows.Forms.Button()
         Me.ButtonOKReg = New System.Windows.Forms.Button()
+        Me.CheckedListBoxCourses = New System.Windows.Forms.CheckedListBox()
+        Me.ButtonDownloadTemplate = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -111,6 +108,7 @@ Partial Class FormStudentsRegistration
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.dgvStudents)
         Me.Panel1.Controls.Add(Me.Panel2)
+        Me.Panel1.Controls.Add(Me.ProgressBarBS)
         Me.Panel1.Location = New System.Drawing.Point(19, 43)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(659, 346)
@@ -118,34 +116,26 @@ Partial Class FormStudentsRegistration
         '
         'dgvStudents
         '
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black
-        Me.dgvStudents.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle10.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black
+        Me.dgvStudents.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle10
         Me.dgvStudents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvStudents.BackgroundColor = System.Drawing.Color.Silver
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvStudents.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvStudents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvStudents.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvStudents.DefaultCellStyle = DataGridViewCellStyle11
         Me.dgvStudents.GridColor = System.Drawing.Color.Gray
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(863, 265)
+        Me.dgvStudents.Size = New System.Drawing.Size(1238, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -164,7 +154,7 @@ Partial Class FormStudentsRegistration
         Me.lblSet.AutoSize = True
         Me.lblSet.Location = New System.Drawing.Point(64, 21)
         Me.lblSet.Name = "lblSet"
-        Me.lblSet.Size = New System.Drawing.Size(23, 13)
+        Me.lblSet.Size = New System.Drawing.Size(28, 16)
         Me.lblSet.TabIndex = 1
         Me.lblSet.Text = "Set"
         Me.lblSet.Visible = False
@@ -209,9 +199,17 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxDepartments.Items.AddRange(New Object() {"Computer Engineering", "Production Engineering"})
         Me.ComboBoxDepartments.Location = New System.Drawing.Point(6, 6)
         Me.ComboBoxDepartments.Name = "ComboBoxDepartments"
-        Me.ComboBoxDepartments.Size = New System.Drawing.Size(170, 21)
+        Me.ComboBoxDepartments.Size = New System.Drawing.Size(285, 24)
         Me.ComboBoxDepartments.TabIndex = 25
         Me.ComboBoxDepartments.Text = "Computer Engineering"
+        '
+        'TextBoxSession
+        '
+        Me.TextBoxSession.Enabled = False
+        Me.TextBoxSession.Location = New System.Drawing.Point(181, 43)
+        Me.TextBoxSession.Name = "TextBoxSession"
+        Me.TextBoxSession.Size = New System.Drawing.Size(10, 22)
+        Me.TextBoxSession.TabIndex = 92
         '
         'ComboBoxSessions
         '
@@ -220,7 +218,7 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxSessions.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
         Me.ComboBoxSessions.Location = New System.Drawing.Point(6, 42)
         Me.ComboBoxSessions.Name = "ComboBoxSessions"
-        Me.ComboBoxSessions.Size = New System.Drawing.Size(169, 21)
+        Me.ComboBoxSessions.Size = New System.Drawing.Size(169, 24)
         Me.ComboBoxSessions.TabIndex = 31
         Me.ComboBoxSessions.Text = "2018/2019"
         '
@@ -230,44 +228,34 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
         Me.ComboBoxLevel.Location = New System.Drawing.Point(6, 72)
         Me.ComboBoxLevel.Name = "ComboBoxLevel"
-        Me.ComboBoxLevel.Size = New System.Drawing.Size(169, 21)
+        Me.ComboBoxLevel.Size = New System.Drawing.Size(169, 24)
         Me.ComboBoxLevel.TabIndex = 30
         Me.ComboBoxLevel.Text = "100"
         '
-        'ButtonImportFromAccess
+        'ButtonImportStudentsFromExcel
         '
-        Me.ButtonImportFromAccess.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonImportFromAccess.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonImportFromAccess.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonImportFromAccess.Location = New System.Drawing.Point(1006, 81)
-        Me.ButtonImportFromAccess.Name = "ButtonImportFromAccess"
-        Me.ButtonImportFromAccess.Size = New System.Drawing.Size(123, 28)
-        Me.ButtonImportFromAccess.TabIndex = 32
-        Me.ButtonImportFromAccess.Text = "Import From Access"
-        Me.ButtonImportFromAccess.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(1006, 124)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(123, 28)
-        Me.Button1.TabIndex = 6
-        Me.Button1.Text = "Import From Excel"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.ButtonImportStudentsFromExcel.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ButtonImportStudentsFromExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonImportStudentsFromExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportStudentsFromExcel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ButtonImportStudentsFromExcel.Location = New System.Drawing.Point(1006, 84)
+        Me.ButtonImportStudentsFromExcel.Name = "ButtonImportStudentsFromExcel"
+        Me.ButtonImportStudentsFromExcel.Size = New System.Drawing.Size(119, 50)
+        Me.ButtonImportStudentsFromExcel.TabIndex = 6
+        Me.ButtonImportStudentsFromExcel.Text = "Add Students"
+        Me.ButtonImportStudentsFromExcel.UseVisualStyleBackColor = True
         '
         'btnExportExcel
         '
         Me.btnExportExcel.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnExportExcel.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnExportExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnExportExcel.Location = New System.Drawing.Point(1006, 162)
+        Me.btnExportExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExportExcel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.btnExportExcel.Location = New System.Drawing.Point(1004, 146)
         Me.btnExportExcel.Name = "btnExportExcel"
-        Me.btnExportExcel.Size = New System.Drawing.Size(123, 28)
+        Me.btnExportExcel.Size = New System.Drawing.Size(119, 42)
         Me.btnExportExcel.TabIndex = 5
-        Me.btnExportExcel.Text = "Export Excel"
+        Me.btnExportExcel.Text = "Export Students to Excel"
         Me.btnExportExcel.UseVisualStyleBackColor = True
         '
         'Panel3
@@ -300,7 +288,7 @@ Partial Class FormStudentsRegistration
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(156, 35)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(41, 13)
+        Me.Label8.Size = New System.Drawing.Size(50, 16)
         Me.Label8.TabIndex = 15
         Me.Label8.Text = "DeptID"
         '
@@ -329,15 +317,17 @@ Partial Class FormStudentsRegistration
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(10, 64)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(107, 13)
+        Me.Label3.Size = New System.Drawing.Size(131, 16)
         Me.Label3.TabIndex = 12
         Me.Label3.Text = "Search  By MATNO :"
         '
         'ButtonAccess
         '
         Me.ButtonAccess.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonAccess.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonAccess.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonAccess.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonAccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonAccess.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonAccess.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ButtonAccess.Location = New System.Drawing.Point(1006, 496)
         Me.ButtonAccess.Name = "ButtonAccess"
         Me.ButtonAccess.Size = New System.Drawing.Size(123, 51)
@@ -348,9 +338,11 @@ Partial Class FormStudentsRegistration
         'btnClose
         '
         Me.btnClose.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnClose.Location = New System.Drawing.Point(1006, 589)
+        Me.btnClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnClose.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.btnClose.Location = New System.Drawing.Point(1006, 565)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(119, 28)
         Me.btnClose.TabIndex = 4
@@ -360,13 +352,14 @@ Partial Class FormStudentsRegistration
         'btnReset
         '
         Me.btnReset.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.btnReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnReset.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.btnReset.Location = New System.Drawing.Point(1006, 37)
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Size = New System.Drawing.Size(119, 33)
         Me.btnReset.TabIndex = 0
-        Me.btnReset.Text = "Reset"
+        Me.btnReset.Text = "Refresh"
         Me.btnReset.UseVisualStyleBackColor = True
         '
         'Panel4
@@ -374,97 +367,89 @@ Partial Class FormStudentsRegistration
         Me.Panel4.AutoScroll = True
         Me.Panel4.Controls.Add(Me.dgvCourses)
         Me.Panel4.Controls.Add(Me.dgvImportCourses)
-        Me.Panel4.Location = New System.Drawing.Point(19, 424)
+        Me.Panel4.Location = New System.Drawing.Point(19, 395)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(659, 158)
+        Me.Panel4.Size = New System.Drawing.Size(659, 187)
         Me.Panel4.TabIndex = 11
         '
         'dgvCourses
         '
         Me.dgvCourses.AllowUserToAddRows = False
         Me.dgvCourses.AllowUserToDeleteRows = False
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FloralWhite
-        Me.dgvCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle12.BackColor = System.Drawing.Color.FloralWhite
+        Me.dgvCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle12
         Me.dgvCourses.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.dgvCourses.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.SeaGreen
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.LightSteelBlue
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle13.BackColor = System.Drawing.Color.SeaGreen
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle13.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
         Me.dgvCourses.ColumnHeadersHeight = 24
         Me.dgvCourses.Cursor = System.Windows.Forms.Cursors.Hand
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle14.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.DefaultCellStyle = DataGridViewCellStyle14
         Me.dgvCourses.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.dgvCourses.EnableHeadersVisualStyles = False
         Me.dgvCourses.GridColor = System.Drawing.Color.White
-        Me.dgvCourses.Location = New System.Drawing.Point(5, 30)
+        Me.dgvCourses.Location = New System.Drawing.Point(5, 8)
         Me.dgvCourses.MultiSelect = False
         Me.dgvCourses.Name = "dgvCourses"
         Me.dgvCourses.ReadOnly = True
         Me.dgvCourses.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.Color.CadetBlue
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.RowHeadersDefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle15.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.RowHeadersDefaultCellStyle = DataGridViewCellStyle15
         Me.dgvCourses.RowHeadersWidth = 25
         Me.dgvCourses.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle8.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.RowsDefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle16.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle16.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.RowsDefaultCellStyle = DataGridViewCellStyle16
         Me.dgvCourses.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgvCourses.RowTemplate.Height = 40
         Me.dgvCourses.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgvCourses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvCourses.Size = New System.Drawing.Size(630, 128)
+        Me.dgvCourses.Size = New System.Drawing.Size(647, 176)
         Me.dgvCourses.TabIndex = 41
         '
         'dgvImportCourses
         '
-        DataGridViewCellStyle9.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black
-        Me.dgvImportCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle17.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle17.ForeColor = System.Drawing.Color.Black
+        Me.dgvImportCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle17
         Me.dgvImportCourses.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvImportCourses.BackgroundColor = System.Drawing.Color.Silver
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvImportCourses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
         Me.dgvImportCourses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle11.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvImportCourses.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle18.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle18.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvImportCourses.DefaultCellStyle = DataGridViewCellStyle18
         Me.dgvImportCourses.GridColor = System.Drawing.Color.Gray
-        Me.dgvImportCourses.Location = New System.Drawing.Point(5, 17)
+        Me.dgvImportCourses.Location = New System.Drawing.Point(5, 8)
         Me.dgvImportCourses.Name = "dgvImportCourses"
-        Me.dgvImportCourses.Size = New System.Drawing.Size(630, 155)
+        Me.dgvImportCourses.Size = New System.Drawing.Size(647, 176)
         Me.dgvImportCourses.TabIndex = 80
         '
         'Panel6
@@ -504,8 +489,10 @@ Partial Class FormStudentsRegistration
         'ButtonImportRegRTPS
         '
         Me.ButtonImportRegRTPS.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonImportRegRTPS.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonImportRegRTPS.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportRegRTPS.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonImportRegRTPS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonImportRegRTPS.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportRegRTPS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ButtonImportRegRTPS.Location = New System.Drawing.Point(1006, 360)
         Me.ButtonImportRegRTPS.Name = "ButtonImportRegRTPS"
         Me.ButtonImportRegRTPS.Size = New System.Drawing.Size(117, 42)
@@ -516,8 +503,10 @@ Partial Class FormStudentsRegistration
         'ButtonSaveReg
         '
         Me.ButtonSaveReg.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonSaveReg.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonSaveReg.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonSaveReg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonSaveReg.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSaveReg.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonSaveReg.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ButtonSaveReg.Location = New System.Drawing.Point(1006, 408)
         Me.ButtonSaveReg.Name = "ButtonSaveReg"
         Me.ButtonSaveReg.Size = New System.Drawing.Size(119, 28)
@@ -528,29 +517,30 @@ Partial Class FormStudentsRegistration
         'ButtonRegToExcel
         '
         Me.ButtonRegToExcel.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonRegToExcel.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonRegToExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonRegToExcel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonRegToExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonRegToExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonRegToExcel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ButtonRegToExcel.Location = New System.Drawing.Point(1006, 311)
         Me.ButtonRegToExcel.Name = "ButtonRegToExcel"
-        Me.ButtonRegToExcel.Size = New System.Drawing.Size(123, 28)
+        Me.ButtonRegToExcel.Size = New System.Drawing.Size(119, 43)
         Me.ButtonRegToExcel.TabIndex = 9
-        Me.ButtonRegToExcel.Text = "Export Excel"
+        Me.ButtonRegToExcel.Text = "Export Reg to Excel"
         Me.ButtonRegToExcel.UseVisualStyleBackColor = True
         '
         'ButtonImportRegFERMA
         '
         Me.ButtonImportRegFERMA.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonImportRegFERMA.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonImportRegFERMA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportRegFERMA.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonImportRegFERMA.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonImportRegFERMA.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportRegFERMA.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ButtonImportRegFERMA.Location = New System.Drawing.Point(1006, 448)
         Me.ButtonImportRegFERMA.Name = "ButtonImportRegFERMA"
         Me.ButtonImportRegFERMA.Size = New System.Drawing.Size(119, 42)
         Me.ButtonImportRegFERMA.TabIndex = 7
         Me.ButtonImportRegFERMA.Text = "Import From Excel (FERMA format)"
         Me.ButtonImportRegFERMA.UseVisualStyleBackColor = True
-        '
-        'BgWProcess
-        '
         '
         'TimerBS
         '
@@ -563,9 +553,9 @@ Partial Class FormStudentsRegistration
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ProgressBarBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
-        Me.ProgressBarBS.Location = New System.Drawing.Point(19, 395)
+        Me.ProgressBarBS.Location = New System.Drawing.Point(79, 295)
         Me.ProgressBarBS.Name = "ProgressBarBS"
-        Me.ProgressBarBS.Size = New System.Drawing.Size(659, 23)
+        Me.ProgressBarBS.Size = New System.Drawing.Size(650, 23)
         Me.ProgressBarBS.TabIndex = 75
         Me.ProgressBarBS.Value = 1
         '
@@ -584,9 +574,11 @@ Partial Class FormStudentsRegistration
         '
         Me.ButtonSave.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ButtonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonSave.Location = New System.Drawing.Point(1006, 212)
+        Me.ButtonSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonSave.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ButtonSave.Location = New System.Drawing.Point(691, 378)
         Me.ButtonSave.Name = "ButtonSave"
-        Me.ButtonSave.Size = New System.Drawing.Size(123, 23)
+        Me.ButtonSave.Size = New System.Drawing.Size(123, 39)
         Me.ButtonSave.TabIndex = 76
         Me.ButtonSave.Text = "Save Courses"
         Me.ButtonSave.UseVisualStyleBackColor = True
@@ -597,9 +589,11 @@ Partial Class FormStudentsRegistration
         'ButtonShowAllReg
         '
         Me.ButtonShowAllReg.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonShowAllReg.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ButtonShowAllReg.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonShowAllReg.Location = New System.Drawing.Point(1006, 248)
+        Me.ButtonShowAllReg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonShowAllReg.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonShowAllReg.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonShowAllReg.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ButtonShowAllReg.Location = New System.Drawing.Point(1004, 255)
         Me.ButtonShowAllReg.Name = "ButtonShowAllReg"
         Me.ButtonShowAllReg.Size = New System.Drawing.Size(119, 28)
         Me.ButtonShowAllReg.TabIndex = 81
@@ -625,18 +619,22 @@ Partial Class FormStudentsRegistration
         Me.Panel7.Size = New System.Drawing.Size(301, 97)
         Me.Panel7.TabIndex = 82
         '
-        'TextBoxSession
+        'ComboBoxCourseCode
         '
-        Me.TextBoxSession.Location = New System.Drawing.Point(181, 43)
-        Me.TextBoxSession.Name = "TextBoxSession"
-        Me.TextBoxSession.Size = New System.Drawing.Size(10, 20)
-        Me.TextBoxSession.TabIndex = 92
+        Me.ComboBoxCourseCode.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
+        Me.ComboBoxCourseCode.FormattingEnabled = True
+        Me.ComboBoxCourseCode.Items.AddRange(New Object() {"CPE375"})
+        Me.ComboBoxCourseCode.Location = New System.Drawing.Point(131, 10)
+        Me.ComboBoxCourseCode.Name = "ComboBoxCourseCode"
+        Me.ComboBoxCourseCode.Size = New System.Drawing.Size(62, 24)
+        Me.ComboBoxCourseCode.TabIndex = 94
+        Me.ComboBoxCourseCode.Text = "CPE375"
         '
         'TextBoxSemester
         '
         Me.TextBoxSemester.Location = New System.Drawing.Point(131, 35)
         Me.TextBoxSemester.Name = "TextBoxSemester"
-        Me.TextBoxSemester.Size = New System.Drawing.Size(60, 20)
+        Me.TextBoxSemester.Size = New System.Drawing.Size(60, 22)
         Me.TextBoxSemester.TabIndex = 90
         '
         'Label2
@@ -644,7 +642,7 @@ Partial Class FormStudentsRegistration
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(4, 42)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(54, 13)
+        Me.Label2.Size = New System.Drawing.Size(69, 16)
         Me.Label2.TabIndex = 89
         Me.Label2.Text = "Semester:"
         '
@@ -652,7 +650,7 @@ Partial Class FormStudentsRegistration
         '
         Me.TextBoxTotalCredits.Location = New System.Drawing.Point(131, 62)
         Me.TextBoxTotalCredits.Name = "TextBoxTotalCredits"
-        Me.TextBoxTotalCredits.Size = New System.Drawing.Size(60, 20)
+        Me.TextBoxTotalCredits.Size = New System.Drawing.Size(60, 22)
         Me.TextBoxTotalCredits.TabIndex = 86
         '
         'Label7
@@ -660,7 +658,7 @@ Partial Class FormStudentsRegistration
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(4, 65)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(58, 13)
+        Me.Label7.Size = New System.Drawing.Size(72, 16)
         Me.Label7.TabIndex = 85
         Me.Label7.Text = "Total Units"
         '
@@ -668,7 +666,7 @@ Partial Class FormStudentsRegistration
         '
         Me.TextBoxCourseCode.Location = New System.Drawing.Point(78, 11)
         Me.TextBoxCourseCode.Name = "TextBoxCourseCode"
-        Me.TextBoxCourseCode.Size = New System.Drawing.Size(47, 20)
+        Me.TextBoxCourseCode.Size = New System.Drawing.Size(47, 22)
         Me.TextBoxCourseCode.TabIndex = 84
         '
         'Label5
@@ -676,7 +674,7 @@ Partial Class FormStudentsRegistration
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(4, 10)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(68, 13)
+        Me.Label5.Size = New System.Drawing.Size(87, 16)
         Me.Label5.TabIndex = 83
         Me.Label5.Text = "Course Code"
         '
@@ -726,17 +724,6 @@ Partial Class FormStudentsRegistration
         Me.Label11.TabIndex = 0
         Me.Label11.Text = "List Of Rooms"
         '
-        'ComboBoxCourseCode
-        '
-        Me.ComboBoxCourseCode.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
-        Me.ComboBoxCourseCode.FormattingEnabled = True
-        Me.ComboBoxCourseCode.Items.AddRange(New Object() {"CPE375"})
-        Me.ComboBoxCourseCode.Location = New System.Drawing.Point(131, 10)
-        Me.ComboBoxCourseCode.Name = "ComboBoxCourseCode"
-        Me.ComboBoxCourseCode.Size = New System.Drawing.Size(62, 21)
-        Me.ComboBoxCourseCode.TabIndex = 94
-        Me.ComboBoxCourseCode.Text = "CPE375"
-        '
         'PanelCourses
         '
         Me.PanelCourses.Controls.Add(Me.ButtonCancelReg)
@@ -746,20 +733,7 @@ Partial Class FormStudentsRegistration
         Me.PanelCourses.Name = "PanelCourses"
         Me.PanelCourses.Size = New System.Drawing.Size(200, 240)
         Me.PanelCourses.TabIndex = 83
-        '
-        'CheckedListBoxCourses
-        '
-        Me.CheckedListBoxCourses.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        Me.CheckedListBoxCourses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.CheckedListBoxCourses.CheckOnClick = True
-        Me.CheckedListBoxCourses.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckedListBoxCourses.FormattingEnabled = True
-        Me.CheckedListBoxCourses.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
-        Me.CheckedListBoxCourses.Location = New System.Drawing.Point(16, 45)
-        Me.CheckedListBoxCourses.Name = "CheckedListBoxCourses"
-        Me.CheckedListBoxCourses.Size = New System.Drawing.Size(181, 184)
-        Me.CheckedListBoxCourses.TabIndex = 76
-        Me.CheckedListBoxCourses.Visible = False
+        Me.PanelCourses.Visible = False
         '
         'ButtonCancelReg
         '
@@ -795,20 +769,46 @@ Partial Class FormStudentsRegistration
         Me.ButtonOKReg.Text = "OK"
         Me.ButtonOKReg.UseVisualStyleBackColor = False
         '
+        'CheckedListBoxCourses
+        '
+        Me.CheckedListBoxCourses.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.CheckedListBoxCourses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.CheckedListBoxCourses.CheckOnClick = True
+        Me.CheckedListBoxCourses.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckedListBoxCourses.FormattingEnabled = True
+        Me.CheckedListBoxCourses.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
+        Me.CheckedListBoxCourses.Location = New System.Drawing.Point(16, 45)
+        Me.CheckedListBoxCourses.Name = "CheckedListBoxCourses"
+        Me.CheckedListBoxCourses.Size = New System.Drawing.Size(181, 184)
+        Me.CheckedListBoxCourses.TabIndex = 76
+        '
+        'ButtonDownloadTemplate
+        '
+        Me.ButtonDownloadTemplate.FlatAppearance.BorderSize = 0
+        Me.ButtonDownloadTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonDownloadTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonDownloadTemplate.ForeColor = System.Drawing.Color.White
+        Me.ButtonDownloadTemplate.Location = New System.Drawing.Point(857, 360)
+        Me.ButtonDownloadTemplate.Name = "ButtonDownloadTemplate"
+        Me.ButtonDownloadTemplate.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonDownloadTemplate.TabIndex = 84
+        Me.ButtonDownloadTemplate.Text = "Download Template"
+        Me.ButtonDownloadTemplate.UseVisualStyleBackColor = True
+        '
         'FormStudentsRegistration
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1131, 772)
+        Me.ClientSize = New System.Drawing.Size(1131, 733)
+        Me.Controls.Add(Me.ButtonDownloadTemplate)
         Me.Controls.Add(Me.PanelCourses)
         Me.Controls.Add(Me.PictureBox2)
-        Me.Controls.Add(Me.ButtonImportFromAccess)
         Me.Controls.Add(Me.Panel7)
         Me.Controls.Add(Me.ButtonSaveReg)
         Me.Controls.Add(Me.btnExportExcel)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.ButtonImportStudentsFromExcel)
         Me.Controls.Add(Me.ButtonImportRegRTPS)
         Me.Controls.Add(Me.ButtonShowAllReg)
         Me.Controls.Add(Me.ButtonRegToExcel)
@@ -819,11 +819,12 @@ Partial Class FormStudentsRegistration
         Me.Controls.Add(Me.ButtonAccess)
         Me.Controls.Add(Me.ButtonImportRegFERMA)
         Me.Controls.Add(Me.ButtonSave)
-        Me.Controls.Add(Me.ProgressBarBS)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Panel1)
+        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormStudentsRegistration"
         Me.Text = "Students Registration"
@@ -866,10 +867,9 @@ Partial Class FormStudentsRegistration
     Friend WithEvents Label4 As Label
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PictureBox2 As PictureBox
-    Friend WithEvents BgWProcess As System.ComponentModel.BackgroundWorker
     Friend WithEvents TimerBS As Timer
     Friend WithEvents ProgressBarBS As ProgressBar
-    Friend WithEvents Button1 As Button
+    Friend WithEvents ButtonImportStudentsFromExcel As Button
     Friend WithEvents dgvStudents As DataGridView
     Friend WithEvents ButtonSave As Button
     Friend WithEvents ButtonImportRegFERMA As Button
@@ -881,7 +881,6 @@ Partial Class FormStudentsRegistration
     Friend WithEvents ComboBoxLevel As ComboBox
     Friend WithEvents ButtonSaveReg As Button
     Friend WithEvents dgvImportCourses As DataGridView
-    Friend WithEvents ButtonImportFromAccess As Button
     Friend WithEvents ButtonRegToExcel As Button
     Friend WithEvents ButtonAccess As Button
     Friend WithEvents ButtonImportRegRTPS As Button
@@ -903,4 +902,5 @@ Partial Class FormStudentsRegistration
     Friend WithEvents ButtonCancelReg As Button
     Friend WithEvents ButtonOKReg As Button
     Friend WithEvents CheckedListBoxCourses As CheckedListBox
+    Friend WithEvents ButtonDownloadTemplate As Button
 End Class

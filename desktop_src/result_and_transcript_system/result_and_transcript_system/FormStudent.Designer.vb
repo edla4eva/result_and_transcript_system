@@ -23,10 +23,11 @@ Partial Class FormStudent
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormStudent))
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonSave = New System.Windows.Forms.Button()
         Me.ButtonViewMode = New System.Windows.Forms.Button()
         Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonImport = New System.Windows.Forms.Button()
@@ -66,7 +67,6 @@ Partial Class FormStudent
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ButtonNext = New System.Windows.Forms.Button()
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ButtonSave = New System.Windows.Forms.Button()
         Me.SidePanel.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelForm.SuspendLayout()
@@ -90,13 +90,26 @@ Partial Class FormStudent
         Me.SidePanel.Size = New System.Drawing.Size(134, 525)
         Me.SidePanel.TabIndex = 7
         '
+        'ButtonSave
+        '
+        Me.ButtonSave.FlatAppearance.BorderSize = 0
+        Me.ButtonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonSave.ForeColor = System.Drawing.Color.White
+        Me.ButtonSave.Location = New System.Drawing.Point(3, 287)
+        Me.ButtonSave.Name = "ButtonSave"
+        Me.ButtonSave.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonSave.TabIndex = 5
+        Me.ButtonSave.Text = "Upload"
+        Me.ButtonSave.UseVisualStyleBackColor = True
+        '
         'ButtonViewMode
         '
         Me.ButtonViewMode.FlatAppearance.BorderSize = 0
         Me.ButtonViewMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonViewMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonViewMode.ForeColor = System.Drawing.Color.White
-        Me.ButtonViewMode.Location = New System.Drawing.Point(6, 345)
+        Me.ButtonViewMode.Location = New System.Drawing.Point(6, 357)
         Me.ButtonViewMode.Name = "ButtonViewMode"
         Me.ButtonViewMode.Size = New System.Drawing.Size(128, 55)
         Me.ButtonViewMode.TabIndex = 4
@@ -109,7 +122,7 @@ Partial Class FormStudent
         Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(3, 399)
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 422)
         Me.ButtonClose.Name = "ButtonClose"
         Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
         Me.ButtonClose.TabIndex = 3
@@ -126,7 +139,7 @@ Partial Class FormStudent
         Me.ButtonImport.Name = "ButtonImport"
         Me.ButtonImport.Size = New System.Drawing.Size(128, 55)
         Me.ButtonImport.TabIndex = 2
-        Me.ButtonImport.Text = "Browse Students..."
+        Me.ButtonImport.Text = "Import Students..."
         Me.ButtonImport.UseVisualStyleBackColor = True
         '
         'ButtonSearch
@@ -169,20 +182,20 @@ Partial Class FormStudent
         Me.DataGridView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.GridColor = System.Drawing.Color.Black
         Me.DataGridView1.Location = New System.Drawing.Point(12, 118)
         Me.DataGridView1.Name = "DataGridView1"
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
-        Me.DataGridView1.RowsDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        Me.DataGridView1.RowsDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView1.Size = New System.Drawing.Size(775, 373)
         Me.DataGridView1.TabIndex = 26
         '
@@ -460,19 +473,6 @@ Partial Class FormStudent
         Me.ButtonNext.TabIndex = 0
         Me.ButtonNext.Text = "Next"
         Me.ButtonNext.UseVisualStyleBackColor = True
-        '
-        'ButtonSave
-        '
-        Me.ButtonSave.FlatAppearance.BorderSize = 0
-        Me.ButtonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonSave.ForeColor = System.Drawing.Color.White
-        Me.ButtonSave.Location = New System.Drawing.Point(3, 287)
-        Me.ButtonSave.Name = "ButtonSave"
-        Me.ButtonSave.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonSave.TabIndex = 5
-        Me.ButtonSave.Text = "Upload"
-        Me.ButtonSave.UseVisualStyleBackColor = True
         '
         'FormStudent
         '

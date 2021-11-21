@@ -397,6 +397,30 @@ Public Class ClassDB
         End Using
         Return dt
     End Function
+    Public Function changeUserPassword(usr As String, pass As String) As Boolean
+        Dim retVal As Boolean
+
+        Dim strSQL As String = "UPDATE  users SET(password='{0}' WHERE name='{1}' AND password='{2}')"
+        retVal = doQuery(String.Format(strSQL, pass, usr, pass))
+        Debug.Print(strSQL)
+        Return retVal
+    End Function
+    Public Function saveUser(usr As String, pass As String) As Boolean
+        Dim retVal As Boolean
+        Dim strSQL As String = ""
+        Dim id As Integer
+        id = mappDB.getMaxID("select Max(users.id) AS MaxOfresult_id FROM users")
+        id = id + 1
+        strSQL = "INSERT INTO users  (`id`, `name`, `email`, `password`) VALUES({0},'{1}','admin@admin.com','{2}');"
+        retVal = doQuery(String.Format(strSQL, id, usr, pass))
+        'Debug.Print(String.Format(strSQL, id,usr, pass))
+        Return retVal
+    End Function
+    Public Function getUser(usr As String, pass As String) As Boolean
+        Dim usrFromDB As String = ""
+        usrFromDB = GetRecordWhere(String.Format("SELECT name FROM users WHERE name='{0}' AND password='{1}'", usr, pass))
+        If usrFromDB = usr Then Return True Else Return False
+    End Function
     Public Function manualRegInsertDB(dt As DataTable) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             Try
@@ -432,7 +456,7 @@ Public Class ClassDB
         Return True
     End Function
     'TODO: incomplete
-    Public Function manualRegExportToAccessList(dt As DataTable) As Boolean
+    Public Function manualRegExportToEmbeddedAccessSPD(dt As DataTable) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             Try
                 xConn.Open()
@@ -444,10 +468,65 @@ Public Class ClassDB
             Dim sql As String = ""  'todo: move sql to module
             'access
             Dim cmd As New OleDbCommand
+            Dim dLevel As Integer = 100
+
             For Each row As DataRow In dt.Rows
                 'todo: use parameters
-                sql = "INSERT INTO SPD (matno,Surname,Other_Names,dept,SPD.Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2,Fees_Status,Pix,txtImageName1) "
-                sql = sql & "VALUES ('" & row.Item("matno") & "','Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam" & "','" & row.Item("CourseCode_1") & "','" & row.Item("CourseCode_2") & "','" & row.Item("Fees_Status") & "','" & row.Item("level") & "','Computer Engineering');"
+                'Notes Fees_Status is Yes/No without quotes, enlose Level in `` 
+                If IsDBNull(row.Item("Fees_Status")) Then
+                    row.Item("Fees_Status") = "No"
+                ElseIf row.Item("Fees_Status") = "" Then
+                    row.Item("Fees_Status") = "No"
+                    dLevel = CInt(Trim(row.Item("Level")))
+                End If
+                sql = "INSERT INTO SPD (matno,Surname,OtherNames,`Dept`,`Level`,`Year`,`Mode`,Sex,txtImageName,CourseCode_1,CourseCode_2,Fees_Status,Pix,txtImageName1) "
+                sql = sql & "VALUES ('" & row.Item("matno") & "','Surname','Other_Names','Department',100,1,'full time','Male','txtImageNam" & "','" & row.Item("CourseCode_1") & "','" & row.Item("CourseCode_2") & "'," & row.Item("Fees_Status") & ",'" & row.Item("matno") & ".jpg','');"
+                Debug.Print(sql)
+                'INSERT INTO SPD (matno,Surname,Other_Names,Department,Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2, 
+                'Fees_Status, Pix, txtImageName1) VALUES (ENG1704248,'Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam','CHM111;CHM113;GST111;GST112;MTH110;MTH112;PHY111;PHY113,CHM122;CHM124;GST121;GST122;GST123;MTH123;MTH125;PHY109;PHY124,'False','100','Computer Engineering' 
+
+                cmd = New OleDbCommand(sql, xConn)
+                'cmd.Transaction.Begin()
+                'da = New OleDbDataAdapter(cmd)
+                'da.Update(dt) 'da.fill() this is a promising mthd
+                cmd.ExecuteNonQuery()
+                'TODO: Show progress (trigger event)
+            Next
+
+            'cmd.Transaction.Commit()
+
+            closeConn(xConn)
+            cmd.Dispose()
+        End Using
+        Return True
+    End Function
+
+    Public Function manualRegExportToExternalAccess(dt As DataTable, AccessFileName As String) As Boolean
+        Using xConn As New OleDb.OleDbConnection(buildConnectionStringFromAccessFile(AccessFileName, False))
+            Try
+                xConn.Open()
+            Catch ex1 As Exception
+                xConn.ConnectionString = buildConnectionStringFromAccessFile(AccessFileName, True)
+                xConn.Open()
+            End Try
+
+            '1. check for duplicates and delete
+            Dim sql As String = ""  'todo: move sql to module
+            'access
+            Dim cmd As New OleDbCommand
+            Dim dLevel As Integer = 100
+
+            For Each row As DataRow In dt.Rows
+                'todo: use parameters
+                'Notes Fees_Status is Yes/No without quotes, enlose Level in `` 
+                If IsDBNull(row.Item("Fees_Status")) Then
+                    row.Item("Fees_Status") = "No"
+                ElseIf row.Item("Fees_Status") = "" Then
+                    row.Item("Fees_Status") = "No"
+                    dLevel = CInt(Trim(row.Item("Level")))
+                End If
+                sql = "INSERT INTO SPD (matno,Surname,OtherNames,`Dept`,`Level`,`Year`,`Mode`,Sex,txtImageName,CourseCode_1,CourseCode_2,Fees_Status,Pix,txtImageName1) "
+                sql = sql & "VALUES ('" & row.Item("matno") & "','Surname','Other_Names','Department',100,1,'full time','Male','txtImageNam" & "','" & row.Item("CourseCode_1") & "','" & row.Item("CourseCode_2") & "'," & row.Item("Fees_Status") & ",'" & row.Item("matno") & ".jpg','');"
                 Debug.Print(sql)
                 'INSERT INTO SPD (matno,Surname,Other_Names,Department,Level,Year,Mode,Sex,txtImageName,CourseCode_1,CourseCode2, 
                 'Fees_Status, Pix, txtImageName1) VALUES (ENG1704248,'Surname','Other_Names','Department','Level','Year','full time','Male','txtImageNam','CHM111;CHM113;GST111;GST112;MTH110;MTH112;PHY111;PHY113,CHM122;CHM124;GST121;GST122;GST123;MTH123;MTH125;PHY109;PHY124,'False','100','Computer Engineering' 
@@ -543,7 +622,7 @@ Public Class ClassDB
                 xConn.Open()
             End Try
             '1. check for duplicates and delete
-            Dim sql As String = "INSERT INTO results (result_id, student_idr, total, timestamp) "  'todo: move sql to module
+            Dim sql As String = "INSERT INTO results (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
             Dim strTimestmp As String = Now.ToString
             'access
             Dim cmd As New OleDbCommand
@@ -554,7 +633,7 @@ Public Class ClassDB
             For Each row As DataRow In dt.Rows
                 id = id + 1
                 'todo: use parameters
-                sql = "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,resut_timestamp) "
+                sql = "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,result_timestamp) "
                 sql = sql & "VALUES (" & id & "," & row.Item("sn") & ",'" & row.Item("matno") & "','" & row.Item("name") & "'," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "','" & strTimestmp & "');"   '
 
                 'Debug.Print(sql)

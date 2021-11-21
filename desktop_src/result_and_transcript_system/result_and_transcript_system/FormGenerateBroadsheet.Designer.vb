@@ -62,6 +62,11 @@ Partial Class FormGenerateBroadsheet
         Me.LabelProgress = New System.Windows.Forms.Label()
         Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
         Me.PanelModify = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxSecondSemester = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFirsrSemester = New System.Windows.Forms.CheckBox()
+        Me.RadioButtonGrades = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonScores = New System.Windows.Forms.RadioButton()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBoxDean = New System.Windows.Forms.TextBox()
         Me.TextBoxHOD = New System.Windows.Forms.TextBox()
@@ -81,18 +86,13 @@ Partial Class FormGenerateBroadsheet
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.DataGridViewTemp = New System.Windows.Forms.DataGridView()
         Me.ButtonOpen = New System.Windows.Forms.Button()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonGrades = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonScores = New System.Windows.Forms.RadioButton()
-        Me.CheckBoxFirsrSemester = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxSecondSemester = New System.Windows.Forms.CheckBox()
         CType(Me.DataGridViewBroadSheet, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridViewTemp, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridViewBroadSheet
@@ -251,7 +251,7 @@ Partial Class FormGenerateBroadsheet
         'ComboBoxLevel
         '
         Me.ComboBoxLevel.FormattingEnabled = True
-        Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
+        Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "Yr.1", "Yr.2"})
         Me.ComboBoxLevel.Location = New System.Drawing.Point(32, 73)
         Me.ComboBoxLevel.Name = "ComboBoxLevel"
         Me.ComboBoxLevel.Size = New System.Drawing.Size(195, 21)
@@ -418,6 +418,65 @@ Partial Class FormGenerateBroadsheet
         Me.PanelModify.Name = "PanelModify"
         Me.PanelModify.Size = New System.Drawing.Size(503, 124)
         Me.PanelModify.TabIndex = 30
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.CheckBoxSecondSemester)
+        Me.GroupBox1.Controls.Add(Me.CheckBoxFirsrSemester)
+        Me.GroupBox1.Controls.Add(Me.RadioButtonGrades)
+        Me.GroupBox1.Controls.Add(Me.RadioButtonScores)
+        Me.GroupBox1.Location = New System.Drawing.Point(381, 11)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(114, 100)
+        Me.GroupBox1.TabIndex = 38
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Export Options"
+        '
+        'CheckBoxSecondSemester
+        '
+        Me.CheckBoxSecondSemester.AutoSize = True
+        Me.CheckBoxSecondSemester.Checked = True
+        Me.CheckBoxSecondSemester.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxSecondSemester.Location = New System.Drawing.Point(8, 77)
+        Me.CheckBoxSecondSemester.Name = "CheckBoxSecondSemester"
+        Me.CheckBoxSecondSemester.Size = New System.Drawing.Size(110, 17)
+        Me.CheckBoxSecondSemester.TabIndex = 19
+        Me.CheckBoxSecondSemester.Text = "Second Semester"
+        Me.CheckBoxSecondSemester.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFirsrSemester
+        '
+        Me.CheckBoxFirsrSemester.AutoSize = True
+        Me.CheckBoxFirsrSemester.Checked = True
+        Me.CheckBoxFirsrSemester.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxFirsrSemester.Location = New System.Drawing.Point(8, 59)
+        Me.CheckBoxFirsrSemester.Name = "CheckBoxFirsrSemester"
+        Me.CheckBoxFirsrSemester.Size = New System.Drawing.Size(92, 17)
+        Me.CheckBoxFirsrSemester.TabIndex = 18
+        Me.CheckBoxFirsrSemester.Text = "First Semester"
+        Me.CheckBoxFirsrSemester.UseVisualStyleBackColor = True
+        '
+        'RadioButtonGrades
+        '
+        Me.RadioButtonGrades.AutoSize = True
+        Me.RadioButtonGrades.Location = New System.Drawing.Point(8, 35)
+        Me.RadioButtonGrades.Name = "RadioButtonGrades"
+        Me.RadioButtonGrades.Size = New System.Drawing.Size(59, 17)
+        Me.RadioButtonGrades.TabIndex = 17
+        Me.RadioButtonGrades.Text = "Grades"
+        Me.RadioButtonGrades.UseVisualStyleBackColor = True
+        '
+        'RadioButtonScores
+        '
+        Me.RadioButtonScores.AutoSize = True
+        Me.RadioButtonScores.Checked = True
+        Me.RadioButtonScores.Location = New System.Drawing.Point(8, 16)
+        Me.RadioButtonScores.Name = "RadioButtonScores"
+        Me.RadioButtonScores.Size = New System.Drawing.Size(58, 17)
+        Me.RadioButtonScores.TabIndex = 16
+        Me.RadioButtonScores.TabStop = True
+        Me.RadioButtonScores.Text = "Scores"
+        Me.RadioButtonScores.UseVisualStyleBackColor = True
         '
         'Button1
         '
@@ -623,65 +682,6 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonOpen.Text = "Open"
         Me.ButtonOpen.UseVisualStyleBackColor = False
         '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.CheckBoxSecondSemester)
-        Me.GroupBox1.Controls.Add(Me.CheckBoxFirsrSemester)
-        Me.GroupBox1.Controls.Add(Me.RadioButtonGrades)
-        Me.GroupBox1.Controls.Add(Me.RadioButtonScores)
-        Me.GroupBox1.Location = New System.Drawing.Point(381, 11)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(114, 100)
-        Me.GroupBox1.TabIndex = 38
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Export Options"
-        '
-        'RadioButtonGrades
-        '
-        Me.RadioButtonGrades.AutoSize = True
-        Me.RadioButtonGrades.Location = New System.Drawing.Point(8, 35)
-        Me.RadioButtonGrades.Name = "RadioButtonGrades"
-        Me.RadioButtonGrades.Size = New System.Drawing.Size(59, 17)
-        Me.RadioButtonGrades.TabIndex = 17
-        Me.RadioButtonGrades.Text = "Grades"
-        Me.RadioButtonGrades.UseVisualStyleBackColor = True
-        '
-        'RadioButtonScores
-        '
-        Me.RadioButtonScores.AutoSize = True
-        Me.RadioButtonScores.Checked = True
-        Me.RadioButtonScores.Location = New System.Drawing.Point(8, 16)
-        Me.RadioButtonScores.Name = "RadioButtonScores"
-        Me.RadioButtonScores.Size = New System.Drawing.Size(58, 17)
-        Me.RadioButtonScores.TabIndex = 16
-        Me.RadioButtonScores.TabStop = True
-        Me.RadioButtonScores.Text = "Scores"
-        Me.RadioButtonScores.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFirsrSemester
-        '
-        Me.CheckBoxFirsrSemester.AutoSize = True
-        Me.CheckBoxFirsrSemester.Checked = True
-        Me.CheckBoxFirsrSemester.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxFirsrSemester.Location = New System.Drawing.Point(8, 59)
-        Me.CheckBoxFirsrSemester.Name = "CheckBoxFirsrSemester"
-        Me.CheckBoxFirsrSemester.Size = New System.Drawing.Size(92, 17)
-        Me.CheckBoxFirsrSemester.TabIndex = 18
-        Me.CheckBoxFirsrSemester.Text = "First Semester"
-        Me.CheckBoxFirsrSemester.UseVisualStyleBackColor = True
-        '
-        'CheckBoxSecondSemester
-        '
-        Me.CheckBoxSecondSemester.AutoSize = True
-        Me.CheckBoxSecondSemester.Checked = True
-        Me.CheckBoxSecondSemester.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxSecondSemester.Location = New System.Drawing.Point(8, 77)
-        Me.CheckBoxSecondSemester.Name = "CheckBoxSecondSemester"
-        Me.CheckBoxSecondSemester.Size = New System.Drawing.Size(110, 17)
-        Me.CheckBoxSecondSemester.TabIndex = 19
-        Me.CheckBoxSecondSemester.Text = "Second Semester"
-        Me.CheckBoxSecondSemester.UseVisualStyleBackColor = True
-        '
         'FormGenerateBroadsheet
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -717,10 +717,10 @@ Partial Class FormGenerateBroadsheet
         Me.SidePanel.ResumeLayout(False)
         Me.PanelModify.ResumeLayout(False)
         Me.PanelModify.PerformLayout()
-        CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.DataGridViewTemp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.DataGridViewBroadsheetAudit, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridViewTemp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

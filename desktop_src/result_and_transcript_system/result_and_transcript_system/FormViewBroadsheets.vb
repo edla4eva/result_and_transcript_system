@@ -24,21 +24,21 @@ Public Class FormViewBroadsheets
             Dim strSQL As String = STR_SQL_ALL_BROADSHEETS_SUMMARY
             Dim dt As New DataTable
             Dim dictColHeaders As New Dictionary(Of String, String)
-            Dim strColNames As String
-            Dim strArrColNames As String()
+            ' Dim strColNames As String
+            ' Dim strArrColNames As String()
             dt = mappDB.GetDataWhere(strSQL).Tables(0)
-            strColNames = dt.Rows(0).Item("ColNames")
-            strArrColNames = strColNames.Split(";")
-
-            'For Each row In dt.Rows
-            '    dictColHeaders.Add(row(0), row("ColNames"))
+            'strColNames = dt.Rows(0).Item("ColNames").ToString
+            'strArrColNames = strColNames.Split(",")
+            'DataGridView1.DataSource = dt.DefaultView
+            'For Each col In dt.Columns
+            '    If strArrColNames(col) <> "" Then col.coloumnName = strArrColNames(col)
+            '    dt.Rows(0).Item(col.index) = strArrColNames(col)
             'Next
-            Dim dRow As DataRow = dt.Rows.Add(strArrColNames)
-            dt.Rows.InsertAt(dRow, 0)
+
 
 
             DataGridView1.DataSource = dt.DefaultView
-            'get the source codes (col headers)
+
 
 
         Catch ex As Exception
@@ -55,9 +55,7 @@ Public Class FormViewBroadsheets
         'MainForm.status("Done: generated GeneratedResult.xlsx")
     End Sub
 
-    Private Sub SelectBroadsheetTemplate_Click(sender As Object, e As EventArgs) Handles SelectBroadsheetTemplate.Click
 
-    End Sub
 
     Sub showButtons(ButtonName As String, enableOnly As Boolean)
         Select Case ButtonName
@@ -134,6 +132,36 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub ButtonAdjustTemplate_Click(sender As Object, e As EventArgs) Handles ButtonAdjustTemplate.Click
+
+    End Sub
+
+    Private Sub ButtonSearchBroadheet_Click(sender As Object, e As EventArgs) Handles ButtonSearchBroadheet.Click
+        Try
+            Dim strSQL As String = STR_SQL_ALL_BROADSHEET
+            Dim dt As New DataTable
+            Dim dictColHeaders As New Dictionary(Of String, String)
+            Dim strColNames As String
+            Dim strArrColNames As String()
+            'Dim tmpCol As DataColumn
+            dt = mappDB.GetDataWhere(strSQL).Tables(0)
+            strColNames = dt.Rows(0).Item("ColNames").ToString
+            strArrColNames = strColNames.Split(",")
+            DataGridView1.DataSource = dt.DefaultView
+            For Each col In dt.Columns
+                'If strArrColNames(col.ordinal) <> "" Then col.columnName = strArrColNames(col.ordinal)
+                dt.Rows(0).Item(col.Ordinal) = strArrColNames(col.ordinal)
+            Next
+
+
+
+            DataGridView1.DataSource = dt.DefaultView
+
+
+
+        Catch ex As Exception
+            MsgBox("Cannot get broadsheets data" & vbCrLf & ex.Message)
+        End Try
+
 
     End Sub
 End Class

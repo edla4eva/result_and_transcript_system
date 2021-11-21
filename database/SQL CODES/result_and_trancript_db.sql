@@ -304,6 +304,60 @@ INSERT INTO `students` (`student_id`, `mat_no`, `surname`, `firstname`, `other_n
 (34, 601238, 'MAXIMILLIAN', 'MIRACLE ', 'NIL', 'MR', '1'),
 (35, 601239, 'MIN', 'MYKAEL ', 'NIL', 'MISS', '1');
 
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) DEFAULT NULL,
+  `email` varchar(191) NOT NULL,
+  `password` varchar(191) NOT NULL,
+  `activation_code` varchar(191) DEFAULT NULL,
+  `persist_code` varchar(191) DEFAULT NULL,
+  `reset_password_code` varchar(191) DEFAULT NULL,
+  `permissions` text,
+  `is_activated` tinyint(1) NOT NULL DEFAULT '0',
+  `activated_at` timestamp NULL DEFAULT NULL,
+  `last_login` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `username` varchar(191) DEFAULT NULL,
+  `surname` varchar(191) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `last_seen` timestamp NULL DEFAULT NULL,
+  `is_guest` tinyint(1) NOT NULL DEFAULT '0',
+  `is_superuser` tinyint(1) NOT NULL DEFAULT '0',
+  `gender` varchar(6) DEFAULT NULL,
+  `mobile` varchar(50) DEFAULT NULL,
+  `accept_terms` tinyint(1) NOT NULL DEFAULT '0',
+  `country_name` varchar(100) DEFAULT NULL,
+  `country_iso_code` varchar(50) DEFAULT NULL,
+  `created_ip_address` varchar(255) DEFAULT NULL,
+  `last_ip_address` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `users_email_unique` (`email`) USING BTREE,
+  UNIQUE KEY `users_login_unique` (`username`) USING BTREE,
+  KEY `users_activation_code_index` (`activation_code`) USING BTREE,
+  KEY `users_reset_password_code_index` (`reset_password_code`) USING BTREE,
+  KEY `users_login_index` (`username`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin','admin@gmail.com','$2y$10$randomhashedandencryptnWTlhVL0O',NULL,'$2y$10$randomhashedandencryptnWTlhVL0OQeqKNLq.rXOWDJCe',NULL,NULL,1,'2019-12-30 21:59:52','2020-05-22 11:03:38','2019-12-30 21:49:14','2020-05-22 11:03:38','Admin','Surname',NULL,'2020-05-23 07:06:54',0,0,'Male','+2348105447111',1,'Nigeria','ng',NULL,'105.112.97.230')/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 --
 -- Indexes for dumped tables
 --

@@ -9,13 +9,26 @@
 
     Private Sub ButtonDownloadTemplate_Click(sender As Object, e As EventArgs) Handles ButtonDownloadTemplate.Click
         Try
+            Dim tmpileName As String = My.Application.Info.DirectoryPath & "\templates\result.xltx"
+            Dim tmpileName2 As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\templates\result.xltx"
+            Dim tmpileName3 As String = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\templates\result.xltx"
 
-            'objResult.resultTemplateFileName
-            If SaveFileDialog1.ShowDialog = DialogResult.OK Then
-                My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\result.xltx", SaveFileDialog1.FileName & ".xltx")
+            If My.Computer.FileSystem.FileExists(tmpileName) Then
+
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName2) Then
+                tmpileName = tmpileName2
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
+                tmpileName = tmpileName3
+            End If
+
+                'objResult.resultTemplateFileName
+                If SaveFileDialog1.ShowDialog = DialogResult.OK Then
+                My.Computer.FileSystem.CopyFile(tmpileName, SaveFileDialog1.FileName & ".xltx")
             End If
         Catch ex As Exception
+
             MsgBox(ex.Message)
+
         End Try
 
         'System.Diagnostics.Process.Start(objResult.resultTemplateFileName)

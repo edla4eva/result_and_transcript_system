@@ -142,7 +142,7 @@
 
             'objResult.resultTemplateFileName
             If SaveFileDialog1.ShowDialog = DialogResult.OK Then
-                My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\students.xlts", SaveFileDialog1.FileName & ".xlmx")
+                My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\students.xlts", SaveFileDialog1.FileName & ".xltx")
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -226,8 +226,6 @@
             mappDB.genericManualInsertDB(dt, STR_SQL_INSERT_STUDENTS, {})
 
             MsgBox("Students Uploaded into Database Successfully! Cross check what was uploaded below")
-
-
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)

@@ -16,11 +16,9 @@ Public Class FormGenerateBroadsheet
     'Dim dictAllCourses As New Dictionary(Of String, String)
     'Dim dictSessions As New Dictionary(Of String, String)
 
-    Private Sub TextBoxDepartment_TextChanged(sender As Object, e As EventArgs) Handles TextBoxDepartment.TextChanged
-
-    End Sub
 
     Private Sub FormGenerateBroadsheet_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        On Error Resume Next
         Me.BackColor = RGBColors.colorBlack2
         Me.DataGridViewBroadSheet.BackgroundColor = RGBColors.colorBlack2
         Me.DataGridViewBroadSheet.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
@@ -31,36 +29,49 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonProcessBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonProcessBroadsheet.Click
-        ButtonProcessBroadsheet.Enabled = False
-        TimerBS.Enabled = True
-        TimerBS.Start()
-        course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
-        session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
-        course_level = TextBoxLevel.Text '.SelectedItem.ToString  'not databound
-        objBroadsheet.broadsheetSemester = 1
-        objBroadsheet.departmentName = TextBoxDepartment.Text
-        objBroadsheet.facultyName = "Faculty of Engineering"
-        objBroadsheet.SchoolName = "University of Benin"
-        objBroadsheet.DeptId = course_dept_idr
-        objBroadsheet.HOD = TextBoxHOD.Text
-        objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
-        objBroadsheet.Dean = TextBoxDean.Text
+        Dim dLevel As String
+        Try
+            TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
+            dLevel = TextBoxLevel.Text
+            If dLevel = "Yr.1" Then
+                dLevel = "100"
+            ElseIf dLevel = "Yr.2" Then
+                dLevel = "200"
+            End If
+            ButtonProcessBroadsheet.Enabled = False
+            TimerBS.Enabled = True
+            TimerBS.Start()
+            course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
+            session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
+            course_level = dLevel '.SelectedItem.ToString  'not databound
+            objBroadsheet.broadsheetSemester = 1
+            objBroadsheet.departmentName = TextBoxDepartment.Text
+            objBroadsheet.facultyName = "Faculty of Engineering"
+            objBroadsheet.SchoolName = "University of Benin"
+            objBroadsheet.DeptId = course_dept_idr
+            objBroadsheet.HOD = TextBoxHOD.Text
+            objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
+            objBroadsheet.Dean = TextBoxDean.Text
 
-        If RadioButtonUseBuiltIn.Checked = True Then
-            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
-            'get broadsheetDatta from result and students table
-            BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
-        ElseIf RadioButtonUseExcel.Checked = True Then
-            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xlsm"
-            'get broadsheetDatta from result and students table
-            BgWProcess.RunWorkerAsync(1)  'runs objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData().Tables(0).DefaultView
-        ElseIf RadioButtonUseBuiltInFormula.Checked = True Then
-            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
-            'get broadsheetDatta from result and students table
-            BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
-        Else
+            If RadioButtonUseBuiltIn.Checked = True Then
+                objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
+                'get broadsheetDatta from result and students table
+                BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
+            ElseIf RadioButtonUseExcel.Checked = True Then
+                objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xlsm"
+                'get broadsheetDatta from result and students table
+                BgWProcess.RunWorkerAsync(1)  'runs objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData().Tables(0).DefaultView
+            ElseIf RadioButtonUseBuiltInFormula.Checked = True Then
+                objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
+                'get broadsheetDatta from result and students table
+                BgWProcess.RunWorkerAsync(2)  'runs objBroadsheet.broadsheetDataDS = excelFile
+            Else
 
-        End If
+            End If
+        Catch ex As Exception
+            MsgBox("Broadsheet process failed due to an error, see log for details")
+            logError(ex.ToString)
+        End Try
     End Sub
     Private Sub processBroadsheetExcelInteropMethod()   'todo: orphaned sub
         Dim tmpDS As DataSet
@@ -70,123 +81,124 @@ Public Class FormGenerateBroadsheet
         Dim dCourseCode As String = "CPE375"
         Dim strapprovedCourses As String
         Dim arrayapprovedCourses() As String
-        tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_BROADSHEET, dSession, dLevel))
-        tmpDV = tmpDS.Tables(0).DefaultView
-        For i = 0 To tmpDS.Tables(0).Rows.Count - 1
+        Try
+            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_BROADSHEET, dSession, dLevel))
+            tmpDV = tmpDS.Tables(0).DefaultView
+            For i = 0 To tmpDS.Tables(0).Rows.Count - 1
 
-        Next
-        '#Get couses approved for session
-        'public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';
-        strapprovedCourses = mappDB.GetRecordWhere(String.Format(STR_SQL_APPROVED_COURSES, dSession))
-        arrayapprovedCourses = strapprovedCourses.Split(";")
-        For j = 0 To arrayapprovedCourses.Count - 1
-            tmpDS.Tables(0).Columns.Add(arrayapprovedCourses(j))
-        Next
+            Next
+            '#Get couses approved for session
+            'public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';
+            strapprovedCourses = mappDB.GetRecordWhere(String.Format(STR_SQL_APPROVED_COURSES, dSession))
+            arrayapprovedCourses = strapprovedCourses.Split(";")
+            For j = 0 To arrayapprovedCourses.Count - 1
+                tmpDS.Tables(0).Columns.Add(arrayapprovedCourses(j))
+            Next
 
-        DataGridViewBroadSheet.DataSource = tmpDS.Tables(0).DefaultView
-        '#use dlookup to add specific results to col
-        'string.Format(str_dlookup_sql
-        objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm"
-        objBroadsheet.updateExcelBroadSheetInterop(tmpDV, objBroadsheet.broadsheetFileName, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm")
+            DataGridViewBroadSheet.DataSource = tmpDS.Tables(0).DefaultView
+            '#use dlookup to add specific results to col
+            'string.Format(str_dlookup_sql
+            objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm"
+            objBroadsheet.updateExcelBroadSheetInterop(tmpDV, objBroadsheet.broadsheetFileName, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsm")
 
 
-        ' objBroadsheet.updateExcelBroadSheetInterop(objBroadsheet.broadsheetFileName, tmpDV)
-        'end if
+            ' objBroadsheet.updateExcelBroadSheetInterop(objBroadsheet.broadsheetFileName, tmpDV)
+            'end if
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
     End Sub
     Public Sub createBroadsheetTables()
         Dim strSQL As String
-        strSQL = "Create Table Broadsheet500 ("
-        For i = 0 To LAST_COL + 5 'broadshetCols+ headings(comma seperated), session, dept, level,CA,HOD,Dean,Summary1(comma seperated)
-            If i = 6 Or i = 81 Then
-                strSQL += "[" & "Col" & i.ToString & "] " & "varchar(500)" & ","    'repeated courses
-            Else
-                strSQL += "[" & "Col" & i.ToString & "] " & "varchar(50)" & ","
-            End If
+        Try
+            strSQL = "Create Table Broadsheet500 ("
+            For i = 0 To LAST_COL + 5 'broadshetCols+ headings(comma seperated), session, dept, level,CA,HOD,Dean,Summary1(comma seperated)
+                If i = 6 Or i = 81 Then
+                    strSQL += "[" & "Col" & i.ToString & "] " & "varchar(500)" & ","    'repeated courses
+                Else
+                    strSQL += "[" & "Col" & i.ToString & "] " & "varchar(50)" & ","
+                End If
 
-        Next
-        strSQL += "[" & "ColNames" & "] " & "varchar(200)" & ")"
-        mappDB.doQuery(strSQL)
-        Debug.Print("")
-        ''#FirstTime--delete tmpBroadsheet table
-        'strSQL = "DROP Table tmpBroadsheet"
-        'mappDB.doQuery(strSQL)
-        ''Create table on the fly
-        ''create the table
-        'strSQL = "Create Table tmpBroadsheet ("
-        'For i = 0 To dtSource.Columns.Count - 1
-        '    strSQL += "[" & "Col" & i.ToString & "] " & "nvarchar(50)" & ","
-        'Next
-        'strSQL += "[" & "ColNames" & "] " & "nvarchar(200)" & ")"
-        ''For Each column As DataColumn In dtSource.Columns
-        ''    strSQL += "[" & column.ColumnName & "] " & "nvarchar(50)" & ","
-        ''Next
-        ''strSQL = strSQL.TrimEnd(New Char() {","c}) & ")"
-        'mappDB.bulkInsertDB(dtDestination, strSQL, "tmpBroadsheet")
-
-        '#Subsequently---'Save to database
-        '
+            Next
+            strSQL += "[" & "ColNames" & "] " & "varchar(200)" & ")"
+            mappDB.doQuery(strSQL)
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
     End Sub
 
     Private Sub ButtonSaveBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonSaveBroadsheet.Click
-        Dim strSQL As String
-        Dim dv As DataView = DataGridViewBroadSheet.DataSource
-        Dim dtSource As DataTable
-        Dim dtDestination As New DataTable
-        Dim dSFtomDB As New DataSet ' = dv.ToTable
-        dtSource = dv.ToTable
+        Try
+            Dim strSQL As String
+            Dim dv As DataView = DataGridViewBroadSheet.DataSource
+            Dim dtSource As DataTable
+            Dim dtDestination As New DataTable
+            Dim dSFtomDB As New DataSet ' = dv.ToTable
+            dtSource = dv.ToTable
 
-        'createBroadsheetTables()
-        strSQL = "SELECT * FROM Broadsheets_all" ' WHERE session_idr={1}"
+            'createBroadsheetTables()
+            strSQL = "SELECT * FROM Broadsheets_all" ' WHERE session_idr={1}"
 
-        Using xconn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
-            Try
-                xconn.Open()
-            Catch ex1 As Exception
-                xconn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xconn.Open()
-            End Try
-            Dim adapter As New OleDb.OleDbDataAdapter(strSQL, xconn)
-            'Dim insert As OleDb.OleDbCommand("INSERT INTO Broadsheet (matno) VALUES (@matno)", xconn)
-            Dim builder As New OleDb.OleDbCommandBuilder(adapter)       'easy way for single table
-            'Dim titleParam As New OleDb.OleDbParameter("@matno", Str)
-            'cmd.Parameters.Add(titleParam)
-            'adapter.InsertCommand = insert
+            Using xconn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
+                Try
+                    xconn.Open()
+                Catch ex1 As Exception
+                    xconn.ConnectionString = ModuleGeneral.STR_connectionString32
+                    xconn.Open()
+                End Try
+                Dim adapter As New OleDb.OleDbDataAdapter(strSQL, xconn)
+                'Dim insert As OleDb.OleDbCommand("INSERT INTO Broadsheet (matno) VALUES (@matno)", xconn)
+                Dim builder As New OleDb.OleDbCommandBuilder(adapter)       'easy way for single table
+                'Dim titleParam As New OleDb.OleDbParameter("@matno", Str)
+                'cmd.Parameters.Add(titleParam)
+                'adapter.InsertCommand = insert
 
-            adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
+                adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
 
-            'fill it
-            adapter.Fill(dSFtomDB)
-            'put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
-            DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
-            'MsgBox("After fresh fill")
-            'edit it
-            dSFtomDB.Tables(0).Clear()
-            adapter.Update(dSFtomDB)
-            Dim dRow As DataRow
-            Dim strColNames As String = ""
-            Dim nExtraCols As Integer = 1
-            'MsgBox("After empty db")
-            'Note col85 and Col6 are for repeated courses hence Text datatype
-            For i = 0 To dtSource.Rows.Count - 1
-                dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
-                For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors
-                    If j > dtSource.Rows.Count - 1 Then Exit For
-                    dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
-                    strColNames = strColNames & "," & dtSource.Columns(j).ColumnName
+                'fill it
+                adapter.Fill(dSFtomDB)
+                'put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
+                DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
+                'MsgBox("After fresh fill")
+                'edit it
+                dSFtomDB.Tables(0).Clear()
+                adapter.Update(dSFtomDB)
+                Dim dRow As DataRow
+                Dim strColNames As String = ""
+                Dim nExtraCols As Integer = 1
+                'MsgBox("After empty db")
+                'Note col85 and Col6 are for repeated courses hence Text datatype
+                For i = 0 To dtSource.Rows.Count - 1
+                    dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
+                    For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors
+                        If j > dtSource.Columns.Count - 1 Then Exit For    'avoid errors bcos table has more cols
+                        dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
+                        If strColNames = "" Then
+                            strColNames = dtSource.Columns(j).ColumnName
+                        Else
+                            strColNames = strColNames & "," & dtSource.Columns(j).ColumnName
+                        End If
+
+                    Next
+                    dRow.Item("ColNames") = strColNames
+                    dRow.Item("Col175") = TextBoxSession.Text
                 Next
-                dRow.Item("ColNames") = strColNames
-            Next
 
-            DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
+                DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
 
-            'MsgBox("After add to datatable")
-            DataGridViewTemp.Refresh()
-            DataGridViewTemp.EndEdit()
-            ' MsgBox("After refresh")
-            'save
-            adapter.Update(dSFtomDB)
-        End Using
-
+                'MsgBox("After add to datatable")
+                DataGridViewTemp.Refresh()
+                DataGridViewTemp.EndEdit()
+                ' MsgBox("After refresh")
+                'save
+                adapter.Update(dSFtomDB)
+            End Using
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
     End Sub
     Sub saveData()
 
@@ -220,13 +232,19 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonGrades_Click(sender As Object, e As EventArgs) Handles ButtonGrades.Click
-        dvScores = DataGridViewBroadSheet.DataSource
-        dtScores = dvScores.ToTable
-        dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
-        dvGrades = dtGrades.DefaultView    'TODO: Fix
-        DataGridViewBroadSheet.DataSource = dtGrades.DefaultView    'TODO: Fix
-        'DataGridViewBroadSheet.AllowUserToAddRows = True
-        'DataGridViewBroadSheet.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
+        Try
+
+            dvScores = DataGridViewBroadSheet.DataSource
+            dtScores = dvScores.ToTable
+            dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
+            dvGrades = dtGrades.DefaultView    'TODO: Fix
+            DataGridViewBroadSheet.DataSource = dtGrades.DefaultView    'TODO: Fix
+            'DataGridViewBroadSheet.AllowUserToAddRows = True
+            'DataGridViewBroadSheet.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
+        Catch ex As Exception
+            MsgBox("Broadsheet scores have to be generated first before grades")
+            logError(ex.ToString)
+        End Try
     End Sub
 
 
@@ -247,11 +265,19 @@ Public Class FormGenerateBroadsheet
 
     Private Sub FormGenerateBroadsheet_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
+        Dim dLevel As String
+        TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
+        dLevel = TextBoxLevel.Text
+        If dLevel = "Yr.1" Then
+            dLevel = "100"
+        ElseIf dLevel = "Yr.2" Then
+            dLevel = "200"
+        End If
         'Me.TextBoxTemplateFileName.Text = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
         Me.ButtonProcessBroadsheet.Enabled = False
         Me.ButtonExportToExcel.Enabled = False
         Me.ButtonExportPDF.Enabled = False
-        bgwLoad.RunWorkerAsync()
+        bgwLoad.RunWorkerAsync(dLevel)
     End Sub
 
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
@@ -321,6 +347,14 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
+        Dim dLevel As String
+        TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
+        dLevel = TextBoxLevel.Text
+        If dLevel = "Yr.1" Then
+            dLevel = "100"
+        ElseIf dLevel = "Yr.2" Then
+            dLevel = "200"
+        End If
         'TODO: create UI to configure order
         footers(0) = TextBoxCourseAdviser.Text
         footers(1) = TextBoxDean.Text
@@ -328,13 +362,13 @@ Public Class FormGenerateBroadsheet
         Select Case CInt(e.Argument)
             Case 1
                 'interop
-                objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm")
+                objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dlevel & ".xlsm")
 
             Case 2
                 'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
-                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
             Case -2     'grades
-                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, True, dvGrades)
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, True, dvGrades)
 
 
 
@@ -347,7 +381,7 @@ Public Class FormGenerateBroadsheet
         If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
         'copy the file
         'TODO: access denied
-        'My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm", True)
+        'My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\GeneratedResultBroadsheet" & dlevel & ".xlsm", True)
         'replace template with fresh copy
 
         MsgBox("Done: GeneratedResultBroadsheet - " & retFileName)
@@ -391,6 +425,14 @@ Public Class FormGenerateBroadsheet
         Else
             Exit Sub
         End If
+        Dim dLevel As String
+        TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
+        dLevel = TextBoxLevel.Text
+        If dLevel = "Yr.1" Then
+            dLevel = "100"
+        ElseIf dLevel = "Yr.2" Then
+            dLevel = "200"
+        End If
         If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
 
         ButtonExportToExcel.Enabled = False
@@ -403,7 +445,7 @@ Public Class FormGenerateBroadsheet
         'get broadsheetDatta from result and students table
 
         If Me.RadioButtonUseBuiltIn.Checked = True Or RadioButtonUseBuiltInFormula.Checked = True Then
-            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsx"
+            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsx"
             If RadioButtonScores.Checked = True Then
                 bgwExportToExcel.RunWorkerAsync(2)
             Else
@@ -418,7 +460,7 @@ Public Class FormGenerateBroadsheet
 
 
         ElseIf Me.RadioButtonUseExcel.Checked = True Or Me.RadioButtonUseExcelWithFormula.Checked = True Then
-            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & TextBoxLevel.Text & ".xlsm"
+            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsm"
 
             bgwExportToExcel.RunWorkerAsync(1)  'runs  objBroadsheet.updateExcelBroadSheetInterop(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", DataGridViewBroadSheet.DataSource)
         End If
@@ -454,15 +496,21 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
+        Dim dLevel As String = ""
+
         Try
             TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
-
+            dLevel = TextBoxLevel.Text
+            If dLevel = "Yr.1" Then
+                dLevel = "100"
+            ElseIf dLevel = "Yr.2" Then
+                dLevel = "200"
+            End If
             ' bgwCourses.RunWorkerAsync()
 
-            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & TextBoxLevel.Text & "L", "FS" & TextBoxLevel.Text & "L")
-
-            dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & TextBoxLevel.Text & "L", "FS" & TextBoxLevel.Text & "L")
-            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & TextBoxLevel.Text & "L", "SS" & TextBoxLevel.Text & "L")
+            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
+            dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
+            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
         Catch ex As Exception
 
         End Try
@@ -478,24 +526,14 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
-        If e.Argument = "CoursesOnly" Then
-            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & TextBoxLevel.Text & "L", "FS" & TextBoxLevel.Text & "L")
-            ' dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & TextBoxLevel.Text, "FS" & TextBoxLevel.Text)
-            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & TextBoxLevel.Text & "L", "SS" & TextBoxLevel.Text & "L")
 
-        Else
+        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
+        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
+        dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
+        'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" &  e.Argument, "FS" & dlevel)
+        'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" &  e.Argument & "L", "SS" & dLevel & "L")
+        dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
 
-            dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-
-            dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-
-            dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
-            'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & TextBoxLevel.Text, "FS" & TextBoxLevel.Text)
-            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & TextBoxLevel.Text & "L", "SS" & TextBoxLevel.Text & "L")
-
-            dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
-
-        End If
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
@@ -510,13 +548,14 @@ Public Class FormGenerateBroadsheet
             ComboBoxDepartments.Items.Add(dictDepts(key))
         Next
         TextBoxDepartment.Text = ComboBoxDepartments.Items(0).ToString
-
+        ComboBoxDepartments.SelectedIndex = 0
 
         ComboBoxSessions.Items.Clear()
         For Each key In dictSessions.Keys
             ComboBoxSessions.Items.Add(dictSessions(key))
         Next
         TextBoxSession.Text = ComboBoxSessions.Items(0).ToString
+        ComboBoxSessions.SelectedIndex = 0
 
 
     End Sub
