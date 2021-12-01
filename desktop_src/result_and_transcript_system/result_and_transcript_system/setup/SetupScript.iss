@@ -68,7 +68,10 @@ Source: "..\bin\debug\NPOI.xml"; DestDir: "{app}"
 Source: "..\bin\debug\samples\sample_broadsheet.xlsm"; DestDir: "{app}\samples"
 Source: "..\bin\debug\samples\Sample_result.xlsx"; DestDir: "{app}\samples"
 ;Source: "..\bin\debug\samples\sample_GPA_DMI.xlsx"; DestDir: "{userdocs}\{#Mydir}\samples"
-Source: "..\bin\debug\samples\sample_Broadsheet500.xlsx"; DestDir: "{userdocs}\{#Mydir}\samples"
+Source: "..\bin\debug\samples\Students_CCT_1_2018_2019.xlsx"; DestDir: "{userdocs}\{#Mydir}\samples"
+Source: "..\bin\debug\samples\Sample_registration_extracted_from_ACCESS_2018_2019.xlsx"; DestDir: "{userdocs}\{#Mydir}\samples"
+
+
 
 
 
@@ -83,6 +86,8 @@ Source: "..\bin\debug\templates\senate.xltx"; DestDir: "{userdocs}\{#Mydir}\temp
  Source: "..\bin\debug\templates\courses.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\templates\students.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 Source: "..\bin\debug\templates\registration.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
+
+;images
 Source: "..\bin\debug\photos\ENG1503585.jpg"; DestDir: "{userdocs}\{#Mydir}\photos"
 Source: "..\bin\debug\photos\photo_female.jpg"; DestDir: "{userdocs}\{#Mydir}\photos"
 Source: "..\bin\debug\scans\result_2018_2019_ecp281.jpg"; DestDir: "{userdocs}\{#Mydir}\scans"

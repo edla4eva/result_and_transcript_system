@@ -153,6 +153,9 @@ Module ModuleGeneral
     Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col171 As Session,count(broadsheets_all.Col2) AS NumStudents, first(broadsheets_all.ColNames) AS ColNames
                                                     FROM broadsheets_all
                                                     GROUP BY broadsheets_all.Col171;"   'todo "Col" & LAST_COL
+    Public STR_SQL_ALL_REG_SUMMARY As String = "SELECT reg.session_idr As Session,count(reg.matno) AS NumStudents
+                                                    FROM reg
+                                                    GROUP BY reg.session_idr;"   'todo "Col" & LAST_COL
 
     Public STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE As String = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Departments.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
                  FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Departments On students.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code 
@@ -185,6 +188,16 @@ Module ModuleGeneral
                             FROM Reg INNER JOIN students ON Reg.MatNo = students.matno 
                             WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1} AND (Reg.level)={2}));"
 
+    'Transcripts
+    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO_SESSION As String = "SELECT Students.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
+                      Results.Session_idr  FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
+                      Results.Session_idr HAVING (((Students.matno)='{0}') AND ((Results.Session_idr)='{1}'));"
+
+    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Students.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
+                      Results.Session_idr  FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
+                      Results.Session_idr HAVING (((Students.matno)='{0}'));"
+    Public STR_SQL_STUDENTS_FULL_NAME As String = "SELECT * FROM Students WHERE matno='{0}'"
+
     'Import reg students from existing Access sofware
     'Note table name is SPD
     Public STR_SQL_ACCESS_IMPORT_REGISTERED_STUDENTS_INPUT_DEPT_LEVEL As String = "SELECT MatNo, year as session_idr, CourseCode_1, CourseCode_2, Fees_Status, SPD.level, year as dept_idr,   
@@ -215,6 +228,7 @@ Module ModuleGeneral
 
     Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by course_code" ' 
     Public STR_SQL_COURSES_REG_WHERE As String = "SELECT * FROM reg WHERE matno='{0}'"
+    Public STR_SQL_COURSES_REGS_WHERE As String = "SELECT * FROM regs WHERE matno='{0}'"
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
     Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO students (students.matno, students.student_firstname, students.student_surname, students.student_othernames, students.student_dept_idr, students.status, students.level, students.year_of_entry,students.session_idr_of_entry, students.mode_of_entry) " &

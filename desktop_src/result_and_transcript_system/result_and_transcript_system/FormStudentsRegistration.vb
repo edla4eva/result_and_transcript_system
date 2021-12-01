@@ -242,8 +242,8 @@ Public Class FormStudentsRegistration
     End Sub
     Public Sub updatePix()
         'todo: get from ser doc
-        Dim tmpileName As String = Application.StartupPath & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
-        Dim tmpileName2 As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
+        Dim TMPileNAME As String = Application.StartupPath & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
+        Dim TMP_PIC_FILE_NAME2 As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
         Dim tmpileName3 As String = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
 
 
@@ -251,8 +251,8 @@ Public Class FormStudentsRegistration
 
             If My.Computer.FileSystem.FileExists(tmpileName) Then
                 PictureBox1.Image = Image.FromFile(tmpileName)
-            ElseIf My.Computer.FileSystem.FileExists(tmpileName2) Then
-                PictureBox1.Image = Image.FromFile(tmpileName2)
+            ElseIf My.Computer.FileSystem.FileExists(TMP_PIC_FILE_NAME2) Then
+                PictureBox1.Image = Image.FromFile(TMP_PIC_FILE_NAME2)
             ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
                 PictureBox1.Image = Image.FromFile(tmpileName3)
             End If
@@ -354,16 +354,16 @@ Public Class FormStudentsRegistration
         If dgvCourses.Rows.Count > 0 Then
             If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
                 If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                    If dt.Rows(0).Item("CourseCode_1").Value.contains(TextBoxCourseCode.Text) Then
+                    If dt.Rows(0).Item("CourseCode_1").ToString.Contains(TextBoxCourseCode.Text) Then
                         MsgBox("Already Registered")
                     Else
-                        dt.Rows(0).Item("CourseCode_1").Value = dt.Rows(0).Item("CourseCode_2").Value.ToString & ";" & TextBoxCourseCode.Text
+                        dt.Rows(0).Item("CourseCode_1") = dt.Rows(0).Item("CourseCode_2").Value.ToString & ";" & TextBoxCourseCode.Text
                     End If
                 ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                    If dt.Rows(0).Item("CourseCode_2").Value.contains(TextBoxCourseCode.Text) Then
+                    If dt.Rows(0).Item("CourseCode_2").ToString.Contains(TextBoxCourseCode.Text) Then
                         MsgBox("Already Registered")
                     Else
-                        dt.Rows(0).Item("CourseCode_2").Value = dt.Rows(0).Item("CourseCode_1").Value.ToString & ";" & TextBoxCourseCode.Text
+                        dt.Rows(0).Item("CourseCode_2").Value = dt.Rows(0).Item("CourseCode_1").ToString & ";" & TextBoxCourseCode.Text
                     End If
                 End If
                 dgvCourses.DataSource = dt.DefaultView
@@ -870,12 +870,22 @@ Public Class FormStudentsRegistration
     Private Sub ButtonCancelReg_Click(sender As Object, e As EventArgs) Handles ButtonCancelReg.Click
         PanelCourses.Visible = False
 
-        For Each itm In CheckedListBoxCourses.CheckedItems
-           CheckedListBoxCourses.SetItemCheckState(itm, False)
+        For Each itm In CheckedListBoxCourses.CheckedIndices
+            CheckedListBoxCourses.SetItemCheckState(itm, False)
         Next
     End Sub
 
     Private Sub ButtonShowAllReg_Click(sender As Object, e As EventArgs) Handles ButtonShowAllReg.Click
+
+        If PanelAllReg.Visible = False Then
+            DataGridViewAlReg.DataSource = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0).DefaultView
+
+            PanelAllReg.BringToFront()
+            PanelAllReg.Visible = True
+        Else
+            PanelAllReg.SendToBack()
+            PanelAllReg.Visible = False
+        End If
 
     End Sub
 
@@ -893,5 +903,7 @@ Public Class FormStudentsRegistration
         End Try
     End Sub
 
+    Private Sub dgvStudents_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentClick
 
+    End Sub
 End Class

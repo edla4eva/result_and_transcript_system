@@ -542,7 +542,42 @@ Public Class ClassExcelFile
             Next
         Next
 
+        'save work
+        'todo: if file exists(fileName) create new filename
+        If System.IO.File.Exists(fileName) Then
+            fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
+            'System.IO.File.Delete(fileName)
+            If System.IO.File.Exists(fileName) Then fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
+            writeToFile(workbook, fileName)
+            'Throw New Exception("RTPS Error: Excel File Already Exists!")
+        Else
+            writeToFile(workbook, fileName)
+        End If
 
+        Return fileName
+    End Function
+
+    Public Function exportTranscriptToExcelFile_NPOI(dv As DataView, fileName As String) As String
+        Dim dt As DataTable = dv.ToTable
+        Dim workbook As IWorkbook = New XSSFWorkbook()
+        Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
+        Dim row1 As IRow
+        'Dim cell As ICell
+        Dim cR As CellRangeAddress = New CellRangeAddress(1, 3, 1, 120)
+
+
+        row1 = sheet1.CreateRow(0)   'headers
+        For jCol = 0 To dt.Columns.Count - 1
+            row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName)
+        Next
+
+        For jRow = 0 To dt.Rows.Count - 1
+            row1 = sheet1.CreateRow(jRow + 1)
+            For jCol = 0 To dt.Columns.Count - 1
+                'data
+                row1.CreateCell(jCol).SetCellValue(dt.Rows(jRow).ItemArray(jCol).ToString)
+            Next
+        Next
 
         'save work
         'todo: if file exists(fileName) create new filename

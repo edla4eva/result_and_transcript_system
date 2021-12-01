@@ -22,14 +22,24 @@ Partial Class FormResultsTranscripts
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxMATNO = New System.Windows.Forms.TextBox()
-        Me.dgw = New System.Windows.Forms.DataGridView()
+        Me.dgvTranscripts = New System.Windows.Forms.DataGridView()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.lblSet = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -42,9 +52,26 @@ Partial Class FormResultsTranscripts
         Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonTranscript = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        CType(Me.dgw, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.dgvStudents = New System.Windows.Forms.DataGridView()
+        Me.dgvCourses = New System.Windows.Forms.DataGridView()
+        Me.ButtonEport = New System.Windows.Forms.Button()
+        Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
+        Me.bgwExportToExcel = New System.ComponentModel.BackgroundWorker()
+        Me.TextBoxTemplateFileName = New System.Windows.Forms.TextBox()
+        Me.ButtonDownload = New System.Windows.Forms.Button()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
+        Me.ButtonOpen = New System.Windows.Forms.Button()
+        Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        CType(Me.dgvTranscripts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvCourses, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SidePanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -73,15 +100,16 @@ Partial Class FormResultsTranscripts
         Me.TextBoxMATNO.Name = "TextBoxMATNO"
         Me.TextBoxMATNO.Size = New System.Drawing.Size(93, 20)
         Me.TextBoxMATNO.TabIndex = 11
+        Me.TextBoxMATNO.Text = "ENG1503585"
         '
-        'dgw
+        'dgvTranscripts
         '
-        Me.dgw.AllowUserToAddRows = False
-        Me.dgw.AllowUserToDeleteRows = False
+        Me.dgvTranscripts.AllowUserToAddRows = False
+        Me.dgvTranscripts.AllowUserToDeleteRows = False
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FloralWhite
-        Me.dgw.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
-        Me.dgw.BackgroundColor = System.Drawing.Color.White
-        Me.dgw.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.dgvTranscripts.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        Me.dgvTranscripts.BackgroundColor = System.Drawing.Color.White
+        Me.dgvTranscripts.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle2.BackColor = System.Drawing.Color.PaleGoldenrod
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -89,36 +117,44 @@ Partial Class FormResultsTranscripts
         DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSteelBlue
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgw.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
-        Me.dgw.ColumnHeadersHeight = 24
-        Me.dgw.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.dgw.EnableHeadersVisualStyles = False
-        Me.dgw.GridColor = System.Drawing.Color.White
-        Me.dgw.Location = New System.Drawing.Point(282, 115)
-        Me.dgw.MultiSelect = False
-        Me.dgw.Name = "dgw"
-        Me.dgw.ReadOnly = True
-        Me.dgw.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.dgvTranscripts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        Me.dgvTranscripts.ColumnHeadersHeight = 24
+        Me.dgvTranscripts.Cursor = System.Windows.Forms.Cursors.Hand
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.CadetBlue
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgw.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
-        Me.dgw.RowHeadersWidth = 25
-        Me.dgw.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dgvTranscripts.DefaultCellStyle = DataGridViewCellStyle3
+        Me.dgvTranscripts.EnableHeadersVisualStyles = False
+        Me.dgvTranscripts.GridColor = System.Drawing.Color.White
+        Me.dgvTranscripts.Location = New System.Drawing.Point(352, 115)
+        Me.dgvTranscripts.MultiSelect = False
+        Me.dgvTranscripts.Name = "dgvTranscripts"
+        Me.dgvTranscripts.ReadOnly = True
+        Me.dgvTranscripts.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
         DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White
-        Me.dgw.RowsDefaultCellStyle = DataGridViewCellStyle4
-        Me.dgw.RowTemplate.Height = 18
-        Me.dgw.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgw.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgw.Size = New System.Drawing.Size(584, 411)
-        Me.dgw.TabIndex = 41
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvTranscripts.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
+        Me.dgvTranscripts.RowHeadersWidth = 25
+        Me.dgvTranscripts.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White
+        Me.dgvTranscripts.RowsDefaultCellStyle = DataGridViewCellStyle5
+        Me.dgvTranscripts.RowTemplate.Height = 18
+        Me.dgvTranscripts.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvTranscripts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvTranscripts.Size = New System.Drawing.Size(514, 273)
+        Me.dgvTranscripts.TabIndex = 41
         '
         'Panel2
         '
@@ -126,9 +162,9 @@ Partial Class FormResultsTranscripts
         Me.Panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Panel2.Controls.Add(Me.lblSet)
         Me.Panel2.Controls.Add(Me.Label3)
-        Me.Panel2.Location = New System.Drawing.Point(282, 47)
+        Me.Panel2.Location = New System.Drawing.Point(352, 47)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(584, 62)
+        Me.Panel2.Size = New System.Drawing.Size(514, 62)
         Me.Panel2.TabIndex = 42
         '
         'lblSet
@@ -158,7 +194,7 @@ Partial Class FormResultsTranscripts
         Me.TextBoxName.Enabled = False
         Me.TextBoxName.Location = New System.Drawing.Point(81, 89)
         Me.TextBoxName.Name = "TextBoxName"
-        Me.TextBoxName.Size = New System.Drawing.Size(152, 20)
+        Me.TextBoxName.Size = New System.Drawing.Size(254, 20)
         Me.TextBoxName.TabIndex = 43
         '
         'TextBoxDate
@@ -182,14 +218,15 @@ Partial Class FormResultsTranscripts
         '
         Me.DateTimePicker1.Location = New System.Drawing.Point(95, 125)
         Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(138, 20)
+        Me.DateTimePicker1.Size = New System.Drawing.Size(240, 20)
         Me.DateTimePicker1.TabIndex = 58
         '
         'PictureBoxImg
         '
-        Me.PictureBoxImg.Location = New System.Drawing.Point(872, 12)
+        Me.PictureBoxImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBoxImg.Location = New System.Drawing.Point(30, 254)
         Me.PictureBoxImg.Name = "PictureBoxImg"
-        Me.PictureBoxImg.Size = New System.Drawing.Size(127, 118)
+        Me.PictureBoxImg.Size = New System.Drawing.Size(305, 134)
         Me.PictureBoxImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBoxImg.TabIndex = 59
         Me.PictureBoxImg.TabStop = False
@@ -230,7 +267,7 @@ Partial Class FormResultsTranscripts
         Me.ButtonTranscript.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonTranscript.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonTranscript.ForeColor = System.Drawing.Color.White
-        Me.ButtonTranscript.Location = New System.Drawing.Point(888, 156)
+        Me.ButtonTranscript.Location = New System.Drawing.Point(3, 115)
         Me.ButtonTranscript.Name = "ButtonTranscript"
         Me.ButtonTranscript.Size = New System.Drawing.Size(128, 55)
         Me.ButtonTranscript.TabIndex = 62
@@ -243,12 +280,212 @@ Partial Class FormResultsTranscripts
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.Button1.ForeColor = System.Drawing.Color.White
-        Me.Button1.Location = New System.Drawing.Point(888, 239)
+        Me.Button1.Location = New System.Drawing.Point(3, 263)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(128, 55)
         Me.Button1.TabIndex = 63
         Me.Button1.Text = "Print"
         Me.Button1.UseVisualStyleBackColor = True
+        '
+        'dgvStudents
+        '
+        Me.dgvStudents.AllowUserToAddRows = False
+        Me.dgvStudents.AllowUserToDeleteRows = False
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FloralWhite
+        Me.dgvStudents.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle6
+        Me.dgvStudents.BackgroundColor = System.Drawing.Color.White
+        Me.dgvStudents.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = System.Drawing.Color.PaleGoldenrod
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvStudents.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
+        Me.dgvStudents.ColumnHeadersHeight = 24
+        Me.dgvStudents.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.dgvStudents.EnableHeadersVisualStyles = False
+        Me.dgvStudents.GridColor = System.Drawing.Color.White
+        Me.dgvStudents.Location = New System.Drawing.Point(30, 167)
+        Me.dgvStudents.MultiSelect = False
+        Me.dgvStudents.Name = "dgvStudents"
+        Me.dgvStudents.ReadOnly = True
+        Me.dgvStudents.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvStudents.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
+        Me.dgvStudents.RowHeadersWidth = 25
+        Me.dgvStudents.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        DataGridViewCellStyle9.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle9.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White
+        Me.dgvStudents.RowsDefaultCellStyle = DataGridViewCellStyle9
+        Me.dgvStudents.RowTemplate.Height = 18
+        Me.dgvStudents.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvStudents.Size = New System.Drawing.Size(305, 81)
+        Me.dgvStudents.TabIndex = 64
+        '
+        'dgvCourses
+        '
+        Me.dgvCourses.AllowUserToAddRows = False
+        Me.dgvCourses.AllowUserToDeleteRows = False
+        DataGridViewCellStyle10.BackColor = System.Drawing.Color.FloralWhite
+        Me.dgvCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle10
+        Me.dgvCourses.BackgroundColor = System.Drawing.Color.White
+        Me.dgvCourses.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle11.BackColor = System.Drawing.Color.PaleGoldenrod
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
+        Me.dgvCourses.ColumnHeadersHeight = 24
+        Me.dgvCourses.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.dgvCourses.EnableHeadersVisualStyles = False
+        Me.dgvCourses.GridColor = System.Drawing.Color.White
+        Me.dgvCourses.Location = New System.Drawing.Point(30, 442)
+        Me.dgvCourses.MultiSelect = False
+        Me.dgvCourses.Name = "dgvCourses"
+        Me.dgvCourses.ReadOnly = True
+        Me.dgvCourses.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle12.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.RowHeadersDefaultCellStyle = DataGridViewCellStyle12
+        Me.dgvCourses.RowHeadersWidth = 25
+        Me.dgvCourses.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        DataGridViewCellStyle13.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.RowsDefaultCellStyle = DataGridViewCellStyle13
+        Me.dgvCourses.RowTemplate.Height = 45
+        Me.dgvCourses.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvCourses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvCourses.Size = New System.Drawing.Size(836, 136)
+        Me.dgvCourses.TabIndex = 65
+        '
+        'ButtonEport
+        '
+        Me.ButtonEport.FlatAppearance.BorderSize = 0
+        Me.ButtonEport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonEport.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonEport.ForeColor = System.Drawing.Color.White
+        Me.ButtonEport.Location = New System.Drawing.Point(3, 191)
+        Me.ButtonEport.Name = "ButtonEport"
+        Me.ButtonEport.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonEport.TabIndex = 66
+        Me.ButtonEport.Text = "Export"
+        Me.ButtonEport.UseVisualStyleBackColor = True
+        '
+        'TimerBS
+        '
+        Me.TimerBS.Enabled = True
+        Me.TimerBS.Interval = 500
+        '
+        'bgwExportToExcel
+        '
+        '
+        'TextBoxTemplateFileName
+        '
+        Me.TextBoxTemplateFileName.Enabled = False
+        Me.TextBoxTemplateFileName.Location = New System.Drawing.Point(322, 14)
+        Me.TextBoxTemplateFileName.Name = "TextBoxTemplateFileName"
+        Me.TextBoxTemplateFileName.Size = New System.Drawing.Size(327, 20)
+        Me.TextBoxTemplateFileName.TabIndex = 67
+        '
+        'ButtonDownload
+        '
+        Me.ButtonDownload.FlatAppearance.BorderSize = 0
+        Me.ButtonDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonDownload.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonDownload.ForeColor = System.Drawing.Color.White
+        Me.ButtonDownload.Location = New System.Drawing.Point(655, 15)
+        Me.ButtonDownload.Name = "ButtonDownload"
+        Me.ButtonDownload.Size = New System.Drawing.Size(95, 21)
+        Me.ButtonDownload.TabIndex = 68
+        Me.ButtonDownload.Text = "Download"
+        Me.ButtonDownload.UseVisualStyleBackColor = True
+        '
+        'SaveFileDialog1
+        '
+        Me.SaveFileDialog1.Filter = "Excel Files|*.xlsx"
+        Me.SaveFileDialog1.RestoreDirectory = True
+        '
+        'ProgressBarBS
+        '
+        Me.ProgressBarBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
+        Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
+        Me.ProgressBarBS.Location = New System.Drawing.Point(3, 14)
+        Me.ProgressBarBS.Name = "ProgressBarBS"
+        Me.ProgressBarBS.Size = New System.Drawing.Size(302, 20)
+        Me.ProgressBarBS.TabIndex = 69
+        Me.ProgressBarBS.Value = 1
+        '
+        'ButtonOpen
+        '
+        Me.ButtonOpen.FlatAppearance.BorderSize = 0
+        Me.ButtonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonOpen.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonOpen.ForeColor = System.Drawing.Color.White
+        Me.ButtonOpen.Location = New System.Drawing.Point(766, 12)
+        Me.ButtonOpen.Name = "ButtonOpen"
+        Me.ButtonOpen.Size = New System.Drawing.Size(63, 25)
+        Me.ButtonOpen.TabIndex = 70
+        Me.ButtonOpen.Text = "Open"
+        Me.ButtonOpen.UseVisualStyleBackColor = True
+        '
+        'SidePanel
+        '
+        Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.Button2)
+        Me.SidePanel.Controls.Add(Me.ButtonTranscript)
+        Me.SidePanel.Controls.Add(Me.Button1)
+        Me.SidePanel.Controls.Add(Me.ButtonEport)
+        Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
+        Me.SidePanel.Location = New System.Drawing.Point(885, 0)
+        Me.SidePanel.Name = "SidePanel"
+        Me.SidePanel.Size = New System.Drawing.Size(134, 624)
+        Me.SidePanel.TabIndex = 71
+        '
+        'Button2
+        '
+        Me.Button2.FlatAppearance.BorderSize = 0
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Button2.ForeColor = System.Drawing.Color.White
+        Me.Button2.Location = New System.Drawing.Point(3, 423)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(128, 55)
+        Me.Button2.TabIndex = 8
+        Me.Button2.Text = "Close"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.ProgressBarBS)
+        Me.Panel1.Controls.Add(Me.TextBoxTemplateFileName)
+        Me.Panel1.Controls.Add(Me.ButtonOpen)
+        Me.Panel1.Controls.Add(Me.ButtonDownload)
+        Me.Panel1.Location = New System.Drawing.Point(30, 394)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(836, 42)
+        Me.Panel1.TabIndex = 72
         '
         'FormResultsTranscripts
         '
@@ -256,8 +493,10 @@ Partial Class FormResultsTranscripts
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1019, 624)
-        Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.ButtonTranscript)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.SidePanel)
+        Me.Controls.Add(Me.dgvCourses)
+        Me.Controls.Add(Me.dgvStudents)
         Me.Controls.Add(Me.ButtonClose)
         Me.Controls.Add(Me.PictureBoxImg)
         Me.Controls.Add(Me.DateTimePicker1)
@@ -265,18 +504,24 @@ Partial Class FormResultsTranscripts
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.TextBoxName)
         Me.Controls.Add(Me.Panel2)
-        Me.Controls.Add(Me.dgw)
+        Me.Controls.Add(Me.dgvTranscripts)
         Me.Controls.Add(Me.TextBoxMATNO)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ButtonCheck)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormResultsTranscripts"
         Me.Tag = "Front"
         Me.Text = "Results - Transcript"
-        CType(Me.dgw, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvTranscripts, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvCourses, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SidePanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -286,7 +531,7 @@ Partial Class FormResultsTranscripts
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxMATNO As TextBox
-    Friend WithEvents dgw As DataGridView
+    Friend WithEvents dgvTranscripts As DataGridView
     Friend WithEvents Panel2 As Panel
     Friend WithEvents lblSet As Label
     Friend WithEvents Label3 As Label
@@ -298,4 +543,17 @@ Partial Class FormResultsTranscripts
     Friend WithEvents ButtonClose As Button
     Friend WithEvents ButtonTranscript As Button
     Friend WithEvents Button1 As Button
+    Friend WithEvents dgvStudents As DataGridView
+    Friend WithEvents dgvCourses As DataGridView
+    Friend WithEvents ButtonEport As Button
+    Friend WithEvents TimerBS As Timer
+    Friend WithEvents bgwExportToExcel As System.ComponentModel.BackgroundWorker
+    Friend WithEvents TextBoxTemplateFileName As TextBox
+    Friend WithEvents ButtonDownload As Button
+    Friend WithEvents SaveFileDialog1 As SaveFileDialog
+    Friend WithEvents ProgressBarBS As ProgressBar
+    Friend WithEvents ButtonOpen As Button
+    Friend WithEvents SidePanel As Panel
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Panel1 As Panel
 End Class

@@ -41,14 +41,18 @@ Public Class FormGenerateBroadsheet
             ButtonProcessBroadsheet.Enabled = False
             TimerBS.Enabled = True
             TimerBS.Start()
-            course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
             session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
             course_level = dLevel '.SelectedItem.ToString  'not databound
+            course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
+            objBroadsheet.DeptId = course_dept_idr
+
+            objBroadsheet.Level = dLevel
+            objBroadsheet.Session = TextBoxSession.Text
             objBroadsheet.broadsheetSemester = 1
             objBroadsheet.departmentName = TextBoxDepartment.Text
             objBroadsheet.facultyName = "Faculty of Engineering"
             objBroadsheet.SchoolName = "University of Benin"
-            objBroadsheet.DeptId = course_dept_idr
+
             objBroadsheet.HOD = TextBoxHOD.Text
             objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
             objBroadsheet.Dean = TextBoxDean.Text
@@ -301,6 +305,15 @@ Public Class FormGenerateBroadsheet
 
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
         Try
+            If objBroadsheet.broadsheetDataDS.Tables(0).Columns(0).ColumnName.Contains("Error") Then
+                DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
+                DataGridViewBroadSheet.Columns(0).Width = 120
+                Exit Sub
+            ElseIf objBroadsheet.broadsheetDataDS.Tables(0).Rows.Count < 1 Then
+                MsgBox("No broadsheet data generated, students must be registered")
+                Exit Sub
+            End If
+
             DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
             dvScores = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
             dtScores = dvScores.ToTable
@@ -347,29 +360,27 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
-        Dim dLevel As String
-        TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
-        dLevel = TextBoxLevel.Text
-        If dLevel = "Yr.1" Then
-            dLevel = "100"
-        ElseIf dLevel = "Yr.2" Then
-            dLevel = "200"
-        End If
+
         'TODO: create UI to configure order
         footers(0) = TextBoxCourseAdviser.Text
         footers(1) = TextBoxDean.Text
         footers(2) = TextBoxHOD.Text
+        '1-interrp  2. built in     -2 grades
+        '4-diploma
         Select Case CInt(e.Argument)
             Case 1
                 'interop
-                objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dlevel & ".xlsm")
+                objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
 
             Case 2
                 'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
-                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
             Case -2     'grades
-                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, True, dvGrades)
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, True, dvGrades)
 
+            Case 4
+                'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
 
 
             Case Else
@@ -428,11 +439,7 @@ Public Class FormGenerateBroadsheet
         Dim dLevel As String
         TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
         dLevel = TextBoxLevel.Text
-        If dLevel = "Yr.1" Then
-            dLevel = "100"
-        ElseIf dLevel = "Yr.2" Then
-            dLevel = "200"
-        End If
+
         If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
 
         ButtonExportToExcel.Enabled = False
@@ -454,15 +461,22 @@ Public Class FormGenerateBroadsheet
                 ElseIf CheckBoxSecondSemester.Checked = False Then
                     'Hide em
                 End If
-                If dvGrades Is Nothing Then ButtonGrades.PerformClick() Else 'todo: call function computeGrades
-                bgwExportToExcel.RunWorkerAsync(-2)
+                If dvGrades Is Nothing Then
+                    ButtonGrades.PerformClick()
+                    bgwExportToExcel.RunWorkerAsync(-2)
+                Else 'todo: call function computeGrades
+
+                End If
             End If
 
-
         ElseIf Me.RadioButtonUseExcel.Checked = True Or Me.RadioButtonUseExcelWithFormula.Checked = True Then
-            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsm"
+            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm"
+            If dLevel.Contains("Yr.") Then
+                bgwExportToExcel.RunWorkerAsync(4)
+            Else
+                bgwExportToExcel.RunWorkerAsync(1)  'runs  objBroadsheet.updateExcelBroadSheetInterop(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", DataGridViewBroadSheet.DataSource)
 
-            bgwExportToExcel.RunWorkerAsync(1)  'runs  objBroadsheet.updateExcelBroadSheetInterop(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", DataGridViewBroadSheet.DataSource)
+            End If
         End If
 
 

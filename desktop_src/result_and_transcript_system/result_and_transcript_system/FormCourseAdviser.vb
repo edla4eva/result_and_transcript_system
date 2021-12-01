@@ -75,10 +75,16 @@ Public Class FormCourseAdviser
         tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_RESULTS_SUMMARY)
 
         dCountResult1 = tmpDS.Tables(0).Rows.Count
+
+
         tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_COURSES)
         dCountResult2 = tmpDS.Tables(0).Rows.Count
         tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_REGISTERED_STUDENTS, objBroadsheet.Session, objBroadsheet.DeptId))
         dCountStudents = tmpDS.Tables(0).Rows.Count
+
+        tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY)
+        dCountStudents = tmpDS.Tables(0).Rows.Count
+
         'getrecordwhere("select count(matno) as countMat from reg")
         'TODO: Fetch from Database
         'count of broadsheets
