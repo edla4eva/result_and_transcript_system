@@ -401,7 +401,7 @@ Public Class FormStudentsRegistration
         showCoursesList(e.ColumnIndex)
     End Sub
     Sub showCoursesList(dColumnIndex As Integer)
-        Dim dLeft As Integer = 0
+
         If PanelCourses.Visible = True Then PanelCourses.Visible = False Else PanelCourses.Visible = True
         For i = 0 To CheckedListBoxCourses.Items.Count - 1
             If dgvCourses.Rows(0).Cells("CourseCode_1").Value.contains(CheckedListBoxCourses.Items(i).ToString()) Then
@@ -425,9 +425,6 @@ Public Class FormStudentsRegistration
     End Sub
 
 
-    Private Sub CheckedListBoxCourses_KeyPress(sender As Object, e As KeyPressEventArgs)
-
-    End Sub
 
     Private Sub ButtonImportRegFERMA_Click(sender As Object, e As EventArgs) Handles ButtonImportRegFERMA.Click
         Dim FileOpenDialogBroadsheet As New OpenFileDialog()
@@ -905,5 +902,45 @@ Public Class FormStudentsRegistration
 
     Private Sub dgvStudents_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentClick
 
+    End Sub
+
+    Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefresh.Click
+        Dim ds As New DataSet
+        'Dim rd As OleDb.OleDbDataReader
+        'ds = mappDB.GetRecordWhere("SELECT * FROM students")
+        ds = mappDB.GetDataWhere("SELECT * FROM students")
+        BindingSource1.DataSource = ds.Tables(0)
+        BindingNavigator1.BindingSource = BindingSource1
+        'TextBoxMATNO.DataBindings.Item(0).DataSource =
+        If TextBoxMATNO.DataBindings.Count = 0 Then
+            TextBoxMATNO.DataBindings.Add("Text", BindingSource1, "matno")
+            TextBoxSurname.DataBindings.Add("Text", BindingSource1, "student_surname")
+            TextBoxFirstName.DataBindings.Add("Text", BindingSource1, "student_firstname")
+            TextBoxOtherNames.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
+        End If
+    End Sub
+
+    Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
+        BindingSource1.MoveNext()
+    End Sub
+
+    Private Sub ButtonFormView_Click(sender As Object, e As EventArgs) Handles ButtonFormView.Click
+        If PanelForm.Visible = False Then
+            PanelForm.Visible = True
+            PanelForm.Top = 51
+            dgvStudents.Visible = False
+            ButtonFormView.Text = "Grid View"
+        Else
+
+            PanelForm.Visible = False
+            dgvStudents.Visible = True
+
+            ButtonFormView.Text = "Form View"
+        End If
+    End Sub
+
+    Private Sub ButtonClosePanelForm_Click(sender As Object, e As EventArgs) Handles ButtonClosePanelForm.Click
+        ButtonFormView.PerformClick()
     End Sub
 End Class

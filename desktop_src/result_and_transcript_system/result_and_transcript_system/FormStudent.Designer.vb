@@ -250,6 +250,7 @@ Partial Class FormStudent
         'Button1
         '
         Me.Button1.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button1.Location = New System.Drawing.Point(394, 223)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
@@ -327,6 +328,7 @@ Partial Class FormStudent
         '
         Me.BindingNavigatorPositionItem.AccessibleName = "Position"
         Me.BindingNavigatorPositionItem.AutoSize = False
+        Me.BindingNavigatorPositionItem.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.BindingNavigatorPositionItem.Name = "BindingNavigatorPositionItem"
         Me.BindingNavigatorPositionItem.Size = New System.Drawing.Size(50, 23)
         Me.BindingNavigatorPositionItem.Text = "0"
@@ -362,6 +364,7 @@ Partial Class FormStudent
         '
         'ButtonRefresh
         '
+        Me.ButtonRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRefresh.Location = New System.Drawing.Point(148, 223)
         Me.ButtonRefresh.Name = "ButtonRefresh"
         Me.ButtonRefresh.Size = New System.Drawing.Size(75, 23)
@@ -467,6 +470,7 @@ Partial Class FormStudent
         '
         'ButtonNext
         '
+        Me.ButtonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNext.Location = New System.Drawing.Point(229, 223)
         Me.ButtonNext.Name = "ButtonNext"
         Me.ButtonNext.Size = New System.Drawing.Size(75, 23)

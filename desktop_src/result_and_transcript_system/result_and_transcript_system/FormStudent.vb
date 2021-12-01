@@ -171,9 +171,9 @@
         'TextBoxMATNO.DataBindings.Item(0).DataSource =
         If TextBoxMATNO.DataBindings.Count = 0 Then
             TextBoxMATNO.DataBindings.Add("Text", BindingSource1, "matno")
-            TextBoxSurname.DataBindings.Add("Text", ds.Tables(0), "student_surname")
-            TextBoxFirstName.DataBindings.Add("Text", ds.Tables(0), "student_firstname")
-            TextBoxOtherNames.DataBindings.Add("Text", ds.Tables(0), "student_othernames")
+            TextBoxSurname.DataBindings.Add("Text", BindingSource1, "student_surname")
+            TextBoxFirstName.DataBindings.Add("Text", BindingSource1, "student_firstname")
+            TextBoxOtherNames.DataBindings.Add("Text", BindingSource1, "student_othernames")
             'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
         End If
     End Sub
