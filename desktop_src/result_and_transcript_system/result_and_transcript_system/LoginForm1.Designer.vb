@@ -42,7 +42,6 @@ Partial Class LoginForm1
         '
         'LoginMiddlePanel
         '
-        Me.LoginMiddlePanel.AutoSize = True
         Me.LoginMiddlePanel.Controls.Add(Me.GroupBox1)
         Me.LoginMiddlePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LoginMiddlePanel.Location = New System.Drawing.Point(0, 0)
@@ -217,7 +216,6 @@ Partial Class LoginForm1
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents LoginMiddlePanel As Panel

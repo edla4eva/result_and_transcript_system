@@ -1,0 +1,89 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 360px;
+  padding: 15px;
+  margin: auto;
+  /* background-color:#e2e3ee; */
+  border: solid 1px #DADADA;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+
+.form-signin .form-control-password {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.input-inline-custom{
+  display: table; 
+  width: 100%;
+  /* make the div look like textbox */
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  background-color: white;
+  background-color: -moz-field;
+  border: 1px solid darkgray;
+  box-shadow: 1px 1px 1px 0 lightgray inset;  
+  font: -moz-field;
+  font: -webkit-small-control;
+  margin-top: 5px;
+  padding: 2px 3px;
+  /* width: 398px;     */
+}
+.input-inline-cell-custom{
+  display: table-cell;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.fa{
+  color:rgb(85, 83, 83);
+  font-size:26px;
+  margin: auto;
+  width: 100%;
+  
+
+}

@@ -143,8 +143,10 @@
                 Me.WindowState = FormWindowState.Normal
                 Me.AutoScroll = False
                 Me.AutoScrollMinSize = New Size(0, 0) 'normal
-                Me.Width = 790
-                Me.Height = 530
+                'Me.Width = 790
+                'Me.Height = 530
+                Me.Width = Screen.AllScreens(0).WorkingArea.Width * 0.7
+                Me.Height = Screen.AllScreens(0).WorkingArea.Height * 0.9
                 Me.StartPosition = FormStartPosition.CenterScreen
                 Me.CenterToScreen()
             Case "Home"
@@ -152,8 +154,10 @@
                 Me.WindowState = FormWindowState.Normal
                 Me.AutoScroll = False
                 Me.AutoScrollMinSize = New Size(0, 0) 'normal
-                Me.Width = 790
-                Me.Height = 530
+                ' Me.Width = 790
+                'Me.Height = 530
+                Me.Width = Screen.AllScreens(0).WorkingArea.Width * 0.7
+                Me.Height = Screen.AllScreens(0).WorkingArea.Height * 0.9
                 Me.StartPosition = FormStartPosition.CenterScreen
                 Me.CenterToScreen()
             Case Else

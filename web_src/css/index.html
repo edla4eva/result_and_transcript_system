@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Tree view from unordered list</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<figure>
+  <figcaption>Example DOM structure diagram</figcaption>
+  <ul class="tree">
+    <li><code>html</code>
+      <ul>
+        <li><code>head</code>
+          <ul>
+            <li><code>title</code></li>
+          </ul>
+        </li>
+        <li><code>body</code>
+          <ul>
+            <li><code>header</code>
+              <ul>
+                <li><code>h1</code></li>
+                <li><code>p</code></li>
+              </ul>
+            </li>
+            <li><code>nav</code>
+              <ul>
+                <li><code>a</code></li>
+                <li><code>a</code></li>
+                <li><code>a</code></li>
+                <li><code>a</code></li>
+              </ul>
+            </li>
+            <li><code>main</code>
+              <ul>
+                <li><code>h1</code></li>
+                <li><code>article</code>
+                  <ul>
+                    <li><code>h2</code></li>
+                    <li><code>p</code></li>
+                    <li><code>p</code></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><code>aside</code>
+              <ul>
+                <li><code>h2</code></li>
+                <li><code>p</code></li>
+                <li><code>p</code>
+                  <ul>
+                    <li><code>a</code></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><code>footer</code>
+              <ul>
+                <li><code>nav</code>
+                  <ul>
+                    <li><code>a</code></li>
+                    <li><code>a</code></li>
+                    <li><code>a</code></li>
+                    <li><code>a</code></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</figure>
+<figure> 
+  <figcaption>Example sitemap</figcaption>
+  <ul class="tree">
+    <li><span>Home</span>
+      <ul>
+        <li><span>About us</span>
+          <ul>
+            <li><span>Our history</span>
+              <ul>
+                <li><span>Founder</span></li>
+              </ul>
+            </li>
+            <li><span>Our board</span>
+              <ul>
+                <li><span>Brad Whiteman</span></li>
+                <li><span>Cynthia Tolken</span></li>
+                <li><span>Bobby Founderson</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><span>Our products</span>
+          <ul>
+            <li><span>The Widget 2000™</span>
+              <ul>
+                <li><span>Order form</span></li>
+              </ul>
+            </li>
+            <li><span>The McGuffin V2</span>
+              <ul>
+                <li><span>Order form</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><span>Contact us</span>
+          <ul>
+            <li><span>Social media</span>
+              <ul>
+                <li><span>Facebook</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</figure>
+<p><a href="https://medium.com/@ross.angus/sitemaps-and-dom-structure-from-nested-unordered-lists-eab2b02950cf" target="_blank">Full writeup</a></p>
+<!-- partial -->
+  
+</body>
+</html>

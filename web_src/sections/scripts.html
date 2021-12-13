@@ -1,0 +1,24 @@
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+<script src="js/bootstrap.bundle.js"></script>
+  <script> 
+      //Make nodes expandable
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+      toggler[i].addEventListener("click", function() {
+        this.parentElement.querySelector(".nested").classList.toggle("active");
+        this.classList.toggle("caret-down");
+      });
+    }
+    </script> 
+ <script src="js/tree.js"></script>     
+  
+   <!------ Use AJAX to get json from php to javascript ---------->
+  <script  src="js/tree-functions.js">   </script> 
+
+   <!------ bullet points ---------->
+  <script  src="js/tree-add-caret.js">   </script> 
+
+

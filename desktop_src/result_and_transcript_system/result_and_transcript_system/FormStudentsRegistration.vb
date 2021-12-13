@@ -404,11 +404,17 @@ Public Class FormStudentsRegistration
 
         If PanelCourses.Visible = True Then PanelCourses.Visible = False Else PanelCourses.Visible = True
         For i = 0 To CheckedListBoxCourses.Items.Count - 1
-            If dgvCourses.Rows(0).Cells("CourseCode_1").Value.contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            'If dgvCourses.Rows(0).Cells("CourseCode_1").Value.contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            '    CheckedListBoxCourses.SetItemChecked(i, True)
+            'ElseIf dgvCourses.Rows(0).Cells("CourseCode_2").Value.contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            '    CheckedListBoxCourses.SetItemChecked(i, True)
+            '    End If
+
+            If TextBoxCourse_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
                 CheckedListBoxCourses.SetItemChecked(i, True)
-            ElseIf dgvCourses.Rows(0).Cells("CourseCode_2").Value.contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            ElseIf TextBoxCourse_2.Text.contains(CheckedListBoxCourses.Items(i).ToString()) Then
                 CheckedListBoxCourses.SetItemChecked(i, True)
-                End If
+            End If
         Next
 
         'CheckedListBoxCourses.Width = dgvCourses.Columns("CourseCode_1").Width + 10   'todo: calc the with as only once
@@ -844,8 +850,10 @@ Public Class FormStudentsRegistration
         If MsgBox("Are the courses corectly displayed" & vbCrLf & strReg1 & vbCrLf & vbCrLf & strReg2, MsgBoxStyle.YesNo) = vbYes Then
             PanelCourses.Visible = False
             If dgvCourses.SelectedRows.Count > 0 Then
-                dgvCourses.SelectedRows(0).Cells("CourseCode_1").Value = strReg1
-                dgvCourses.SelectedRows(0).Cells("CourseCode_2").Value = strReg2
+                'dgvCourses.SelectedRows(0).Cells("CourseCode_1").Value = strReg1
+                'dgvCourses.SelectedRows(0).Cells("CourseCode_2").Value = strReg2
+                TextBoxCourse_1.Text = strReg1
+                TextBoxCourse_2.Text = strReg2
             End If
         End If
     End Sub
@@ -876,7 +884,7 @@ Public Class FormStudentsRegistration
 
         If PanelAllReg.Visible = False Then
             DataGridViewAlReg.DataSource = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0).DefaultView
-
+            Debug.Print(STR_SQL_ALL_REG_SUMMARY)
             PanelAllReg.BringToFront()
             PanelAllReg.Visible = True
         Else
@@ -904,6 +912,26 @@ Public Class FormStudentsRegistration
 
     End Sub
 
+    Sub refreshReg(dMATNO)
+        Dim ds As New DataSet
+        'Dim rd As OleDb.OleDbDataReader
+        'ds = mappDB.GetRecordWhere("SELECT * FROM students")
+        ds = mappDB.GetDataWhere("SELECT * FROM Reg")
+        BindingSourcereg.DataSource = ds.Tables(0)
+        BindingNavigator1.BindingSource = BindingSourcereg
+        'BindingNavigator1.MoveNextItem.PerformClick()
+        'TextBoxMATNO.DataBindings.Item(0).DataSource =
+        If TextBoxMATNO.DataBindings.Count = 0 Then
+            TextBoxMATNO.DataBindings.Add("Text", BindingSource1, "matno")
+            TextBoxSurname.DataBindings.Add("Text", BindingSource1, "student_surname")
+            TextBoxFirstName.DataBindings.Add("Text", BindingSource1, "student_firstname")
+            TextBoxOtherNames.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            TextBoxEntrySession.DataBindings.Add("Text", BindingSource1, "session_idr")
+            TextBoxEntryMode.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
+        End If
+
+    End Sub
     Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefresh.Click
         Dim ds As New DataSet
         'Dim rd As OleDb.OleDbDataReader
@@ -917,12 +945,107 @@ Public Class FormStudentsRegistration
             TextBoxSurname.DataBindings.Add("Text", BindingSource1, "student_surname")
             TextBoxFirstName.DataBindings.Add("Text", BindingSource1, "student_firstname")
             TextBoxOtherNames.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            'TextBoxEntrySession.DataBindings.Add("Text", BindingSource1, "session_idr")
+
+            TextBoxEntryMode.DataBindings.Add("Text", BindingSource1, "student_othernames")
             'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
         End If
+    End Sub
+    Public Sub UpdateUsingDataAdapter(dMATno As String)
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
+                    xConn.Open()
+                End Try
+
+                Dim dStrSQL As String = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
+                Dim dStrSQLUpdate As String = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
+
+                Dim cmdLocal As New OleDb.OleDbCommand(dStrSQL, xConn)
+                Dim myAdapter As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(dStrSQL, xConn)
+                myAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
+                Dim myDataSet As DataSet = New DataSet
+                myAdapter.Fill(myDataSet, "Reg")
+
+                myAdapter.UpdateCommand = New OleDb.OleDbCommand(dStrSQLUpdate, xConn)
+                myAdapter.UpdateCommand.Parameters.Add("dMATNO", OleDb.OleDbType.VarChar, 50, "matno")
+
+                myAdapter.Update(myDataSet, "Reg")
+                xConn.Close()
+
+            End Using
+        Catch ex As Exception
+            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
+            'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
+    End Sub
+
+    Public Sub InsertUsingDataAdapter(dMATno As String)
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                Try
+                    xConn.Open()
+                Catch ex1 As Exception
+                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
+                    xConn.Open()
+                End Try
+
+
+
+                Dim dStrSQL As String = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
+                Dim dStrSQLInsert As String = "INSERT INTO Reg ( matno, session_idr, CourseCode_1, CourseCode_2) VALUES (:dMATNO, '2018/2019', 'MEE211', 'MEE211' )"
+                Dim dStrSQLUpdate As String = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
+
+                Dim cmdLocal As New OleDb.OleDbCommand(dStrSQL, xConn)
+                Dim myAdapter As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(dStrSQL, xConn)
+                myAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
+                Dim myDataSet As DataSet = New DataSet
+                myAdapter.Fill(myDataSet, "Reg")
+                Dim rowVals(0 To 3) As Object
+                rowVals(0) = dMATno
+                rowVals(1) = "2018/2019"
+                rowVals(2) = "GST111"   'kole werk bcos query overides
+                rowVals(3) = "GST111"
+                myDataSet.Tables("Reg").Rows.Add(rowVals)
+                myAdapter.InsertCommand = New OleDb.OleDbCommand(dStrSQLInsert, xConn)
+                myAdapter.InsertCommand.Parameters.Add("dMATNO", OleDb.OleDbType.VarChar, 50, "matno")
+
+                myAdapter.UpdateCommand = New OleDb.OleDbCommand(dStrSQLUpdate, xConn)
+                myAdapter.UpdateCommand.Parameters.Add("dMATNO", OleDb.OleDbType.VarChar, 50, "matno")
+
+
+                myAdapter.Update(myDataSet, "Reg")
+                Dim myTable As DataTable
+                Dim myRow As DataRow
+                Dim myColumn As DataColumn
+                ' Get all data from all tables within the dataset
+                For Each myTable In myDataSet.Tables
+                    For Each myRow In myTable.Rows
+                        For Each myColumn In myTable.Columns
+                            Debug.Print(myRow(myColumn) & Chr(9))
+                        Next myColumn
+                        Debug.Print("")
+                    Next myRow
+                    Debug.Print("-")
+                Next myTable
+
+                xConn.Close()
+
+            End Using
+        Catch ex As Exception
+            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
+            'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
     End Sub
 
     Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
         BindingSource1.MoveNext()
+
     End Sub
 
     Private Sub ButtonFormView_Click(sender As Object, e As EventArgs) Handles ButtonFormView.Click
@@ -942,5 +1065,29 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonClosePanelForm_Click(sender As Object, e As EventArgs) Handles ButtonClosePanelForm.Click
         ButtonFormView.PerformClick()
+    End Sub
+
+    Private Sub TextBoxCourse_1_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCourse_1.TextChanged
+
+    End Sub
+
+    Private Sub TextBoxCourse_1_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_1.Click
+        PanelCourses.Visible = True
+    End Sub
+
+    Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSource1.CurrentChanged
+
+    End Sub
+
+    Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
+        Try
+            'If update then
+
+            'else
+            InsertUsingDataAdapter(TextBoxMATNO.Text)
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
     End Sub
 End Class

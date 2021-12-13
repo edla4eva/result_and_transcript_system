@@ -125,4 +125,8 @@ Public Class LoginForm1
 
 
     End Sub
+
+    Private Sub LoginMiddlePanel_Paint(sender As Object, e As PaintEventArgs) Handles LoginMiddlePanel.Paint
+
+    End Sub
 End Class

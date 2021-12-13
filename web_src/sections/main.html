@@ -1,0 +1,97 @@
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+
+  <div class="container">
+    <!-- Row for spacing -->
+        <!-- Row of columns tree-bio-pix -->
+    <div class="row">
+      <p></p>
+    </div>
+    <!-- Row of columns tree-bio-pix -->
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Family Tree</h2>
+        <p>This is a family tree view representing a hierarchical view of the family structure, 
+        where each family member is shown with parents/relatives.</p>
+        <p>Click on the arrow(s) to open or close the family tree branches.</p>
+        <p><a class="btn btn-secondary" href="#" role="button">Refresh &raquo;</a></p>
+        <ul id="myUL">
+          <li><span class="caret">Obadan Family</span>
+            <ul class="nested">
+              <li>Pa Obadan</li>
+              <li>Madam Obadan</li>
+              <li><span class="caret">Pa Obadan</span>
+                <ul class="nested">
+                  <li class="caret">Amos Obadan</li>
+                    <ul class="nested">
+                      <li>Jamson Obadan</li>
+                      <li>Nikoro Obadan</li>
+                      <li>Name unknown</li>
+                      <li>Name unknown</li>
+                    </ul>
+                  <li>Dorcas Amadi (Nee Obadan)</li>
+                  <li><span class="caret">Obadiah Obadan</span>
+                    <ul class="nested">
+                      <li>Jamson Obadan</li>
+                      <li>Nikoro Obadan</li>
+                      <li>Name unknown</li>
+                      <li>Name unknown</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>  
+            </ul>
+          </li>
+        </ul>
+
+        <p><a class="btn btn-secondary" href="#" role="button">Refresh &raquo;</a></p>
+        <div class="tree">
+          <h1>Updated Family Tree</h1>
+          <button class="btn btn-primary"  type="button" onclick="call_tree_getMenu()">Get list from json</button>
+          <div id="list-json"><p>...</p></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h2>Bio</h2>
+        <p>Bio daata of the selected family members is displayed here. </p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Photograph</h2>
+            <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+            <div class="card-body">
+              <p class="card-text">This is the photograph of the family member selected from the tree
+              . Addition information can be accomodated here.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">ID:1</small>
+              </div>
+            </div>
+          </div>
+        <p>The immediate lineage of thefamily member is displayed here</p>
+                      <div id="json-list-branch">
+                      <ul id="myUL2" class="nested">
+                        <li class="caret">Amos Obadan</li>
+                          <ul class="nested">
+                            <li>Jamson Obadan</li>
+                            <li>Nikoro Obadan</li>
+                            <li>Name unknown</li>
+                            <li>Name unknown</li>
+                          </ul>
+                      </ul>
+
+                      </div>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+    </div>
+
+    <hr>
+
+  </div> <!-- /container -->
+
+</main>

@@ -4,6 +4,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 
+#db
+web_src/svr
+web_src/install
+
 # third party files 
 /third_party
 /local_dev

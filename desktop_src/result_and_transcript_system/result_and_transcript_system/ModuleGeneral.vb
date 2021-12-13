@@ -605,6 +605,69 @@ Module ModuleGeneral
     'End Structure
     'Public accounts As New _accounts
 
+
+    Function creatDataSetSenate() As DataSet
+        'Very good!
+        Dim ds As New DataSet
+        Dim dt As DataTable
+        Dim dr As DataRow
+        Dim idCoulumn, matnoCoulumn As DataColumn
+        Dim nameCoulumn, surnameCoulumn, statusCoulumn, creditsCoulumn As DataColumn
+
+        Dim i As Integer
+        Dim sumCr As Double = 0
+        Dim SumDr As Double = 0
+
+        dt = New DataTable()
+        idCoulumn = New DataColumn("SN", Type.GetType("System.Int32"))
+        matnoCoulumn = New DataColumn("MATNO", Type.GetType("System.String"))
+        surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
+        nameCoulumn = New DataColumn("Other Names", Type.GetType("System.String"))
+        statusCoulumn = New DataColumn("Status", Type.GetType("System.String"))
+        creditsCoulumn = New DataColumn("Credits", Type.GetType("System.Double"))
+
+
+        dt.TableName = "Senate"
+        dt.Columns.Add(idCoulumn)
+        dt.Columns.Add(matnoCoulumn)
+        dt.Columns.Add(surnameCoulumn)
+        dt.Columns.Add(nameCoulumn)
+        dt.Columns.Add(statusCoulumn)
+        dt.Columns.Add(creditsCoulumn)
+
+        dr = dt.NewRow()
+        dr("SN") = 1
+        dr("MATNO") = "ENG000222111"
+        dr("SURNAME") = "OBINNA"
+        dr("Other Names") = "Amenaghawon"
+        dr("Status") = "Successful"
+        dr("Credits") = 22
+        dt.Rows.Add(dr)
+        SumDr = SumDr + 1
+
+
+
+
+        ds.Tables.Add(dt)
+
+        For i = 0 To ds.Tables(0).Rows.Count - 1
+            'MsgBox(ds.Tables(0).Rows(i).Item(0).ToString & "   --   " & ds.Tables(0).Rows(i).Item(1).ToString)
+        Next i
+
+        'Visualization
+        'dgw.DataSource = ds.Tables("Senate").DefaultView
+
+        'Report stuff
+        'With Me.ReportViewer1.LocalReport
+
+        '    .DataSources.Clear()
+        '    '.ReportPath = My.Application.Info.DirectoryPath
+        '    .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
+        'End With
+        'Me.ReportViewer1.RefreshReport()
+        'Works perfectly
+        Return ds
+    End Function
     Function creatDataSet() As DataSet
         'Very good!
         Dim ds As New DataSet

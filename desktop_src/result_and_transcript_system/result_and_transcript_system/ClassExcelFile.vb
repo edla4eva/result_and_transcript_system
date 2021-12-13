@@ -417,6 +417,7 @@ Public Class ClassExcelFile
         For x = COURSE_START_COL To LAST_COL    ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
             If sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
                 hideCols(sheet1, x)
+                sheet1.GetRow(ROW_HEADER).Cells(x).SetCellValue("")         'display nothing
             Else
                 If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) Then
                     If Not dictAllCourseCodeKeyAndCourseLevelVal(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) = dLevel Then hideCols(sheet1, x)
