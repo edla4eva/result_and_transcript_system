@@ -10,7 +10,7 @@ Public Class ClassExcel
     Public Event myEventOnPropertyChanged(ByVal sende As Object, e As ClassAnswerEventArgs) 'support for events
 
     Private _fileNameWB As String
-    Private _previewImageFileName As String
+    Private _fileName As String
     Private _font As New Font("Arial", 50, FontStyle.Bold)
     Private _settings As Dictionary(Of String, String)
     Private _WBDataSet As DataSet
@@ -37,13 +37,12 @@ Public Class ClassExcel
         End Set
     End Property
 
-
     Public Property FileName() As String
         Get
-            Return _previewImageFileName
+            Return _fileName
         End Get
         Set(ByVal value As String)
-            _previewImageFileName = value
+            _fileName = value
         End Set
     End Property
 
@@ -53,7 +52,7 @@ Public Class ClassExcel
             Me._font = New Font("Arial", 50, FontStyle.Bold)
             'USER_DIRECTORY
             Me._fileNameWB = USER_DIRECTORY & "\Samples\Result.xlsx"
-            Me.settings = getSettings(True)
+            Me.settings = getDefaultSettings(True)
         Catch ex As Exception
             Throw ex
         Finally
@@ -64,7 +63,7 @@ Public Class ClassExcel
 
 
 
-    Function getSettings(Optional useDefault As Boolean = False) As Dictionary(Of String, String)
+    Function getDefaultSettings(Optional useDefault As Boolean = False) As Dictionary(Of String, String)
         Try
             Dim tmp As New Dictionary(Of String, String)
             If useDefault = True Then

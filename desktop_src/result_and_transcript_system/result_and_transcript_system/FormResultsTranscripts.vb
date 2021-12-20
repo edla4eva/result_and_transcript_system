@@ -26,6 +26,7 @@ Public Class FormResultsTranscripts
         Me.dgvStudents.BackgroundColor = RGBColors.colorBlack2
         Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
         Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.ReportViewer1.RefreshReport
     End Sub
 
     Private Sub reset()
@@ -40,7 +41,7 @@ Public Class FormResultsTranscripts
     Private Sub ButtonAddResult_Click(sender As Object, e As EventArgs)
         'update
         Dim str As String
-        Dim p0, p1, p2, p3, p4, p5, p6 As String
+        Dim p0, p1 As String
         p0 = Me.TextBoxMATNO.Text
         p1 = Me.TextBoxDate.Text
 
@@ -57,9 +58,7 @@ Public Class FormResultsTranscripts
 
 
 
-    Private Sub ButtonCheck_Click(sender As Object, e As EventArgs) Handles ButtonCheck.Click
-        searchTranscripts(TextBoxMATNO.Text)
-    End Sub
+
 
     Private Function searchTranscripts(dMATNO As String)
         Dim tmpDSStudent As DataSet
@@ -72,7 +71,7 @@ Public Class FormResultsTranscripts
             dgvStudents.Refresh()
             resizeDatagrids("Students")
 
-            tmpDSStudentName = mappDB.GetDataWhere(STR_SQL_STUDENTS_FULL_NAME)
+            tmpDSStudentName = mappDB.GetDataWhere(String.Format(STR_SQL_STUDENTS_FULL_NAME, dMATNO))
 
             With tmpDSStudentName.Tables(0)
                 If .Rows.Count > 0 Then
@@ -142,16 +141,20 @@ Public Class FormResultsTranscripts
         Me.Close()
     End Sub
     Private Sub ButtonTranscript_Click(sender As Object, e As EventArgs) Handles ButtonTranscript.Click
+        searchTranscripts(TextBoxMATNO.Text)
+        objReports.MATNO = "ENG0000001" 'TODO
         If dgvStudents.Rows.Count > 0 Then
             getTranscripts(dgvStudents.Rows(0).Cells("matno").Value.ToString)
+            Dim dv As DataView = dgvTranscripts.DataSource
+            objReports.updateReportDataSource("DataSet1", Me.ReportViewer1, dv.ToTable)
         End If
     End Sub
 
     Private Function getTranscripts(dMATNO As String) As DataSet
         Dim tmpDSRegCourses As DataSet
 
-        Dim tmpDSResults As DataSet
-        Dim tmpDSBroadsheets As DataSet
+        Dim tmpDSResults As New DataSet
+        Dim tmpDSBroadsheets As New DataSet
         Try
             mappDB.MATNO = dMATNO
             tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
@@ -227,5 +230,24 @@ Public Class FormResultsTranscripts
         Catch ex As Exception
             MsgBox("Could not open excel file" & vbCrLf & ex.Message)
         End Try
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+    End Sub
+
+    Private Sub ButtonFullScreen_Click(sender As Object, e As EventArgs) Handles ButtonFullScreen.Click
+        If ReportViewer1.Dock = DockStyle.Fill Then
+            ReportViewer1.Dock = DockStyle.None
+            ReportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        Else
+            ReportViewer1.Dock = DockStyle.Fill
+            ReportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        End If
+
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Me.Close()
     End Sub
 End Class

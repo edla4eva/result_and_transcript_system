@@ -161,14 +161,14 @@ Public Class FormViewResults
     End Sub
 
     Private Sub DataGridView2_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentDoubleClick
-        Dim txtCC, txtS As String
+        Dim txtCourseCode, txtSession As String
         Dim myDataSet As DataSet
         If DataGridView2.SelectedRows.Count > 0 And
             DataGridView2.Columns.Contains("course_code_idr") And
             DataGridView2.Columns.Contains("session_idr") Then
-            txtCC = DataGridView2.SelectedRows(0).Cells("course_code_idr").Value
-            txtS = DataGridView2.SelectedRows(0).Cells("session_idr").Value
-            myDataSet = objResult.getFromDBResultssDataset(txtS, txtCC)
+            txtCourseCode = DataGridView2.SelectedRows(0).Cells("course_code_idr").Value
+            txtSession = DataGridView2.SelectedRows(0).Cells("session_idr").Value
+            myDataSet = objResult.getFromDBResultssDataset(txtSession, txtCourseCode)
             DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
         End If
     End Sub

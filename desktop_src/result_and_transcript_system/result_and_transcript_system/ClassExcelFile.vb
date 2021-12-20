@@ -369,12 +369,12 @@ Public Class ClassExcelFile
 
         rowFooter = sheet1.CreateRow(footerRowount)    'account for 9 header rows
         rowFooter.CreateCell(2).SetCellValue(footers(0))
-        rowFooter.CreateCell(COURSE_START_COL).SetCellValue(footers(1))
+        rowFooter.CreateCell(TCP_1_COL).SetCellValue(footers(1))
         rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue(footers(2))
         'titles/position
         rowFooter = sheet1.CreateRow(footerRowount + 1)    'account for 9 header rows
         rowFooter.CreateCell(2).SetCellValue("Course Adviser")
-        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("Dean")
+        rowFooter.CreateCell(TCP_1_COL).SetCellValue("Dean")
         rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue("Head of Department")
 
         'Style
@@ -382,7 +382,7 @@ Public Class ClassExcelFile
         sheet1.AddMergedRegion(cRFooter)
         RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
         'todo center text
-        cRFooter = New CellRangeAddress(footerRowount, footerRowount, COURSE_START_COL, COURSE_START_COL + 10)  'merge 10 small cols
+        cRFooter = New CellRangeAddress(footerRowount, footerRowount, TCP_1_COL, TCP_1_COL + 10)  'merge 10 small cols
         sheet1.AddMergedRegion(cRFooter)
         RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
         cRFooter = New CellRangeAddress(footerRowount, footerRowount, COURSE_FAIL_COL, COURSE_FAIL_COL + 1)
@@ -395,12 +395,19 @@ Public Class ClassExcelFile
     'on apply settings, objects are created with these settings appled
     Public Function setFormatPerSemester(sheet1 As ISheet, dSem As Integer) As Boolean
         Select Case dSem
-            Case 1
-                'hide first sem repeat
+            Case 1  'First emester broadsheet
                 'hide all second semester courses
                 For i = COURSE_END_COL_2 To COURSE_END_COL_2
-                    'hideCols(sheet1, i)
+                    hideCols(sheet1, i)
                 Next
+                hideCols(sheet1, TCR_2_COL)
+                hideCols(sheet1, TCP_2_COL)
+                hideCols(sheet1, TCF_2_COL)
+                hideCols(sheet1, TCR_COL)
+                hideCols(sheet1, TCP_COL)
+                hideCols(sheet1, TCF_COL)
+                hideCols(sheet1, GPA_COL)
+
             Case 2
                 'show first sem repeat
 

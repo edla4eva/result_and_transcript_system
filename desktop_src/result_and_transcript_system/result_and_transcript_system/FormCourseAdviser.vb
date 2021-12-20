@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 
 Public Class FormCourseAdviser
-    Dim dCountResult1, dCountResult2, dCountBS1, dCountBS2, dCountStudents, dCountSenate As Integer
+    Dim dCountResult1, dCountResult2, dCountBS1, dCountBS2, dCountReg, dCountStudents, dCountSenate As Integer
     Private Sub FormCourseAdviser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
     End Sub
@@ -15,7 +15,7 @@ Public Class FormCourseAdviser
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles ButtonStudents.Click
-        MainForm.ChangeMenu("StudentsRegistration")
+        MainForm.ChangeMenu("viewRegs")
     End Sub
 
     Private Sub ButtonResultList_Click(sender As Object, e As EventArgs) Handles ButtonResultList.Click
@@ -42,11 +42,16 @@ Public Class FormCourseAdviser
 
 
     Private Sub ButtonNoOfStudents_Click(sender As Object, e As EventArgs) Handles ButtonNoOfStudents.Click
-        ButtonStudents.PerformClick()
+        MainForm.ChangeMenu("students")
     End Sub
 
     Private Sub ButtonSenate_Click(sender As Object, e As EventArgs) Handles ButtonSenate.Click
-        FormReport.ShowDialog()
+      
+        MainForm.ChangeMenu("viewSenate")
+    End Sub
+
+    Private Sub ButtonCoursereg_Click(sender As Object, e As EventArgs) Handles ButtonCoursereg.Click
+        MainForm.ChangeMenu("StudentsRegistration")
     End Sub
 
     Private Sub ButtonNoOfBroadsheets_Click(sender As Object, e As EventArgs) Handles ButtonNoOfBroadsheets.Click
@@ -63,8 +68,9 @@ Public Class FormCourseAdviser
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         ButtonResultsSubmitted.Text = dCountResult1.ToString & "/" & dCountResult2.ToString
-        ButtonNoOfStudents.Text = dCountStudents.ToString
-        'ButtonNoOfBroadsheets
+        ButtonNoOfStudents.Text = dCountReg.ToString & "/" & dCountStudents.ToString
+        ButtonNoOfBroadsheets.Text = dCountBS1.ToString
+
     End Sub
     Sub updateDashBoard()
         On Error Resume Next
@@ -79,11 +85,17 @@ Public Class FormCourseAdviser
 
         tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_COURSES)
         dCountResult2 = tmpDS.Tables(0).Rows.Count
-        tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_REGISTERED_STUDENTS, objBroadsheet.Session, objBroadsheet.DeptId))
-        dCountStudents = tmpDS.Tables(0).Rows.Count
+        tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_REG_COUNT, objBroadsheet.Session, objBroadsheet.DeptId))
+        dCountReg = CInt(tmpDS.Tables(0).Rows(0).Item(0).ToString)
 
-        tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY)
-        dCountStudents = tmpDS.Tables(0).Rows.Count
+        tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_STUDENTS_COUNT)
+        dCountStudents = CInt(tmpDS.Tables(0).Rows(0).Item(0).ToString)
+
+        tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_BROADSHEETS_SUMMARY)
+        dCountBS1 = tmpDS.Tables(0).Rows.Count
+
+        'tmpDS = mappDB.GetDataWhere(STR_SQL_ALL_DEPARTMENTS_COMBO)
+        'dCountBS2 = tmpDS.Tables(0).Rows.Count * 5
 
         'getrecordwhere("select count(matno) as countMat from reg")
         'TODO: Fetch from Database

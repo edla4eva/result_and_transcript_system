@@ -47,6 +47,7 @@ Partial Class FormCourseAdviser
         Me.ButtonNoOfSenate = New System.Windows.Forms.Button()
         Me.ButtonSenate = New System.Windows.Forms.Button()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.ButtonCoursereg = New System.Windows.Forms.Button()
         Me.SidePanel.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -85,6 +86,7 @@ Partial Class FormCourseAdviser
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonCoursereg)
         Me.SidePanel.Controls.Add(Me.ButtonGenerateBroadsheet)
         Me.SidePanel.Controls.Add(Me.ButtonResultList)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
@@ -127,7 +129,7 @@ Partial Class FormCourseAdviser
         Me.ButtonCloud.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonCloud.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonCloud.ForeColor = System.Drawing.Color.White
-        Me.ButtonCloud.Location = New System.Drawing.Point(0, 336)
+        Me.ButtonCloud.Location = New System.Drawing.Point(0, 470)
         Me.ButtonCloud.Name = "ButtonCloud"
         Me.ButtonCloud.Size = New System.Drawing.Size(128, 55)
         Me.ButtonCloud.TabIndex = 3
@@ -157,7 +159,7 @@ Partial Class FormCourseAdviser
         Me.ButtonStudents.Name = "ButtonStudents"
         Me.ButtonStudents.Size = New System.Drawing.Size(128, 55)
         Me.ButtonStudents.TabIndex = 5
-        Me.ButtonStudents.Text = "Course Reg."
+        Me.ButtonStudents.Text = "View"
         Me.ButtonStudents.UseVisualStyleBackColor = True
         '
         'ButtonBroadsheets
@@ -373,6 +375,19 @@ Partial Class FormCourseAdviser
         'BackgroundWorker1
         '
         '
+        'ButtonCoursereg
+        '
+        Me.ButtonCoursereg.FlatAppearance.BorderSize = 0
+        Me.ButtonCoursereg.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonCoursereg.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonCoursereg.ForeColor = System.Drawing.Color.White
+        Me.ButtonCoursereg.Location = New System.Drawing.Point(3, 367)
+        Me.ButtonCoursereg.Name = "ButtonCoursereg"
+        Me.ButtonCoursereg.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonCoursereg.TabIndex = 7
+        Me.ButtonCoursereg.Text = "Course Registration"
+        Me.ButtonCoursereg.UseVisualStyleBackColor = True
+        '
         'FormCourseAdviser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -429,4 +444,5 @@ Partial Class FormCourseAdviser
     Friend WithEvents ButtonNoOfSenate As Button
     Friend WithEvents ButtonSenate As Button
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ButtonCoursereg As Button
 End Class

@@ -48,7 +48,12 @@ Public Class FormGenerateBroadsheet
 
             objBroadsheet.Level = dLevel
             objBroadsheet.Session = TextBoxSession.Text
-            objBroadsheet.broadsheetSemester = 1
+            If CheckBoxSecondSemester.Checked Then
+                objBroadsheet.broadsheetSemester = 2
+            Else
+                objBroadsheet.broadsheetSemester = 1
+            End If
+
             objBroadsheet.departmentName = TextBoxDepartment.Text
             objBroadsheet.facultyName = "Faculty of Engineering"
             objBroadsheet.SchoolName = "University of Benin"
@@ -187,7 +192,12 @@ Public Class FormGenerateBroadsheet
 
                     Next
                     dRow.Item("ColNames") = strColNames
-                    dRow.Item("Col175") = TextBoxSession.Text
+                    dRow.Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
+
+                    dRow.Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
+                    dRow.Item("Col173") = objBroadsheet.FacultyName
+                    dRow.Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
+                    dRow.Item("Col175") = Array2sTR(footers)        'todo:
                 Next
 
                 DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
@@ -368,11 +378,9 @@ Public Class FormGenerateBroadsheet
         '1-interrp  2. built in     -2 grades
         '4-diploma
         Select Case CInt(e.Argument)
-            Case 1
-                'interop
+            Case 1 'interop
                 objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
-
-            Case 2
+            Case 2  'NPOI
                 'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
                 retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
             Case -2     'grades
@@ -380,6 +388,10 @@ Public Class FormGenerateBroadsheet
 
             Case 4
                 'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
+                retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
+
+
+            Case 11 'first semeser
                 retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, False)
 
 
@@ -440,7 +452,11 @@ Public Class FormGenerateBroadsheet
         TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
         dLevel = TextBoxLevel.Text
 
-        If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
+        If DataGridViewBroadSheet.DataSource Is Nothing Then
+            Exit Sub
+        Else
+            If dvScores Is Nothing Then dvScores = DataGridViewBroadSheet.DataSource
+        End If
 
         ButtonExportToExcel.Enabled = False
         ButtonProcessBroadsheet.Enabled = False
@@ -584,6 +600,10 @@ Public Class FormGenerateBroadsheet
         MainForm.doCloseForm()
     End Sub
 
+    Public Sub importBroadsheetData(dv As DataView)
+        Me.DataGridViewBroadSheet.DataSource = dv
+        'TODO: department etc
+    End Sub
 
 
     Private Sub ButtonExportPDF_Click(sender As Object, e As EventArgs) Handles ButtonExportPDF.Click
@@ -637,6 +657,19 @@ Public Class FormGenerateBroadsheet
         'effect change in audit dgv
         'DataGridViewBroadSheet_audit.rows(currentcell.rowindex).cell(currentcekk.columnindex).value = "Ugraded from x to 40 by CA"
 
+    End Sub
+
+    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles Label4.Click
+
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If MsgBox("Are you sure you want to cancel?", MsgBoxStyle.YesNo) = vbYes Then
+
+            BgWProcess.CancelAsync()
+            bgwExportToExcel.CancelAsync()
+            TimerBS.Stop()
+        End If
     End Sub
 
     Private Sub UpgradeWith2MarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith2MarksToolStripMenuItem.Click

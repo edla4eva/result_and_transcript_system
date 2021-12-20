@@ -74,13 +74,14 @@ Partial Class FormStudentsRegistration
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.ButtonShowAllReg = New System.Windows.Forms.Button()
         Me.PanelGegSingle = New System.Windows.Forms.Panel()
+        Me.ButtonSaveRecord = New System.Windows.Forms.Button()
         Me.ComboBoxCourseCode = New System.Windows.Forms.ComboBox()
-        Me.TextBoxTotalCredits = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.TextBoxCourseCode = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.ButtonUnregister = New System.Windows.Forms.Button()
         Me.ButtonRegister = New System.Windows.Forms.Button()
+        Me.TextBoxTotalCredits = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.PanelCourses = New System.Windows.Forms.Panel()
         Me.ButtonCancelReg = New System.Windows.Forms.Button()
         Me.ButtonOKReg = New System.Windows.Forms.Button()
@@ -93,9 +94,9 @@ Partial Class FormStudentsRegistration
         Me.Label10 = New System.Windows.Forms.Label()
         Me.PanelForm = New System.Windows.Forms.Panel()
         Me.ComboBoxEntryMode = New System.Windows.Forms.ComboBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxShortCuts2 = New System.Windows.Forms.ComboBox()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.ComboBoxCourseCodeForm = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxShortCuts1 = New System.Windows.Forms.ComboBox()
         Me.TextBoxCourse_2 = New System.Windows.Forms.TextBox()
         Me.TextBoxCourse_1 = New System.Windows.Forms.TextBox()
         Me.ButtonClosePanelForm = New System.Windows.Forms.Button()
@@ -128,7 +129,6 @@ Partial Class FormStudentsRegistration
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.ButtonFormView = New System.Windows.Forms.Button()
         Me.BindingSourcereg = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ButtonSaveRecord = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -186,7 +186,7 @@ Partial Class FormStudentsRegistration
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(1538, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(1613, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -230,7 +230,7 @@ Partial Class FormStudentsRegistration
         Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.ProgressBarBS.Location = New System.Drawing.Point(79, 295)
         Me.ProgressBarBS.Name = "ProgressBarBS"
-        Me.ProgressBarBS.Size = New System.Drawing.Size(950, 23)
+        Me.ProgressBarBS.Size = New System.Drawing.Size(1025, 23)
         Me.ProgressBarBS.TabIndex = 75
         Me.ProgressBarBS.Value = 1
         '
@@ -666,6 +666,16 @@ Partial Class FormStudentsRegistration
         Me.PanelGegSingle.Size = New System.Drawing.Size(515, 74)
         Me.PanelGegSingle.TabIndex = 82
         '
+        'ButtonSaveRecord
+        '
+        Me.ButtonSaveRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSaveRecord.Location = New System.Drawing.Point(420, 45)
+        Me.ButtonSaveRecord.Name = "ButtonSaveRecord"
+        Me.ButtonSaveRecord.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonSaveRecord.TabIndex = 99
+        Me.ButtonSaveRecord.Text = "Save"
+        Me.ButtonSaveRecord.UseVisualStyleBackColor = True
+        '
         'ComboBoxCourseCode
         '
         Me.ComboBoxCourseCode.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
@@ -676,22 +686,6 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxCourseCode.Size = New System.Drawing.Size(121, 24)
         Me.ComboBoxCourseCode.TabIndex = 94
         Me.ComboBoxCourseCode.Text = "CPE375"
-        '
-        'TextBoxTotalCredits
-        '
-        Me.TextBoxTotalCredits.Location = New System.Drawing.Point(428, 307)
-        Me.TextBoxTotalCredits.Name = "TextBoxTotalCredits"
-        Me.TextBoxTotalCredits.Size = New System.Drawing.Size(139, 22)
-        Me.TextBoxTotalCredits.TabIndex = 86
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(336, 313)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(72, 16)
-        Me.Label7.TabIndex = 85
-        Me.Label7.Text = "Total Units"
         '
         'TextBoxCourseCode
         '
@@ -742,6 +736,22 @@ Partial Class FormStudentsRegistration
         Me.ButtonRegister.TabIndex = 81
         Me.ButtonRegister.Text = "Register"
         Me.ButtonRegister.UseVisualStyleBackColor = False
+        '
+        'TextBoxTotalCredits
+        '
+        Me.TextBoxTotalCredits.Location = New System.Drawing.Point(428, 307)
+        Me.TextBoxTotalCredits.Name = "TextBoxTotalCredits"
+        Me.TextBoxTotalCredits.Size = New System.Drawing.Size(139, 22)
+        Me.TextBoxTotalCredits.TabIndex = 86
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(336, 313)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(72, 16)
+        Me.Label7.TabIndex = 85
+        Me.Label7.Text = "Total Units"
         '
         'PanelCourses
         '
@@ -895,9 +905,9 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.Controls.Add(Me.PanelCourses)
         Me.PanelForm.Controls.Add(Me.Label7)
         Me.PanelForm.Controls.Add(Me.ComboBoxEntryMode)
-        Me.PanelForm.Controls.Add(Me.ComboBox1)
+        Me.PanelForm.Controls.Add(Me.ComboBoxShortCuts2)
         Me.PanelForm.Controls.Add(Me.Button1)
-        Me.PanelForm.Controls.Add(Me.ComboBoxCourseCodeForm)
+        Me.PanelForm.Controls.Add(Me.ComboBoxShortCuts1)
         Me.PanelForm.Controls.Add(Me.TextBoxCourse_2)
         Me.PanelForm.Controls.Add(Me.TextBoxCourse_1)
         Me.PanelForm.Controls.Add(Me.ButtonClosePanelForm)
@@ -935,16 +945,16 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxEntryMode.TabIndex = 98
         Me.ComboBoxEntryMode.Text = "UME"
         '
-        'ComboBox1
+        'ComboBoxShortCuts2
         '
-        Me.ComboBox1.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Add All 100L Courses", "Add All 200L Courses", "Add All 300L Courses", "Add All 400L Courses", "Add All 500L Courses", "Add All Departmetal Courses", "Add All Faculty Courses"})
-        Me.ComboBox1.Location = New System.Drawing.Point(339, 281)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(228, 24)
-        Me.ComboBox1.TabIndex = 97
-        Me.ComboBox1.Text = "--Shortcuts--"
+        Me.ComboBoxShortCuts2.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
+        Me.ComboBoxShortCuts2.FormattingEnabled = True
+        Me.ComboBoxShortCuts2.Items.AddRange(New Object() {"Add All 100L Courses", "Add All 200L Courses", "Add All 300L Courses", "Add All 400L Courses", "Add All 500L Courses", "Add All Departmetal Courses", "Add All Faculty Courses"})
+        Me.ComboBoxShortCuts2.Location = New System.Drawing.Point(339, 281)
+        Me.ComboBoxShortCuts2.Name = "ComboBoxShortCuts2"
+        Me.ComboBoxShortCuts2.Size = New System.Drawing.Size(228, 24)
+        Me.ComboBoxShortCuts2.TabIndex = 97
+        Me.ComboBoxShortCuts2.Text = "--Shortcuts--"
         '
         'Button1
         '
@@ -956,16 +966,16 @@ Partial Class FormStudentsRegistration
         Me.Button1.Text = "Previous"
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'ComboBoxCourseCodeForm
+        'ComboBoxShortCuts1
         '
-        Me.ComboBoxCourseCodeForm.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
-        Me.ComboBoxCourseCodeForm.FormattingEnabled = True
-        Me.ComboBoxCourseCodeForm.Items.AddRange(New Object() {"CPE375"})
-        Me.ComboBoxCourseCodeForm.Location = New System.Drawing.Point(339, 82)
-        Me.ComboBoxCourseCodeForm.Name = "ComboBoxCourseCodeForm"
-        Me.ComboBoxCourseCodeForm.Size = New System.Drawing.Size(228, 24)
-        Me.ComboBoxCourseCodeForm.TabIndex = 95
-        Me.ComboBoxCourseCodeForm.Text = "CPE375"
+        Me.ComboBoxShortCuts1.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
+        Me.ComboBoxShortCuts1.FormattingEnabled = True
+        Me.ComboBoxShortCuts1.Items.AddRange(New Object() {"Add All 100L Courses", "Add All 200L Courses", "Add All 300L Courses", "Add All 400L Courses", "Add All 500L Courses", "Add All Departmetal Courses", "Add All Faculty Courses"})
+        Me.ComboBoxShortCuts1.Location = New System.Drawing.Point(339, 153)
+        Me.ComboBoxShortCuts1.Name = "ComboBoxShortCuts1"
+        Me.ComboBoxShortCuts1.Size = New System.Drawing.Size(228, 24)
+        Me.ComboBoxShortCuts1.TabIndex = 95
+        Me.ComboBoxShortCuts1.Text = "--Shortcuts--"
         '
         'TextBoxCourse_2
         '
@@ -977,7 +987,7 @@ Partial Class FormStudentsRegistration
         '
         'TextBoxCourse_1
         '
-        Me.TextBoxCourse_1.Location = New System.Drawing.Point(339, 109)
+        Me.TextBoxCourse_1.Location = New System.Drawing.Point(339, 81)
         Me.TextBoxCourse_1.Multiline = True
         Me.TextBoxCourse_1.Name = "TextBoxCourse_1"
         Me.TextBoxCourse_1.Size = New System.Drawing.Size(228, 72)
@@ -1231,16 +1241,6 @@ Partial Class FormStudentsRegistration
         Me.ButtonFormView.Text = "Form View"
         Me.ButtonFormView.UseVisualStyleBackColor = True
         '
-        'ButtonSaveRecord
-        '
-        Me.ButtonSaveRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonSaveRecord.Location = New System.Drawing.Point(420, 45)
-        Me.ButtonSaveRecord.Name = "ButtonSaveRecord"
-        Me.ButtonSaveRecord.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonSaveRecord.TabIndex = 99
-        Me.ButtonSaveRecord.Text = "Save"
-        Me.ButtonSaveRecord.UseVisualStyleBackColor = True
-        '
         'FormStudentsRegistration
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1389,13 +1389,13 @@ Partial Class FormStudentsRegistration
     Friend WithEvents TextBoxMATNO As TextBox
     Friend WithEvents Label16 As Label
     Friend WithEvents ButtonNext As Button
-    Friend WithEvents ComboBoxCourseCodeForm As ComboBox
+    Friend WithEvents ComboBoxShortCuts1 As ComboBox
     Friend WithEvents TextBoxCourse_2 As TextBox
     Friend WithEvents TextBoxCourse_1 As TextBox
     Friend WithEvents BindingSource1 As BindingSource
     Friend WithEvents Button1 As Button
     Friend WithEvents ButtonFormView As Button
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents ComboBoxShortCuts2 As ComboBox
     Friend WithEvents ButtonUnregister As Button
     Friend WithEvents ComboBoxEntryMode As ComboBox
     Friend WithEvents BindingSourcereg As BindingSource

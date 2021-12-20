@@ -16,6 +16,9 @@ Module ModuleGeneral
     Public mappDBCloud As New ClassDB() '(cloud)
     Public objResult As New ClassExcelResult()
     Public objBroadsheet As New ClassBroadsheets()
+    Public objReports As New ClassReports()
+    Public objRTPS As New ClassApp
+
 
     Public conn As New MySql.Data.MySqlClient.MySqlConnection
     Dim oadDataGrid As MySqlDataAdapter
@@ -150,12 +153,21 @@ Module ModuleGeneral
                                                     FROM Results
                                                     GROUP BY Results.Session_idr, Results.course_code_idr, Results.result_timestamp;"
 
-    Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col171 As Session,count(broadsheets_all.Col2) AS NumStudents, first(broadsheets_all.ColNames) AS ColNames
+    Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col171,count(broadsheets_all.Col2) AS NumStudents,broadsheets_all.col172, first(broadsheets_all.col173) AS Faculty, broadsheets_all.Col174, first(broadsheets_all.Col175) AS Footers
                                                     FROM broadsheets_all
-                                                    GROUP BY broadsheets_all.Col171;"   'todo "Col" & LAST_COL
-    Public STR_SQL_ALL_REG_SUMMARY As String = "SELECT reg.session_idr As Session,count(reg.matno) AS NumStudents
+                                                    GROUP BY broadsheets_all.Col171,broadsheets_all.Col172,broadsheets_all.Col174;"   'todo "Col" & LAST_COL
+    Public STR_SQL_ALL_REG_SUMMARY As String = "SELECT reg.session_idr, reg.dept_idr, reg.level, count(reg.matno) AS NumStudents
+                                                    FROM reg
+                                                    GROUP BY reg.session_idr,reg.dept_idr,reg.level;"   'todo "Col" & LAST_COL
+    Public STR_SQL_ALL_REG As String = "SELECT reg.session_idr As Session, count(reg.matno) AS NumStudents
                                                     FROM reg
                                                     GROUP BY reg.session_idr;"   'todo "Col" & LAST_COL
+
+    Public STR_SQL_ALL_REG_COUNT As String = "SELECT  count(reg.matno) AS NumStudents
+                                                    FROM reg;"   'todo "Col" & LAST_COL
+
+    Public STR_SQL_ALL_STUDENTS_COUNT As String = "SELECT count(matno) AS NumStudents
+                                                    FROM students;"   'todo "Col" & LAST_COL
 
     Public STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE As String = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Departments.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
                  FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Departments On students.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code 
@@ -180,6 +192,7 @@ Module ModuleGeneral
                  HAVING (((Courses.course_semester)>0))
                  ORDER BY Courses.course_level, Courses.course_order;" 'and level
     Public STR_COURSES_ORDER_GENERAL As String = "SELECT * FROM Courses_order WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
+    Public STR_COURSES_ORDER_GENERAL_ALL As String = "SELECT * FROM Courses_order;"
 
     Public STR_SQL_REGISTERED_STUDENTS As String = "SELECT Reg.MatNo, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr,   
                             students.student_firstname, students.student_surname, students.student_othernames, 
@@ -193,8 +206,8 @@ Module ModuleGeneral
                       Results.Session_idr  FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
                       Results.Session_idr HAVING (((Students.matno)='{0}') AND ((Results.Session_idr)='{1}'));"
 
-    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Students.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
-                      Results.Session_idr  FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
+    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Students.MatNo, Last(Results.total) AS Score, Results.course_code_idr, 
+                      Results.Session_idr   FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
                       Results.Session_idr HAVING (((Students.matno)='{0}'));"
     Public STR_SQL_STUDENTS_FULL_NAME As String = "SELECT * FROM Students WHERE matno='{0}'"
 
@@ -259,6 +272,8 @@ Module ModuleGeneral
 
     'BroadSheets
     Public STR_SQL_ALL_BROADSHEET As String = "SELECT * FROM broadsheets_all" ' WHERE( (session='{0}') And (level={1}));"
+    Public STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL As String = "SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'));"
+
     Public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';"
 
     'Public STR_SQL_ALL_USERS As String = "SELECT user_id, username, status as STATUS from tblusers order by status"
@@ -566,7 +581,22 @@ Module ModuleGeneral
         End Using
         Return dMD5Hsh
     End Function
+    Function Array2sTR(s As String()) As String
+        Dim tmpStr As String = ""
 
+        For i = 0 To s.Length - 1
+            tmpStr = tmpStr & s(i) & ","
+        Next
+        Return tmpStr
+    End Function
+    Function str2Array(s As String) As String()
+        Dim tmpStr As String() = {""}
+
+
+        tmpStr = s.Split(",")
+        'tmpStr = s.Substring(0, 0)
+        Return tmpStr
+    End Function
     Public Sub showError(ByVal _msg As String)
         MessageBox.Show("WARNING : " & _msg & Chr(13) & " Click OK to continue.", strApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
@@ -606,68 +636,6 @@ Module ModuleGeneral
     'Public accounts As New _accounts
 
 
-    Function creatDataSetSenate() As DataSet
-        'Very good!
-        Dim ds As New DataSet
-        Dim dt As DataTable
-        Dim dr As DataRow
-        Dim idCoulumn, matnoCoulumn As DataColumn
-        Dim nameCoulumn, surnameCoulumn, statusCoulumn, creditsCoulumn As DataColumn
-
-        Dim i As Integer
-        Dim sumCr As Double = 0
-        Dim SumDr As Double = 0
-
-        dt = New DataTable()
-        idCoulumn = New DataColumn("SN", Type.GetType("System.Int32"))
-        matnoCoulumn = New DataColumn("MATNO", Type.GetType("System.String"))
-        surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
-        nameCoulumn = New DataColumn("Other Names", Type.GetType("System.String"))
-        statusCoulumn = New DataColumn("Status", Type.GetType("System.String"))
-        creditsCoulumn = New DataColumn("Credits", Type.GetType("System.Double"))
-
-
-        dt.TableName = "Senate"
-        dt.Columns.Add(idCoulumn)
-        dt.Columns.Add(matnoCoulumn)
-        dt.Columns.Add(surnameCoulumn)
-        dt.Columns.Add(nameCoulumn)
-        dt.Columns.Add(statusCoulumn)
-        dt.Columns.Add(creditsCoulumn)
-
-        dr = dt.NewRow()
-        dr("SN") = 1
-        dr("MATNO") = "ENG000222111"
-        dr("SURNAME") = "OBINNA"
-        dr("Other Names") = "Amenaghawon"
-        dr("Status") = "Successful"
-        dr("Credits") = 22
-        dt.Rows.Add(dr)
-        SumDr = SumDr + 1
-
-
-
-
-        ds.Tables.Add(dt)
-
-        For i = 0 To ds.Tables(0).Rows.Count - 1
-            'MsgBox(ds.Tables(0).Rows(i).Item(0).ToString & "   --   " & ds.Tables(0).Rows(i).Item(1).ToString)
-        Next i
-
-        'Visualization
-        'dgw.DataSource = ds.Tables("Senate").DefaultView
-
-        'Report stuff
-        'With Me.ReportViewer1.LocalReport
-
-        '    .DataSources.Clear()
-        '    '.ReportPath = My.Application.Info.DirectoryPath
-        '    .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
-        'End With
-        'Me.ReportViewer1.RefreshReport()
-        'Works perfectly
-        Return ds
-    End Function
     Function creatDataSet() As DataSet
         'Very good!
         Dim ds As New DataSet

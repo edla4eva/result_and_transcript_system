@@ -37,6 +37,7 @@
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'This calls the changemenu method that sets it to the home screen
         ChangeMenu("Home")
+        My.Application.SaveMySettingsOnExit = True
     End Sub
 
     Public Sub New()
@@ -170,6 +171,8 @@
         Select Case menu
             Case "Settings"
                 addForm(FormSettings)
+            Case "Help"
+                addForm(FormHelp)
             Case "CourseAdviser"
                 addForm(FormCourseAdviser)
             Case "CourseLecturer"
@@ -192,6 +195,10 @@
                 addForm(FormViewResults)
             Case "viewBroadsheets"
                 addForm(FormViewBroadsheets)
+            Case "viewSenate"
+                addForm(FormReport)
+            Case "viewRegs"
+                addForm(FormViewRegs)
                 'Me.WindowState = FormWindowState.Maximized
         End Select
     End Sub
@@ -278,6 +285,11 @@
     End Sub
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
+    End Sub
+
+    Private Sub Buttonhelp_Click(sender As Object, e As EventArgs) Handles Buttonhelp.Click
+        ActiveButton(sender, RGBColors.colorCrimson)
+        ChangeMenu("Help")
     End Sub
 End Class
 

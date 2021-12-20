@@ -30,8 +30,10 @@ Partial Class FormViewBroadsheets
         Me.Label5 = New System.Windows.Forms.Label()
         Me.TextBoxSession = New System.Windows.Forms.TextBox()
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxLevel = New System.Windows.Forms.ComboBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonDelete = New System.Windows.Forms.Button()
+        Me.ButtonRework = New System.Windows.Forms.Button()
         Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonSearchBroadheet = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
@@ -39,9 +41,6 @@ Partial Class FormViewBroadsheets
         Me.ButtonAdjustTemplate = New System.Windows.Forms.Button()
         Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
         Me.PanelModify = New System.Windows.Forms.Panel()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.LabelClosePanelModify = New System.Windows.Forms.Label()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -56,6 +55,7 @@ Partial Class FormViewBroadsheets
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Location = New System.Drawing.Point(29, 179)
         Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(628, 326)
         Me.DataGridView1.TabIndex = 9
         '
@@ -117,19 +117,21 @@ Partial Class FormViewBroadsheets
         Me.ComboBoxDepartments.TabIndex = 24
         Me.ComboBoxDepartments.Text = "Computer Engineering"
         '
-        'ComboBox1
+        'ComboBoxLevel
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
-        Me.ComboBox1.Location = New System.Drawing.Point(16, 70)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(198, 21)
-        Me.ComboBox1.TabIndex = 25
-        Me.ComboBox1.Text = "100"
+        Me.ComboBoxLevel.FormattingEnabled = True
+        Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
+        Me.ComboBoxLevel.Location = New System.Drawing.Point(16, 70)
+        Me.ComboBoxLevel.Name = "ComboBoxLevel"
+        Me.ComboBoxLevel.Size = New System.Drawing.Size(198, 21)
+        Me.ComboBoxLevel.TabIndex = 25
+        Me.ComboBoxLevel.Text = "100"
         '
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonDelete)
+        Me.SidePanel.Controls.Add(Me.ButtonRework)
         Me.SidePanel.Controls.Add(Me.ButtonClose)
         Me.SidePanel.Controls.Add(Me.ButtonSearchBroadheet)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
@@ -140,6 +142,32 @@ Partial Class FormViewBroadsheets
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 517)
         Me.SidePanel.TabIndex = 27
+        '
+        'ButtonDelete
+        '
+        Me.ButtonDelete.FlatAppearance.BorderSize = 0
+        Me.ButtonDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonDelete.ForeColor = System.Drawing.Color.White
+        Me.ButtonDelete.Location = New System.Drawing.Point(3, 247)
+        Me.ButtonDelete.Name = "ButtonDelete"
+        Me.ButtonDelete.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonDelete.TabIndex = 10
+        Me.ButtonDelete.Text = "Delete"
+        Me.ButtonDelete.UseVisualStyleBackColor = True
+        '
+        'ButtonRework
+        '
+        Me.ButtonRework.FlatAppearance.BorderSize = 0
+        Me.ButtonRework.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonRework.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonRework.ForeColor = System.Drawing.Color.White
+        Me.ButtonRework.Location = New System.Drawing.Point(3, 311)
+        Me.ButtonRework.Name = "ButtonRework"
+        Me.ButtonRework.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonRework.TabIndex = 9
+        Me.ButtonRework.Text = "ReWork"
+        Me.ButtonRework.UseVisualStyleBackColor = True
         '
         'ButtonClose
         '
@@ -222,12 +250,9 @@ Partial Class FormViewBroadsheets
         Me.PanelModify.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PanelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PanelModify.Controls.Add(Me.ComboBox2)
-        Me.PanelModify.Controls.Add(Me.TextBox2)
-        Me.PanelModify.Controls.Add(Me.Label6)
         Me.PanelModify.Controls.Add(Me.ComboBoxSessions)
         Me.PanelModify.Controls.Add(Me.LabelClosePanelModify)
-        Me.PanelModify.Controls.Add(Me.ComboBox1)
+        Me.PanelModify.Controls.Add(Me.ComboBoxLevel)
         Me.PanelModify.Controls.Add(Me.Label2)
         Me.PanelModify.Controls.Add(Me.ComboBoxDepartments)
         Me.PanelModify.Controls.Add(Me.TextBoxDepartment)
@@ -239,33 +264,6 @@ Partial Class FormViewBroadsheets
         Me.PanelModify.Name = "PanelModify"
         Me.PanelModify.Size = New System.Drawing.Size(625, 142)
         Me.PanelModify.TabIndex = 30
-        '
-        'ComboBox2
-        '
-        Me.ComboBox2.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
-        Me.ComboBox2.Location = New System.Drawing.Point(332, 115)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(161, 21)
-        Me.ComboBox2.TabIndex = 32
-        Me.ComboBox2.Text = "2018/2019"
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Location = New System.Drawing.Point(295, 115)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(33, 20)
-        Me.TextBox2.TabIndex = 31
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(245, 122)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(16, 13)
-        Me.Label6.TabIndex = 30
-        Me.Label6.Text = "to"
         '
         'LabelClosePanelModify
         '
@@ -307,7 +305,7 @@ Partial Class FormViewBroadsheets
     Friend WithEvents Label5 As Label
     Friend WithEvents TextBoxSession As TextBox
     Friend WithEvents ComboBoxDepartments As ComboBox
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents ComboBoxLevel As ComboBox
     Friend WithEvents SidePanel As Panel
     Friend WithEvents ButtonSearchBroadheet As Button
     Friend WithEvents ButtonCloud As Button
@@ -316,9 +314,8 @@ Partial Class FormViewBroadsheets
     Friend WithEvents ComboBoxSessions As ComboBox
     Friend WithEvents PanelModify As Panel
     Friend WithEvents LabelClosePanelModify As Label
-    Friend WithEvents ComboBox2 As ComboBox
-    Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents Label6 As Label
     Friend WithEvents ButtonClose As Button
     Friend WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ButtonRework As Button
+    Friend WithEvents ButtonDelete As Button
 End Class

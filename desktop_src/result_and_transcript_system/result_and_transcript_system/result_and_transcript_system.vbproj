@@ -72,6 +72,24 @@
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.7.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.7.9\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
@@ -125,6 +143,7 @@
     <Compile Include="ClassBroadsheets.vb" />
     <Compile Include="ClassDB.vb" />
     <Compile Include="ClasseEF.vb" />
+    <Compile Include="ClassApp.vb" />
     <Compile Include="ClassExcel.vb" />
     <Compile Include="ClassExcelFile.vb" />
     <Compile Include="ClassExcelResult.vb" />
@@ -142,10 +161,28 @@
     <Compile Include="FormAdmin.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormHelp.Designer.vb">
+      <DependentUpon>FormHelp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormHelp.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReportBroadsheet.Designer.vb">
+      <DependentUpon>FormReportBroadsheet.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormReportBroadsheet.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormReport.Designer.vb">
       <DependentUpon>FormReport.vb</DependentUpon>
     </Compile>
     <Compile Include="FormReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewRegs.Designer.vb">
+      <DependentUpon>FormViewRegs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewRegs.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormViewResults.Designer.vb">
@@ -255,8 +292,17 @@
     <EmbeddedResource Include="FormAdmin.resx">
       <DependentUpon>FormAdmin.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormHelp.resx">
+      <DependentUpon>FormHelp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReportBroadsheet.resx">
+      <DependentUpon>FormReportBroadsheet.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormReport.resx">
       <DependentUpon>FormReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormViewRegs.resx">
+      <DependentUpon>FormViewRegs.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormViewResults.resx">
       <DependentUpon>FormViewResults.vb</DependentUpon>
@@ -304,6 +350,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ReportSenateCover.rdlc" />
+    <EmbeddedResource Include="ReportTranscript.rdlc" />
     <EmbeddedResource Include="ReportBroadSheet.rdlc" />
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +372,7 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Report1.rdlc" />
+    <EmbeddedResource Include="Report1.rdlc" />
     <None Include="ReportAccount.rdlc" />
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +386,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Male-Image.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SqlServerTypes\Loader.cs" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

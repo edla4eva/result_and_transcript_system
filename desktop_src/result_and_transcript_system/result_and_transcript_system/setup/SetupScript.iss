@@ -53,6 +53,22 @@ Source: "..\bin\debug\NPOI.OpenXml4Net.dll"; DestDir: "{app}"
 Source: "..\bin\debug\NPOI.OpenXmlFormats.dll"; DestDir: "{app}"
 Source: "..\bin\debug\MySql.Data.dll"; DestDir: "{app}"
 
+Source: "..\bin\debug\stdole.dll"; DestDir: "{app}"
+  Source: "..\bin\debug\Microsoft.VisualStudio.TextManager.Interop.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.VisualStudio.TextManager.Interop.8.0.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.VisualStudio.Shell.Interop.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.VisualStudio.Shell.Interop.8.0.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.VisualStudio.OLE.Interop.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.MSXML.dll"; DestDir: "{app}"
+Source: "..\bin\debug\EnvDTE.dll"; DestDir: "{app}"
+
+Source: "..\bin\debug\Microsoft.ReportViewer.ProcessingObjectModel.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.ReportViewer.DataVisualization.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.ReportViewer.Common.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.ReportViewer.Design.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.ReportViewer.WinForms.dll"; DestDir: "{app}"
+Source: "..\bin\debug\Microsoft.SqlServer.Types.dll"; DestDir: "{app}"
+
 ;pdb and xml todo
 Source: "..\bin\debug\ExcelDataReader.DataSet.pdb"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.pdb"; DestDir: "{app}"
@@ -63,7 +79,24 @@ Source: "..\bin\debug\ExcelDataReader.xml"; DestDir: "{app}"
 Source: "..\bin\debug\NPOI.OOXML.xml"; DestDir: "{app}"
 Source: "..\bin\debug\NPOI.xml"; DestDir: "{app}"
 
+ ;help files
+Source: "..\bin\debug\help\guide.html"; DestDir: "{app}\help\guide.html"
+Source: "..\bin\debug\help\js\bootstrap.min.js"; DestDir: "{app}\help\js\bootstrap.min.js"
 
+
+Source: "..\bin\debug\help\css\bootstrap.min.css"; DestDir: "{app}\help\css\bootstrap.min.css"
+Source: "..\bin\debug\help\css\bootstrap.css"; DestDir: "{app}\help\css\bootstrap.css"
+Source: "..\bin\debug\help\css\style.css"; DestDir: "{app}\help\css\style.css"
+Source: "..\bin\debug\help\css\sticky-menu.css"; DestDir: "{app}\help\css\sticky-menu.css"
+
+
+Source: "..\bin\debug\help\images\banner.jpg"; DestDir: "{app}\help\images\banner.jpg"
+Source: "..\bin\debug\help\images\banner2.jpg"; DestDir: "{app}\help\images\banner2.jpg"
+Source: "..\bin\debug\help\images\banner3.jpg"; DestDir: "{app}\help\images\banner3.jpg"
+Source: "..\bin\debug\help\images\header.svg"; DestDir: "{app}\help\images\header.svg"
+Source: "..\bin\debug\help\images\feature.svg"; DestDir: "{app}\help\images\feature.svg"
+Source: "..\bin\debug\help\images\content.svg"; DestDir: "{app}\help\images\content.svg"
+Source: "..\bin\debug\help\images\troubleshoot_updateable_query.jpg"; DestDir: "{app}\help\images\troubleshoot_updateable_query.jpg"
 ;samples
 Source: "..\bin\debug\samples\sample_broadsheet.xlsm"; DestDir: "{app}\samples"
 Source: "..\bin\debug\samples\Sample_result.xlsx"; DestDir: "{app}\samples"

@@ -39,6 +39,7 @@ Partial Class MainForm
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabelMax = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.Buttonhelp = New System.Windows.Forms.Button()
         Me.PanelContainer.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -90,6 +91,7 @@ Partial Class MainForm
         Me.SidePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.Buttonhelp)
         Me.SidePanel.Controls.Add(Me.PanelBtn)
         Me.SidePanel.Controls.Add(Me.ButtonSettings)
         Me.SidePanel.Controls.Add(Me.ButtonCurrent)
@@ -131,7 +133,7 @@ Partial Class MainForm
         Me.ButtonCurrent.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonCurrent.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonCurrent.ForeColor = System.Drawing.Color.White
-        Me.ButtonCurrent.Location = New System.Drawing.Point(3, 344)
+        Me.ButtonCurrent.Location = New System.Drawing.Point(3, 415)
         Me.ButtonCurrent.Name = "ButtonCurrent"
         Me.ButtonCurrent.Size = New System.Drawing.Size(128, 55)
         Me.ButtonCurrent.TabIndex = 4
@@ -157,7 +159,7 @@ Partial Class MainForm
         Me.ButtonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonExit.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonExit.ForeColor = System.Drawing.Color.White
-        Me.ButtonExit.Location = New System.Drawing.Point(6, 283)
+        Me.ButtonExit.Location = New System.Drawing.Point(6, 339)
         Me.ButtonExit.Name = "ButtonExit"
         Me.ButtonExit.Size = New System.Drawing.Size(128, 55)
         Me.ButtonExit.TabIndex = 2
@@ -254,6 +256,19 @@ Partial Class MainForm
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Close (X)"
         '
+        'Buttonhelp
+        '
+        Me.Buttonhelp.FlatAppearance.BorderSize = 0
+        Me.Buttonhelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Buttonhelp.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Buttonhelp.ForeColor = System.Drawing.Color.White
+        Me.Buttonhelp.Location = New System.Drawing.Point(3, 278)
+        Me.Buttonhelp.Name = "Buttonhelp"
+        Me.Buttonhelp.Size = New System.Drawing.Size(128, 55)
+        Me.Buttonhelp.TabIndex = 7
+        Me.Buttonhelp.Text = "Help"
+        Me.Buttonhelp.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -298,4 +313,5 @@ Partial Class MainForm
     Friend WithEvents ButtonSettings As Button
     Friend WithEvents PanelBtn As Panel
     Friend WithEvents Label1 As Label
+    Friend WithEvents Buttonhelp As Button
 End Class

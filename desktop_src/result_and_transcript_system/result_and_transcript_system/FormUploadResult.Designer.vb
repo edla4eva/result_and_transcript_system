@@ -31,6 +31,8 @@ Partial Class FormUploadResult
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.ButtonBatchUpload = New System.Windows.Forms.Button()
         Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonCheck = New System.Windows.Forms.Button()
@@ -84,6 +86,7 @@ Partial Class FormUploadResult
         Me.TimerResult = New System.Windows.Forms.Timer(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -133,6 +136,7 @@ Partial Class FormUploadResult
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.Panel2)
         Me.SidePanel.Controls.Add(Me.ButtonBatchUpload)
         Me.SidePanel.Controls.Add(Me.ButtonClose)
         Me.SidePanel.Controls.Add(Me.ButtonCheck)
@@ -146,13 +150,37 @@ Partial Class FormUploadResult
         Me.SidePanel.Size = New System.Drawing.Size(134, 675)
         Me.SidePanel.TabIndex = 6
         '
+        'Panel2
+        '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel2.BackColor = System.Drawing.Color.RoyalBlue
+        Me.Panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Panel2.Controls.Add(Me.Label11)
+        Me.Panel2.Location = New System.Drawing.Point(3, 3)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(139, 33)
+        Me.Panel2.TabIndex = 75
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.BackColor = System.Drawing.Color.Transparent
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.White
+        Me.Label11.Location = New System.Drawing.Point(22, 3)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(78, 24)
+        Me.Label11.TabIndex = 0
+        Me.Label11.Text = "Results"
+        '
         'ButtonBatchUpload
         '
         Me.ButtonBatchUpload.FlatAppearance.BorderSize = 0
         Me.ButtonBatchUpload.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonBatchUpload.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonBatchUpload.ForeColor = System.Drawing.Color.White
-        Me.ButtonBatchUpload.Location = New System.Drawing.Point(3, 20)
+        Me.ButtonBatchUpload.Location = New System.Drawing.Point(3, 53)
         Me.ButtonBatchUpload.Name = "ButtonBatchUpload"
         Me.ButtonBatchUpload.Size = New System.Drawing.Size(128, 55)
         Me.ButtonBatchUpload.TabIndex = 9
@@ -719,6 +747,8 @@ Partial Class FormUploadResult
         Me.Text = "Upload Result"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -783,4 +813,6 @@ Partial Class FormUploadResult
     Friend WithEvents ProgressBarBS As ProgressBar
     Friend WithEvents LabelProgress As Label
     Friend WithEvents TimerResult As Timer
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents Label11 As Label
 End Class

@@ -346,7 +346,7 @@ Public Class FormStudentsRegistration
     End Sub
 
 
-    Private Sub ButtonRegister_Click(sender As Object, e As EventArgs) Handles ButtonRegister.Click
+    Private Sub ButtonRegister_DataGridVersion(sender As Object, e As EventArgs)
         Dim dv As DataView
         Dim dt As DataTable
         dv = dgvCourses.DataSource
@@ -380,6 +380,35 @@ Public Class FormStudentsRegistration
                 dgvCourses.DataSource = dt.DefaultView
             End If
         End If
+    End Sub
+
+    Private Sub ButtonRegister_Click(sender As Object, e As EventArgs) Handles ButtonRegister.Click
+
+        If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
+                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+                If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+                    MsgBox("Already Registered")
+                Else
+                    If TextBoxCourse_1.Text = "" Then
+                        TextBoxCourse_1.Text = TextBoxCourseCode.Text
+                    Else
+                        TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & TextBoxCourseCode.Text
+                    End If
+                End If
+            ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
+                If TextBoxCourse_2.Text.Contains(TextBoxCourseCode.Text) Then
+                    MsgBox("Already Registered")
+                Else
+                    If TextBoxCourse_2.Text = "" Then
+                        TextBoxCourse_2.Text = TextBoxCourseCode.Text
+                    Else
+                        TextBoxCourse_2.Text = TextBoxCourse_2.Text & ";" & TextBoxCourseCode.Text
+                    End If
+                End If
+            End If
+
+            End If
+
     End Sub
 
     Private Sub dgvCourses_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCourses.CellClick
@@ -883,8 +912,8 @@ Public Class FormStudentsRegistration
     Private Sub ButtonShowAllReg_Click(sender As Object, e As EventArgs) Handles ButtonShowAllReg.Click
 
         If PanelAllReg.Visible = False Then
-            DataGridViewAlReg.DataSource = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0).DefaultView
-            Debug.Print(STR_SQL_ALL_REG_SUMMARY)
+            DataGridViewAlReg.DataSource = mappDB.GetDataWhere(STR_SQL_ALL_REG).Tables(0).DefaultView
+            Debug.Print(STR_SQL_ALL_REG)
             PanelAllReg.BringToFront()
             PanelAllReg.Visible = True
         Else
@@ -1089,5 +1118,29 @@ Public Class FormStudentsRegistration
             MsgBox(ex.Message)
         End Try
 
+    End Sub
+
+    Private Sub ComboBoxShortCuts2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxShortCuts2.SelectedIndexChanged
+        '        Add All 100L Courses
+        'Add All 200L Courses
+        'Add All 300L Courses
+        'Add All 400L Courses
+        'Add All 500L Courses
+        'Add All Departmetal Courses
+        'Add All Faculty Courses
+        If CheckedListBoxCourses.Items.Count < 1 Then
+            If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then mappDB.getAllCourses()
+            CheckedListBoxCourses.Items.Clear()
+            For Each key In dictAllCourseCodeKeyAndCourseUnitVal.Keys
+                CheckedListBoxCourses.Items.Add(key)
+            Next
+        End If
+
+
+        If ComboBoxShortCuts2.SelectedItem = "Add All 100L Courses" Then
+            For Each item In CheckedListBoxCourses.Items
+                If dictAllCourseCodeKeyAndCourseLevelVal(item) = "100" Then CheckedListBoxCourses.Items(item).checked = True
+            Next
+        End If
     End Sub
 End Class
