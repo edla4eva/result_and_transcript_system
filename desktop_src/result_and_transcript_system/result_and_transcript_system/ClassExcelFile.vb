@@ -80,7 +80,7 @@ Public Class ClassExcelFile
         End Try
 
     End Function
-    Public Function exportBroadsheettoExcelFile_NPOI(dv As DataView, fileName As String, objBS As ClassBroadsheets, dictCr As Dictionary(Of String, Integer), footers As String(), Optional showGrades As Boolean = False, Optional dvGrades As DataView = Nothing) As String
+    Public Function exportBroadsheettoExcelFile_NPOI(dv As DataView, fileName As String, objBS As ClassBroadsheets, dictCr As Dictionary(Of String, Integer), footers As String(), dOption As Integer, Optional showGrades As Boolean = False, Optional dvGrades As DataView = Nothing) As String
         Dim dt As DataTable = dv.ToTable
         Dim dtGrades As DataTable = Nothing
         Dim workbook As IWorkbook = New XSSFWorkbook()
@@ -110,30 +110,34 @@ Public Class ClassExcelFile
 
         '# Insert values for header
         row1 = sheet1.CreateRow(0)  'row1
-        row1.CreateCell(0).SetCellValue("")   'control row
-        row1 = sheet1.CreateRow(1)  'row2
         row1.CreateCell(0).SetCellValue(objBS.DepartmentName.ToUpper)   'row1.CreateCell(jCol).SetCellValue("S/N")
+        row1 = sheet1.CreateRow(1)  'row2
+        row1.CreateCell(0).SetCellValue(objBS.FacultyName.ToUpper)
         row1.GetCell(0).CellStyle = (styleMediumBorderCenter)
 
         row1 = sheet1.CreateRow(2)  'row3
-        row1.CreateCell(0).SetCellValue(objBS.FacultyName.ToUpper)  ''cell.SetCellValue(New XSSFRichTextString("This is a styled Faculty Name"))
+        row1.CreateCell(0).SetCellValue(objBS.SchoolName.ToUpper)  ''cell.SetCellValue(New XSSFRichTextString("This is a styled Faculty Name"))
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
         row1 = sheet1.CreateRow(3)  'row4
-        row1.CreateCell(0).SetCellValue(objBS.SchoolName.ToUpper)
-        row1.Cells(0).CellStyle = (styleMediumBorderCenter)
-        row1 = sheet1.CreateRow(4)  'row5
         row1.CreateCell(0).SetCellValue("EXAMINATION RECORD SHEET (" & objBS.Session & " Academic Session)")
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
-        row1 = sheet1.CreateRow(5)  'row6
-
-        row1.CreateCell(0).SetCellValue("LEVEL: " & objBS.Level.ToString)      'TODO: if 2yrs then 100L=        
-        If objBroadsheet.DeptId > 1 Then        'todo objBS.TwoYear=true
+        row1 = sheet1.CreateRow(4)  'row5
+        If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
             row1.GetCell(0).SetCellValue("YEAR " & (objBS.Level / 100).ToString)
+        Else
+            row1.CreateCell(0).SetCellValue("LEVEL: " & objBS.Level.ToString)
         End If
-
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
+
+        row1 = sheet1.CreateRow(5)  'row6
+        row1.CreateCell(COURSE_START_COL).SetCellValue("")
+        row1.Cells(0).CellStyle = (styleMediumBorderCenter)
+
         row1 = sheet1.CreateRow(6)  'row7
-        row1.CreateCell(0).SetCellValue("")
+        row1.CreateCell(COURSE_START_COL).SetCellValue("FIRST SEMESTER COURSES")
+        row1.CreateCell(COURSE_START_COL_2).SetCellValue("SECOND SEMESTER COURSES")
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
 
         '#STYLE: Special case of merged cells border
@@ -147,9 +151,13 @@ Public Class ClassExcelFile
         sheet1.AddMergedRegion(cR)
         cR = New CellRangeAddress(5, 5, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
-        ' applyDBorderToMergedReg(cR, sheet1)
+
+        cR = New CellRangeAddress(6, 6, COURSE_START_COL, COURSE_END_COL - 1)
+        sheet1.AddMergedRegion(cR)
+        cR = New CellRangeAddress(6, 6, COURSE_START_COL_2, COURSE_END_COL_2 - 1)
+        sheet1.AddMergedRegion(cR)
+
         'sets the border of the merged cells
-        cR = New CellRangeAddress(1, 5, 0, LAST_COL)
         RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
         RegionUtil.SetBorderBottom(BorderStyle.Medium, cR, sheet1)
         RegionUtil.SetBorderLeft(BorderStyle.Medium, cR, sheet1)
@@ -176,7 +184,14 @@ Public Class ClassExcelFile
             row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
             'Proper headers
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("SN") Then row1.GetCell(jCol).SetCellValue("S/N")
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO.")
+            If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO. DMI")
+            Else
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO. ENG..")
+            End If
+
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_1") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (FIRST SEMESTER)")
             If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATALL") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS")
 
@@ -187,9 +202,17 @@ Public Class ClassExcelFile
             '
             If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then Exit Function 'no need '
             If jCol >= COURSE_START_COL And dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dt.Columns(jCol).ColumnName.ToString) Then rowCredits.CreateCell(jCol).SetCellValue(dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(jCol).ColumnName.ToString))
-            'Style
+            'Style  9course code headers)
             If jCol < COURSE_START_COL Then row1.Cells(jCol).CellStyle = (styleMediumBorder) Else row1.Cells(jCol).CellStyle = (styleMediumBorderVertical)
-            cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+            'TODO: selectively merge als excluding course codes
+            If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
+                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+            ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
+                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+            Else
+                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+            End If
+
             sheet1.AddMergedRegion(cR)
             RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
             RegionUtil.SetBorderBottom(BorderStyle.Medium, cR, sheet1)
@@ -250,7 +273,14 @@ Public Class ClassExcelFile
 
         Dim strFooterVal As Integer() = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
 
-        doFooters(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
+        If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
+            doFootersYr(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
+        Else
+            doFootersLevel(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
+        End If
+
         'OR
         Dim rowFooter As IRow
         For i = 0 To 9
@@ -333,7 +363,7 @@ Public Class ClassExcelFile
         Return fileName
     End Function
 
-    Public Sub doFooters(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String(), styleSignFooter As ICellStyle)
+    Public Sub doFootersLevel(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String(), styleSignFooter As ICellStyle)
         Dim rowFooter As IRow
         rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 1)
         rowFooter.CreateCell(1) _
@@ -388,6 +418,29 @@ Public Class ClassExcelFile
         cRFooter = New CellRangeAddress(footerRowount, footerRowount, COURSE_FAIL_COL, COURSE_FAIL_COL + 1)
         sheet1.AddMergedRegion(cRFooter)
         RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
+
+
+    End Sub
+    Public Sub doFootersYr(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String(), styleSignFooter As ICellStyle)
+        Dim rowFooter As IRow
+        'final footers HOD, dean etc
+        Dim footerRowount As Integer = rowCount + ALL_HEADERS_COUNT + 11 + 3
+        Dim cRFooter As CellRangeAddress = New CellRangeAddress(footerRowount, footerRowount, 2, 6)
+
+        rowFooter = sheet1.CreateRow(footerRowount)    'account for 9 header rows
+        rowFooter.CreateCell(2).SetCellValue(footers(0))
+        rowFooter.CreateCell(TCP_1_COL).SetCellValue(footers(1))
+        rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue(footers(2))
+        'titles/position
+        rowFooter = sheet1.CreateRow(footerRowount + 1)    'account for 9 header rows
+        rowFooter.CreateCell(2).SetCellValue("Ag. Director")
+
+
+        'Style
+        cRFooter = New CellRangeAddress(footerRowount, footerRowount, FULLNAME_COL, FULLNAME_COL + 1)
+        sheet1.AddMergedRegion(cRFooter)
+        RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
+
 
 
     End Sub

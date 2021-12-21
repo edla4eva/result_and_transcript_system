@@ -143,7 +143,29 @@ Module ModuleGeneral
     Public DEFAULT_DISP As String = ""
     Public RESULT_NOT_IN_R_DISP As String = ""
 
+    'mutiplier
+    Public BGW_EXPORT_EXCEL_YR_MILTIPLIER As Integer = 10    'multiplier
+    Public BGW_EXPORT_EXCEL_LEVEL_MILTIPLIER As Integer = 1    'multiplier
 
+    'Base constant
+    Public BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT As Integer = 100
+    Public BGW_EXPORT_EXCEL_TEMPLATE_BASE_CONSTANT As Integer = 1000
+
+    'scores
+    Public BGW_EXPORT_EXCEL_1ST_SEM_SCORES As Integer = 1
+    Public BGW_EXPORT_EXCEL_2ND_SEM_SCORES As Integer = 2
+    Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
+    'Grades
+    Public BGW_EXPORT_EXCEL_1ST_SEM_GRADES As Integer = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + BGW_EXPORT_EXCEL_1ST_SEM_SCORES
+    Public BGW_EXPORT_EXCEL_2ND_SEM_GRADES As Integer = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + BGW_EXPORT_EXCEL_2ND_SEM_SCORES
+    Public BGW_EXPORT_EXCEL_ALL_SEM_GRADES As Integer = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + BGW_EXPORT_EXCEL_ALL_SEM_SCORES
+
+
+
+
+    'mutiplier
+    Public BGW_PROCESS_INTERROP_YR_SCORES As Integer = 1
+    Public BGW_PROCESS_BUILTIN_NPOI_LEVEL As Integer = 2
 
     'Queries
     'FormResult

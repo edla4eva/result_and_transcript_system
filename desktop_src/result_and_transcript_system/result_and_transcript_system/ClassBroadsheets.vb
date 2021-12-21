@@ -43,7 +43,7 @@ Public Class ClassBroadsheets
     Private _processedBroadsheetFileName As String = Nothing
     Private _broadsheetDataDS As DataSet
     Private _levelCGPAPercentages(9) As Double
-
+    Private _dts(0 To 1) As DataTable
 
     Private _dean As String = "Name of Dean"
     Private _hod As String = "Name of HOD"
@@ -56,6 +56,14 @@ Public Class ClassBroadsheets
     Private _deptId As Integer = 1
 
 
+    Public Property dataTablesScoresAndGrades() As DataTable()
+        Get
+            Return _dts
+        End Get
+        Set(ByVal value As DataTable())
+            _dts = value
+        End Set
+    End Property
     Public Property levelCGPaPercentages() As Double()
         Get
             Return _levelcGPAPercentages
@@ -376,6 +384,9 @@ Public Class ClassBroadsheets
         Dim inxC As Integer = 0
         Dim levelPos = 0
 
+
+        Dim dtGrades As New DataTable
+
         For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
             If dt.Columns(inxC).ColumnName.Contains("REPEATED") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
             If dt.Columns(inxC).ColumnName.Contains("TCP_") Or dt.Columns(inxC).ColumnName.Contains("TCR_") Then Continue For
@@ -407,20 +418,29 @@ Public Class ClassBroadsheets
                         Else
                             dt.Rows(iMainDS).Item(tmpStrCourseCode) = -3
                         End If
+
                     Next
                 End If
 
             End If
-            objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
 
+            objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
         Next
 
+        dtGrades = dt
+
         'Now Update calculated fields in dataSet
+
+        Dim dts(0 To 1) As DataTable
         If isInterrop Then  'TODO: impliment condition
-            dt = updateDatasetWithFomula(dt, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits)
+            dts = updateDatasetWithFomula(dt, dtGrades, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits)
         Else
-            dt = updateDatasetWithComputedValues(dt, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1) 'Update dt Datatable with scores
+            dts = updateDatasetWithComputedValues(dt, dtGrades, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1) 'Update dt Datatable with scores
         End If
+
+        dt = dts(0)
+        dtGrades = dts(1)
+        objBroadsheet.dataTablesScoresAndGrades = dts
 
         'Retain global copy of useful data stored in dictionaries
         objBroadsheet.Level = course_level
@@ -452,7 +472,7 @@ Public Class ClassBroadsheets
         tmpCol = New DataColumn("RepeatCourses_1", Type.GetType("System.String")) '7 syst
         dt.Columns.Add(tmpCol)
         For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 '7 + 55 - 1 =61'create columns for courses 'TODO: 1st and second
-            tmpCol = New DataColumn("ColUNIQUE" & j, Type.GetType("System.Int32"))  '8 OR (7) ZERO INDEX
+            tmpCol = New DataColumn("ColUNIQUE" & j, Type.GetType("System.String"))  '8 OR (7) ZERO INDEX System.Int32"
             dt.Columns.Add(tmpCol)
         Next
         tmpCol = New DataColumn("TCF_1", Type.GetType("System.String")) '62
@@ -464,7 +484,7 @@ Public Class ClassBroadsheets
         tmpCol = New DataColumn("RepeatCourses_2", Type.GetType("System.String")) '65
         dt.Columns.Add(tmpCol)
         For j = COURSE_START_COL_2 To COURSE_START_COL_2 + MAX_COURSES_2 - 1 '7 + 55 - 1 'create columns for courses 'TODO: 1st and second
-            tmpCol = New DataColumn("ColUNIQUE" & j, Type.GetType("System.Int32"))
+            tmpCol = New DataColumn("ColUNIQUE" & j, Type.GetType("System.String"))
             dt.Columns.Add(tmpCol)
         Next
         tmpCol = New DataColumn("TCF_2", Type.GetType("System.String")) '121
@@ -528,14 +548,16 @@ Public Class ClassBroadsheets
         End If
         Return dictMATNO
     End Function
-    Function updateDatasetWithComputedValues(dt As DataTable, dictAllCourseCodeKeyAndCourseUnitVal As Dictionary(Of String, Integer), courses As String(), credits As Integer(), course_level As String, dictAllCourseCodeKeyAndCourseLevelVal As Dictionary(Of String, Integer), dictRegistered_1 As Dictionary(Of String, String)) As DataTable
+    'TODO: improve code quality by avoiding modyfying parameters dt and dtGrades
+    Function updateDatasetWithComputedValues(dt As DataTable, dtGrades As DataTable, dictAllCourseCodeKeyAndCourseUnitVal As Dictionary(Of String, Integer), courses As String(), credits As Integer(), course_level As String, dictAllCourseCodeKeyAndCourseLevelVal As Dictionary(Of String, Integer), dictRegistered_1 As Dictionary(Of String, String)) As DataTable()
         'compute every thing first
-
+        Dim dts(0 To 1) As DataTable
         Dim countRows As Integer = dt.Rows.Count - 1    'todo: move up
         Dim iScore As Integer = 0
         Dim iMarker(5) As Integer
         Dim tmpStrColName As String = ""
         Dim tmpStrR As String = ""
+        Dim tmpStrRGrades As String = ""
         Dim scores(160) As String
         Dim grades(160) As String
         Dim scores_1(NUM_COURSES_PER_LEVEL_1 * NUM_LEVELS) As String
@@ -572,20 +594,30 @@ Public Class ClassBroadsheets
                     iScore = iScore + 1
                     'compile repeated registered courses for 1st semester
                     If tmpStrR = "" And dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then    'only lower level courses
-                        If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & scores(j)   'avoid leading ","
+                        If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then
+                            tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & scores(j)   'avoid leading ","
+                            tmpStrRGrades = tmpStrRGrades & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)   'avoid leading ","
+                        End If
                     ElseIf dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then
-                        If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & scores(j)
+                        If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then
+                            tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & scores(j)
+                            tmpStrRGrades = tmpStrRGrades & ", " & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)
+                        End If
                     End If
                 Else
                     scores(j) = 0
                     If iMarker(0) = Nothing Then iMarker(0) = j   'on off marker
                 End If
+                'dtGrades.Columns(j).DataType = Type.GetType("System.String")
+                If IsDBNull(dt.Rows(i).Item(j)) Then dt.Rows(i).Item(j) = ""
+                dtGrades.Rows(i).Item(j) = getGRADE(dt.Rows(i).Item(j), Nothing, Nothing)
                 objBroadsheet.progress = (i / countRows * 90)
             Next
             dt.Rows(i).Item("RepeatCourses_1") = tmpStrR
-
+            dtGrades.Rows(i).Item("RepeatCourses_1") = tmpStrRGrades
 
             tmpStrR = ""
+            tmpStrRGrades = ""
             For j = COURSE_START_COL_2 To COURSE_END_COL_2 - 1  'Second semester
                 tmpStrColName = dt.Columns(j).ColumnName
                 scores(j) = -4.ToString 'initialize on the fly  'TODO
@@ -604,19 +636,29 @@ Public Class ClassBroadsheets
                     iScore = iScore + 1
                     'compile repeated registered courses for 2nd semester
                     If tmpStrR = "" And dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j).ToString) Then    'only lower level courses
-                        If (dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level)) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & scores(j)   'avoid leading ","
+                        If (dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level)) And IsRegisteredScore(scores(j)) Then
+                            tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & scores(j)   'avoid leading ","
+                            tmpStrRGrades = tmpStrRGrades & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)   'avoid leading ","
+                        End If
                     ElseIf dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j).ToString) Then
-                        If (dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level)) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & scores(j)
+                        If (dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level)) And IsRegisteredScore(scores(j)) Then
+                            tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & scores(j)
+                            tmpStrRGrades = tmpStrRGrades & ", " & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)
+                        End If
                     End If
                 Else
                     scores(j) = 0
                     If iMarker(1) = Nothing Then iMarker(1) = j
                 End If
+                If IsDBNull(dt.Rows(i).Item(j)) Then dt.Rows(i).Item(j) = ""
+                dtGrades.Rows(i).Item(j) = getGRADE(dt.Rows(i).Item(j), Nothing, Nothing)
                 objBroadsheet.progress = (j / COURSE_END_COL_2 * 95)
             Next
             dt.Rows(i).Item("RepeatCourses_2") = tmpStrR
+            dtGrades.Rows(i).Item("RepeatCourses_2") = tmpStrRGrades
 
             dt.Rows(i).Item("RepeatAll") = dt.Rows(i).Item("RepeatCourses_1") & " " & dt.Rows(i).Item("RepeatCourses_2")
+            dtGrades.Rows(i).Item("RepeatAll") = dt.Rows(i).Item("RepeatCourses_1") & " " & dt.Rows(i).Item("RepeatCourses_2")
 
             objBroadsheet.progressStr = "Computing grades " & " ..."
             grades = getGRADES(scores, Nothing, Nothing)
@@ -636,7 +678,7 @@ Public Class ClassBroadsheets
             'levelPercentages(8) = 0
             'objBroadsheet.levelcgpaPercentages = levelPercentages
 
-            gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelcgpaPercentages)
+            gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             dt.Rows(i).Item("GPA") = gpa.ToString
             objBroadsheet.progressStr = "Computing Credits registered" & " ..."
             TCRs = getAllTCR(scores, credits, objBroadsheet.Level)
@@ -657,7 +699,9 @@ Public Class ClassBroadsheets
 
             objBroadsheet.progress = (i / countRows * 95)  'max 80+16 = 96%
         Next
-        Return dt
+        dts(0) = dt
+        dts(1) = dtGrades
+        Return dts
     End Function
     Function createBroadsheetGrades(dt As DataTable) As DataTable
         Dim countRows As Integer = dt.Rows.Count
@@ -686,6 +730,7 @@ Public Class ClassBroadsheets
             dtNew.Rows.Add(dGrades)
         Next
         'Now overwrite matno name etc
+        Dim tmpRepeated As String()
         For i = 0 To countRows - 1
             For j = 0 To dt.Columns.Count - 1
                 If j < COURSE_START_COL Then
@@ -694,41 +739,51 @@ Public Class ClassBroadsheets
                     dtNew.Rows(i).Item(j) = dt.Rows(i).Item(j)
                 ElseIf j > COURSE_END_COL_2 And j <= dt.Columns.Count - 1 Then
                     dtNew.Rows(i).Item(j) = dt.Rows(i).Item(j)
-                Else
+                ElseIf j = REPEATED_1_COL Then
+                    'tmpRepeated = Split(dt.Rows(i).Item(j), ", ")
+                    'For Each strT In tmpRepeated
+                    '    strT.Substring(strT.IndexOf("/", 0, 2)
+                    'Next
+                ElseIf j = REPEATED_2_COL Then
+
+                ElseIf j = REPEATED_ALL_COL Then
+                    dtNew.Rows(i).Item(j) = dtNew.Rows(i).Item(REPEATED_1_COL) & ", " & dtNew.Rows(i).Item(REPEATED_2_COL)
                 End If
             Next
         Next
 
-        ''todo: handle repeated and ailed
-        'Dim tmpStrColName As String
-        'Dim tmpStrR As String = ""
-        'Dim courses(LAST_COL) As String
-        'Dim scores(LAST_COL) As String
-        'Dim credits(LAST_COL) As Integer
-        'For i = 0 To countRows - 1
-        '    For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
-        '        tmpStrColName = dt.Columns(j).ColumnName
-        '        scores(j) = -4.ToString 'initialize on the fly  'TODO
-        '        credits(j) = 0 'initialize on the fly  'TOD
+        'todo: handle repeated and failed
+        Dim tmpStrColName As String
+        Dim tmpStrR As String = ""
+        Dim courses(LAST_COL) As String
+        Dim scores(LAST_COL) As String
+        Dim credits(LAST_COL) As Integer
+        For i = 0 To countRows - 1
+            For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
+                tmpStrColName = dt.Columns(j).ColumnName
+                scores(j) = -4.ToString 'initialize on the fly  'TODO
+                credits(j) = 0 'initialize on the fly  'TOD
 
-        '        courses(j) = tmpStrColName
-        '        If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStrColName) And Not tmpStrColName.Contains("ColUNIQUE") Then
-        '            scores(j) = dt.Rows(i).Item(j).ToString
-        '            credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStrColName)
-        '            'compile repeated registered courses for 1st semester
-        '            If tmpStrR = "" And dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then    'only lower level courses
-        '                If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & scores(j)   'avoid leading ","
-        '            ElseIf dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then
-        '                If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < CInt(course_level) And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & scores(j)
-        '            End If
-        '        Else
-        '            scores(j) = 0
-        '        End If
-        '    Next
-        'Next
+                courses(j) = tmpStrColName
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStrColName) And Not tmpStrColName.Contains("ColUNIQUE") Then
+                    scores(j) = dt.Rows(i).Item(j).ToString
+                    credits(j) = dictAllCourseCodeKeyAndCourseUnitVal(tmpStrColName)
+                    'compile repeated registered courses for 1st semester
+                    If tmpStrR = "" And dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then    'only lower level courses
+                        If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < objBroadsheet.Level And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)   'avoid leading ","
+                    ElseIf dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(courses(j)) Then
+                        If dictAllCourseCodeKeyAndCourseLevelVal(courses(j)) < objBroadsheet.Level And IsRegisteredScore(scores(j)) Then tmpStrR = tmpStrR & ", " & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)
+                    End If
+                Else
+                    scores(j) = 0
+                End If
+
+                dtNew.Rows(i).Item(j) = tmpStrR
+            Next
+        Next
         Return dtNew
     End Function
-    Function updateDatasetWithFomula(dt As DataTable, dictAllCourseCodeKeyAndCourseUnitVal As Dictionary(Of String, Integer), courses As String(), credits As Integer()) As DataTable
+    Function updateDatasetWithFomula(dt As DataTable, dtgrades As DataTable, dictAllCourseCodeKeyAndCourseUnitVal As Dictionary(Of String, Integer), courses As String(), credits As Integer()) As DataTable()
         'fml stuff special consideration for excel 
         'add formula
         'Dim fsFml, ssFml As String
@@ -1454,6 +1509,9 @@ Public Class ClassBroadsheets
             dGrade = "**"
             'error chechs
             If strScore = "" Then
+                Return ""
+                Exit Function
+            ElseIf IsDBNull(strScore) Then
                 Return ""
                 Exit Function
             ElseIf (strScore = "ABS") Then

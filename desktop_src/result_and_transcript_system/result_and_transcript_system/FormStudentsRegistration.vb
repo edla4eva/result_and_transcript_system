@@ -1139,7 +1139,7 @@ Public Class FormStudentsRegistration
 
         If ComboBoxShortCuts2.SelectedItem = "Add All 100L Courses" Then
             For Each item In CheckedListBoxCourses.Items
-                If dictAllCourseCodeKeyAndCourseLevelVal(item) = "100" Then CheckedListBoxCourses.Items(item).checked = True
+                If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then CheckedListBoxCourses.Items(item).checked = True
             Next
         End If
     End Sub
