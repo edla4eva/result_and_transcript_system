@@ -94,7 +94,8 @@ Module ModuleGeneral
     Public MAX_COURSES_2 As Integer = NUM_COURSES_PER_LEVEL_2 * NUM_LEVELS    '75
     Public NUM_COLS_BETWEEN_COURSES_1_AND_COURSES_2 As Integer = 4
 
-    Public ROW_HEADER As Integer = 6
+    Public ROW_HEADER As Integer = 5
+    Public COURSE_CODE_HEADER As Integer = 6
     Public ROW_CREDIT As Integer = 8
     Public ALL_HEADERS_COUNT As Integer = 9
 

@@ -251,11 +251,12 @@ Public Class FormGenerateBroadsheet
     Sub showGrades()
         Try
 
-            dvScores = DataGridViewBroadSheet.DataSource
-            dtScores = dvScores.ToTable
+            'dvScores = DataGridViewBroadSheet.DataSource
+            'dtScores = dvScores.ToTable
             'dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
             'dvGrades = dtGrades.DefaultView    'TODO: Fix
             dtGrades = objBroadsheet.dataTablesScoresAndGrades(1)
+            If dtGrades Is Nothing Then Exit Sub
             dvGrades = dtGrades.DefaultView
             DataGridViewBroadSheet.DataSource = dtGrades.DefaultView    'TODO: Fix
             'DataGridViewBroadSheet.AllowUserToAddRows = True
@@ -268,11 +269,12 @@ Public Class FormGenerateBroadsheet
     Sub showScores()
         Try
 
-            dvScores = DataGridViewBroadSheet.DataSource
-            dtScores = dvScores.ToTable
+            'dvScores = DataGridViewBroadSheet.DataSource
+            'dtScores = dvScores.ToTable
             'dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
             'dvGrades = dtGrades.DefaultView    'TODO: Fix
             dtScores = objBroadsheet.dataTablesScoresAndGrades(0)
+            If dtScores Is Nothing Then Exit Sub
             dvScores = dtScores.DefaultView
             DataGridViewBroadSheet.DataSource = dtScores.DefaultView    'TODO: Fix
             'DataGridViewBroadSheet.AllowUserToAddRows = True
@@ -399,15 +401,15 @@ Public Class FormGenerateBroadsheet
         Select Case CInt(e.Argument)
             Case Is > 1000  'interop
                 objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
-            Case Is < 1000 'interop grades  'todo
-                objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
+                ' Case Is < 1000 'interop grades  'todo
+                'objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
                 'Public BGW_EXPORT_EXCEL_1ST_SEM_SCORES As Integer = 1
                 'Public BGW_EXPORT_EXCEL_2ND_SEM_SCORES As Integer = 2
                 'Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
             Case Else  ' NPOI
-                If CInt(e.Argument) < 0 Then 'grades
+                If CInt(e.Argument) > BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then 'grades
                     retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, True, dvGrades)
-                Else    'scores
+                Else    'scores 'todo eror when selected yr.1
                     retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
                 End If
 

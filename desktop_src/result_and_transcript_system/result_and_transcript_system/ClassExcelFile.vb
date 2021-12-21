@@ -85,7 +85,7 @@ Public Class ClassExcelFile
         Dim dtGrades As DataTable = Nothing
         Dim workbook As IWorkbook = New XSSFWorkbook()
         Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
-        Dim row1, rowCredits As IRow
+        Dim row1, rowCourseCodes, rowCredits As IRow
         'Dim cell As ICell
         Dim cR As CellRangeAddress = New CellRangeAddress(1, 3, 1, 120)
 
@@ -111,6 +111,7 @@ Public Class ClassExcelFile
         '# Insert values for header
         row1 = sheet1.CreateRow(0)  'row1
         row1.CreateCell(0).SetCellValue(objBS.DepartmentName.ToUpper)   'row1.CreateCell(jCol).SetCellValue("S/N")
+        row1.GetCell(0).CellStyle = (styleMediumBorderCenter)
         row1 = sheet1.CreateRow(1)  'row2
         row1.CreateCell(0).SetCellValue(objBS.FacultyName.ToUpper)
         row1.GetCell(0).CellStyle = (styleMediumBorderCenter)
@@ -131,16 +132,16 @@ Public Class ClassExcelFile
         End If
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
 
-        row1 = sheet1.CreateRow(5)  'row6
-        row1.CreateCell(COURSE_START_COL).SetCellValue("")
+        'row1 = sheet1.CreateRow(5)  'row6
+        'row1.CreateCell(COURSE_START_COL).SetCellValue("")
+        'row1.Cells(0).CellStyle = (styleMediumBorderCenter)
+
+
         row1.Cells(0).CellStyle = (styleMediumBorderCenter)
 
-        row1 = sheet1.CreateRow(6)  'row7
-        row1.CreateCell(COURSE_START_COL).SetCellValue("FIRST SEMESTER COURSES")
-        row1.CreateCell(COURSE_START_COL_2).SetCellValue("SECOND SEMESTER COURSES")
-        row1.Cells(0).CellStyle = (styleMediumBorderCenter)
-
-        '#STYLE: Special case of merged cells border
+        '#STYLE: Special case of merged cells border for headings dept, fac, etc
+        cR = New CellRangeAddress(0, 0, 0, LAST_COL)
+        sheet1.AddMergedRegion(cR)
         cR = New CellRangeAddress(1, 1, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
         cR = New CellRangeAddress(2, 2, 0, LAST_COL)
@@ -149,13 +150,8 @@ Public Class ClassExcelFile
         sheet1.AddMergedRegion(cR)
         cR = New CellRangeAddress(4, 4, 0, LAST_COL)
         sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(5, 5, 0, LAST_COL)
-        sheet1.AddMergedRegion(cR)
 
-        cR = New CellRangeAddress(6, 6, COURSE_START_COL, COURSE_END_COL - 1)
-        sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(6, 6, COURSE_START_COL_2, COURSE_END_COL_2 - 1)
-        sheet1.AddMergedRegion(cR)
+
 
         'sets the border of the merged cells
         RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
@@ -177,40 +173,60 @@ Public Class ClassExcelFile
         styleMediumBorderVertical.BorderTop = BorderStyle.Medium
         styleMediumBorderVertical.BorderBottom = BorderStyle.Medium
         styleMediumBorderVertical.Rotation = 90
-        row1 = sheet1.CreateRow(ROW_HEADER)  'row 7
+        row1 = sheet1.CreateRow(ROW_HEADER)
+        rowCourseCodes = sheet1.CreateRow(ROW_HEADER + 1)
+
         rowCredits = sheet1.CreateRow(ROW_CREDIT)  '8=row 9
         For jCol = 0 To dt.Columns.Count - 1
-            'data
-            row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
-            'Proper headers
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("SN") Then row1.GetCell(jCol).SetCellValue("S/N")
-            If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
-            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
-            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO. DMI")
-            Else
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO. ENG..")
-            End If
-
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_1") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (FIRST SEMESTER)")
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATALL") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS")
-
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FULLNAME") Then row1.GetCell(jCol).SetCellValue("NAME OF CANDIDATE (SURNAME LAST AND IN BLOCK LETTERS)")
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then row1.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
-            If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
 
             '
             If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then Exit Function 'no need '
             If jCol >= COURSE_START_COL And dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dt.Columns(jCol).ColumnName.ToString) Then rowCredits.CreateCell(jCol).SetCellValue(dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(jCol).ColumnName.ToString))
             'Style  9course code headers)
-            If jCol < COURSE_START_COL Then row1.Cells(jCol).CellStyle = (styleMediumBorder) Else row1.Cells(jCol).CellStyle = (styleMediumBorderVertical)
-            'TODO: selectively merge als excluding course codes
             If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
-                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+                'data
+                rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
+                'merge
+                cR = New CellRangeAddress(ROW_HEADER + 1, ROW_HEADER + 2, jCol, jCol)
+                'style
+                rowCourseCodes.Cells(jCol).CellStyle = (styleMediumBorderVertical)
+
             ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
-                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+                'data
+                rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
+                'merge
+                cR = New CellRangeAddress(ROW_HEADER + 1, ROW_HEADER + 2, jCol, jCol)
+                'style
+                rowCourseCodes.Cells(jCol).CellStyle = (styleMediumBorderVertical)
+
             Else
-                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 1, jCol, jCol)
+                'data
+                row1.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
+
+
+                'Proper headers
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("SN") Then row1.GetCell(jCol).SetCellValue("S/N")
+                If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+                        dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+                        dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO. DMI")
+                Else
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then row1.GetCell(jCol).SetCellValue("MAT. NO. ENG..")
+                End If
+
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_1") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (FIRST SEMESTER)")
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATALL") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS")
+
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FULLNAME") Then row1.GetCell(jCol).SetCellValue("NAME OF CANDIDATE (SURNAME LAST AND IN BLOCK LETTERS)")
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then row1.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
+
+                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 2, jCol, jCol)
+                'Style
+
+                'row1.Cells(jCol).CellStyle = (styleMediumBorder)
+
+
             End If
 
             sheet1.AddMergedRegion(cR)
@@ -220,6 +236,13 @@ Public Class ClassExcelFile
             RegionUtil.SetBorderRight(BorderStyle.Medium, cR, sheet1)
         Next
         'Style Special cases 
+        row1.CreateCell(COURSE_START_COL).SetCellValue("FIRST SEMESTER COURSES")
+        row1.CreateCell(COURSE_START_COL_2).SetCellValue("SECOND SEMESTER COURSES")
+        cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER, COURSE_START_COL, COURSE_END_COL - 1)
+        sheet1.AddMergedRegion(cR)
+        cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER, COURSE_START_COL_2, COURSE_END_COL_2 - 1)
+        sheet1.AddMergedRegion(cR)
+
         row1.GetCell(COURSE_FAIL_COL).CellStyle = styleMediumBorder 'horzontal
 
         style = changeStyle(workbook)
@@ -475,12 +498,12 @@ Public Class ClassExcelFile
         hideCols(sheet1, REPEATED_1_COL)
         'ColG is repeated course wrap;  'col H to AG 100-400L courses; 'colAG = colz+colg; 'colBJ = colz + colz + colj
         For x = COURSE_START_COL To LAST_COL    ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
-            If sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
+            If sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
                 hideCols(sheet1, x)
-                sheet1.GetRow(ROW_HEADER).Cells(x).SetCellValue("")         'display nothing
+                sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).SetCellValue("")         'display nothing
             Else
-                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) Then
-                    If Not dictAllCourseCodeKeyAndCourseLevelVal(sheet1.GetRow(ROW_HEADER).Cells(x).StringCellValue) = dLevel Then hideCols(sheet1, x)
+                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).StringCellValue) Then
+                    If Not dictAllCourseCodeKeyAndCourseLevelVal(sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).StringCellValue) = dLevel Then hideCols(sheet1, x)
                 End If
             End If
         Next
