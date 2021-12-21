@@ -427,7 +427,7 @@ Public Class ClassBroadsheets
             objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
         Next
 
-        dtGrades = dt
+        dtGrades = dt.Copy
 
         'Now Update calculated fields in dataSet
 

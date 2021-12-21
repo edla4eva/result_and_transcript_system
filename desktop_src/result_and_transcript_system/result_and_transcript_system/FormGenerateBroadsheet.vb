@@ -245,6 +245,10 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonGrades_Click(sender As Object, e As EventArgs) Handles ButtonGrades.Click
+        If RadioButtonScores.Checked = True Then RadioButtonScores.Checked = False Else RadioButtonScores.Checked = True
+    End Sub
+
+    Sub showGrades()
         Try
 
             dvScores = DataGridViewBroadSheet.DataSource
@@ -261,8 +265,23 @@ Public Class FormGenerateBroadsheet
             logError(ex.ToString)
         End Try
     End Sub
+    Sub showScores()
+        Try
 
-
+            dvScores = DataGridViewBroadSheet.DataSource
+            dtScores = dvScores.ToTable
+            'dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
+            'dvGrades = dtGrades.DefaultView    'TODO: Fix
+            dtScores = objBroadsheet.dataTablesScoresAndGrades(0)
+            dvScores = dtScores.DefaultView
+            DataGridViewBroadSheet.DataSource = dtScores.DefaultView    'TODO: Fix
+            'DataGridViewBroadSheet.AllowUserToAddRows = True
+            'DataGridViewBroadSheet.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
+        Catch ex As Exception
+            MsgBox("Broadsheet scores have to be generated first before grades")
+            logError(ex.ToString)
+        End Try
+    End Sub
     Function getCoursesList() As String()
         Dim str As New List(Of String)
         str.Add("PRE571")
@@ -675,6 +694,15 @@ Public Class FormGenerateBroadsheet
 
     Private Sub ButtonTest_Click(sender As Object, e As EventArgs) Handles ButtonTest.Click
         objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
+    End Sub
+
+    Private Sub RadioButtonScores_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonScores.CheckedChanged
+        If RadioButtonScores.Checked Then
+            showScores()
+        Else
+            showGrades()
+        End If
+
     End Sub
 
     Private Sub UpgradeWith2MarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith2MarksToolStripMenuItem.Click
