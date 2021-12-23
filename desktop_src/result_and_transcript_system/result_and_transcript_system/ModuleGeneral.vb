@@ -145,7 +145,7 @@ Module ModuleGeneral
     Public RESULT_NOT_IN_R_DISP As String = ""
 
     'mutiplier
-    Public BGW_EXPORT_EXCEL_YR_MILTIPLIER As Integer = 10    'multiplier
+    Public BGW_EXPORT_EXCEL_YR_MILTIPLIER As Integer = -1    'multiplier
     Public BGW_EXPORT_EXCEL_LEVEL_MILTIPLIER As Integer = 1    'multiplier
 
     'Base constant
@@ -165,8 +165,8 @@ Module ModuleGeneral
 
 
     'mutiplier
-    Public BGW_PROCESS_INTERROP_YR_SCORES As Integer = 1
-    Public BGW_PROCESS_BUILTIN_NPOI_LEVEL As Integer = 2
+    Public BGW_PROCESS_INTERROP_YR_SCORES As Integer = -1
+    Public BGW_PROCESS_BUILTIN_NPOI_LEVEL As Integer = 1
 
     'Queries
     'FormResult

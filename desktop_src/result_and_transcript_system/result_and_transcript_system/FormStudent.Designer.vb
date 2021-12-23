@@ -27,6 +27,8 @@ Partial Class FormStudent
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormStudent))
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.btnExportExcel = New System.Windows.Forms.Button()
+        Me.ButtonAutoReg = New System.Windows.Forms.Button()
         Me.ButtonSave = New System.Windows.Forms.Button()
         Me.ButtonViewMode = New System.Windows.Forms.Button()
         Me.ButtonClose = New System.Windows.Forms.Button()
@@ -34,7 +36,7 @@ Partial Class FormStudent
         Me.ButtonSearch = New System.Windows.Forms.Button()
         Me.ButtonDownloadTemplate = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.dgvStudents = New System.Windows.Forms.DataGridView()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TextBoxExcelFilename = New System.Windows.Forms.TextBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
@@ -68,7 +70,7 @@ Partial Class FormStudent
         Me.ButtonNext = New System.Windows.Forms.Button()
         Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.SidePanel.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelForm.SuspendLayout()
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
@@ -78,6 +80,8 @@ Partial Class FormStudent
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.btnExportExcel)
+        Me.SidePanel.Controls.Add(Me.ButtonAutoReg)
         Me.SidePanel.Controls.Add(Me.ButtonSave)
         Me.SidePanel.Controls.Add(Me.ButtonViewMode)
         Me.SidePanel.Controls.Add(Me.ButtonClose)
@@ -87,8 +91,34 @@ Partial Class FormStudent
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(799, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 525)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 582)
         Me.SidePanel.TabIndex = 7
+        '
+        'btnExportExcel
+        '
+        Me.btnExportExcel.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExportExcel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.btnExportExcel.Location = New System.Drawing.Point(12, 422)
+        Me.btnExportExcel.Name = "btnExportExcel"
+        Me.btnExportExcel.Size = New System.Drawing.Size(119, 42)
+        Me.btnExportExcel.TabIndex = 7
+        Me.btnExportExcel.Text = "Export Students to Excel"
+        Me.btnExportExcel.UseVisualStyleBackColor = True
+        '
+        'ButtonAutoReg
+        '
+        Me.ButtonAutoReg.FlatAppearance.BorderSize = 0
+        Me.ButtonAutoReg.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonAutoReg.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonAutoReg.ForeColor = System.Drawing.Color.White
+        Me.ButtonAutoReg.Location = New System.Drawing.Point(0, 284)
+        Me.ButtonAutoReg.Name = "ButtonAutoReg"
+        Me.ButtonAutoReg.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonAutoReg.TabIndex = 6
+        Me.ButtonAutoReg.Text = "Upload " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Auto Reg)"
+        Me.ButtonAutoReg.UseVisualStyleBackColor = True
         '
         'ButtonSave
         '
@@ -96,7 +126,7 @@ Partial Class FormStudent
         Me.ButtonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonSave.ForeColor = System.Drawing.Color.White
-        Me.ButtonSave.Location = New System.Drawing.Point(3, 287)
+        Me.ButtonSave.Location = New System.Drawing.Point(0, 223)
         Me.ButtonSave.Name = "ButtonSave"
         Me.ButtonSave.Size = New System.Drawing.Size(128, 55)
         Me.ButtonSave.TabIndex = 5
@@ -122,7 +152,7 @@ Partial Class FormStudent
         Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(3, 422)
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 480)
         Me.ButtonClose.Name = "ButtonClose"
         Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
         Me.ButtonClose.TabIndex = 3
@@ -135,7 +165,7 @@ Partial Class FormStudent
         Me.ButtonImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonImport.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonImport.ForeColor = System.Drawing.Color.White
-        Me.ButtonImport.Location = New System.Drawing.Point(3, 223)
+        Me.ButtonImport.Location = New System.Drawing.Point(3, 156)
         Me.ButtonImport.Name = "ButtonImport"
         Me.ButtonImport.Size = New System.Drawing.Size(128, 55)
         Me.ButtonImport.TabIndex = 2
@@ -148,7 +178,7 @@ Partial Class FormStudent
         Me.ButtonSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonSearch.ForeColor = System.Drawing.Color.White
-        Me.ButtonSearch.Location = New System.Drawing.Point(3, 161)
+        Me.ButtonSearch.Location = New System.Drawing.Point(3, 94)
         Me.ButtonSearch.Name = "ButtonSearch"
         Me.ButtonSearch.Size = New System.Drawing.Size(128, 55)
         Me.ButtonSearch.TabIndex = 1
@@ -161,7 +191,7 @@ Partial Class FormStudent
         Me.ButtonDownloadTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonDownloadTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonDownloadTemplate.ForeColor = System.Drawing.Color.White
-        Me.ButtonDownloadTemplate.Location = New System.Drawing.Point(3, 100)
+        Me.ButtonDownloadTemplate.Location = New System.Drawing.Point(3, 33)
         Me.ButtonDownloadTemplate.Name = "ButtonDownloadTemplate"
         Me.ButtonDownloadTemplate.Size = New System.Drawing.Size(128, 55)
         Me.ButtonDownloadTemplate.TabIndex = 0
@@ -176,12 +206,13 @@ Partial Class FormStudent
         Me.Label7.Size = New System.Drawing.Size(297, 13)
         Me.Label7.TabIndex = 25
         Me.Label7.Text = "NB: Correct Order of Columns: S/N, MATNO, NAME, SCORE"
+        Me.Label7.Visible = False
         '
-        'DataGridView1
+        'dgvStudents
         '
-        Me.DataGridView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.dgvStudents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvStudents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -189,15 +220,15 @@ Partial Class FormStudent
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle1
-        Me.DataGridView1.GridColor = System.Drawing.Color.Black
-        Me.DataGridView1.Location = New System.Drawing.Point(12, 118)
-        Me.DataGridView1.Name = "DataGridView1"
+        Me.dgvStudents.DefaultCellStyle = DataGridViewCellStyle1
+        Me.dgvStudents.GridColor = System.Drawing.Color.Black
+        Me.dgvStudents.Location = New System.Drawing.Point(12, 78)
+        Me.dgvStudents.Name = "dgvStudents"
         DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        Me.DataGridView1.RowsDefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridView1.Size = New System.Drawing.Size(775, 373)
-        Me.DataGridView1.TabIndex = 26
+        Me.dgvStudents.RowsDefaultCellStyle = DataGridViewCellStyle2
+        Me.dgvStudents.Size = New System.Drawing.Size(775, 413)
+        Me.dgvStudents.TabIndex = 26
         '
         'Label1
         '
@@ -207,6 +238,7 @@ Partial Class FormStudent
         Me.Label1.Size = New System.Drawing.Size(123, 13)
         Me.Label1.TabIndex = 24
         Me.Label1.Text = "Filename (Excel file .xlsx)"
+        Me.Label1.Visible = False
         '
         'TextBoxExcelFilename
         '
@@ -217,10 +249,10 @@ Partial Class FormStudent
         Me.TextBoxExcelFilename.Name = "TextBoxExcelFilename"
         Me.TextBoxExcelFilename.Size = New System.Drawing.Size(781, 20)
         Me.TextBoxExcelFilename.TabIndex = 23
+        Me.TextBoxExcelFilename.Visible = False
         '
         'SaveFileDialog1
         '
-        Me.SaveFileDialog1.Filter = "Excel Files|*.xlsx"
         Me.SaveFileDialog1.RestoreDirectory = True
         '
         'PanelForm
@@ -483,10 +515,10 @@ Partial Class FormStudent
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(82, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(933, 525)
+        Me.ClientSize = New System.Drawing.Size(933, 582)
         Me.Controls.Add(Me.PanelForm)
         Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.dgvStudents)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBoxExcelFilename)
         Me.Controls.Add(Me.SidePanel)
@@ -494,7 +526,7 @@ Partial Class FormStudent
         Me.Name = "FormStudent"
         Me.Text = "Students"
         Me.SidePanel.ResumeLayout(False)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelForm.ResumeLayout(False)
         Me.PanelForm.PerformLayout()
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -511,7 +543,7 @@ Partial Class FormStudent
     Friend WithEvents ButtonSearch As Button
     Friend WithEvents ButtonDownloadTemplate As Button
     Friend WithEvents Label7 As Label
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents dgvStudents As DataGridView
     Friend WithEvents Label1 As Label
     Friend WithEvents TextBoxExcelFilename As TextBox
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
@@ -547,4 +579,6 @@ Partial Class FormStudent
     Friend WithEvents Button1 As Button
     Friend WithEvents ButtonViewMode As Button
     Friend WithEvents ButtonSave As Button
+    Friend WithEvents ButtonAutoReg As Button
+    Friend WithEvents btnExportExcel As Button
 End Class

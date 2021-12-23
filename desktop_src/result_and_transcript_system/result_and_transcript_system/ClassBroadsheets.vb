@@ -445,7 +445,6 @@ Public Class ClassBroadsheets
         'Retain global copy of useful data stored in dictionaries
         objBroadsheet.Level = course_level
         objBroadsheet.Session = session_idr
-
         objBroadsheet.progressStr = "Done!"
         objBroadsheet.progress = 99 'update progress
         ds.Tables.Add(dt)
@@ -512,6 +511,18 @@ Public Class ClassBroadsheets
         'others
         tmpCol = New DataColumn("Session", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
+
+        'gpa100
+        'gpa200
+        '...
+        'wgpa100
+        '...
+        'fgpa
+        'dob
+        'session_of_entry
+        'mode_of_entry
+        'CourseCode_1
+
         Return dt
     End Function
     Function doMATNos(dictCol As Dictionary(Of String, Integer), FSBroadsheetDS As DataSet) As Dictionary(Of String, Integer)
@@ -730,7 +741,7 @@ Public Class ClassBroadsheets
             dtNew.Rows.Add(dGrades)
         Next
         'Now overwrite matno name etc
-        Dim tmpRepeated As String()
+        Dim tmpRepeated As String() = {}
         For i = 0 To countRows - 1
             For j = 0 To dt.Columns.Count - 1
                 If j < COURSE_START_COL Then
@@ -1504,8 +1515,8 @@ Public Class ClassBroadsheets
         Dim score As Integer
         Dim dGrade As String
         Try
-            rulesMax = {100, 69, 59, 49, 44, 39}    'todo: use params
-            rulesMin = {70, 60, 50, 45, 40, 0}
+            If rulesMax Is Nothing Then rulesMax = {100, 69, 59, 49, 44, 39}    'todo: use params
+            If rulesMin Is Nothing Then rulesMin = {70, 60, 50, 45, 40, 0}
             dGrade = "**"
             'error chechs
             If strScore = "" Then
@@ -1570,7 +1581,7 @@ Public Class ClassBroadsheets
             ElseIf score < DEFAULT_CODE Then
                 dGrade = DEFAULT_DISP
             Else
-                dGrade = ""
+                dGrade = DEFAULT_DISP
             End If
 
             Return dGrade
@@ -1609,7 +1620,7 @@ Public Class ClassBroadsheets
                 dPoint = "0"
             ElseIf strGrade = "ABS" Or strGrade = "NR" Or strGrade = "NA" Then
                 dPoint = "0"
-            ElseIf strGrade < "" Then
+            ElseIf strGrade = "" Then
                 dPoint = "0"
             Else
                 dPoint = "0"

@@ -32,7 +32,6 @@ Partial Class FormSettings
         Me.ButtonUser = New System.Windows.Forms.Button()
         Me.ButtonApply = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.ComboBoxLevel = New System.Windows.Forms.ComboBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -71,31 +70,30 @@ Partial Class FormSettings
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ButtonRefresh = New System.Windows.Forms.Button()
         Me.DataGridViewCoursesOrder = New System.Windows.Forms.DataGridView()
-        Me.Course_Code = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Course_Order = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Session_idr = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.TextBox6 = New System.Windows.Forms.TextBox()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.SidePanel.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
         Me.PanelModify.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.DataGridViewCoursesOrder, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.Green
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button1.Font = New System.Drawing.Font("Arial Black", 18.75!, System.Drawing.FontStyle.Bold)
         Me.Button1.ForeColor = System.Drawing.Color.Silver
-        Me.Button1.Location = New System.Drawing.Point(27, 112)
+        Me.Button1.Location = New System.Drawing.Point(27, 95)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(269, 50)
         Me.Button1.TabIndex = 0
@@ -171,43 +169,18 @@ Partial Class FormSettings
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Arial Narrow", 24.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(18, 20)
+        Me.Label1.Location = New System.Drawing.Point(18, 17)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(122, 37)
         Me.Label1.TabIndex = 8
         Me.Label1.Text = "Settings"
         '
-        'GroupBox3
-        '
-        Me.GroupBox3.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.GroupBox3.BackColor = System.Drawing.Color.Transparent
-        Me.GroupBox3.Controls.Add(Me.ComboBoxLevel)
-        Me.GroupBox3.Controls.Add(Me.Label10)
-        Me.GroupBox3.Controls.Add(Me.Label9)
-        Me.GroupBox3.Controls.Add(Me.ComboBox1)
-        Me.GroupBox3.Controls.Add(Me.ButtonAddSession)
-        Me.GroupBox3.Controls.Add(Me.ButtonAddDept)
-        Me.GroupBox3.Controls.Add(Me.ComboBoxSessions)
-        Me.GroupBox3.Controls.Add(Me.Label6)
-        Me.GroupBox3.Controls.Add(Me.TextBoxSession)
-        Me.GroupBox3.Controls.Add(Me.TextBox1)
-        Me.GroupBox3.Controls.Add(Me.ComboBoxDepartments)
-        Me.GroupBox3.Controls.Add(Me.Label5)
-        Me.GroupBox3.Controls.Add(Me.TextBoxDepartment)
-        Me.GroupBox3.Controls.Add(Me.Label3)
-        Me.GroupBox3.Controls.Add(Me.Button1)
-        Me.GroupBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.GroupBox3.Location = New System.Drawing.Point(25, 49)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(384, 297)
-        Me.GroupBox3.TabIndex = 13
-        Me.GroupBox3.TabStop = False
-        '
         'ComboBoxLevel
         '
+        Me.ComboBoxLevel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBoxLevel.FormattingEnabled = True
         Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "Yr.1", "Yr.2"})
-        Me.ComboBoxLevel.Location = New System.Drawing.Point(22, 269)
+        Me.ComboBoxLevel.Location = New System.Drawing.Point(22, 252)
         Me.ComboBoxLevel.Name = "ComboBoxLevel"
         Me.ComboBoxLevel.Size = New System.Drawing.Size(162, 21)
         Me.ComboBoxLevel.TabIndex = 38
@@ -216,7 +189,7 @@ Partial Class FormSettings
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(20, 255)
+        Me.Label10.Location = New System.Drawing.Point(20, 238)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(33, 13)
         Me.Label10.TabIndex = 37
@@ -226,8 +199,8 @@ Partial Class FormSettings
         '
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Arial", 15.75!)
-        Me.Label9.ForeColor = System.Drawing.Color.Silver
-        Me.Label9.Location = New System.Drawing.Point(23, 65)
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label9.Location = New System.Drawing.Point(23, 48)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(115, 24)
         Me.Label9.TabIndex = 36
@@ -237,7 +210,7 @@ Partial Class FormSettings
         '
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"Access 2016 32bit", "Access 2016 64bit", "Access 2019 32bit", "Access 2019 64bit", "Access 2013 32bit", "Access 2013 64bit", "mySQL", "SQL"})
-        Me.ComboBox1.Location = New System.Drawing.Point(144, 68)
+        Me.ComboBox1.Location = New System.Drawing.Point(144, 51)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(144, 21)
         Me.ComboBox1.TabIndex = 35
@@ -245,11 +218,11 @@ Partial Class FormSettings
         '
         'ButtonAddSession
         '
-        Me.ButtonAddSession.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.ButtonAddSession.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonAddSession.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAddSession.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.ButtonAddSession.ForeColor = System.Drawing.Color.Silver
-        Me.ButtonAddSession.Location = New System.Drawing.Point(208, 260)
+        Me.ButtonAddSession.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonAddSession.Location = New System.Drawing.Point(208, 243)
         Me.ButtonAddSession.Name = "ButtonAddSession"
         Me.ButtonAddSession.Size = New System.Drawing.Size(88, 32)
         Me.ButtonAddSession.TabIndex = 34
@@ -258,11 +231,11 @@ Partial Class FormSettings
         '
         'ButtonAddDept
         '
-        Me.ButtonAddDept.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.ButtonAddDept.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonAddDept.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAddDept.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.ButtonAddDept.ForeColor = System.Drawing.Color.Silver
-        Me.ButtonAddDept.Location = New System.Drawing.Point(208, 186)
+        Me.ButtonAddDept.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonAddDept.Location = New System.Drawing.Point(208, 169)
         Me.ButtonAddDept.Name = "ButtonAddDept"
         Me.ButtonAddDept.Size = New System.Drawing.Size(88, 30)
         Me.ButtonAddDept.TabIndex = 32
@@ -271,10 +244,10 @@ Partial Class FormSettings
         '
         'ComboBoxSessions
         '
-        Me.ComboBoxSessions.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ComboBoxSessions.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBoxSessions.FormattingEnabled = True
         Me.ComboBoxSessions.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
-        Me.ComboBoxSessions.Location = New System.Drawing.Point(22, 231)
+        Me.ComboBoxSessions.Location = New System.Drawing.Point(22, 214)
         Me.ComboBoxSessions.Name = "ComboBoxSessions"
         Me.ComboBoxSessions.Size = New System.Drawing.Size(161, 21)
         Me.ComboBoxSessions.TabIndex = 31
@@ -282,9 +255,8 @@ Partial Class FormSettings
         '
         'Label6
         '
-        Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(20, 216)
+        Me.Label6.Location = New System.Drawing.Point(20, 199)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(44, 13)
         Me.Label6.TabIndex = 30
@@ -292,16 +264,14 @@ Partial Class FormSettings
         '
         'TextBoxSession
         '
-        Me.TextBoxSession.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.TextBoxSession.Location = New System.Drawing.Point(208, 234)
+        Me.TextBoxSession.Location = New System.Drawing.Point(208, 217)
         Me.TextBoxSession.Name = "TextBoxSession"
         Me.TextBoxSession.Size = New System.Drawing.Size(88, 20)
         Me.TextBoxSession.TabIndex = 29
         '
         'TextBox1
         '
-        Me.TextBox1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.TextBox1.Location = New System.Drawing.Point(144, 40)
+        Me.TextBox1.Location = New System.Drawing.Point(144, 23)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(144, 20)
         Me.TextBox1.TabIndex = 28
@@ -309,10 +279,10 @@ Partial Class FormSettings
         '
         'ComboBoxDepartments
         '
-        Me.ComboBoxDepartments.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ComboBoxDepartments.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBoxDepartments.FormattingEnabled = True
         Me.ComboBoxDepartments.Items.AddRange(New Object() {"Computer Engineering", "Production Engineering"})
-        Me.ComboBoxDepartments.Location = New System.Drawing.Point(23, 186)
+        Me.ComboBoxDepartments.Location = New System.Drawing.Point(23, 169)
         Me.ComboBoxDepartments.Name = "ComboBoxDepartments"
         Me.ComboBoxDepartments.Size = New System.Drawing.Size(161, 21)
         Me.ComboBoxDepartments.TabIndex = 27
@@ -320,9 +290,8 @@ Partial Class FormSettings
         '
         'Label5
         '
-        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(20, 169)
+        Me.Label5.Location = New System.Drawing.Point(20, 152)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(62, 13)
         Me.Label5.TabIndex = 26
@@ -330,19 +299,17 @@ Partial Class FormSettings
         '
         'TextBoxDepartment
         '
-        Me.TextBoxDepartment.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.TextBoxDepartment.Location = New System.Drawing.Point(208, 165)
+        Me.TextBoxDepartment.Location = New System.Drawing.Point(208, 148)
         Me.TextBoxDepartment.Name = "TextBoxDepartment"
         Me.TextBoxDepartment.Size = New System.Drawing.Size(88, 20)
         Me.TextBoxDepartment.TabIndex = 25
         '
         'Label3
         '
-        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.Silver
-        Me.Label3.Location = New System.Drawing.Point(23, 36)
+        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label3.Location = New System.Drawing.Point(23, 19)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(93, 24)
         Me.Label3.TabIndex = 12
@@ -351,8 +318,7 @@ Partial Class FormSettings
         '
         'PanelModify
         '
-        Me.PanelModify.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelModify.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.PanelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelModify.Controls.Add(Me.GroupBox4)
         Me.PanelModify.Controls.Add(Me.ListBoxCoursesOrderSS)
@@ -364,9 +330,9 @@ Partial Class FormSettings
         Me.PanelModify.Controls.Add(Me.ButtonRefereshListFirst)
         Me.PanelModify.Controls.Add(Me.LabelClosePanelModify)
         Me.PanelModify.Controls.Add(Me.ListBoxCoursesOrder)
-        Me.PanelModify.Location = New System.Drawing.Point(435, 62)
+        Me.PanelModify.Location = New System.Drawing.Point(435, 54)
         Me.PanelModify.Name = "PanelModify"
-        Me.PanelModify.Size = New System.Drawing.Size(380, 174)
+        Me.PanelModify.Size = New System.Drawing.Size(380, 182)
         Me.PanelModify.TabIndex = 33
         '
         'GroupBox4
@@ -425,6 +391,7 @@ Partial Class FormSettings
         '
         'ButtonRemoveCourses
         '
+        Me.ButtonRemoveCourses.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRemoveCourses.ForeColor = System.Drawing.Color.Black
         Me.ButtonRemoveCourses.Location = New System.Drawing.Point(300, 61)
         Me.ButtonRemoveCourses.Name = "ButtonRemoveCourses"
@@ -435,6 +402,7 @@ Partial Class FormSettings
         '
         'ButtonAddCourse
         '
+        Me.ButtonAddCourse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAddCourse.ForeColor = System.Drawing.Color.Black
         Me.ButtonAddCourse.Location = New System.Drawing.Point(258, 61)
         Me.ButtonAddCourse.Name = "ButtonAddCourse"
@@ -445,6 +413,7 @@ Partial Class FormSettings
         '
         'ButtonMoveDown
         '
+        Me.ButtonMoveDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveDown.ForeColor = System.Drawing.Color.Black
         Me.ButtonMoveDown.Location = New System.Drawing.Point(258, 36)
         Me.ButtonMoveDown.Name = "ButtonMoveDown"
@@ -455,6 +424,7 @@ Partial Class FormSettings
         '
         'ButtonMoveUp
         '
+        Me.ButtonMoveUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveUp.ForeColor = System.Drawing.Color.Black
         Me.ButtonMoveUp.Location = New System.Drawing.Point(258, 8)
         Me.ButtonMoveUp.Name = "ButtonMoveUp"
@@ -473,6 +443,7 @@ Partial Class FormSettings
         Me.ButtonRefereshListFirst.Name = "ButtonRefereshListFirst"
         Me.ButtonRefereshListFirst.Size = New System.Drawing.Size(79, 34)
         Me.ButtonRefereshListFirst.TabIndex = 6
+        Me.ButtonRefereshListFirst.Tag = ""
         Me.ButtonRefereshListFirst.Text = "Refresh"
         Me.ButtonRefereshListFirst.UseVisualStyleBackColor = True
         '
@@ -499,8 +470,7 @@ Partial Class FormSettings
         '
         'GroupBox1
         '
-        Me.GroupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.GroupBox1.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.Label8)
@@ -509,9 +479,9 @@ Partial Class FormSettings
         Me.GroupBox1.Controls.Add(Me.TextBoxFont)
         Me.GroupBox1.Controls.Add(Me.ComboBoxColor)
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.GroupBox1.Location = New System.Drawing.Point(16, 352)
+        Me.GroupBox1.Location = New System.Drawing.Point(25, 352)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(628, 239)
+        Me.GroupBox1.Size = New System.Drawing.Size(384, 239)
         Me.GroupBox1.TabIndex = 14
         Me.GroupBox1.TabStop = False
         '
@@ -519,7 +489,7 @@ Partial Class FormSettings
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Arial", 15.75!)
-        Me.Label7.ForeColor = System.Drawing.Color.Silver
+        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Label7.Location = New System.Drawing.Point(21, 128)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(105, 24)
@@ -530,7 +500,7 @@ Partial Class FormSettings
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Arial", 15.75!)
-        Me.Label2.ForeColor = System.Drawing.Color.Silver
+        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Label2.Location = New System.Drawing.Point(21, 62)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(60, 24)
@@ -541,7 +511,7 @@ Partial Class FormSettings
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Arial", 15.75!)
-        Me.Label8.ForeColor = System.Drawing.Color.Silver
+        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Label8.Location = New System.Drawing.Point(21, 11)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(52, 24)
@@ -585,7 +555,7 @@ Partial Class FormSettings
         '
         'GroupBox2
         '
-        Me.GroupBox2.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.GroupBox2.Controls.Add(Me.ButtonRefresh)
         Me.GroupBox2.Controls.Add(Me.DataGridViewCoursesOrder)
         Me.GroupBox2.Controls.Add(Me.Button3)
@@ -594,17 +564,17 @@ Partial Class FormSettings
         Me.GroupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.GroupBox2.Location = New System.Drawing.Point(435, 242)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(380, 364)
+        Me.GroupBox2.Size = New System.Drawing.Size(380, 349)
         Me.GroupBox2.TabIndex = 15
         Me.GroupBox2.TabStop = False
         '
         'ButtonRefresh
         '
-        Me.ButtonRefresh.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.ButtonRefresh.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRefresh.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.ButtonRefresh.ForeColor = System.Drawing.Color.Silver
-        Me.ButtonRefresh.Location = New System.Drawing.Point(271, 11)
+        Me.ButtonRefresh.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonRefresh.Location = New System.Drawing.Point(271, 7)
         Me.ButtonRefresh.Name = "ButtonRefresh"
         Me.ButtonRefresh.Size = New System.Drawing.Size(88, 30)
         Me.ButtonRefresh.TabIndex = 34
@@ -622,7 +592,6 @@ Partial Class FormSettings
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridViewCoursesOrder.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridViewCoursesOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridViewCoursesOrder.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Course_Code, Me.Course_Order, Me.Session_idr})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -644,28 +613,13 @@ Partial Class FormSettings
         Me.DataGridViewCoursesOrder.Size = New System.Drawing.Size(343, 280)
         Me.DataGridViewCoursesOrder.TabIndex = 33
         '
-        'Course_Code
-        '
-        Me.Course_Code.HeaderText = "Course_Code"
-        Me.Course_Code.Name = "Course_Code"
-        '
-        'Course_Order
-        '
-        Me.Course_Order.HeaderText = "Course_Order"
-        Me.Course_Order.Name = "Course_Order"
-        '
-        'Session_idr
-        '
-        Me.Session_idr.HeaderText = "Session_idr"
-        Me.Session_idr.Name = "Session_idr"
-        '
         'Button3
         '
         Me.Button3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button3.BackColor = System.Drawing.Color.Transparent
         Me.Button3.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button3.ForeColor = System.Drawing.Color.Silver
-        Me.Button3.Location = New System.Drawing.Point(56, 392)
+        Me.Button3.Location = New System.Drawing.Point(56, 385)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(255, 30)
         Me.Button3.TabIndex = 32
@@ -681,11 +635,10 @@ Partial Class FormSettings
         '
         'Label12
         '
-        Me.Label12.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.ForeColor = System.Drawing.Color.Silver
-        Me.Label12.Location = New System.Drawing.Point(52, 13)
+        Me.Label12.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label12.Location = New System.Drawing.Point(52, 6)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(148, 24)
         Me.Label12.TabIndex = 12
@@ -694,6 +647,31 @@ Partial Class FormSettings
         '
         'bgwLoad
         '
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GroupBox3.Controls.Add(Me.ComboBoxLevel)
+        Me.GroupBox3.Controls.Add(Me.Label10)
+        Me.GroupBox3.Controls.Add(Me.Label9)
+        Me.GroupBox3.Controls.Add(Me.ComboBox1)
+        Me.GroupBox3.Controls.Add(Me.ButtonAddSession)
+        Me.GroupBox3.Controls.Add(Me.ButtonAddDept)
+        Me.GroupBox3.Controls.Add(Me.ComboBoxSessions)
+        Me.GroupBox3.Controls.Add(Me.Label6)
+        Me.GroupBox3.Controls.Add(Me.TextBoxSession)
+        Me.GroupBox3.Controls.Add(Me.TextBox1)
+        Me.GroupBox3.Controls.Add(Me.ComboBoxDepartments)
+        Me.GroupBox3.Controls.Add(Me.Label5)
+        Me.GroupBox3.Controls.Add(Me.TextBoxDepartment)
+        Me.GroupBox3.Controls.Add(Me.Label3)
+        Me.GroupBox3.Controls.Add(Me.Button1)
+        Me.GroupBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.GroupBox3.Location = New System.Drawing.Point(25, 54)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(384, 292)
+        Me.GroupBox3.TabIndex = 13
+        Me.GroupBox3.TabStop = False
         '
         'FormSettings
         '
@@ -711,8 +689,6 @@ Partial Class FormSettings
         Me.Name = "FormSettings"
         Me.Text = "Settings"
         Me.SidePanel.ResumeLayout(False)
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
         Me.PanelModify.ResumeLayout(False)
         Me.PanelModify.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
@@ -722,6 +698,8 @@ Partial Class FormSettings
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         CType(Me.DataGridViewCoursesOrder, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -733,7 +711,6 @@ Partial Class FormSettings
     Friend WithEvents ButtonApply As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Button4 As Button
-    Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents Label3 As Label
     Friend WithEvents ButtonAddDept As Button
     Friend WithEvents ComboBoxSessions As ComboBox
@@ -771,9 +748,6 @@ Partial Class FormSettings
     Friend WithEvents FontDialog1 As FontDialog
     Friend WithEvents ColorDialog1 As ColorDialog
     Friend WithEvents ButtonAddSession As Button
-    Friend WithEvents Course_Code As DataGridViewTextBoxColumn
-    Friend WithEvents Course_Order As DataGridViewTextBoxColumn
-    Friend WithEvents Session_idr As DataGridViewTextBoxColumn
     Friend WithEvents Label7 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label8 As Label
@@ -782,4 +756,5 @@ Partial Class FormSettings
     Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents ComboBoxLevel As ComboBox
     Friend WithEvents Label10 As Label
+    Friend WithEvents GroupBox3 As GroupBox
 End Class

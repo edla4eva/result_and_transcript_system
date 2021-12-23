@@ -1,11 +1,16 @@
 ﻿Imports System.ComponentModel
 
 Public Class FormSettings
+    Dim Session_idr As String = "2018/2019"
     Dim course_dept_idr As Integer = 1
     Dim course_level As Integer = 100
     Dim ds As New DataSet
     Private Sub FormCourseAdviser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         Me.BackColor = RGBColors.colorBlack2
+        Me.DataGridViewCoursesOrder.BackgroundColor = RGBColors.colorBlack2
+        Me.DataGridViewCoursesOrder.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
+        Me.DataGridViewCoursesOrder.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
     End Sub
 
 
@@ -122,7 +127,15 @@ Public Class FormSettings
     End Sub
 
     Private Sub ButtonAddCourse_Click(sender As Object, e As EventArgs) Handles ButtonAddCourse.Click
-        ListBoxCoursesOrder.Items.Add(ComboBoxCourses.SelectedItem)
+        If ComboBoxCourses.SelectedIndex >= 0 Then
+            If RadioButton1.Checked Then
+                ListBoxCoursesOrder.Items.Add(ComboBoxCourses.SelectedItem)
+            Else
+                ListBoxCoursesOrderSS.Items.Add(ComboBoxCourses.SelectedItem)
+            End If
+
+        End If
+
     End Sub
 
     Private Sub FormSettings_Closed(sender As Object, e As EventArgs) Handles Me.Closed

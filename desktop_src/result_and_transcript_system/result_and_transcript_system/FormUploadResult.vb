@@ -18,7 +18,7 @@ Public Class FormUploadResult
 
     Private Sub FormUploadResult_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
-        resizeCombosToGrid()
+
         BackgroundWorker1.RunWorkerAsync()
     End Sub
 
@@ -135,7 +135,7 @@ Public Class FormUploadResult
         'TODO: reset datagrid
         DataGridView1.DataSource = tmpDS.Tables(0).DefaultView  'todo: error if cancel file diag
         showButtons("ButtonCheck", True)
-        resizeCombosToGrid()
+
     End Sub
     Sub showButtons(ButtonName As String, enableOnly As Boolean)
         Select Case ButtonName
@@ -401,26 +401,7 @@ Public Class FormUploadResult
         End Try
     End Sub
 
-    Private Sub DataGridView1_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
-        resizeCombosToGrid()
-    End Sub
-    Sub resizeCombosToGrid()
-        On Error Resume Next
-        ComboBox1.Width = DataGridView1.Columns(0).Width - 5
-        ComboBox1.Left = DataGridView1.RowHeadersWidth + DataGridView1.Left ' + DataGridView1.Columns(0).Width
-        ComboBox2.Width = DataGridView1.Columns(1).Width
-        ComboBox2.Left = ComboBox1.Left + DataGridView1.Columns(0).Width + 5
-        ComboBox3.Width = DataGridView1.Columns(2).Width
-        ComboBox3.Left = ComboBox2.Left + DataGridView1.Columns(1).Width
-        ComboBox4.Width = DataGridView1.Columns(3).Width
-        ComboBox4.Left = ComboBox3.Left + DataGridView1.Columns(2).Width
-        ComboBox5.Width = DataGridView1.Columns(4).Width
-        ComboBox5.Left = ComboBox4.Left + DataGridView1.Columns(3).Width
-        ComboBox6.Width = DataGridView1.Columns(5).Width
-        ComboBox6.Left = ComboBox5.Left + DataGridView1.Columns(4).Width
-        ComboBox7.Width = DataGridView1.Columns(6).Width
-        ComboBox7.Left = ComboBox6.Left + DataGridView1.Columns(5).Width
-    End Sub
+
 
     Private Sub FormUploadResult_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
@@ -856,6 +837,37 @@ Public Class FormUploadResult
         If objExcelFile.progress <= 100 Then ProgressBarBS.Value = CInt(objExcelFile.progress)
         Me.LabelProgress.Text = (objExcelFile.progress).ToString & "% - " & objExcelFile.progressStr
     End Sub
+
+    Private Sub ButtonDownloadTemplate_Click(sender As Object, e As EventArgs) Handles ButtonDownloadTemplate.Click
+        Try
+            Dim tmpileName As String = My.Application.Info.DirectoryPath & "\templates\result.xltx"
+            Dim tmpileName2 As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\templates\result.xltx"
+            Dim tmpileName3 As String = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\templates\result.xltx"
+
+            If My.Computer.FileSystem.FileExists(tmpileName) Then
+
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName2) Then
+                tmpileName = tmpileName2
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
+                tmpileName = tmpileName3
+            End If
+
+            Using sfd As New SaveFileDialog
+                If sfd.ShowDialog = DialogResult.OK Then
+                    My.Computer.FileSystem.CopyFile(tmpileName, sfd.FileName & ".xltx")
+                End If
+                If MsgBox("Do you want to open the template file in Excel?", "Result Template", vbYesNo) = DialogResult.Yes Then
+                    System.Diagnostics.Process.Start(tmpileName)
+                End If
+            End Using
+        Catch ex As Exception
+
+            MsgBox(ex.Message)
+
+        End Try
+
+    End Sub
+
 
     Private Sub ButtonCloud_Click(sender As Object, e As EventArgs) Handles ButtonCloud.Click
         Dim FileOpenDialogBroadsheet As New OpenFileDialog()

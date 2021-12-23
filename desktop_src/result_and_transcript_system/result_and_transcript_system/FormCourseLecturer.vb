@@ -21,9 +21,13 @@
                 tmpileName = tmpileName3
             End If
 
-                'objResult.resultTemplateFileName
-                If SaveFileDialog1.ShowDialog = DialogResult.OK Then
+            'objResult.resultTemplateFileName
+            If SaveFileDialog1.ShowDialog = DialogResult.OK Then
                 My.Computer.FileSystem.CopyFile(tmpileName, SaveFileDialog1.FileName & ".xltx")
+                If MsgBox("Do you want to open the template file in Excel?", "Result Template", vbYesNo) = DialogResult.Yes Then
+                    System.Diagnostics.Process.Start(tmpileName)
+                End If
+
             End If
         Catch ex As Exception
 

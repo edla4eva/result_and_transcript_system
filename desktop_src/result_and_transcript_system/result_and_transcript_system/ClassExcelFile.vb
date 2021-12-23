@@ -224,7 +224,7 @@ Public Class ClassExcelFile
                 cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + 2, jCol, jCol)
                 'Style
 
-                'row1.Cells(jCol).CellStyle = (styleMediumBorder)
+                'row1.Cells(jCol).CellStyle = (styleMediumBorder)   'todo
 
 
             End If

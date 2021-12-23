@@ -57,22 +57,20 @@ Partial Class FormCourseAdviser
         '
         'ButtonResultsSubmitted
         '
-        Me.ButtonResultsSubmitted.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonResultsSubmitted.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonResultsSubmitted.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.ButtonResultsSubmitted.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonResultsSubmitted.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonResultsSubmitted.ForeColor = System.Drawing.Color.Silver
         Me.ButtonResultsSubmitted.Location = New System.Drawing.Point(17, 19)
         Me.ButtonResultsSubmitted.Name = "ButtonResultsSubmitted"
-        Me.ButtonResultsSubmitted.Size = New System.Drawing.Size(178, 143)
+        Me.ButtonResultsSubmitted.Size = New System.Drawing.Size(174, 143)
         Me.ButtonResultsSubmitted.TabIndex = 0
         Me.ButtonResultsSubmitted.Text = "23/40"
         Me.ButtonResultsSubmitted.UseVisualStyleBackColor = False
         '
         'ButtonNoOfStudents
         '
-        Me.ButtonNoOfStudents.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonNoOfStudents.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonNoOfStudents.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.ButtonNoOfStudents.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNoOfStudents.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonNoOfStudents.ForeColor = System.Drawing.Color.Silver
@@ -155,7 +153,7 @@ Partial Class FormCourseAdviser
         Me.ButtonStudents.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonStudents.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonStudents.ForeColor = System.Drawing.Color.White
-        Me.ButtonStudents.Location = New System.Drawing.Point(31, 227)
+        Me.ButtonStudents.Location = New System.Drawing.Point(30, 227)
         Me.ButtonStudents.Name = "ButtonStudents"
         Me.ButtonStudents.Size = New System.Drawing.Size(128, 55)
         Me.ButtonStudents.TabIndex = 5
@@ -201,7 +199,6 @@ Partial Class FormCourseAdviser
         '
         'Label5
         '
-        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.Color.Silver
@@ -231,7 +228,7 @@ Partial Class FormCourseAdviser
         Me.ButtonResults.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonResults.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonResults.ForeColor = System.Drawing.Color.White
-        Me.ButtonResults.Location = New System.Drawing.Point(32, 236)
+        Me.ButtonResults.Location = New System.Drawing.Point(31, 230)
         Me.ButtonResults.Name = "ButtonResults"
         Me.ButtonResults.Size = New System.Drawing.Size(128, 55)
         Me.ButtonResults.TabIndex = 12
@@ -240,7 +237,6 @@ Partial Class FormCourseAdviser
         '
         'Label4
         '
-        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.Silver
@@ -266,7 +262,6 @@ Partial Class FormCourseAdviser
         '
         'Label3
         '
-        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.Color.Silver
@@ -279,8 +274,7 @@ Partial Class FormCourseAdviser
         '
         'ButtonNoOfBroadsheets
         '
-        Me.ButtonNoOfBroadsheets.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonNoOfBroadsheets.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonNoOfBroadsheets.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.ButtonNoOfBroadsheets.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNoOfBroadsheets.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonNoOfBroadsheets.ForeColor = System.Drawing.Color.Silver
@@ -295,6 +289,7 @@ Partial Class FormCourseAdviser
         '
         Me.TextBoxStatus1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.TextBoxStatus1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBoxStatus1.Enabled = False
         Me.TextBoxStatus1.Font = New System.Drawing.Font("Arial", 15.75!)
         Me.TextBoxStatus1.ForeColor = System.Drawing.Color.Silver
         Me.TextBoxStatus1.Location = New System.Drawing.Point(26, 379)
@@ -302,13 +297,14 @@ Partial Class FormCourseAdviser
         Me.TextBoxStatus1.Name = "TextBoxStatus1"
         Me.TextBoxStatus1.Size = New System.Drawing.Size(877, 72)
         Me.TextBoxStatus1.TabIndex = 15
-        Me.TextBoxStatus1.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "All Courses have been marked and graded"
+        Me.TextBoxStatus1.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Application files are up to date"
         Me.TextBoxStatus1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBoxStatus2
         '
         Me.TextBoxStatus2.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.TextBoxStatus2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBoxStatus2.Enabled = False
         Me.TextBoxStatus2.Font = New System.Drawing.Font("Arial", 15.75!)
         Me.TextBoxStatus2.ForeColor = System.Drawing.Color.Silver
         Me.TextBoxStatus2.Location = New System.Drawing.Point(25, 458)
@@ -316,7 +312,7 @@ Partial Class FormCourseAdviser
         Me.TextBoxStatus2.Name = "TextBoxStatus2"
         Me.TextBoxStatus2.Size = New System.Drawing.Size(877, 72)
         Me.TextBoxStatus2.TabIndex = 16
-        Me.TextBoxStatus2.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Departmental Board Meeting is on Friday"
+        Me.TextBoxStatus2.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "--Anouncements--"
         Me.TextBoxStatus2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'GroupBox4
@@ -334,11 +330,10 @@ Partial Class FormCourseAdviser
         '
         'Label2
         '
-        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.Silver
-        Me.Label2.Location = New System.Drawing.Point(34, 185)
+        Me.Label2.Location = New System.Drawing.Point(19, 185)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(164, 24)
         Me.Label2.TabIndex = 12
@@ -347,8 +342,7 @@ Partial Class FormCourseAdviser
         '
         'ButtonNoOfSenate
         '
-        Me.ButtonNoOfSenate.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonNoOfSenate.BackColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer), CType(CType(66, Byte), Integer))
+        Me.ButtonNoOfSenate.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
         Me.ButtonNoOfSenate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNoOfSenate.Font = New System.Drawing.Font("Arial Black", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonNoOfSenate.ForeColor = System.Drawing.Color.Silver

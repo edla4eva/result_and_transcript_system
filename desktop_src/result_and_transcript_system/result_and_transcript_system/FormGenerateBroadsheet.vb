@@ -60,6 +60,20 @@ Public Class FormGenerateBroadsheet
             objBroadsheet.HOD = TextBoxHOD.Text
             objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
             objBroadsheet.Dean = TextBoxDean.Text
+            'objBroadsheet.levelCGPaPercentages = ""   'todo get from settings
+            '_levelCGPAPercentages(0) = 0.05
+            '_levelCGPAPercentages(1) = 0.1
+            '_levelCGPAPercentages(2) = 0.15
+            '_levelCGPAPercentages(3) = 0.2
+            '_levelCGPAPercentages(4) = 0.5
+            '_levelCGPAPercentages(5) = 0
+            '_levelCGPAPercentages(6) = 0
+            '_levelCGPAPercentages(7) = 0
+            '_levelCGPAPercentages(8) = 0
+            'objBroadsheet.levelCGPaPercentagesUME
+            'objBroadsheet.levelCGPaPercentagesDE2
+            'objBroadsheet.levelCGPaPercentagesDE3
+            'objBroadsheet.levelCGPaPercentagesDIP
 
             If RadioButtonUseBuiltIn.Checked = True Then
                 objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
@@ -398,8 +412,8 @@ Public Class FormGenerateBroadsheet
         footers(2) = TextBoxHOD.Text
         '1-interrp  2. built in     -2 grades
         '4-diploma
-        Select Case CInt(e.Argument)
-            Case Is > 1000  'interop
+        Select Case System.Math.Abs(CInt(e.Argument))
+            Case Is > 1000  'interop Template based
                 objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
                 ' Case Is < 1000 'interop grades  'todo
                 'objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
@@ -407,10 +421,15 @@ Public Class FormGenerateBroadsheet
                 'Public BGW_EXPORT_EXCEL_2ND_SEM_SCORES As Integer = 2
                 'Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
             Case Else  ' NPOI
-                If CInt(e.Argument) > BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then 'grades
+                If CInt(e.Argument) > BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then 'grades    'will not need this anymore
                     retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, True, dvGrades)
-                Else    'scores 'todo eror when selected yr.1
+                ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then    'scores 'todo eror when selected yr.1
                     retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_YR_MILTIPLIER Then    'scores 'todo eror when selected yr.1
+                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                Else 'default
+                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+
                 End If
 
 
@@ -457,7 +476,7 @@ Public Class FormGenerateBroadsheet
                 'dgw.DataSource = myDataSet.Tables("Result").DefaultView
 
                 xConn.Close() 'safely close it
-                MsgBox("I got it " & myDataSet.Tables(0).Rows(0).ItemArray(1).ToString)
+                MsgBox("Database Test Success: " & myDataSet.Tables(0).Rows(0).ItemArray(1).ToString)
             End Using
         Catch ex As Exception
             MsgBox("Database access problem, connect and try again" & vbCrLf & ex.Message)

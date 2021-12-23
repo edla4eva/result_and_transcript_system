@@ -37,7 +37,6 @@ Partial Class FormResultsTranscripts
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim ReportDataSource1 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
-        Me.ClassBroadsheetsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxMATNO = New System.Windows.Forms.TextBox()
@@ -49,7 +48,6 @@ Partial Class FormResultsTranscripts
         Me.TextBoxDate = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
-        Me.PictureBoxImg = New System.Windows.Forms.PictureBox()
         Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonTranscript = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -68,19 +66,18 @@ Partial Class FormResultsTranscripts
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ReportViewer1 = New Microsoft.Reporting.WinForms.ReportViewer()
-        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ClassBroadsheetsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.PictureBoxImg = New System.Windows.Forms.PictureBox()
+        Me.ButtonGPACard = New System.Windows.Forms.Button()
         CType(Me.dgvTranscripts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
-        CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCourses, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'ClassBroadsheetsBindingSource
-        '
-        Me.ClassBroadsheetsBindingSource.DataMember = "ClassBroadsheets"
         '
         'Label1
         '
@@ -229,16 +226,6 @@ Partial Class FormResultsTranscripts
         Me.DateTimePicker1.Size = New System.Drawing.Size(240, 20)
         Me.DateTimePicker1.TabIndex = 58
         '
-        'PictureBoxImg
-        '
-        Me.PictureBoxImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBoxImg.Location = New System.Drawing.Point(159, 167)
-        Me.PictureBoxImg.Name = "PictureBoxImg"
-        Me.PictureBoxImg.Size = New System.Drawing.Size(180, 134)
-        Me.PictureBoxImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBoxImg.TabIndex = 59
-        Me.PictureBoxImg.TabStop = False
-        '
         'ButtonClose
         '
         Me.ButtonClose.FlatAppearance.BorderSize = 0
@@ -271,7 +258,7 @@ Partial Class FormResultsTranscripts
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.Button1.ForeColor = System.Drawing.Color.White
-        Me.Button1.Location = New System.Drawing.Point(3, 263)
+        Me.Button1.Location = New System.Drawing.Point(3, 329)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(128, 55)
         Me.Button1.TabIndex = 63
@@ -377,7 +364,7 @@ Partial Class FormResultsTranscripts
         Me.ButtonEport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonEport.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonEport.ForeColor = System.Drawing.Color.White
-        Me.ButtonEport.Location = New System.Drawing.Point(3, 191)
+        Me.ButtonEport.Location = New System.Drawing.Point(3, 257)
         Me.ButtonEport.Name = "ButtonEport"
         Me.ButtonEport.Size = New System.Drawing.Size(128, 55)
         Me.ButtonEport.TabIndex = 66
@@ -444,6 +431,7 @@ Partial Class FormResultsTranscripts
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonGPACard)
         Me.SidePanel.Controls.Add(Me.ButtonFullScreen)
         Me.SidePanel.Controls.Add(Me.Button2)
         Me.SidePanel.Controls.Add(Me.ButtonTranscript)
@@ -463,7 +451,7 @@ Partial Class FormResultsTranscripts
         Me.ButtonFullScreen.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonFullScreen.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonFullScreen.ForeColor = System.Drawing.Color.White
-        Me.ButtonFullScreen.Location = New System.Drawing.Point(3, 342)
+        Me.ButtonFullScreen.Location = New System.Drawing.Point(3, 408)
         Me.ButtonFullScreen.Name = "ButtonFullScreen"
         Me.ButtonFullScreen.Size = New System.Drawing.Size(125, 55)
         Me.ButtonFullScreen.TabIndex = 67
@@ -476,7 +464,7 @@ Partial Class FormResultsTranscripts
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.Button2.ForeColor = System.Drawing.Color.White
-        Me.Button2.Location = New System.Drawing.Point(3, 430)
+        Me.Button2.Location = New System.Drawing.Point(3, 496)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(128, 55)
         Me.Button2.TabIndex = 8
@@ -509,6 +497,33 @@ Partial Class FormResultsTranscripts
         Me.ReportViewer1.TabIndex = 73
         Me.ReportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         '
+        'ClassBroadsheetsBindingSource
+        '
+        Me.ClassBroadsheetsBindingSource.DataMember = "ClassBroadsheets"
+        '
+        'PictureBoxImg
+        '
+        Me.PictureBoxImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBoxImg.Location = New System.Drawing.Point(159, 167)
+        Me.PictureBoxImg.Name = "PictureBoxImg"
+        Me.PictureBoxImg.Size = New System.Drawing.Size(180, 134)
+        Me.PictureBoxImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBoxImg.TabIndex = 59
+        Me.PictureBoxImg.TabStop = False
+        '
+        'ButtonGPACard
+        '
+        Me.ButtonGPACard.FlatAppearance.BorderSize = 0
+        Me.ButtonGPACard.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonGPACard.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonGPACard.ForeColor = System.Drawing.Color.White
+        Me.ButtonGPACard.Location = New System.Drawing.Point(6, 176)
+        Me.ButtonGPACard.Name = "ButtonGPACard"
+        Me.ButtonGPACard.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonGPACard.TabIndex = 68
+        Me.ButtonGPACard.Text = "GPA Card"
+        Me.ButtonGPACard.UseVisualStyleBackColor = True
+        '
         'FormResultsTranscripts
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -533,17 +548,17 @@ Partial Class FormResultsTranscripts
         Me.Name = "FormResultsTranscripts"
         Me.Tag = "Front"
         Me.Text = "Results - Transcript"
-        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvTranscripts, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvCourses, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
         Me.SidePanel.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -579,4 +594,5 @@ Partial Class FormResultsTranscripts
     Friend WithEvents ReportViewer1 As Microsoft.Reporting.WinForms.ReportViewer
     Friend WithEvents ClassBroadsheetsBindingSource As BindingSource
     Friend WithEvents ButtonFullScreen As Button
+    Friend WithEvents ButtonGPACard As Button
 End Class

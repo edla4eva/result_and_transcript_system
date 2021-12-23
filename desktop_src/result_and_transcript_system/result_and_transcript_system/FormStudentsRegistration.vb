@@ -171,10 +171,7 @@ Public Class FormStudentsRegistration
 
 
     End Sub
-    Public Sub registerStudent(all As Boolean)
-        ButtonSaveBroadsheet_Click()
-        dgvCourses.Update()
-    End Sub
+
     Private Sub ButtonSaveBroadsheet_Click()
         Try
             Dim strSQL As String
@@ -419,9 +416,7 @@ Public Class FormStudentsRegistration
         showCoursesList(e.ColumnIndex)
     End Sub
 
-    Private Sub ButtonSave_Click(sender As Object, e As EventArgs) Handles ButtonSave.Click
-        registerStudent(False)
-    End Sub
+
 
     Private Sub ButtonImportStudentsFromExcel_Click(sender As Object, e As EventArgs) Handles ButtonImportStudentsFromExcel.Click
         MainForm.ChangeMenu("Student")
@@ -756,11 +751,7 @@ Public Class FormStudentsRegistration
 
 
 
-    Private Sub btnExportExcel_Click(sender As Object, e As EventArgs) Handles btnExportExcel.Click
-        Dim retFileName As String
-        retFileName = objExcelFile.exportStudentsToExcelFile_NPOI(dgvStudents.DataSource, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\ExportedStudents" & ComboBoxLevel.Text & ".xlsx")
-        MsgBox("File exported to: " & retFileName)
-    End Sub
+
 
 
 
@@ -833,6 +824,10 @@ Public Class FormStudentsRegistration
             dgvImportCourses.Tag = "RTPS"
             checkReg()
             dgvImportCourses.BringToFront()
+        End If
+
+        If MsgBox("Do you want to save the imported Registration data into the database (cannot be undone)." & vbCrLf & "You ca also do it later by clicking the Save Imported button", MsgBoxStyle.YesNo) = vbYes Then
+            ButtonSaveReg.PerformClick()
         End If
     End Sub
 
@@ -909,7 +904,7 @@ Public Class FormStudentsRegistration
         Next
     End Sub
 
-    Private Sub ButtonShowAllReg_Click(sender As Object, e As EventArgs) Handles ButtonShowAllReg.Click
+    Private Sub ButtonShowAllReg_Click(sender As Object, e As EventArgs)
 
         If PanelAllReg.Visible = False Then
             DataGridViewAlReg.DataSource = mappDB.GetDataWhere(STR_SQL_ALL_REG).Tables(0).DefaultView
@@ -928,8 +923,9 @@ Public Class FormStudentsRegistration
 
             'objResult.resultTemplateFileName
             Using svDia As New SaveFileDialog
+                'filter=Excel Files|*.xltx
                 If svDia.ShowDialog = DialogResult.OK Then
-                    My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\registration.xlts", svDia.FileName & ".xltx")
+                    My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\registration.xltx", svDia.FileName & ".xltx")
                 End If
             End Using
         Catch ex As Exception
