@@ -1016,7 +1016,7 @@ Public Class FormStudentsRegistration
 
         End If
     End Sub
-    Public Sub InsertOrUpdateUsingDataAdapter(dMATno As String, insert As Boolean)
+    Public Sub InsertOrUpdateUsingDataAdapter(dMATno As String, dTable As String, insert As Boolean)
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
                 xConn.ConnectionString = mappDB.getCorrectConnectionstring()
@@ -1025,7 +1025,16 @@ Public Class FormStudentsRegistration
                 Dim myDataSet As DataSet = New DataSet
                 Dim dStrSQL As String = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
                 Dim dStrSQLUpdate As String = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
+                If dTable = "students" Then
+                    dStrSQL = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
+                    dStrSQLUpdate = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
 
+                ElseIf dTable = "Reg" Then
+                    dStrSQL = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
+                    dStrSQLUpdate = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
+
+                Else
+                End If
                 Dim cmdLocal As New OleDb.OleDbCommand(dStrSQL, xConn)
                 Dim myAdapterInsert As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(dStrSQL, xConn)
                 Dim myAdapterUpdate As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(dStrSQLUpdate, xConn)
@@ -1166,12 +1175,13 @@ Public Class FormStudentsRegistration
     Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
         Try
             If TextBoxCourse_1.BackColor = Color.Pink Or TextBoxCourse_2.BackColor = Color.Pink Then  'insert
-                InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, True)
+                InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, "Reg", True)
             Else
-                InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, False)
+                InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, "Reg", False)
             End If
 
-            'else
+            'always update students table
+            InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, "students", False)
 
         Catch ex As Exception
             MsgBox(ex.Message)

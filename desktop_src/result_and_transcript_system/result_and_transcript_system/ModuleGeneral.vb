@@ -200,10 +200,10 @@ Module ModuleGeneral
                                                     FROM reg;"   'todo "Col" & LAST_COL
 
     Public STR_SQL_ALL_STUDENTS_COUNT As String = "SELECT count(matno) AS NumStudents
-                                                    FROM students;"   'todo "Col" & LAST_COL
+                                                    FROM Reg;"   'todo "Col" & LAST_COL
 
-    Public STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE As String = "SELECT results.s_n, Results.matno, students.student_firstname, students.student_othernames, students.student_surname, Results.total,Results.Session_idr, Departments.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
-                 FROM((Results INNER JOIN students ON Results.matno = students.matno) INNER JOIN Departments On students.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code 
+    Public STR_SQL_QUERY_RESULT_WHERE_SESSION_AND_COURSE As String = "SELECT results.s_n, Results.matno, Reg.student_firstname, Reg.student_othernames, Reg.student_surname, Results.total,Results.Session_idr, Departments.dept_name, Courses.course_code, Courses.course_unit, Courses.course_title, Courses.course_semester 
+                 FROM((Results INNER JOIN Reg ON Results.matno = Reg.matno) INNER JOIN Departments On Reg.student_dept_idr = Departments.dept_id) INNER JOIN Courses On Results.course_code_idr = Courses.course_code 
                  WHERE results.session_idr='{0}' AND results.course_code_idr='{1}';"
 
     Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
@@ -213,7 +213,7 @@ Module ModuleGeneral
 
     Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments"
     Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
-    Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM students" ' 
+    Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM Reg" ' 
 
     'Broadsheets
     Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_INSERT_IN_BROADSHEET As String = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
@@ -227,22 +227,32 @@ Module ModuleGeneral
     Public STR_COURSES_ORDER_GENERAL As String = "SELECT * FROM Courses_order WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
     Public STR_COURSES_ORDER_GENERAL_ALL As String = "SELECT * FROM Courses_order;"
 
+    'Public STR_SQL_REGISTERED_STUDENTS As String = "SELECT Reg.MatNo, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr,   
+    '                        students.student_firstname, students.student_surname, students.student_othernames, 
+    '                        students.mode_of_entry, students.session_idr_of_entry, students.year_of_entry, 
+    '                        students.status
+    '                        FROM Reg INNER JOIN students ON Reg.MatNo = students.matno 
+    '                        WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1} AND (Reg.level)={2}));"
     Public STR_SQL_REGISTERED_STUDENTS As String = "SELECT Reg.MatNo, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr,   
-                            students.student_firstname, students.student_surname, students.student_othernames, 
-                            students.mode_of_entry, students.session_idr_of_entry, students.year_of_entry, 
-                            students.status
-                            FROM Reg INNER JOIN students ON Reg.MatNo = students.matno 
+                            Reg.student_firstname, Reg.student_surname, Reg.student_othernames, 
+                            Reg.mode_of_entry, Reg.session_idr_of_entry, Reg.year_of_entry, 
+                            Reg.status
+                            FROM Reg 
                             WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1} AND (Reg.level)={2}));"
 
     'Transcripts
-    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO_SESSION As String = "SELECT Students.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
-                      Results.Session_idr  FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
-                      Results.Session_idr HAVING (((Students.matno)='{0}') AND ((Results.Session_idr)='{1}'));"
+    'Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO_SESSION As String = "SELECT Students.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
+    '                  Results.Session_idr  FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
+    '                  Results.Session_idr HAVING (((Students.matno)='{0}') AND ((Results.Session_idr)='{1}'));"
 
-    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Students.MatNo, Last(Results.total) AS Score, Results.course_code_idr, 
-                      Results.Session_idr   FROM Students INNER JOIN Results ON Students.MatNo = Results.matno GROUP BY Students.MatNo, Results.course_code_idr,  
-                      Results.Session_idr HAVING (((Students.matno)='{0}'));"
-    Public STR_SQL_STUDENTS_FULL_NAME As String = "SELECT * FROM Students WHERE matno='{0}'"
+    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO_SESSION As String = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
+                      Results.Session_idr  FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
+                      Results.Session_idr HAVING (((Reg.matno)='{0}') AND ((Results.Session_idr)='{1}'));"
+
+    Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Reg.MatNo, Last(Results.total) AS Score, Results.course_code_idr, 
+                      Results.Session_idr   FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
+                      Results.Session_idr HAVING (((Reg.matno)='{0}'));"
+    Public STR_SQL_STUDENTS_FULL_NAME As String = "SELECT * FROM Reg WHERE matno='{0}'"
 
     'Import reg students from existing Access sofware
     'Note table name is SPD
@@ -254,9 +264,9 @@ Module ModuleGeneral
                             WHERE (((dept='{0}') AND (SPD.level='{1}')));"
 
     'search
-    Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_PARAM = "SELECT * FROM students WHERE matno like @STR)"
+    Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_PARAM = "SELECT * FROM Reg WHERE matno like @STR)"
     'Dim strParam As New OleDbParameter("@STR", "%" & str & "%")
-    Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_SURNAME_FIRSTNAME = "SELECT * FROM students WHERE matno like '%{0}%' OR student_surname like '%{1}%' OR student_firstname like '%{2}%'"
+    Public STR_SQL_SEARCH_STUDENTS_BY_MATNO_SURNAME_FIRSTNAME = "SELECT * FROM Reg WHERE matno like '%{0}%' OR student_surname like '%{1}%' OR student_firstname like '%{2}%'"
     ''TIP: Problem with OLEDB and Access. canot use Like  in query ...''FIXED: use % wildcard instead of *
     Public STR_FILTER_STUDENTS = "matno like '%{0}%' OR student_surname='%{1}%'  OR student_firstname='%{2}%'"
     Public STR_FILTER_RESULTS_BYCOURSECODE = "Course_code_idr like '%{0}%'"
@@ -268,8 +278,8 @@ Module ModuleGeneral
     Public STR_SQL_ALL_RESULTS_WHERE As String = "SELECT matno, coursecode_idr, total FROM results WHERE matno='{0}'" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
     Public SQL_SELECT_RESULTS_WHERE_MATNO As String = " SELECT * FROM results WHERE matno= '{0}'"
     Public SQL_SELECT_ALL_RESULTS As String = "SELECT * FROM results"
-    Public STR_SQL_ALL_STUDENTS_IN_DEPT As String = "SELECT * FROM students WHERE student_dept_idr={0}" ' 
-    Public STR_SQL_ALL_STUDENTS_WHERE_MATNO As String = "SELECT * FROM students WHERE matno='{0}'" ' 
+    Public STR_SQL_ALL_STUDENTS_IN_DEPT As String = "SELECT * FROM Reg WHERE student_dept_idr={0}" ' 
+    Public STR_SQL_ALL_STUDENTS_WHERE_MATNO As String = "SELECT * FROM Reg WHERE matno='{0}'" ' 
 
 
     Public STR_SQL_COURSES_WHERE As String = "SELECT * FROM courses WHERE matno='{0}' order by course_code" ' 
@@ -277,7 +287,7 @@ Module ModuleGeneral
     Public STR_SQL_COURSES_REGS_WHERE As String = "SELECT * FROM regs WHERE matno='{0}'"
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
-    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO students (students.matno, students.student_firstname, students.student_surname, students.student_othernames, students.student_dept_idr, students.status, students.level, students.year_of_entry,students.session_idr_of_entry, students.mode_of_entry) " &
+    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (Reg.matno, Reg.student_firstname, Reg.student_surname, Reg.student_othernames, Reg.student_dept_idr, Reg.status, Reg.level, Reg.year_of_entry,Reg.session_idr_of_entry, Reg.mode_of_entry) " &
                                                 "VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}');"
 
     'Course reg combo
