@@ -5,5 +5,11 @@
     <Setting Name="dbConnectionString" Type="System.String" Scope="User">
       <Value Profile="(Default)">server=localhost;user id=root;database=db;persist security info=True</Value>
     </Setting>
+    <Setting Name="dbpass" Type="System.String" Scope="User">
+      <Value Profile="(Default)">rtpsadmin2021</Value>
+    </Setting>
+    <Setting Name="db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">60ebe72bfd7245769b0564f53fdc439b</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

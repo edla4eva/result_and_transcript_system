@@ -7,6 +7,8 @@ Imports ExcelInterop = Microsoft.Office.Interop.Excel
 Imports System.Data.OleDb
 Imports System.Security.Cryptography
 Imports System.Text
+Imports System.Windows.Controls
+Imports System.Windows.Forms.Control
 
 Module ModuleGeneral
 
@@ -34,9 +36,18 @@ Module ModuleGeneral
 
     'DB defalults
     ' '32 bit Access
-    Public STR_connectionString32 = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" '& "User ID=admin;" & "Password=" & m_password
+    Public STR_connectionString32 = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;"
+    'passworded
+    'Public STR_connectionString32 = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
+
     '64 bits
-    Public STR_connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\db.mdb"
+    Public STR_connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;"
+    'passworded
+    'Public STR_connectionString As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
+
+
+    Public STR_connectionStringAccessNet As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
+
     Public STR_connectionStringCloud As String = "server=localhost;User Id=root;Persist Security Info=True;database=result_and_transript_db"
 
 
@@ -392,49 +403,72 @@ Module ModuleGeneral
     Public Function LastColInSem_2_ForLevel(dLevel As Integer) As Integer
         Return (COURSE_START_COL_2 + (dLevel / 100) * NUM_COURSES_PER_LEVEL_2) - 1
     End Function
-    Public Sub combolist(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, ByVal this_cbo As ComboBox, Optional dConnMode As String = "local")
-        Try
-            Dim oad As Object
-            Dim ds As New DataSet
-            Dim strtmp As String = this_cbo.Text.ToString : this_cbo.Text = String.Empty
-            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString
-                    xConn.Open()
-                End Try
+    Sub refreshcolors(frm As Form, cntls As ControlCollection, Optional darkTheme As Boolean = True)
 
-                If dConnMode = "local" Then
-                    oad = New OleDbDataAdapter(this_sql, xConn)
-                    oad.Fill(ds)
-                Else
-                    'oad = New MySqlDataAdapter(this_sql, xConn)
-                    'oad.Fill(ds)
+        frm.BackColor = RGBColors.colorBackground
+        frm.ForeColor = RGBColors.colorForeground
+        For Each cnt In cntls
+                If cntls.GetType = Type.GetType("TextBox") Then
+
+
+                ElseIf cntls.GetType = Type.GetType("DataGridView") Then
+                    cnt.BackgroundColor = RGBColors.colorBackground
+                cnt.RowsDefaultCellStyle.BackColor = RGBColors.colorBackground
+                cnt.RowsDefaultCellStyle.ForeColor = RGBColors.colorForeground
+            Else
+                    cnt.backcolor = RGBColors.colorBackground
+                    cnt.backcolor = RGBColors.colorForeground
                 End If
 
+            Next
 
-                With this_cbo
-                    .DataSource = ds.Tables(0)
-                    .ValueMember = this_value
-                    .DisplayMember = this_member
-                End With
-
-                xConn.Close()
-                this_sql = Nothing
-                this_value = Nothing
-                this_member = Nothing
-                ds = Nothing
-                oad = Nothing
-
-            End Using
-            'mappDB.close()
-        Catch ex As Exception
-            log(ex.ToString)
-            Throw ex
-
-        End Try
+        If darkTheme Then
+            'do some corrections
+        End If
     End Sub
+    'Public Sub combolist(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, ByVal this_cbo As ComboBox, Optional dConnMode As String = "local")
+    '    Try
+    '        Dim oad As Object
+    '        Dim ds As New DataSet
+    '        Dim strtmp As String = this_cbo.Text.ToString : this_cbo.Text = String.Empty
+    '        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+    '            Try
+    '                xConn.Open()
+    '            Catch ex1 As Exception
+    '                xConn.ConnectionString = ModuleGeneral.STR_connectionString
+    '                xConn.Open()
+    '            End Try
+
+    '            If dConnMode = "local" Then
+    '                oad = New OleDbDataAdapter(this_sql, xConn)
+    '                oad.Fill(ds)
+    '            Else
+    '                'oad = New MySqlDataAdapter(this_sql, xConn)
+    '                'oad.Fill(ds)
+    '            End If
+
+
+    '            With this_cbo
+    '                .DataSource = ds.Tables(0)
+    '                .ValueMember = this_value
+    '                .DisplayMember = this_member
+    '            End With
+
+    '            xConn.Close()
+    '            this_sql = Nothing
+    '            this_value = Nothing
+    '            this_member = Nothing
+    '            ds = Nothing
+    '            oad = Nothing
+
+    '        End Using
+    '        'mappDB.close()
+    '    Catch ex As Exception
+    '        log(ex.ToString)
+    '        Throw ex
+
+    '    End Try
+    'End Sub
     Public Function combolistDict(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, Optional dConnMode As String = "local") As Dictionary(Of String, String)
         Try
             Dim oad As Object

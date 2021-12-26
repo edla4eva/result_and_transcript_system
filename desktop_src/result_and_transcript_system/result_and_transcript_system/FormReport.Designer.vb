@@ -24,6 +24,7 @@ Partial Class FormReport
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim ReportDataSource1 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
+        Me.ClassDBBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.ReportViewer1 = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.SidePanel = New System.Windows.Forms.Panel()
@@ -33,11 +34,14 @@ Partial Class FormReport
         Me.ButtonPrint = New System.Windows.Forms.Button()
         Me.ButtonEport = New System.Windows.Forms.Button()
         Me.ReportViewerSenateCover = New Microsoft.Reporting.WinForms.ReportViewer()
-        Me.ClassDBBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
-        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'ClassDBBindingSource
+        '
+        Me.ClassDBBindingSource.DataSource = GetType(result_and_transcript_system.ClassDB)
         '
         'DataGridView1
         '
@@ -151,14 +155,11 @@ Partial Class FormReport
         Me.ReportViewerSenateCover.Size = New System.Drawing.Size(659, 426)
         Me.ReportViewerSenateCover.TabIndex = 73
         '
-        'ClassDBBindingSource
-        '
-        Me.ClassDBBindingSource.DataSource = GetType(result_and_transcript_system.ClassDB)
-        '
         'FormReport
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.ControlDark
         Me.ClientSize = New System.Drawing.Size(943, 450)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.ReportViewer1)
@@ -167,9 +168,9 @@ Partial Class FormReport
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormReport"
         Me.Text = "Reports"
+        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
-        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

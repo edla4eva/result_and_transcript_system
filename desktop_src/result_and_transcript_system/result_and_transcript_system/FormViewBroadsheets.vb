@@ -8,11 +8,11 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub FormViewBroadsheets_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.BackColor = RGBColors.colorBlack2
-        Me.BackColor = RGBColors.colorBlack2
-        Me.DataGridView1.BackgroundColor = RGBColors.colorBlack2
-        Me.DataGridView1.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.DataGridView1.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.BackColor = RGBColors.colorBackground
+        Me.BackColor = RGBColors.colorBackground
+        Me.DataGridView1.BackgroundColor = RGBColors.colorBackground
+        Me.DataGridView1.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.DataGridView1.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
         On Error Resume Next
 
 

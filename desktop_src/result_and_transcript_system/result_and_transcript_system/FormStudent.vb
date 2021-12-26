@@ -1,6 +1,6 @@
 ﻿Public Class FormStudent
     Private Sub FormStudent_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.BackColor = RGBColors.colorBlack2
+        Me.BackColor = RGBColors.colorBackground
     End Sub
 
     Private Sub FormStudent_Closed(sender As Object, e As EventArgs) Handles Me.Closed

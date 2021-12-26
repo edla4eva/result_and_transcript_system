@@ -12,14 +12,14 @@ Public Class FormStudentsRegistration
     Private Sub FormStudentsRegistration_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.WindowState = FormWindowState.Maximized
 
-        Me.BackColor = RGBColors.colorBlack2
-        Me.dgvStudents.BackgroundColor = RGBColors.colorBlack2
-        Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.BackColor = RGBColors.colorBackground
+        Me.dgvStudents.BackgroundColor = RGBColors.colorBackground
+        Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
 
-        Me.dgvImportCourses.BackgroundColor = RGBColors.colorBlack2
-        Me.dgvImportCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.dgvImportCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.dgvImportCourses.BackgroundColor = RGBColors.colorBackground
+        Me.dgvImportCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.dgvImportCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
     End Sub
     Private Sub FormStudentsRegistration_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
@@ -168,7 +168,28 @@ Public Class FormStudentsRegistration
         End If
     End Sub
     Public Sub unregisterStudent()
+        Dim oldLen As Integer = 0
+        If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+            'If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+            'If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+            'MsgBox("Already Registered")
+            'Else
+            'If TextBoxCourse_1.Text = "" Then
+            oldLen = TextBoxCourse_1.Text.Length
+            TextBoxCourse_1.Text.Replace(TextBoxCourseCode.Text & ";", "")
+            If TextBoxCourse_1.Text.Length = oldLen Then
+                TextBoxCourse_1.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
+            End If
 
+        ElseIf TextBoxCourse_2.Text.Contains(TextBoxCourseCode.Text) Then
+            oldLen = TextBoxCourse_2.Text.Length
+            TextBoxCourse_2.Text.Replace(TextBoxCourseCode.Text & ";", "")
+            If TextBoxCourse_2.Text.Length = oldLen Then
+                TextBoxCourse_2.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
+            End If
+        Else
+
+        End If
 
     End Sub
 
@@ -869,16 +890,11 @@ Public Class FormStudentsRegistration
             End If
         Next
         'TODO Sessions
-        'dgvCourses.Rows.Add({dgvStudents.SelectedRows(0).Cells("matno").Value, strReg1, strReg2})
 
         If MsgBox("Are the courses corectly displayed" & vbCrLf & strReg1 & vbCrLf & vbCrLf & strReg2, MsgBoxStyle.YesNo) = vbYes Then
             PanelCourses.Visible = False
-            If dgvCourses.SelectedRows.Count > 0 Then
-                'dgvCourses.SelectedRows(0).Cells("CourseCode_1").Value = strReg1
-                'dgvCourses.SelectedRows(0).Cells("CourseCode_2").Value = strReg2
-                TextBoxCourse_1.Text = strReg1
-                TextBoxCourse_2.Text = strReg2
-            End If
+            TextBoxCourse_1.Text = strReg1
+            TextBoxCourse_2.Text = strReg2
         End If
     End Sub
 
@@ -947,33 +963,50 @@ Public Class FormStudentsRegistration
         'BindingNavigator1.MoveNextItem.PerformClick()
         'TextBoxMATNO.DataBindings.Item(0).DataSource =
         If TextBoxMATNO.DataBindings.Count = 0 Then
-            TextBoxMATNO.DataBindings.Add("Text", BindingSource1, "matno")
-            TextBoxSurname.DataBindings.Add("Text", BindingSource1, "student_surname")
-            TextBoxFirstName.DataBindings.Add("Text", BindingSource1, "student_firstname")
-            TextBoxOtherNames.DataBindings.Add("Text", BindingSource1, "student_othernames")
-            TextBoxEntrySession.DataBindings.Add("Text", BindingSource1, "session_idr")
-            TextBoxEntryMode.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
+            TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
+            TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
+            TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
+            TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
+            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
             'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
         End If
 
     End Sub
-    Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefresh.Click
-        Dim ds As New DataSet
+    Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefreshFormview.Click
+        Dim dsStudents, dsReg As New DataSet
         'Dim rd As OleDb.OleDbDataReader
         'ds = mappDB.GetRecordWhere("SELECT * FROM students")
-        ds = mappDB.GetDataWhere("SELECT * FROM students")
-        BindingSource1.DataSource = ds.Tables(0)
-        BindingNavigator1.BindingSource = BindingSource1
+        dsStudents = mappDB.GetDataWhere("SELECT * FROM students")
+        BindingSourceStudents.DataSource = dsStudents.Tables(0)
+
+        BindingNavigator1.BindingSource = BindingSourceStudents
         'TextBoxMATNO.DataBindings.Item(0).DataSource =
         If TextBoxMATNO.DataBindings.Count = 0 Then
-            TextBoxMATNO.DataBindings.Add("Text", BindingSource1, "matno")
-            TextBoxSurname.DataBindings.Add("Text", BindingSource1, "student_surname")
-            TextBoxFirstName.DataBindings.Add("Text", BindingSource1, "student_firstname")
-            TextBoxOtherNames.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
+            TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
+            TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
+            TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
             'TextBoxEntrySession.DataBindings.Add("Text", BindingSource1, "session_idr")
 
-            TextBoxEntryMode.DataBindings.Add("Text", BindingSource1, "student_othernames")
+            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
             'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
+        End If
+
+
+        'Detail for (Reg)
+        dsReg = mappDB.GetDataWhere("SELECT * FROM Reg")
+        BindingSourcereg.DataSource = dsReg.Tables(0)
+        If TextBoxMATNOReg.DataBindings.Count = 0 Then
+            TextBoxMATNOReg.DataBindings.Add("Text", BindingSourcereg, "matno")
+            TextBoxCourse_1.DataBindings.Add("Text", BindingSourcereg, "CourseCode_1")
+            TextBoxCourse_2.DataBindings.Add("Text", BindingSourcereg, "CourseCode_2")
+
+            TextBoxSessionReg.DataBindings.Add("Text", BindingSourcereg, "Session_idr")
+            TextBoxFeesReg.DataBindings.Add("Text", BindingSourcereg, "Fees_Status")
+            TextBoxLevelreg.DataBindings.Add("Text", BindingSourcereg, "level")
+            TextBoxdept_idrReg.DataBindings.Add("Text", BindingSourcereg, "dept_idr")
+
         End If
     End Sub
     Public Sub UpdateUsingDataAdapter(dMATno As String)
@@ -1069,7 +1102,7 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
-        BindingSource1.MoveNext()
+        BindingSourceStudents.MoveNext()
 
     End Sub
 
@@ -1079,6 +1112,7 @@ Public Class FormStudentsRegistration
             PanelForm.Top = 51
             dgvStudents.Visible = False
             ButtonFormView.Text = "Grid View"
+            Me.ButtonRefreshFormview.PerformClick()
         Else
 
             PanelForm.Visible = False
@@ -1100,8 +1134,29 @@ Public Class FormStudentsRegistration
         PanelCourses.Visible = True
     End Sub
 
-    Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSource1.CurrentChanged
+    Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSourceStudents.CurrentChanged
 
+        Dim recNo As Integer
+        Try
+
+            recNo = BindingSourcereg.Find("matno", TextBoxMATNO.Text)
+        If recNo >= 0 Then
+                'MsgBox(TextBoxMATNO.Text & "is in Reg")
+                BindingSourcereg.Position = recNo
+        Else
+                'MsgBox("Not in Reg")
+                BindingSourcereg.AddNew()
+                Me.TextBoxMATNOReg.Text = TextBoxMATNO.Text
+                Me.TextBoxSessionReg.Text = ComboBoxSessions.SelectedItem
+                Me.TextBoxDeptID.Text = mappDB.getDeptID(ComboBoxDepartments.SelectedItem)   'todo: error prone
+                Me.TextBoxCourse_1.Text = ""
+            Me.TextBoxCourse_2.Text = ""
+
+        End If
+
+        Catch ex As Exception
+            logError(ex.ToString)
+        End Try
     End Sub
 
     Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
@@ -1138,5 +1193,25 @@ Public Class FormStudentsRegistration
                 If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then CheckedListBoxCourses.Items(item).checked = True
             Next
         End If
+    End Sub
+
+    Private Sub BindingNavigatorAddNewItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorAddNewItem.Click
+        BindingSourcereg.AddNew()
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles SaveToolStripButton1.Click
+        Me.Validate()
+        Me.BindingSourcereg.EndEdit()
+
+        'Me.tableadaptermanager.updateall()
+    End Sub
+
+    Private Sub BindingSourcereg_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSourcereg.CurrentChanged
+        BindingSourcereg.EndEdit()  'todo
+
+    End Sub
+
+    Private Sub ButtonMovePrevious_Click(sender As Object, e As EventArgs) Handles ButtonMovePrevious.Click
+        BindingSourceStudents.MovePrevious()
     End Sub
 End Class

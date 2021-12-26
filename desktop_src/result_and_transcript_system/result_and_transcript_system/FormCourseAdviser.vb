@@ -3,7 +3,8 @@
 Public Class FormCourseAdviser
     Dim dCountResult1, dCountResult2, dCountBS1, dCountBS2, dCountReg, dCountStudents, dCountSenate As Integer
     Private Sub FormCourseAdviser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.BackColor = RGBColors.colorBlack2
+        Me.BackColor = RGBColors.colorBackground
+        Me.ForeColor = RGBColors.colorForeground
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonResultsSubmitted.Click

@@ -14,18 +14,18 @@ Public Class FormResultsTranscripts
 
     Private Sub FormResultsTranscript_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         On Error Resume Next
-        Me.BackColor = RGBColors.colorBlack2
-        Me.dgvTranscripts.BackgroundColor = RGBColors.colorBlack2
-        Me.dgvTranscripts.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.dgvTranscripts.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.BackColor = RGBColors.colorBackground
+        Me.dgvTranscripts.BackgroundColor = RGBColors.colorBackground
+        Me.dgvTranscripts.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.dgvTranscripts.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
 
-        Me.dgvCourses.BackgroundColor = RGBColors.colorBlack2
-        Me.dgvCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.dgvCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.dgvCourses.BackgroundColor = RGBColors.colorBackground
+        Me.dgvCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.dgvCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
 
-        Me.dgvStudents.BackgroundColor = RGBColors.colorBlack2
-        Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.dgvStudents.BackgroundColor = RGBColors.colorBackground
+        Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
         Me.ReportViewer1.RefreshReport
     End Sub
 

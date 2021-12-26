@@ -20,4 +20,9 @@
     Public Shared colorFuchsia As Color = Color.FromArgb(255, 0, 255) 'Fuchsia
     Public Shared colorRoyalBlue As Color = Color.RoyalBlue 'Royal Blue
 
+
+
+    Public Shared colorBackground As Color = colorBlack2
+    Public Shared colorForeground As Color = colorSilver
+
 End Class

@@ -19,13 +19,13 @@ Public Class FormGenerateBroadsheet
 
     Private Sub FormGenerateBroadsheet_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         On Error Resume Next
-        Me.BackColor = RGBColors.colorBlack2
-        Me.DataGridViewBroadSheet.BackgroundColor = RGBColors.colorBlack2
-        Me.DataGridViewBroadSheet.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.DataGridViewBroadSheet.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
-        Me.DataGridViewTemp.BackgroundColor = RGBColors.colorBlack2
-        Me.DataGridViewTemp.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.DataGridViewTemp.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        Me.BackColor = RGBColors.colorBackground
+        Me.DataGridViewBroadSheet.BackgroundColor = RGBColors.colorBackground
+        Me.DataGridViewBroadSheet.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.DataGridViewBroadSheet.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
+        Me.DataGridViewTemp.BackgroundColor = RGBColors.colorBackground
+        Me.DataGridViewTemp.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+        Me.DataGridViewTemp.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
     End Sub
 
     Private Sub ButtonProcessBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonProcessBroadsheet.Click
@@ -350,7 +350,7 @@ Public Class FormGenerateBroadsheet
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
         Try
             If objBroadsheet.broadsheetDataDS.Tables(0).Columns(0).ColumnName.Contains("Error") Then
-                DataGridViewBroadSheet.DataSource = objBroadsheet.dataTablesScoresAndGrades(0).DefaultView
+                DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
                 DataGridViewBroadSheet.Columns(0).Width = 120
                 Exit Sub
             ElseIf objBroadsheet.broadsheetDataDS.Tables(0).Rows.Count < 1 Then

@@ -1,6 +1,7 @@
 ﻿Public Class FormAdmin
     Private Sub FormCourseAdviser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.BackColor = RGBColors.colorBlack2
+        Me.BackColor = RGBColors.colorBackground
+        Me.ForeColor = RGBColors.colorForeground
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

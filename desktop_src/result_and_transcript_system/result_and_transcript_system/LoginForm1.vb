@@ -69,7 +69,8 @@ Public Class LoginForm1
     End Sub
 
     Private Sub LoginForm1_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Me.BackColor = RGBColors.colorBlack2
+        Me.BackColor = RGBColors.colorBackground
+        Me.ForeColor = RGBColors.colorForeground
     End Sub
 
     Private Sub LoginForm1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress

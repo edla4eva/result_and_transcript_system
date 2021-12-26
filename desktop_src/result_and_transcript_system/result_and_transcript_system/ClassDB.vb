@@ -207,6 +207,7 @@ Public Class ClassDB
                     xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                     xConn.Open()
                 End Try
+
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 Dim returnVal As String = Nothing
                 Dim rd As OleDb.OleDbDataReader
@@ -724,15 +725,20 @@ Public Class ClassDB
         End If
         Return retVal
     End Function
-    'TODO:: incomplete
+    'TODO:: use dictonaries
     Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
         Dim retVal As Integer = 1
-        If forceStrict = True Then
-            retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+        If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
+            retVal = CInt(dictDepts.Keys(strDept))
         Else
-            'todo: Where Like in sql
-            retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
 
+            If forceStrict = True Then
+                retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+            Else
+                'todo: Where Like in sql
+                retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+
+            End If
         End If
         Return retVal
     End Function

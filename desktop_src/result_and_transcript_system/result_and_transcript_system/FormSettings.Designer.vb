@@ -60,6 +60,10 @@ Partial Class FormSettings
         Me.LabelClosePanelModify = New System.Windows.Forms.Label()
         Me.ListBoxCoursesOrder = New System.Windows.Forms.ListBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.LightTheme = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonDarkTheme = New System.Windows.Forms.RadioButton()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -81,6 +85,7 @@ Partial Class FormSettings
         Me.PanelModify.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.DataGridViewCoursesOrder, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox3.SuspendLayout()
@@ -471,6 +476,7 @@ Partial Class FormSettings
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GroupBox1.Controls.Add(Me.GroupBox5)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.Label8)
@@ -484,6 +490,50 @@ Partial Class FormSettings
         Me.GroupBox1.Size = New System.Drawing.Size(384, 239)
         Me.GroupBox1.TabIndex = 14
         Me.GroupBox1.TabStop = False
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.LightTheme)
+        Me.GroupBox5.Controls.Add(Me.RadioButtonDarkTheme)
+        Me.GroupBox5.Controls.Add(Me.Label4)
+        Me.GroupBox5.Location = New System.Drawing.Point(208, 19)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(170, 164)
+        Me.GroupBox5.TabIndex = 37
+        Me.GroupBox5.TabStop = False
+        '
+        'LightTheme
+        '
+        Me.LightTheme.AutoSize = True
+        Me.LightTheme.Location = New System.Drawing.Point(21, 109)
+        Me.LightTheme.Name = "LightTheme"
+        Me.LightTheme.Size = New System.Drawing.Size(84, 17)
+        Me.LightTheme.TabIndex = 38
+        Me.LightTheme.Text = "Light Theme"
+        Me.LightTheme.UseVisualStyleBackColor = True
+        '
+        'RadioButtonDarkTheme
+        '
+        Me.RadioButtonDarkTheme.AutoSize = True
+        Me.RadioButtonDarkTheme.Checked = True
+        Me.RadioButtonDarkTheme.Location = New System.Drawing.Point(21, 49)
+        Me.RadioButtonDarkTheme.Name = "RadioButtonDarkTheme"
+        Me.RadioButtonDarkTheme.Size = New System.Drawing.Size(84, 17)
+        Me.RadioButtonDarkTheme.TabIndex = 37
+        Me.RadioButtonDarkTheme.TabStop = True
+        Me.RadioButtonDarkTheme.Text = "Dark Theme"
+        Me.RadioButtonDarkTheme.UseVisualStyleBackColor = True
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Arial", 15.75!)
+        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label4.Location = New System.Drawing.Point(17, 16)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(73, 24)
+        Me.Label4.TabIndex = 36
+        Me.Label4.Text = "Theme"
         '
         'Label7
         '
@@ -695,6 +745,8 @@ Partial Class FormSettings
         Me.GroupBox4.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         CType(Me.DataGridViewCoursesOrder, System.ComponentModel.ISupportInitialize).EndInit()
@@ -757,4 +809,8 @@ Partial Class FormSettings
     Friend WithEvents ComboBoxLevel As ComboBox
     Friend WithEvents Label10 As Label
     Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents GroupBox5 As GroupBox
+    Friend WithEvents LightTheme As RadioButton
+    Friend WithEvents RadioButtonDarkTheme As RadioButton
+    Friend WithEvents Label4 As Label
 End Class

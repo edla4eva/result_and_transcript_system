@@ -7,10 +7,7 @@ Public Class FormSettings
     Dim ds As New DataSet
     Private Sub FormCourseAdviser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Me.BackColor = RGBColors.colorBlack2
-        Me.DataGridViewCoursesOrder.BackgroundColor = RGBColors.colorBlack2
-        Me.DataGridViewCoursesOrder.RowsDefaultCellStyle.BackColor = RGBColors.colorSilver
-        Me.DataGridViewCoursesOrder.RowsDefaultCellStyle.ForeColor = RGBColors.colorBlack
+        refreshcolors(Me, Me.Controls, True)
     End Sub
 
 
@@ -159,9 +156,9 @@ Public Class FormSettings
 
     Private Sub ComboBoxColor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxColor.SelectedIndexChanged
         If ComboBoxColor.SelectedText = "Select..." Then
-            If FontDialog1.ShowDialog = DialogResult.OK Then
-                ComboBoxFonts.Items.Add(FontDialog1.Font.ToString)
-                ComboBoxFonts.Text = (FontDialog1.Font.ToString)
+            If ColorDialog1.ShowDialog = DialogResult.OK Then
+                ComboBoxColor.Items.Add(ColorDialog1.Color.ToString)
+                ComboBoxColor.Text = (ColorDialog1.Color.ToString)
             End If
         End If
 
@@ -216,9 +213,33 @@ Public Class FormSettings
 
 
     Private Sub ButtonAddSession_Click(sender As Object, e As EventArgs) Handles ButtonAddSession.Click
-        Dim strSql As String = "INSERT INTO sessions (session_id,session_name) VALUES ({0},'{1}')"
+        Dim strSql As String = "INSERT INTO sessions (session_id,session_name) VALUES ('{0}','{1}')"
 
         mappDB.doQuery(String.Format(strSql, TextBoxSession.Text, TextBoxSession.Text))
         ComboBoxSessions.Items.Add(TextBoxSession)
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonDarkTheme.CheckedChanged
+        If LightTheme.Checked Then
+            RGBColors.colorBackground = RGBColors.colorSilver
+            RGBColors.colorForeground = RGBColors.colorBlack2
+            refreshcolors(Me, Me.Controls, False)
+        Else
+            RGBColors.colorBackground = RGBColors.colorBlack2
+            RGBColors.colorForeground = RGBColors.colorSilver
+            refreshcolors(Me, Me.Controls, True)
+        End If
+
+    End Sub
+
+    Private Sub ComboBoxFonts_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFonts.SelectedIndexChanged
+        If ComboBoxFonts.SelectedText = "Select..." Then
+            If FontDialog1.ShowDialog = DialogResult.OK Then
+                ComboBoxFonts.Items.Add(FontDialog1.Font.ToString)
+                ComboBoxFonts.Text = (FontDialog1.Font.ToString)
+            End If
+        Else
+            'objRTPS.getFont = Font.FromLogFont(ComboBoxFonts.SelectedItem)
+        End If
     End Sub
 End Class

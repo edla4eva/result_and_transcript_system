@@ -1,6 +1,7 @@
 ﻿Public Class FormCourseLecturer
     Private Sub Form3_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.BackColor = RGBColors.colorBlack2
+        Me.BackColor = RGBColors.colorBackground
+        Me.ForeColor = RGBColors.colorForeground
     End Sub
 
     Private Sub ButtonUpload_Click(sender As Object, e As EventArgs) Handles ButtonUpload.Click

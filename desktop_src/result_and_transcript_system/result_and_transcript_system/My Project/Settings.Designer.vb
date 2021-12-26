@@ -65,6 +65,30 @@ Namespace My
                 Me("dbConnectionString") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("rtpsadmin2021")>  _
+        Public Property dbpass() As String
+            Get
+                Return CType(Me("dbpass"),String)
+            End Get
+            Set
+                Me("dbpass") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("60ebe72bfd7245769b0564f53fdc439b")>  _
+        Public Property db() As String
+            Get
+                Return CType(Me("db"),String)
+            End Get
+            Set
+                Me("db") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
