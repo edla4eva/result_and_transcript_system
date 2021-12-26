@@ -147,16 +147,30 @@ Public Class ClassDB
 
     End Function
 
+    Function getCorrectConnectionstring(Optional cloud As Boolean = False) As String
+        Dim retStr As String = ""
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+            Try
+                xConn.Open()
+                retStr = ModuleGeneral.STR_connectionString
+            Catch ex1 As Exception
+                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
+                Try
+                    xConn.Open()
+                    retStr = ModuleGeneral.STR_connectionString32
+                Catch ex As Exception
+                    retStr = Nothing
+                End Try
 
+            End Try
+        End Using
+        Return retStr
+    End Function
     Public Function GetDataWhere(dstrSQL As String, Optional dTableName As String = "Table") As DataSet
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
                 Dim myDataSet As DataSet = New DataSet()
@@ -178,6 +192,7 @@ Public Class ClassDB
 
             Using xConn As New MySqlConnection(ModuleGeneral.STR_connectionStringCloud)
 
+                xConn.ConnectionString = getCorrectConnectionstring(True)
                 xConn.Open()
 
 
@@ -201,12 +216,8 @@ Public Class ClassDB
     Public Function GetRecordWhere(dstrSQL As String, Optional dTableName As String = "Table") As String
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
 
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 Dim returnVal As String = Nothing
@@ -233,12 +244,8 @@ Public Class ClassDB
         Dim returnVal As String = ""
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
                 closeConn(xConn) 'safely close it
@@ -254,12 +261,8 @@ Public Class ClassDB
         Dim returnVal As String = ""
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
                 closeConn(xConn) 'safely close it
@@ -279,12 +282,8 @@ Public Class ClassDB
         Dim returnVal As String = ""
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
                 closeConn(xConn) 'safely close it
@@ -301,12 +300,8 @@ Public Class ClassDB
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
 
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
                 Dim Table As DataTable = New DataTable()
                 Dim adapterL As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter("Select * from " + TableName, xConn.ConnectionString)
                 ' Dim adapterC As OleDb.OleDbDataAdapter = New MySqlDataAdapter("Select * from " + TableName, Me.connRemote.ConnectionString)
@@ -373,12 +368,8 @@ Public Class ClassDB
 
     Public Function bulkInsertDB(dt As DataTable, strSQL As String, tmpTableName As String) As DataTable
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             Dim cmd As OleDbCommand = New OleDbCommand(strSQL, xConn)
             Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd)
             cmd.ExecuteNonQuery()
@@ -422,17 +413,14 @@ Public Class ClassDB
         usrFromDB = GetRecordWhere(String.Format("SELECT name FROM users WHERE name='{0}' AND password='{1}'", usr, pass))
         If usrFromDB = usr Then Return True Else Return False
     End Function
-    Public Function manualRegInsertDB(dt As DataTable) As Boolean
+    Public Function manualRegInsertDB(dt As DataTable) As String
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             '1. check for duplicates and delete
             Dim sql As String = ""  'todo: move sql to module
             'access
+            Dim retFailed As String = "Failed to insert the following records"
             Dim cmd As New OleDbCommand
             For Each row As DataRow In dt.Rows
                 'todo: use parameters
@@ -444,7 +432,12 @@ Public Class ClassDB
                 'cmd.Transaction.Begin()
                 'da = New OleDbDataAdapter(cmd)
                 'da.Update(dt) 'da.fill() this is a promising mthd
-                cmd.ExecuteNonQuery()
+                Try
+                    cmd.ExecuteNonQuery()
+                Catch ex As Exception
+                    retFailed = retFailed & vbCrLf & row.Item("matno")
+                End Try
+
                 'TODO: Show progress (trigger event)
 
             Next
@@ -453,18 +446,15 @@ Public Class ClassDB
 
             closeConn(xConn)
             cmd.Dispose()
+            Return retFailed
         End Using
-        Return True
+
     End Function
     'TODO: incomplete
     Public Function manualRegExportToEmbeddedAccessSPD(dt As DataTable) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             '1. check for duplicates and delete
             Dim sql As String = ""  'todo: move sql to module
             'access
@@ -504,12 +494,8 @@ Public Class ClassDB
 
     Public Function manualRegExportToExternalAccess(dt As DataTable, AccessFileName As String) As Boolean
         Using xConn As New OleDb.OleDbConnection(buildConnectionStringFromAccessFile(AccessFileName, False))
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = buildConnectionStringFromAccessFile(AccessFileName, True)
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
 
             '1. check for duplicates and delete
             Dim sql As String = ""  'todo: move sql to module
@@ -550,12 +536,8 @@ Public Class ClassDB
 
     Public Function genericManualInsertDB(dt As DataTable, sql As String, values As String()) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             '1. check for duplicates and delete
 
             'access
@@ -581,12 +563,8 @@ Public Class ClassDB
     End Function
     Public Function manualStudentsInsertDB(dt As DataTable) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             '1. check for duplicates and delete
             Dim sql As String = ""  'todo: move sql to module
             'access
@@ -616,12 +594,8 @@ Public Class ClassDB
 
     Public Function manualInsertDB(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             '1. check for duplicates and delete
             Dim sql As String = "INSERT INTO results (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
             Dim strTimestmp As String = Now.ToString
@@ -691,12 +665,8 @@ Public Class ClassDB
     Public Function getMaxID(dstrSQL) As Long
         Dim returnVal As Long = Nothing
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
 
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
             Dim rd As OleDb.OleDbDataReader
@@ -756,12 +726,8 @@ Public Class ClassDB
         Dim dstrSQL As String = "SELECT minimum(matno) FROM Results"    'TODO: move sql
         Dim returnVal As Long = Nothing
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            Try
-                xConn.Open()
-            Catch ex1 As Exception
-                xConn.ConnectionString = ModuleGeneral.STR_connectionString32
-                xConn.Open()
-            End Try
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
             'get the firt record  and add 1
             Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
 
@@ -806,12 +772,8 @@ Public Class ClassDB
         Debug.Print(dstrSQL)
         Try
             Using xConn As New OleDb.OleDbConnection(buildConnectionStringFromAccessFile(dfileName, False))
-                Try
-                    xConn.Open()
-                Catch ex1 As Exception
-                    xConn.ConnectionString = buildConnectionStringFromAccessFile(dfileName, True)
-                    xConn.Open()
-                End Try
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
                 Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
                 Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
                 Dim myDataSet As DataSet = New DataSet()

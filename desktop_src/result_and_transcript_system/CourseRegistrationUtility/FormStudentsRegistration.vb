@@ -241,7 +241,7 @@ Public Class FormStudentsRegistration
             End Using
         Catch ex As Exception
             MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
-            logError(ex.ToString)
+            logerror(ex.ToString)
         End Try
     End Sub
     Public Sub updatePix()

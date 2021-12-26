@@ -90,6 +90,11 @@ Partial Class FormStudentsRegistration
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.PanelForm = New System.Windows.Forms.Panel()
+        Me.TextBoxdept_idrReg = New System.Windows.Forms.TextBox()
+        Me.TextBoxLevelreg = New System.Windows.Forms.TextBox()
+        Me.TextBoxFeesReg = New System.Windows.Forms.TextBox()
+        Me.TextBoxSessionReg = New System.Windows.Forms.TextBox()
+        Me.TextBoxMATNOReg = New System.Windows.Forms.TextBox()
         Me.ComboBoxEntryMode = New System.Windows.Forms.ComboBox()
         Me.ComboBoxShortCuts2 = New System.Windows.Forms.ComboBox()
         Me.ButtonMovePrevious = New System.Windows.Forms.Button()
@@ -99,6 +104,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonClosePanelForm = New System.Windows.Forms.Button()
         Me.BindingNavigator1 = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingSourcereg = New System.Windows.Forms.BindingSource(Me.components)
         Me.BindingNavigatorCountItem = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -109,6 +115,7 @@ Partial Class FormStudentsRegistration
         Me.BindingNavigatorMoveNextItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMoveLastItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SaveToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ButtonRefreshFormview = New System.Windows.Forms.Button()
         Me.TextBoxEntryMode = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -125,13 +132,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonNext = New System.Windows.Forms.Button()
         Me.BindingSourceStudents = New System.Windows.Forms.BindingSource(Me.components)
         Me.ButtonFormView = New System.Windows.Forms.Button()
-        Me.BindingSourcereg = New System.Windows.Forms.BindingSource(Me.components)
-        Me.SaveToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.TextBoxMATNOReg = New System.Windows.Forms.TextBox()
-        Me.TextBoxSessionReg = New System.Windows.Forms.TextBox()
-        Me.TextBoxFeesReg = New System.Windows.Forms.TextBox()
-        Me.TextBoxLevelreg = New System.Windows.Forms.TextBox()
-        Me.TextBoxdept_idrReg = New System.Windows.Forms.TextBox()
+        Me.TextBoxImport = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -151,8 +152,8 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.SuspendLayout()
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
-        CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourcereg, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Panel1
@@ -189,7 +190,7 @@ Partial Class FormStudentsRegistration
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(1838, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(1988, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -233,7 +234,7 @@ Partial Class FormStudentsRegistration
         Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.ProgressBarBS.Location = New System.Drawing.Point(79, 295)
         Me.ProgressBarBS.Name = "ProgressBarBS"
-        Me.ProgressBarBS.Size = New System.Drawing.Size(1250, 23)
+        Me.ProgressBarBS.Size = New System.Drawing.Size(1400, 23)
         Me.ProgressBarBS.TabIndex = 75
         Me.ProgressBarBS.Value = 1
         '
@@ -793,6 +794,7 @@ Partial Class FormStudentsRegistration
         Me.PanelAllReg.AutoScroll = True
         Me.PanelAllReg.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.PanelAllReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelAllReg.Controls.Add(Me.TextBoxImport)
         Me.PanelAllReg.Controls.Add(Me.ButtonDeleteReg)
         Me.PanelAllReg.Controls.Add(Me.DataGridViewAlReg)
         Me.PanelAllReg.Controls.Add(Me.Panel9)
@@ -865,13 +867,13 @@ Partial Class FormStudentsRegistration
         'PanelForm
         '
         Me.PanelForm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelForm.Controls.Add(Me.PanelCourses)
         Me.PanelForm.Controls.Add(Me.TextBoxdept_idrReg)
         Me.PanelForm.Controls.Add(Me.TextBoxLevelreg)
         Me.PanelForm.Controls.Add(Me.TextBoxFeesReg)
         Me.PanelForm.Controls.Add(Me.TextBoxSessionReg)
         Me.PanelForm.Controls.Add(Me.TextBoxMATNOReg)
         Me.PanelForm.Controls.Add(Me.TextBoxTotalCredits)
-        Me.PanelForm.Controls.Add(Me.PanelCourses)
         Me.PanelForm.Controls.Add(Me.Label7)
         Me.PanelForm.Controls.Add(Me.ComboBoxEntryMode)
         Me.PanelForm.Controls.Add(Me.ComboBoxShortCuts2)
@@ -902,6 +904,41 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.Size = New System.Drawing.Size(659, 461)
         Me.PanelForm.TabIndex = 87
         Me.PanelForm.Visible = False
+        '
+        'TextBoxdept_idrReg
+        '
+        Me.TextBoxdept_idrReg.Location = New System.Drawing.Point(573, 227)
+        Me.TextBoxdept_idrReg.Name = "TextBoxdept_idrReg"
+        Me.TextBoxdept_idrReg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxdept_idrReg.TabIndex = 103
+        '
+        'TextBoxLevelreg
+        '
+        Me.TextBoxLevelreg.Location = New System.Drawing.Point(573, 191)
+        Me.TextBoxLevelreg.Name = "TextBoxLevelreg"
+        Me.TextBoxLevelreg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxLevelreg.TabIndex = 102
+        '
+        'TextBoxFeesReg
+        '
+        Me.TextBoxFeesReg.Location = New System.Drawing.Point(573, 152)
+        Me.TextBoxFeesReg.Name = "TextBoxFeesReg"
+        Me.TextBoxFeesReg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxFeesReg.TabIndex = 101
+        '
+        'TextBoxSessionReg
+        '
+        Me.TextBoxSessionReg.Location = New System.Drawing.Point(573, 116)
+        Me.TextBoxSessionReg.Name = "TextBoxSessionReg"
+        Me.TextBoxSessionReg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxSessionReg.TabIndex = 100
+        '
+        'TextBoxMATNOReg
+        '
+        Me.TextBoxMATNOReg.Location = New System.Drawing.Point(573, 81)
+        Me.TextBoxMATNOReg.Name = "TextBoxMATNOReg"
+        Me.TextBoxMATNOReg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxMATNOReg.TabIndex = 99
         '
         'ComboBoxEntryMode
         '
@@ -1002,6 +1039,9 @@ Partial Class FormStudentsRegistration
         Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 22)
         Me.BindingNavigatorAddNewItem.Text = "Add new"
         '
+        'BindingSourcereg
+        '
+        '
         'BindingNavigatorCountItem
         '
         Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
@@ -1078,6 +1118,15 @@ Partial Class FormStudentsRegistration
         '
         Me.BindingNavigatorSeparator2.Name = "BindingNavigatorSeparator2"
         Me.BindingNavigatorSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'SaveToolStripButton1
+        '
+        Me.SaveToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.SaveToolStripButton1.ForeColor = System.Drawing.Color.Black
+        Me.SaveToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.SaveToolStripButton1.Name = "SaveToolStripButton1"
+        Me.SaveToolStripButton1.Size = New System.Drawing.Size(35, 22)
+        Me.SaveToolStripButton1.Text = "Save"
         '
         'ButtonRefreshFormview
         '
@@ -1211,52 +1260,13 @@ Partial Class FormStudentsRegistration
         Me.ButtonFormView.Text = "Form View"
         Me.ButtonFormView.UseVisualStyleBackColor = True
         '
-        'BindingSourcereg
+        'TextBoxImport
         '
-        '
-        'SaveToolStripButton1
-        '
-        Me.SaveToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.SaveToolStripButton1.ForeColor = System.Drawing.Color.Black
-        Me.SaveToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.SaveToolStripButton1.Name = "SaveToolStripButton1"
-        Me.SaveToolStripButton1.Size = New System.Drawing.Size(35, 22)
-        Me.SaveToolStripButton1.Text = "Save"
-        '
-        'TextBoxMATNOReg
-        '
-        Me.TextBoxMATNOReg.Location = New System.Drawing.Point(573, 81)
-        Me.TextBoxMATNOReg.Name = "TextBoxMATNOReg"
-        Me.TextBoxMATNOReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxMATNOReg.TabIndex = 99
-        '
-        'TextBoxSessionReg
-        '
-        Me.TextBoxSessionReg.Location = New System.Drawing.Point(573, 116)
-        Me.TextBoxSessionReg.Name = "TextBoxSessionReg"
-        Me.TextBoxSessionReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxSessionReg.TabIndex = 100
-        '
-        'TextBoxFeesReg
-        '
-        Me.TextBoxFeesReg.Location = New System.Drawing.Point(573, 152)
-        Me.TextBoxFeesReg.Name = "TextBoxFeesReg"
-        Me.TextBoxFeesReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxFeesReg.TabIndex = 101
-        '
-        'TextBoxLevelreg
-        '
-        Me.TextBoxLevelreg.Location = New System.Drawing.Point(573, 191)
-        Me.TextBoxLevelreg.Name = "TextBoxLevelreg"
-        Me.TextBoxLevelreg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxLevelreg.TabIndex = 102
-        '
-        'TextBoxdept_idrReg
-        '
-        Me.TextBoxdept_idrReg.Location = New System.Drawing.Point(573, 227)
-        Me.TextBoxdept_idrReg.Name = "TextBoxdept_idrReg"
-        Me.TextBoxdept_idrReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxdept_idrReg.TabIndex = 103
+        Me.TextBoxImport.Location = New System.Drawing.Point(15, 279)
+        Me.TextBoxImport.Multiline = True
+        Me.TextBoxImport.Name = "TextBoxImport"
+        Me.TextBoxImport.Size = New System.Drawing.Size(277, 204)
+        Me.TextBoxImport.TabIndex = 83
         '
         'FormStudentsRegistration
         '
@@ -1307,6 +1317,7 @@ Partial Class FormStudentsRegistration
         Me.PanelGegSingle.PerformLayout()
         Me.PanelCourses.ResumeLayout(False)
         Me.PanelAllReg.ResumeLayout(False)
+        Me.PanelAllReg.PerformLayout()
         CType(Me.DataGridViewAlReg, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel9.ResumeLayout(False)
         Me.Panel9.PerformLayout()
@@ -1315,8 +1326,8 @@ Partial Class FormStudentsRegistration
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.BindingNavigator1.ResumeLayout(False)
         Me.BindingNavigator1.PerformLayout()
-        CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.BindingSourcereg, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1417,4 +1428,5 @@ Partial Class FormStudentsRegistration
     Friend WithEvents TextBoxLevelreg As TextBox
     Friend WithEvents TextBoxFeesReg As TextBox
     Friend WithEvents TextBoxSessionReg As TextBox
+    Friend WithEvents TextBoxImport As TextBox
 End Class

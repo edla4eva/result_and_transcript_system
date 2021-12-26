@@ -38,8 +38,7 @@ Module ModuleGeneral
     ' '32 bit Access
     Public STR_connectionString32 = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;"
     'passworded
-    'Public STR_connectionString32 = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
-
+    'Public STR_connectionString32 = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "Persist Security Info=True;Jet OLEDB:Database Password={0};", (My.Settings.dbpass))
     '64 bits
     Public STR_connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;"
     'passworded
