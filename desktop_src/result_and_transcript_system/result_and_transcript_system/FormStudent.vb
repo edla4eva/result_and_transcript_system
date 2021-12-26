@@ -55,7 +55,7 @@
         '# Detect header row
         rowCount = tmpDT.Rows.Count
         For i = 0 To rowCount - 1
-            If tmpDT.Rows(i).ItemArray().Contains("S/N") Or tmpDT.Rows(i).ItemArray().Contains("MAT") Then
+            If tmpDT.Rows(i).ItemArray().Contains("matno") Or tmpDT.Rows(i).ItemArray().Contains("MatNo") Then
                 Debug.Print("ColumnHeader at row: " & i)
                 snRow = i
                 Exit For
@@ -104,7 +104,7 @@
             For i = 0 To rowCount - 1
 
                 'check for empty rows
-                If Trim(tmpDT.Rows(i).Item("sn").ToString) = "" And i > snRow Then
+                If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" And i > snRow Then
 
                     If Trim(tmpDT.Rows(i).Item("matno").ToString) = "" Then
                         If Not emptyRowFound Then emptyRow = i
@@ -136,7 +136,7 @@
             dgvStudents.DataSource = tmpDT
             dgvStudents.Refresh()
         Catch ex As Exception
-            MessageBox.Show("Result is not in the correct format, please correct ant try again")
+            MessageBox.Show("Students data is not in the correct format, please correct ant try again")
             logError(ex.ToString)
             Exit Sub
         End Try
@@ -213,7 +213,7 @@
         'insert record by record
 
         Dim strSQL As String   'dMATNO, dScore,
-        strSQL = SQL_SELECT_RESULTS_WHERE_MATNO '"INSERT INTO TableResults"
+        strSQL = STR_SQL_INSERT_STUDENTS
 
         '#method 1 - creates table and inserts
         Dim dt As DataTable
@@ -231,7 +231,7 @@
                 Exit Sub
             End If
 
-            mappDB.genericManualInsertDB(dt, STR_SQL_INSERT_STUDENTS, {})
+            mappDB.genericManualInsertDB(dt, strSQL, {})
 
             MsgBox("Students Uploaded into Database Successfully! Cross check what was uploaded below")
 

@@ -368,15 +368,15 @@ Public Class FormStudentsRegistration
 
     Private Sub dgvStudents_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvStudents.RowsAdded
         On Error Resume Next
-        For Each row As DataGridViewRow In Me.dgvStudents.Rows
-            If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
-                row.DefaultCellStyle.BackColor = Color.White
+        'For Each row As DataGridViewRow In Me.dgvStudents.Rows
+        '    If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
+        '        row.DefaultCellStyle.BackColor = Color.White
 
-            ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
-                row.DefaultCellStyle.BackColor = Color.PaleVioletRed
+        '    ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
+        '        row.DefaultCellStyle.BackColor = Color.PaleVioletRed
 
-            End If
-        Next
+        '    End If
+        'Next
     End Sub
     Private Sub dgvStudents_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.RowEnter
         On Error Resume Next
@@ -872,6 +872,8 @@ Public Class FormStudentsRegistration
 
     Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
         'TODO: ComboBoxCourseCode.filter(level)
+        If Not ComboBoxLevel.SelectedItem = Nothing Then TextBoxLevelreg.Text = ComboBoxLevel.SelectedItem.ToString
+
     End Sub
 
     Private Sub ButtonOKReg_Click(sender As Object, e As EventArgs) Handles ButtonOKReg.Click
@@ -908,12 +910,10 @@ Public Class FormStudentsRegistration
     Private Sub dgvStudents_RowStateChanged(sender As Object, e As DataGridViewRowStateChangedEventArgs) Handles dgvStudents.RowStateChanged
         ' If dgvStudents.Rows.dirty
         If tmpDS.Tables("Students").Rows.Count > 0 And dgvStudents.SelectedRows.Count > 0 Then
-            If dgvCourses.Rows.Count = 0 Then
-                getRegisteredCoursesForStudent(dgvStudents.SelectedRows(0).Cells("matno").Value)
-            Else
-                filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
+
+            filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
                 CaptureCourses()
-            End If
+
 
             updatePix()
         End If
@@ -960,31 +960,12 @@ Public Class FormStudentsRegistration
 
     End Sub
 
-    Sub refreshReg(dMATNO)
-        Dim ds As New DataSet
-        'Dim rd As OleDb.OleDbDataReader
-        'ds = mappDB.GetRecordWhere("SELECT * FROM students")
-        ds = mappDB.GetDataWhere("SELECT * FROM Reg")
-        BindingSourcereg.DataSource = ds.Tables(0)
-        BindingNavigator1.BindingSource = BindingSourcereg
-        'BindingNavigator1.MoveNextItem.PerformClick()
-        'TextBoxMATNO.DataBindings.Item(0).DataSource =
-        If TextBoxMATNO.DataBindings.Count = 0 Then
-            TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
-            TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
-            TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
-            TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
-            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
-        End If
 
-    End Sub
     Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefreshFormview.Click
 
         'Dim rd As OleDb.OleDbDataReader
         'ds = mappDB.GetRecordWhere("SELECT * FROM students")
-        dsStudents = mappDB.GetDataWhere("SELECT * FROM students")
+        dsStudents = mappDB.GetDataWhere("SELECT * FROM Reg")
         BindingSourceStudents.DataSource = dsStudents.Tables(0)
 
         BindingNavigator1.BindingSource = BindingSourceStudents
@@ -994,29 +975,30 @@ Public Class FormStudentsRegistration
             TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
             TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
             TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            'TextBoxEntrySession.DataBindings.Add("Text", BindingSource1, "session_idr")
+            TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
+            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
 
-            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            'TextBoxDept.DataBindings.Add("Text", ds.Tables(0), "student_dept_idr")
-        End If
+            TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
 
 
-        'Detail for (Reg)
-        dsReg = mappDB.GetDataWhere("SELECT * FROM Reg")
-        BindingSourcereg.DataSource = dsReg.Tables(0)
-        If TextBoxMATNOReg.DataBindings.Count = 0 Then
-            TextBoxMATNOReg.DataBindings.Add("Text", BindingSourcereg, "matno")
-            TextBoxCourse_1.DataBindings.Add("Text", BindingSourcereg, "CourseCode_1")
-            TextBoxCourse_2.DataBindings.Add("Text", BindingSourcereg, "CourseCode_2")
+            TextBoxEntryYear.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
+            TextBoxdob.DataBindings.Add("Text", BindingSourceStudents, "dob")
+            TextBoxphone.DataBindings.Add("Text", BindingSourceStudents, "phone")
+            TextBoxemail.DataBindings.Add("Text", BindingSourceStudents, "email")
+            TextBoxgender.DataBindings.Add("Text", BindingSourceStudents, "gender")
 
-            TextBoxSessionReg.DataBindings.Add("Text", BindingSourcereg, "Session_idr")
-            TextBoxFeesReg.DataBindings.Add("Text", BindingSourcereg, "Fees_Status")
-            TextBoxLevelreg.DataBindings.Add("Text", BindingSourcereg, "level")
-            TextBoxdept_idrReg.DataBindings.Add("Text", BindingSourcereg, "dept_idr")
+            'reg specific
+            TextBoxSession.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
+
+            TextBoxCourse_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
+            TextBoxCourse_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
+            TextBoxFeesReg.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
+            TextBoxLevelreg.DataBindings.Add("Text", BindingSourceStudents, "level")
+            'TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
 
         End If
     End Sub
-    Public Sub InsertOrUpdateUsingDataAdapter(dMATno As String, dTable As String, insert As Boolean)
+    Public Sub InsertOrUpdateUsingDataAdapter(dMATno As String, insert As Boolean)
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
                 xConn.ConnectionString = mappDB.getCorrectConnectionstring()
@@ -1025,16 +1007,11 @@ Public Class FormStudentsRegistration
                 Dim myDataSet As DataSet = New DataSet
                 Dim dStrSQL As String = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
                 Dim dStrSQLUpdate As String = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
-                If dTable = "students" Then
-                    dStrSQL = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
-                    dStrSQLUpdate = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
 
-                ElseIf dTable = "Reg" Then
-                    dStrSQL = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
-                    dStrSQLUpdate = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
 
-                Else
-                End If
+                dStrSQL = "SELECT matno, session_idr, CourseCode_1, CourseCode_2 FROM Reg"
+                dStrSQLUpdate = "UPDATE Reg SET matno='ENG50', CourseCode_1='GST112', CourseCode_2='GST122' WHERE matno = '" & dMATno & "'"
+
                 Dim cmdLocal As New OleDb.OleDbCommand(dStrSQL, xConn)
                 Dim myAdapterInsert As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(dStrSQL, xConn)
                 Dim myAdapterUpdate As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(dStrSQLUpdate, xConn)
@@ -1143,30 +1120,16 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSourceStudents.CurrentChanged
-
-        Dim recNo As Integer
         'first save changes to studens 
-        BindingSourceStudents.EndEdit()
         'dsStudents.Tables(0).update?   'todo
         Try
-            recNo = BindingSourcereg.Find("matno", TextBoxMATNO.Text)
-            If recNo >= 0 Then
-                'MsgBox(TextBoxMATNO.Text & "is in Reg")
-                BindingSourcereg.Position = recNo
-                Me.TextBoxCourse_1.BackColor = RGBColors.colorWhite
-                Me.TextBoxCourse_2.BackColor = RGBColors.colorWhite
-            Else
-                'MsgBox("Not in Reg")
-                BindingSourcereg.AddNew()
-                Me.TextBoxMATNOReg.Text = TextBoxMATNO.Text
-                Me.TextBoxSessionReg.Text = ComboBoxSessions.SelectedItem
-                Me.TextBoxDeptID.Text = mappDB.getDeptID(ComboBoxDepartments.SelectedItem)   'todo: error prone
-                Me.TextBoxCourse_1.Text = ""
-                Me.TextBoxCourse_2.Text = ""
-                Me.TextBoxCourse_1.BackColor = Color.Pink
-                Me.TextBoxCourse_2.BackColor = Color.Pink
-            End If
+            For Each itm In ComboBoxEntryMode.Items
+                If itm.ToString.Contains(TextBoxEntryMode.Text) Then
+                    ComboBoxEntryMode.SelectedItem = itm
+                End If
+            Next
 
+            BindingSourceStudents.EndEdit()
         Catch ex As Exception
             logError(ex.ToString)
         End Try
@@ -1174,14 +1137,8 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
         Try
-            If TextBoxCourse_1.BackColor = Color.Pink Or TextBoxCourse_2.BackColor = Color.Pink Then  'insert
-                InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, "Reg", True)
-            Else
-                InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, "Reg", False)
-            End If
-
-            'always update students table
-            InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, "students", False)
+            'always update  table on save
+            InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, False)
 
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -1214,17 +1171,17 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub BindingNavigatorAddNewItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorAddNewItem.Click
-        BindingSourcereg.AddNew()
+        BindingSourceStudents.AddNew()
+        'todo: insert
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles SaveToolStripButton1.Click
         Me.Validate()
-        Me.BindingSourcereg.EndEdit()
-
+        Me.BindingSourceStudents.EndEdit()
         'Me.tableadaptermanager.updateall()
     End Sub
 
-    Private Sub BindingSourcereg_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSourcereg.CurrentChanged
+    Private Sub BindingSourcereg_CurrentChanged(sender As Object, e As EventArgs)
         'todo
 
     End Sub
@@ -1233,6 +1190,19 @@ Public Class FormStudentsRegistration
         BindingSourceStudents.MovePrevious()
     End Sub
 
+    Private Sub ComboBoxShortCuts1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxShortCuts1.SelectedIndexChanged
+        Select Case ComboBoxShortCuts1.SelectedItem
+            Case "Add All 100L Courses"
+                'todo: use course order ds or dict to auto register
+        End Select
+        '
+        'Add All 200L Courses
+        'Add All 300L Courses
+        'Add All 400L Courses
+        'Add All 500L Courses
+        'Add All Departmetal Courses
+        'Add All Faculty Courses
+    End Sub
 
     Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_2.Click
         showCoursesList()

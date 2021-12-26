@@ -23,17 +23,17 @@ Partial Class FormStudentsRegistration
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle39 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle40 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle41 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle42 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle43 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle44 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormStudentsRegistration))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.dgvStudents = New System.Windows.Forms.DataGridView()
@@ -71,12 +71,12 @@ Partial Class FormStudentsRegistration
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.PanelGegSingle = New System.Windows.Forms.Panel()
-        Me.ButtonSaveRecord = New System.Windows.Forms.Button()
         Me.ComboBoxCourseCode = New System.Windows.Forms.ComboBox()
         Me.TextBoxCourseCode = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.ButtonUnregister = New System.Windows.Forms.Button()
         Me.ButtonRegister = New System.Windows.Forms.Button()
+        Me.ButtonSaveRecord = New System.Windows.Forms.Button()
         Me.TextBoxTotalCredits = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.PanelCourses = New System.Windows.Forms.Panel()
@@ -85,16 +85,26 @@ Partial Class FormStudentsRegistration
         Me.CheckedListBoxCourses = New System.Windows.Forms.CheckedListBox()
         Me.ButtonDownloadTemplate = New System.Windows.Forms.Button()
         Me.PanelAllReg = New System.Windows.Forms.Panel()
+        Me.TextBoxImport = New System.Windows.Forms.TextBox()
         Me.ButtonDeleteReg = New System.Windows.Forms.Button()
         Me.DataGridViewAlReg = New System.Windows.Forms.DataGridView()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.PanelForm = New System.Windows.Forms.Panel()
-        Me.TextBoxdept_idrReg = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.TextBoxEntryYear = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.TextBoxemail = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.TextBoxphone = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.TextBoxdob = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.TextBoxstatus = New System.Windows.Forms.TextBox()
         Me.TextBoxLevelreg = New System.Windows.Forms.TextBox()
         Me.TextBoxFeesReg = New System.Windows.Forms.TextBox()
-        Me.TextBoxSessionReg = New System.Windows.Forms.TextBox()
-        Me.TextBoxMATNOReg = New System.Windows.Forms.TextBox()
         Me.ComboBoxEntryMode = New System.Windows.Forms.ComboBox()
         Me.ComboBoxShortCuts2 = New System.Windows.Forms.ComboBox()
         Me.ButtonMovePrevious = New System.Windows.Forms.Button()
@@ -104,7 +114,6 @@ Partial Class FormStudentsRegistration
         Me.ButtonClosePanelForm = New System.Windows.Forms.Button()
         Me.BindingNavigator1 = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
-        Me.BindingSourcereg = New System.Windows.Forms.BindingSource(Me.components)
         Me.BindingNavigatorCountItem = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -132,7 +141,8 @@ Partial Class FormStudentsRegistration
         Me.ButtonNext = New System.Windows.Forms.Button()
         Me.BindingSourceStudents = New System.Windows.Forms.BindingSource(Me.components)
         Me.ButtonFormView = New System.Windows.Forms.Button()
-        Me.TextBoxImport = New System.Windows.Forms.TextBox()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.TextBoxgender = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -152,7 +162,6 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.SuspendLayout()
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
-        CType(Me.BindingSourcereg, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -171,26 +180,26 @@ Partial Class FormStudentsRegistration
         '
         'dgvStudents
         '
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black
-        Me.dgvStudents.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle34.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle34.ForeColor = System.Drawing.Color.Black
+        Me.dgvStudents.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle34
         Me.dgvStudents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvStudents.BackgroundColor = System.Drawing.Color.Silver
         Me.dgvStudents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvStudents.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle35.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        DataGridViewCellStyle35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle35.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle35.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvStudents.DefaultCellStyle = DataGridViewCellStyle35
         Me.dgvStudents.GridColor = System.Drawing.Color.Gray
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(1988, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(2063, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -234,7 +243,7 @@ Partial Class FormStudentsRegistration
         Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.ProgressBarBS.Location = New System.Drawing.Point(79, 295)
         Me.ProgressBarBS.Name = "ProgressBarBS"
-        Me.ProgressBarBS.Size = New System.Drawing.Size(1400, 23)
+        Me.ProgressBarBS.Size = New System.Drawing.Size(1475, 23)
         Me.ProgressBarBS.TabIndex = 75
         Me.ProgressBarBS.Value = 1
         '
@@ -252,7 +261,6 @@ Partial Class FormStudentsRegistration
         '
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel5.Controls.Add(Me.ComboBoxDepartments)
-        Me.Panel5.Controls.Add(Me.TextBoxSession)
         Me.Panel5.Controls.Add(Me.ComboBoxSessions)
         Me.Panel5.Controls.Add(Me.ComboBoxLevel)
         Me.Panel5.Location = New System.Drawing.Point(689, 212)
@@ -273,9 +281,9 @@ Partial Class FormStudentsRegistration
         'TextBoxSession
         '
         Me.TextBoxSession.Enabled = False
-        Me.TextBoxSession.Location = New System.Drawing.Point(181, 43)
+        Me.TextBoxSession.Location = New System.Drawing.Point(545, 278)
         Me.TextBoxSession.Name = "TextBoxSession"
-        Me.TextBoxSession.Size = New System.Drawing.Size(10, 22)
+        Me.TextBoxSession.Size = New System.Drawing.Size(106, 22)
         Me.TextBoxSession.TabIndex = 92
         '
         'ComboBoxSessions
@@ -430,28 +438,28 @@ Partial Class FormStudentsRegistration
         '
         Me.dgvCourses.AllowUserToAddRows = False
         Me.dgvCourses.AllowUserToDeleteRows = False
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FloralWhite
-        Me.dgvCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle36.BackColor = System.Drawing.Color.FloralWhite
+        Me.dgvCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle36
         Me.dgvCourses.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.dgvCourses.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.SeaGreen
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.LightSteelBlue
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle37.BackColor = System.Drawing.Color.SeaGreen
+        DataGridViewCellStyle37.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle37.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle37.SelectionBackColor = System.Drawing.Color.LightSteelBlue
+        DataGridViewCellStyle37.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle37.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle37
         Me.dgvCourses.ColumnHeadersHeight = 24
         Me.dgvCourses.Cursor = System.Windows.Forms.Cursors.Hand
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle38.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle38.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle38.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle38.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle38.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle38.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.DefaultCellStyle = DataGridViewCellStyle38
         Me.dgvCourses.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.dgvCourses.EnableHeadersVisualStyles = False
         Me.dgvCourses.GridColor = System.Drawing.Color.White
@@ -460,23 +468,23 @@ Partial Class FormStudentsRegistration
         Me.dgvCourses.Name = "dgvCourses"
         Me.dgvCourses.ReadOnly = True
         Me.dgvCourses.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.CadetBlue
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle39.BackColor = System.Drawing.Color.CadetBlue
+        DataGridViewCellStyle39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle39.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle39.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle39.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle39.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.RowHeadersDefaultCellStyle = DataGridViewCellStyle39
         Me.dgvCourses.RowHeadersWidth = 25
         Me.dgvCourses.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle7.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.DarkSlateGray
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvCourses.RowsDefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle40.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle40.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle40.SelectionBackColor = System.Drawing.Color.DarkSlateGray
+        DataGridViewCellStyle40.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle40.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvCourses.RowsDefaultCellStyle = DataGridViewCellStyle40
         Me.dgvCourses.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgvCourses.RowTemplate.Height = 120
         Me.dgvCourses.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
@@ -486,21 +494,21 @@ Partial Class FormStudentsRegistration
         '
         'dgvImportCourses
         '
-        DataGridViewCellStyle8.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black
-        Me.dgvImportCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle41.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle41.ForeColor = System.Drawing.Color.Black
+        Me.dgvImportCourses.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle41
         Me.dgvImportCourses.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvImportCourses.BackgroundColor = System.Drawing.Color.Silver
         Me.dgvImportCourses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvImportCourses.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle42.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        DataGridViewCellStyle42.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle42.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle42.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle42.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle42.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvImportCourses.DefaultCellStyle = DataGridViewCellStyle42
         Me.dgvImportCourses.GridColor = System.Drawing.Color.Gray
         Me.dgvImportCourses.Location = New System.Drawing.Point(5, 8)
         Me.dgvImportCourses.Name = "dgvImportCourses"
@@ -513,9 +521,9 @@ Partial Class FormStudentsRegistration
         Me.Panel6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Panel6.Controls.Add(Me.LabelAvaliable)
         Me.Panel6.Controls.Add(Me.Label4)
-        Me.Panel6.Location = New System.Drawing.Point(157, 10)
+        Me.Panel6.Location = New System.Drawing.Point(157, 4)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(301, 55)
+        Me.Panel6.Size = New System.Drawing.Size(301, 41)
         Me.Panel6.TabIndex = 1
         '
         'LabelAvaliable
@@ -523,7 +531,7 @@ Partial Class FormStudentsRegistration
         Me.LabelAvaliable.AutoSize = True
         Me.LabelAvaliable.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelAvaliable.ForeColor = System.Drawing.Color.White
-        Me.LabelAvaliable.Location = New System.Drawing.Point(40, 17)
+        Me.LabelAvaliable.Location = New System.Drawing.Point(40, 10)
         Me.LabelAvaliable.Name = "LabelAvaliable"
         Me.LabelAvaliable.Size = New System.Drawing.Size(248, 24)
         Me.LabelAvaliable.TabIndex = 1
@@ -620,26 +628,17 @@ Partial Class FormStudentsRegistration
         '
         Me.PanelGegSingle.BackColor = System.Drawing.Color.Transparent
         Me.PanelGegSingle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.PanelGegSingle.Controls.Add(Me.ButtonSaveRecord)
         Me.PanelGegSingle.Controls.Add(Me.ComboBoxCourseCode)
         Me.PanelGegSingle.Controls.Add(Me.TextBoxCourseCode)
         Me.PanelGegSingle.Controls.Add(Me.Label5)
         Me.PanelGegSingle.Controls.Add(Me.ButtonUnregister)
         Me.PanelGegSingle.Controls.Add(Me.ButtonRegister)
-        Me.PanelGegSingle.Location = New System.Drawing.Point(52, 335)
+        Me.PanelGegSingle.Controls.Add(Me.TextBoxTotalCredits)
+        Me.PanelGegSingle.Controls.Add(Me.Label7)
+        Me.PanelGegSingle.Location = New System.Drawing.Point(52, 380)
         Me.PanelGegSingle.Name = "PanelGegSingle"
-        Me.PanelGegSingle.Size = New System.Drawing.Size(515, 74)
+        Me.PanelGegSingle.Size = New System.Drawing.Size(599, 50)
         Me.PanelGegSingle.TabIndex = 82
-        '
-        'ButtonSaveRecord
-        '
-        Me.ButtonSaveRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonSaveRecord.Location = New System.Drawing.Point(420, 45)
-        Me.ButtonSaveRecord.Name = "ButtonSaveRecord"
-        Me.ButtonSaveRecord.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonSaveRecord.TabIndex = 99
-        Me.ButtonSaveRecord.Text = "Save"
-        Me.ButtonSaveRecord.UseVisualStyleBackColor = True
         '
         'ComboBoxCourseCode
         '
@@ -662,7 +661,7 @@ Partial Class FormStudentsRegistration
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(4, 10)
+        Me.Label5.Location = New System.Drawing.Point(4, 18)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(87, 16)
         Me.Label5.TabIndex = 83
@@ -678,7 +677,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonUnregister.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonUnregister.ForeColor = System.Drawing.Color.Black
         Me.ButtonUnregister.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonUnregister.Location = New System.Drawing.Point(398, 2)
+        Me.ButtonUnregister.Location = New System.Drawing.Point(390, 2)
         Me.ButtonUnregister.Name = "ButtonUnregister"
         Me.ButtonUnregister.Size = New System.Drawing.Size(97, 37)
         Me.ButtonUnregister.TabIndex = 82
@@ -695,24 +694,34 @@ Partial Class FormStudentsRegistration
         Me.ButtonRegister.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonRegister.ForeColor = System.Drawing.Color.Black
         Me.ButtonRegister.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonRegister.Location = New System.Drawing.Point(287, 3)
+        Me.ButtonRegister.Location = New System.Drawing.Point(280, 3)
         Me.ButtonRegister.Name = "ButtonRegister"
         Me.ButtonRegister.Size = New System.Drawing.Size(97, 34)
         Me.ButtonRegister.TabIndex = 81
         Me.ButtonRegister.Text = "Register"
         Me.ButtonRegister.UseVisualStyleBackColor = False
         '
+        'ButtonSaveRecord
+        '
+        Me.ButtonSaveRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSaveRecord.Location = New System.Drawing.Point(148, 353)
+        Me.ButtonSaveRecord.Name = "ButtonSaveRecord"
+        Me.ButtonSaveRecord.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonSaveRecord.TabIndex = 99
+        Me.ButtonSaveRecord.Text = "Save"
+        Me.ButtonSaveRecord.UseVisualStyleBackColor = True
+        '
         'TextBoxTotalCredits
         '
-        Me.TextBoxTotalCredits.Location = New System.Drawing.Point(428, 307)
+        Me.TextBoxTotalCredits.Location = New System.Drawing.Point(493, 18)
         Me.TextBoxTotalCredits.Name = "TextBoxTotalCredits"
-        Me.TextBoxTotalCredits.Size = New System.Drawing.Size(139, 22)
+        Me.TextBoxTotalCredits.Size = New System.Drawing.Size(66, 22)
         Me.TextBoxTotalCredits.TabIndex = 86
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(336, 313)
+        Me.Label7.Location = New System.Drawing.Point(487, 3)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(72, 16)
         Me.Label7.TabIndex = 85
@@ -723,9 +732,9 @@ Partial Class FormStudentsRegistration
         Me.PanelCourses.Controls.Add(Me.ButtonCancelReg)
         Me.PanelCourses.Controls.Add(Me.ButtonOKReg)
         Me.PanelCourses.Controls.Add(Me.CheckedListBoxCourses)
-        Me.PanelCourses.Location = New System.Drawing.Point(339, 109)
+        Me.PanelCourses.Location = New System.Drawing.Point(339, 58)
         Me.PanelCourses.Name = "PanelCourses"
-        Me.PanelCourses.Size = New System.Drawing.Size(200, 240)
+        Me.PanelCourses.Size = New System.Drawing.Size(208, 301)
         Me.PanelCourses.TabIndex = 83
         Me.PanelCourses.Visible = False
         '
@@ -773,7 +782,7 @@ Partial Class FormStudentsRegistration
         Me.CheckedListBoxCourses.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
         Me.CheckedListBoxCourses.Location = New System.Drawing.Point(16, 45)
         Me.CheckedListBoxCourses.Name = "CheckedListBoxCourses"
-        Me.CheckedListBoxCourses.Size = New System.Drawing.Size(181, 184)
+        Me.CheckedListBoxCourses.Size = New System.Drawing.Size(181, 236)
         Me.CheckedListBoxCourses.TabIndex = 76
         '
         'ButtonDownloadTemplate
@@ -804,6 +813,14 @@ Partial Class FormStudentsRegistration
         Me.PanelAllReg.TabIndex = 85
         Me.PanelAllReg.Visible = False
         '
+        'TextBoxImport
+        '
+        Me.TextBoxImport.Location = New System.Drawing.Point(15, 279)
+        Me.TextBoxImport.Multiline = True
+        Me.TextBoxImport.Name = "TextBoxImport"
+        Me.TextBoxImport.Size = New System.Drawing.Size(277, 204)
+        Me.TextBoxImport.TabIndex = 83
+        '
         'ButtonDeleteReg
         '
         Me.ButtonDeleteReg.Cursor = System.Windows.Forms.Cursors.Hand
@@ -820,21 +837,21 @@ Partial Class FormStudentsRegistration
         '
         'DataGridViewAlReg
         '
-        DataGridViewCellStyle10.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewAlReg.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle43.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle43.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewAlReg.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle43
         Me.DataGridViewAlReg.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridViewAlReg.BackgroundColor = System.Drawing.Color.Silver
         Me.DataGridViewAlReg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewAlReg.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle44.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
+        DataGridViewCellStyle44.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle44.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle44.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle44.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle44.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewAlReg.DefaultCellStyle = DataGridViewCellStyle44
         Me.DataGridViewAlReg.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewAlReg.Location = New System.Drawing.Point(12, 119)
         Me.DataGridViewAlReg.Name = "DataGridViewAlReg"
@@ -868,13 +885,24 @@ Partial Class FormStudentsRegistration
         '
         Me.PanelForm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelForm.Controls.Add(Me.PanelCourses)
-        Me.PanelForm.Controls.Add(Me.TextBoxdept_idrReg)
+        Me.PanelForm.Controls.Add(Me.Label22)
+        Me.PanelForm.Controls.Add(Me.TextBoxSession)
+        Me.PanelForm.Controls.Add(Me.TextBoxgender)
+        Me.PanelForm.Controls.Add(Me.Label21)
+        Me.PanelForm.Controls.Add(Me.TextBoxEntryYear)
+        Me.PanelForm.Controls.Add(Me.Label20)
+        Me.PanelForm.Controls.Add(Me.TextBoxemail)
+        Me.PanelForm.Controls.Add(Me.Label19)
+        Me.PanelForm.Controls.Add(Me.TextBoxphone)
+        Me.PanelForm.Controls.Add(Me.Label18)
+        Me.PanelForm.Controls.Add(Me.TextBoxdob)
+        Me.PanelForm.Controls.Add(Me.Label17)
+        Me.PanelForm.Controls.Add(Me.ButtonSaveRecord)
+        Me.PanelForm.Controls.Add(Me.Label11)
+        Me.PanelForm.Controls.Add(Me.Label2)
+        Me.PanelForm.Controls.Add(Me.TextBoxstatus)
         Me.PanelForm.Controls.Add(Me.TextBoxLevelreg)
         Me.PanelForm.Controls.Add(Me.TextBoxFeesReg)
-        Me.PanelForm.Controls.Add(Me.TextBoxSessionReg)
-        Me.PanelForm.Controls.Add(Me.TextBoxMATNOReg)
-        Me.PanelForm.Controls.Add(Me.TextBoxTotalCredits)
-        Me.PanelForm.Controls.Add(Me.Label7)
         Me.PanelForm.Controls.Add(Me.ComboBoxEntryMode)
         Me.PanelForm.Controls.Add(Me.ComboBoxShortCuts2)
         Me.PanelForm.Controls.Add(Me.ButtonMovePrevious)
@@ -905,49 +933,126 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.TabIndex = 87
         Me.PanelForm.Visible = False
         '
-        'TextBoxdept_idrReg
+        'Label21
         '
-        Me.TextBoxdept_idrReg.Location = New System.Drawing.Point(573, 227)
-        Me.TextBoxdept_idrReg.Name = "TextBoxdept_idrReg"
-        Me.TextBoxdept_idrReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxdept_idrReg.TabIndex = 103
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(194, 241)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(73, 16)
+        Me.Label21.TabIndex = 114
+        Me.Label21.Text = "Entry Year:"
+        '
+        'TextBoxEntryYear
+        '
+        Me.TextBoxEntryYear.Location = New System.Drawing.Point(274, 238)
+        Me.TextBoxEntryYear.Name = "TextBoxEntryYear"
+        Me.TextBoxEntryYear.Size = New System.Drawing.Size(48, 22)
+        Me.TextBoxEntryYear.TabIndex = 113
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(342, 343)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(45, 16)
+        Me.Label20.TabIndex = 112
+        Me.Label20.Text = "Email:"
+        '
+        'TextBoxemail
+        '
+        Me.TextBoxemail.Location = New System.Drawing.Point(427, 334)
+        Me.TextBoxemail.Name = "TextBoxemail"
+        Me.TextBoxemail.Size = New System.Drawing.Size(224, 22)
+        Me.TextBoxemail.TabIndex = 111
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(49, 326)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(50, 16)
+        Me.Label19.TabIndex = 110
+        Me.Label19.Text = "Phone:"
+        '
+        'TextBoxphone
+        '
+        Me.TextBoxphone.Location = New System.Drawing.Point(138, 320)
+        Me.TextBoxphone.Name = "TextBoxphone"
+        Me.TextBoxphone.Size = New System.Drawing.Size(184, 22)
+        Me.TextBoxphone.TabIndex = 109
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Location = New System.Drawing.Point(49, 301)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(40, 16)
+        Me.Label18.TabIndex = 108
+        Me.Label18.Text = "DOB:"
+        '
+        'TextBoxdob
+        '
+        Me.TextBoxdob.Location = New System.Drawing.Point(138, 295)
+        Me.TextBoxdob.Name = "TextBoxdob"
+        Me.TextBoxdob.Size = New System.Drawing.Size(54, 22)
+        Me.TextBoxdob.TabIndex = 107
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(342, 309)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(45, 16)
+        Me.Label17.TabIndex = 106
+        Me.Label17.Text = "Status"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(50, 273)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(77, 16)
+        Me.Label11.TabIndex = 105
+        Me.Label11.Text = "Fees Paid?"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(50, 241)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(44, 16)
+        Me.Label2.TabIndex = 104
+        Me.Label2.Text = "Level:"
+        '
+        'TextBoxstatus
+        '
+        Me.TextBoxstatus.Location = New System.Drawing.Point(427, 306)
+        Me.TextBoxstatus.Name = "TextBoxstatus"
+        Me.TextBoxstatus.Size = New System.Drawing.Size(224, 22)
+        Me.TextBoxstatus.TabIndex = 103
         '
         'TextBoxLevelreg
         '
-        Me.TextBoxLevelreg.Location = New System.Drawing.Point(573, 191)
+        Me.TextBoxLevelreg.Location = New System.Drawing.Point(138, 238)
         Me.TextBoxLevelreg.Name = "TextBoxLevelreg"
-        Me.TextBoxLevelreg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxLevelreg.Size = New System.Drawing.Size(38, 22)
         Me.TextBoxLevelreg.TabIndex = 102
         '
         'TextBoxFeesReg
         '
-        Me.TextBoxFeesReg.Location = New System.Drawing.Point(573, 152)
+        Me.TextBoxFeesReg.Location = New System.Drawing.Point(182, 267)
         Me.TextBoxFeesReg.Name = "TextBoxFeesReg"
-        Me.TextBoxFeesReg.Size = New System.Drawing.Size(13, 22)
+        Me.TextBoxFeesReg.Size = New System.Drawing.Size(140, 22)
         Me.TextBoxFeesReg.TabIndex = 101
-        '
-        'TextBoxSessionReg
-        '
-        Me.TextBoxSessionReg.Location = New System.Drawing.Point(573, 116)
-        Me.TextBoxSessionReg.Name = "TextBoxSessionReg"
-        Me.TextBoxSessionReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxSessionReg.TabIndex = 100
-        '
-        'TextBoxMATNOReg
-        '
-        Me.TextBoxMATNOReg.Location = New System.Drawing.Point(573, 81)
-        Me.TextBoxMATNOReg.Name = "TextBoxMATNOReg"
-        Me.TextBoxMATNOReg.Size = New System.Drawing.Size(13, 22)
-        Me.TextBoxMATNOReg.TabIndex = 99
         '
         'ComboBoxEntryMode
         '
         Me.ComboBoxEntryMode.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxEntryMode.FormattingEnabled = True
-        Me.ComboBoxEntryMode.Items.AddRange(New Object() {"UME", "DE", "Full-time", "Part-time"})
-        Me.ComboBoxEntryMode.Location = New System.Drawing.Point(182, 240)
+        Me.ComboBoxEntryMode.Items.AddRange(New Object() {"UME", "DE", "DIP", "Full-time", "Part-time"})
+        Me.ComboBoxEntryMode.Location = New System.Drawing.Point(201, 210)
         Me.ComboBoxEntryMode.Name = "ComboBoxEntryMode"
-        Me.ComboBoxEntryMode.Size = New System.Drawing.Size(122, 24)
+        Me.ComboBoxEntryMode.Size = New System.Drawing.Size(121, 24)
         Me.ComboBoxEntryMode.TabIndex = 98
         Me.ComboBoxEntryMode.Text = "UME"
         '
@@ -956,16 +1061,16 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxShortCuts2.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxShortCuts2.FormattingEnabled = True
         Me.ComboBoxShortCuts2.Items.AddRange(New Object() {"Add All 100L Courses", "Add All 200L Courses", "Add All 300L Courses", "Add All 400L Courses", "Add All 500L Courses", "Add All Departmetal Courses", "Add All Faculty Courses"})
-        Me.ComboBoxShortCuts2.Location = New System.Drawing.Point(339, 281)
+        Me.ComboBoxShortCuts2.Location = New System.Drawing.Point(339, 251)
         Me.ComboBoxShortCuts2.Name = "ComboBoxShortCuts2"
-        Me.ComboBoxShortCuts2.Size = New System.Drawing.Size(228, 24)
+        Me.ComboBoxShortCuts2.Size = New System.Drawing.Size(312, 24)
         Me.ComboBoxShortCuts2.TabIndex = 97
         Me.ComboBoxShortCuts2.Text = "--Shortcuts--"
         '
         'ButtonMovePrevious
         '
         Me.ButtonMovePrevious.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonMovePrevious.Location = New System.Drawing.Point(53, 296)
+        Me.ButtonMovePrevious.Location = New System.Drawing.Point(53, 353)
         Me.ButtonMovePrevious.Name = "ButtonMovePrevious"
         Me.ButtonMovePrevious.Size = New System.Drawing.Size(75, 23)
         Me.ButtonMovePrevious.TabIndex = 96
@@ -977,26 +1082,26 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxShortCuts1.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxShortCuts1.FormattingEnabled = True
         Me.ComboBoxShortCuts1.Items.AddRange(New Object() {"Add All 100L Courses", "Add All 200L Courses", "Add All 300L Courses", "Add All 400L Courses", "Add All 500L Courses", "Add All Departmetal Courses", "Add All Faculty Courses"})
-        Me.ComboBoxShortCuts1.Location = New System.Drawing.Point(339, 153)
+        Me.ComboBoxShortCuts1.Location = New System.Drawing.Point(339, 123)
         Me.ComboBoxShortCuts1.Name = "ComboBoxShortCuts1"
-        Me.ComboBoxShortCuts1.Size = New System.Drawing.Size(228, 24)
+        Me.ComboBoxShortCuts1.Size = New System.Drawing.Size(312, 24)
         Me.ComboBoxShortCuts1.TabIndex = 95
         Me.ComboBoxShortCuts1.Text = "--Shortcuts--"
         '
         'TextBoxCourse_2
         '
-        Me.TextBoxCourse_2.Location = New System.Drawing.Point(339, 191)
+        Me.TextBoxCourse_2.Location = New System.Drawing.Point(339, 161)
         Me.TextBoxCourse_2.Multiline = True
         Me.TextBoxCourse_2.Name = "TextBoxCourse_2"
-        Me.TextBoxCourse_2.Size = New System.Drawing.Size(228, 81)
+        Me.TextBoxCourse_2.Size = New System.Drawing.Size(312, 81)
         Me.TextBoxCourse_2.TabIndex = 38
         '
         'TextBoxCourse_1
         '
-        Me.TextBoxCourse_1.Location = New System.Drawing.Point(339, 81)
+        Me.TextBoxCourse_1.Location = New System.Drawing.Point(339, 51)
         Me.TextBoxCourse_1.Multiline = True
         Me.TextBoxCourse_1.Name = "TextBoxCourse_1"
-        Me.TextBoxCourse_1.Size = New System.Drawing.Size(228, 72)
+        Me.TextBoxCourse_1.Size = New System.Drawing.Size(312, 72)
         Me.TextBoxCourse_1.TabIndex = 37
         '
         'ButtonClosePanelForm
@@ -1014,7 +1119,6 @@ Partial Class FormStudentsRegistration
         'BindingNavigator1
         '
         Me.BindingNavigator1.AddNewItem = Me.BindingNavigatorAddNewItem
-        Me.BindingNavigator1.BindingSource = Me.BindingSourcereg
         Me.BindingNavigator1.CountItem = Me.BindingNavigatorCountItem
         Me.BindingNavigator1.DeleteItem = Me.BindingNavigatorDeleteItem
         Me.BindingNavigator1.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -1038,9 +1142,6 @@ Partial Class FormStudentsRegistration
         Me.BindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = True
         Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 22)
         Me.BindingNavigatorAddNewItem.Text = "Add new"
-        '
-        'BindingSourcereg
-        '
         '
         'BindingNavigatorCountItem
         '
@@ -1131,16 +1232,17 @@ Partial Class FormStudentsRegistration
         'ButtonRefreshFormview
         '
         Me.ButtonRefreshFormview.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonRefreshFormview.Location = New System.Drawing.Point(138, 296)
+        Me.ButtonRefreshFormview.Location = New System.Drawing.Point(128, 353)
         Me.ButtonRefreshFormview.Name = "ButtonRefreshFormview"
-        Me.ButtonRefreshFormview.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonRefreshFormview.Size = New System.Drawing.Size(15, 23)
         Me.ButtonRefreshFormview.TabIndex = 13
         Me.ButtonRefreshFormview.Text = "Refresh"
         Me.ButtonRefreshFormview.UseVisualStyleBackColor = True
+        Me.ButtonRefreshFormview.Visible = False
         '
         'TextBoxEntryMode
         '
-        Me.TextBoxEntryMode.Location = New System.Drawing.Point(138, 242)
+        Me.TextBoxEntryMode.Location = New System.Drawing.Point(138, 212)
         Me.TextBoxEntryMode.Name = "TextBoxEntryMode"
         Me.TextBoxEntryMode.Size = New System.Drawing.Size(38, 22)
         Me.TextBoxEntryMode.TabIndex = 12
@@ -1148,7 +1250,7 @@ Partial Class FormStudentsRegistration
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(49, 245)
+        Me.Label6.Location = New System.Drawing.Point(49, 215)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(79, 16)
         Me.Label6.TabIndex = 11
@@ -1156,31 +1258,31 @@ Partial Class FormStudentsRegistration
         '
         'TextBoxEntrySession
         '
-        Me.TextBoxEntrySession.Location = New System.Drawing.Point(138, 216)
+        Me.TextBoxEntrySession.Location = New System.Drawing.Point(138, 186)
         Me.TextBoxEntrySession.Name = "TextBoxEntrySession"
-        Me.TextBoxEntrySession.Size = New System.Drawing.Size(166, 22)
+        Me.TextBoxEntrySession.Size = New System.Drawing.Size(184, 22)
         Me.TextBoxEntrySession.TabIndex = 10
         '
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(49, 219)
+        Me.Label12.Location = New System.Drawing.Point(49, 189)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(60, 16)
+        Me.Label12.Size = New System.Drawing.Size(86, 16)
         Me.Label12.TabIndex = 9
-        Me.Label12.Text = "Session:"
+        Me.Label12.Text = "Entr Session:"
         '
         'TextBoxOtherNames
         '
-        Me.TextBoxOtherNames.Location = New System.Drawing.Point(138, 181)
+        Me.TextBoxOtherNames.Location = New System.Drawing.Point(138, 151)
         Me.TextBoxOtherNames.Name = "TextBoxOtherNames"
-        Me.TextBoxOtherNames.Size = New System.Drawing.Size(166, 22)
+        Me.TextBoxOtherNames.Size = New System.Drawing.Size(184, 22)
         Me.TextBoxOtherNames.TabIndex = 8
         '
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(49, 184)
+        Me.Label13.Location = New System.Drawing.Point(49, 154)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(90, 16)
         Me.Label13.TabIndex = 7
@@ -1188,15 +1290,15 @@ Partial Class FormStudentsRegistration
         '
         'TextBoxFirstName
         '
-        Me.TextBoxFirstName.Location = New System.Drawing.Point(138, 155)
+        Me.TextBoxFirstName.Location = New System.Drawing.Point(138, 125)
         Me.TextBoxFirstName.Name = "TextBoxFirstName"
-        Me.TextBoxFirstName.Size = New System.Drawing.Size(166, 22)
+        Me.TextBoxFirstName.Size = New System.Drawing.Size(184, 22)
         Me.TextBoxFirstName.TabIndex = 6
         '
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(49, 158)
+        Me.Label14.Location = New System.Drawing.Point(49, 128)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(73, 16)
         Me.Label14.TabIndex = 5
@@ -1204,15 +1306,15 @@ Partial Class FormStudentsRegistration
         '
         'TextBoxSurname
         '
-        Me.TextBoxSurname.Location = New System.Drawing.Point(138, 123)
+        Me.TextBoxSurname.Location = New System.Drawing.Point(138, 93)
         Me.TextBoxSurname.Name = "TextBoxSurname"
-        Me.TextBoxSurname.Size = New System.Drawing.Size(166, 22)
+        Me.TextBoxSurname.Size = New System.Drawing.Size(184, 22)
         Me.TextBoxSurname.TabIndex = 4
         '
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(49, 126)
+        Me.Label15.Location = New System.Drawing.Point(49, 96)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(79, 16)
         Me.Label15.TabIndex = 3
@@ -1220,15 +1322,15 @@ Partial Class FormStudentsRegistration
         '
         'TextBoxMATNO
         '
-        Me.TextBoxMATNO.Location = New System.Drawing.Point(138, 97)
+        Me.TextBoxMATNO.Location = New System.Drawing.Point(138, 67)
         Me.TextBoxMATNO.Name = "TextBoxMATNO"
-        Me.TextBoxMATNO.Size = New System.Drawing.Size(166, 22)
+        Me.TextBoxMATNO.Size = New System.Drawing.Size(184, 22)
         Me.TextBoxMATNO.TabIndex = 2
         '
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(49, 100)
+        Me.Label16.Location = New System.Drawing.Point(49, 70)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(66, 16)
         Me.Label16.TabIndex = 1
@@ -1237,7 +1339,7 @@ Partial Class FormStudentsRegistration
         'ButtonNext
         '
         Me.ButtonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonNext.Location = New System.Drawing.Point(229, 296)
+        Me.ButtonNext.Location = New System.Drawing.Point(229, 353)
         Me.ButtonNext.Name = "ButtonNext"
         Me.ButtonNext.Size = New System.Drawing.Size(75, 23)
         Me.ButtonNext.TabIndex = 0
@@ -1260,13 +1362,21 @@ Partial Class FormStudentsRegistration
         Me.ButtonFormView.Text = "Form View"
         Me.ButtonFormView.UseVisualStyleBackColor = True
         '
-        'TextBoxImport
+        'Label22
         '
-        Me.TextBoxImport.Location = New System.Drawing.Point(15, 279)
-        Me.TextBoxImport.Multiline = True
-        Me.TextBoxImport.Name = "TextBoxImport"
-        Me.TextBoxImport.Size = New System.Drawing.Size(277, 204)
-        Me.TextBoxImport.TabIndex = 83
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(208, 301)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(56, 16)
+        Me.Label22.TabIndex = 116
+        Me.Label22.Text = "Gender:"
+        '
+        'TextBoxgender
+        '
+        Me.TextBoxgender.Location = New System.Drawing.Point(268, 295)
+        Me.TextBoxgender.Name = "TextBoxgender"
+        Me.TextBoxgender.Size = New System.Drawing.Size(54, 22)
+        Me.TextBoxgender.TabIndex = 115
         '
         'FormStudentsRegistration
         '
@@ -1304,7 +1414,6 @@ Partial Class FormStudentsRegistration
         Me.Panel2.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.Panel4.ResumeLayout(False)
@@ -1326,7 +1435,6 @@ Partial Class FormStudentsRegistration
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.BindingNavigator1.ResumeLayout(False)
         Me.BindingNavigator1.PerformLayout()
-        CType(Me.BindingSourcereg, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -1420,13 +1528,23 @@ Partial Class FormStudentsRegistration
     Friend WithEvents ComboBoxShortCuts2 As ComboBox
     Friend WithEvents ButtonUnregister As Button
     Friend WithEvents ComboBoxEntryMode As ComboBox
-    Friend WithEvents BindingSourcereg As BindingSource
     Friend WithEvents ButtonSaveRecord As Button
     Friend WithEvents SaveToolStripButton1 As ToolStripButton
-    Friend WithEvents TextBoxMATNOReg As TextBox
-    Friend WithEvents TextBoxdept_idrReg As TextBox
+    Friend WithEvents TextBoxstatus As TextBox
     Friend WithEvents TextBoxLevelreg As TextBox
     Friend WithEvents TextBoxFeesReg As TextBox
-    Friend WithEvents TextBoxSessionReg As TextBox
     Friend WithEvents TextBoxImport As TextBox
+    Friend WithEvents Label11 As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label21 As Label
+    Friend WithEvents TextBoxEntryYear As TextBox
+    Friend WithEvents Label20 As Label
+    Friend WithEvents TextBoxemail As TextBox
+    Friend WithEvents Label19 As Label
+    Friend WithEvents TextBoxphone As TextBox
+    Friend WithEvents Label18 As Label
+    Friend WithEvents TextBoxdob As TextBox
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label22 As Label
+    Friend WithEvents TextBoxgender As TextBox
 End Class
