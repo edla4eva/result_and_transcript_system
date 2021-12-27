@@ -21,6 +21,8 @@ Public Class FormStudentsRegistration
         Me.dgvImportCourses.BackgroundColor = RGBColors.colorBackground
         Me.dgvImportCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
         Me.dgvImportCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
+
+        bindcontrolsToReg()
     End Sub
     Private Sub FormStudentsRegistration_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
@@ -278,9 +280,11 @@ Public Class FormStudentsRegistration
                 '2. put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
                 dgvImportCourses.DataSource = dSFtomDB.Tables(0).DefaultView
                 'MsgBox("After fresh fill")
-
+                adapter.InsertCommand = builder.GetInsertCommand
+                MsgBox(adapter.InsertCommand.CommandText)
                 dSFtomDB.Tables(0).Clear()  'empty table
                 adapter.Update(dSFtomDB)    'persist in db
+
                 Dim dRow As DataRow
                 'MsgBox("After empty db")
                 '3. edit it
@@ -844,7 +848,7 @@ Public Class FormStudentsRegistration
             tmpDS = objExcelFile.readResultFile()
             'Do some check
             dt = tmpDS.Tables(0)
-            If dt.Rows(0).Item(0).ToString.ToUpper = "MATNO" And dt.Rows(0).Item(1).ToString.ToUpper = "SESSION_IDR" Then
+            If dt.Rows(0).Item(0).ToString.ToUpper = "MATNO" Then
                 For j = 0 To dt.Columns.Count - 1
                     dt.Columns(j).ColumnName = dt.Rows(0).Item(j).ToString
                 Next
@@ -854,7 +858,7 @@ Public Class FormStudentsRegistration
                 'checkReg()  'todo no need for this insist on rigt format
                 dgvImportCourses.BringToFront()
             Else
-                MsgBox("The file you selected is not in the proper format. Download and use the corrct template")
+                MsgBox("The file you selected is not in the proper format. Download and use the correct template")
             End If
 
         End If
@@ -971,6 +975,9 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefreshFormview.Click
 
+        bindControlsToReg
+    End Sub
+    Sub bindcontrolsToReg()
         'Dim rd As OleDb.OleDbDataReader
         'ds = mappDB.GetRecordWhere("SELECT * FROM students")
         dsStudents = mappDB.GetDataWhere("SELECT * FROM Reg")

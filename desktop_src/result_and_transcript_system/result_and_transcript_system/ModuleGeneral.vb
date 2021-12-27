@@ -287,9 +287,9 @@ Module ModuleGeneral
     Public STR_SQL_COURSES_REGS_WHERE As String = "SELECT * FROM regs WHERE matno='{0}'"
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
-    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, level, year_of_entry,session_idr_of_entry, mode_of_entry) " &
-                                                "VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}');"
-
+    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, year_of_entry,session_idr_of_entry, mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1, CourseCode_2, Fees_Status, level, dept_idr) " &
+                                                "VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}');"
+    '.MatNo, Reg.student_firstname, Reg.student_surname, Reg.student_othernames, Reg.student_dept_idr, Reg.status, Reg.year_of_entry, Reg.session_idr_of_entry, Reg.mode_of_entry, Reg.dob, Reg.phone, Reg.email, Reg.gender, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr
     'Course reg combo
     '"SELECT course_code, course_title, course_unit, course_semester FROM Courses WHERE (((course_semester)=2)) ORDER BY Courses.course_code;"
 
