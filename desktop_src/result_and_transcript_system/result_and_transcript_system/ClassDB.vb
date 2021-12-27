@@ -542,12 +542,12 @@ Public Class ClassDB
 
             'access
             Dim cmd As New OleDbCommand
-            Dim tableValues As String()
+            Dim tableValues As Object()
             'Dim da As OleDbDataAdapter
             For Each row As DataRow In dt.Rows
                 tableValues = row.ItemArray
                 'todo: use parameters
-                String.Format(sql, tableValues) 'add values
+                sql = String.Format(sql, tableValues) 'add values
                 cmd = New OleDbCommand(sql, xConn)
                 'cmd.Transaction.Begin()
                 'da = New OleDbDataAdapter(cmd)

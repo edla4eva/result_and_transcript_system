@@ -1,4 +1,6 @@
-﻿Public Class FormReport
+﻿Imports System.ComponentModel
+
+Public Class FormReport
     Private Sub Button1_Click(sender As Object, e As EventArgs)
 
     End Sub
@@ -45,5 +47,9 @@
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
+    End Sub
+
+    Private Sub FormReport_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        MainForm.doCloseForm()
     End Sub
 End Class

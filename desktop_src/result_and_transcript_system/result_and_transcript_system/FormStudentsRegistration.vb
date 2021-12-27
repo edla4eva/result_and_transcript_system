@@ -262,7 +262,7 @@ Public Class FormStudentsRegistration
             dtSource = dv.ToTable
 
             'createBroadsheetTables()
-            strSQL = "SELECT * FROM reg" ' WHERE session_idr={1}"
+            strSQL = "SELECT * FROM Reg" ' WHERE session_idr={1}"
 
             Using xconn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
                 xconn.ConnectionString = mappDB.getCorrectConnectionstring()
@@ -271,6 +271,8 @@ Public Class FormStudentsRegistration
                 Dim builder As New OleDb.OleDbCommandBuilder(adapter)       'easy way for single table
                 adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
 
+                'adapter.UpdateCommand = ""
+                'adapter.InsertCommand = ""
                 '1. fill it
                 adapter.Fill(dSFtomDB)
                 '2. put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
@@ -285,7 +287,7 @@ Public Class FormStudentsRegistration
                 For i = 0 To dtSource.Rows.Count - 1
                     dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
                     For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1       'Take as much as we have cols for to avoid errors
-                        If j > dtSource.Rows.Count - 1 Then Exit For
+                        If j > dtSource.Columns.Count - 1 Then Exit For
                         dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
                         'strColNames = strColNames & "," & dtSource.Columns(j).ColumnName
                     Next
@@ -361,7 +363,10 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub dgvStudents_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentDoubleClick
-        getRegisteredCoursesForStudent(dgvStudents.Rows(0).Cells("matno").Value.ToString)
+        ButtonFormView.PerformClick()
+        If e.RowIndex >= 0 Then
+            captureReg(e.RowIndex)
+        End If
     End Sub
 
 
@@ -957,7 +962,10 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub dgvStudents_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentClick
-
+        ButtonFormView.PerformClick()
+        If e.RowIndex >= 0 Then
+            captureReg(e.RowIndex)
+        End If
     End Sub
 
 
@@ -1163,11 +1171,7 @@ Public Class FormStudentsRegistration
         End If
 
 
-        If ComboBoxShortCuts2.SelectedItem = "Add All 100L Courses" Then
-            For Each item In CheckedListBoxCourses.Items
-                If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then CheckedListBoxCourses.Items(item).checked = True
-            Next
-        End If
+
     End Sub
 
     Private Sub BindingNavigatorAddNewItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorAddNewItem.Click
@@ -1191,17 +1195,52 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub ComboBoxShortCuts1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxShortCuts1.SelectedIndexChanged
+        Dim dLevel, dSession, dDeptID As String
         Select Case ComboBoxShortCuts1.SelectedItem
             Case "Add All 100L Courses"
-                'todo: use course order ds or dict to auto register
+                dLevel = "100"
+            Case "Add All 200L Courses"
+                dLevel = "200"
+            Case "Add All 300L Courses"
+                dLevel = "300"
+            Case "Add All 400L Courses"
+                dLevel = "400"
+            Case "Add All 500L Courses"
+                dLevel = "500"
+            Case "Add All Departmetal Courses"
+                MsgBox("Haba! fear God now :)")
+                For Each item In CheckedListBoxCourses.Items
+                    If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then item.checked = True
+                Next
+                PanelCourses.Visible = True
+            Case "Add All Faculty Courses"
+                MsgBox("Haba! fear God now")
+                For Each item In CheckedListBoxCourses.Items
+                    If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then item.checked = True
+                Next
+                PanelCourses.Visible = True
         End Select
-        '
-        'Add All 200L Courses
-        'Add All 300L Courses
-        'Add All 400L Courses
-        'Add All 500L Courses
-        'Add All Departmetal Courses
-        'Add All Faculty Courses
+
+        session_idr = ComboBoxSessions.SelectedItem
+        course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedIndex.ToString)
+
+        'todo: use course order ds or dict to auto register
+        If Not dictCoursesOrderFS.Count > 0 Then
+            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel)
+        End If
+
+        If dictCoursesOrderFS.Count > 0 Then
+            For Each cKey In dictCoursesOrderFS.Keys
+                If TextBoxCourse_1.Text = "" Then
+                    TextBoxCourse_1.Text = cKey
+                Else
+                    TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & TextBoxCourse_1.Text & cKey
+                End If
+            Next
+        End If
+
+
+
     End Sub
 
     Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_2.Click

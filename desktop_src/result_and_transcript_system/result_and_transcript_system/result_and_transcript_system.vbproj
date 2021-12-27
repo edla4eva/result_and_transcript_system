@@ -149,6 +149,12 @@
     <Compile Include="ClassExcelResult.vb" />
     <Compile Include="ClassPDF.vb" />
     <Compile Include="ClassReports.vb" />
+    <Compile Include="FormAbout.Designer.vb">
+      <DependentUpon>FormAbout.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormAbout.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormAddNewStuff.Designer.vb">
       <DependentUpon>FormAddNewStuff.vb</DependentUpon>
     </Compile>
@@ -286,6 +292,9 @@
     <Compile Include="RGBColors.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormAbout.resx">
+      <DependentUpon>FormAbout.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormAddNewStuff.resx">
       <DependentUpon>FormAddNewStuff.vb</DependentUpon>
     </EmbeddedResource>

@@ -578,8 +578,9 @@ Public Class FormGenerateBroadsheet
             ' bgwCourses.RunWorkerAsync()
 
             dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
-            dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
-            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
+            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel)
+            'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
+            'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
         Catch ex As Exception
 
         End Try

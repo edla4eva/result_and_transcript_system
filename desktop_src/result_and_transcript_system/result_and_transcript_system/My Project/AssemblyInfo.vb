@@ -8,9 +8,9 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("result_and_transcript_system")>
+<Assembly: AssemblyTitle("RTPS")>
 <Assembly: AssemblyDescription("Result an transcrpt Processing System (RTPS)")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyCompany("E. Olaye (PhD)")>
 <Assembly: AssemblyProduct("result_and_transcript_system")>
 <Assembly: AssemblyCopyright("Copyright ©  2021")>
 <Assembly: AssemblyTrademark("")>

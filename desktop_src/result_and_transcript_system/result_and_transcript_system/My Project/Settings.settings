@@ -11,5 +11,8 @@
     <Setting Name="db" Type="System.String" Scope="User">
       <Value Profile="(Default)">60ebe72bfd7245769b0564f53fdc439b</Value>
     </Setting>
+    <Setting Name="trial" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

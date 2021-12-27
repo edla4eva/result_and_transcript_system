@@ -158,4 +158,8 @@ Public Class FormViewRegs
     Private Sub FormViewResults_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         bgwLoad.RunWorkerAsync()
     End Sub
+
+    Private Sub ButtonCoursereg_Click(sender As Object, e As EventArgs) Handles ButtonCoursereg.Click
+        MainForm.ChangeMenu("StudentsRegistration")
+    End Sub
 End Class

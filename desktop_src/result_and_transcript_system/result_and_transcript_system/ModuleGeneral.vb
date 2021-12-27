@@ -42,7 +42,7 @@ Module ModuleGeneral
     '64 bits
     Public STR_connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;"
     'passworded
-    'Public STR_connectionString As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
+    'Public STR_connectionString As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "Persist Security Info=True;JET OLEDB: Database Password={0};", (My.Settings.dbpass))
 
 
     Public STR_connectionStringAccessNet As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
@@ -209,7 +209,7 @@ Module ModuleGeneral
     Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
 
     Public STR_SQL_ALL_COURSES_ORDER As String = "SELECT * FROM courses_order WHERE (session_idr='{0}' AND dept_idr={1}) order by sn" ' 
-    Public STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA As String = "SELECT * FROM courses_order  order by sn" ' 
+    Public STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA As String = "SELECT * FROM courses_order  order by session_idr, dept_idr,sn" ' 
 
     Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments"
     Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
@@ -287,7 +287,7 @@ Module ModuleGeneral
     Public STR_SQL_COURSES_REGS_WHERE As String = "SELECT * FROM regs WHERE matno='{0}'"
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
-    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (Reg.matno, Reg.student_firstname, Reg.student_surname, Reg.student_othernames, Reg.student_dept_idr, Reg.status, Reg.level, Reg.year_of_entry,Reg.session_idr_of_entry, Reg.mode_of_entry) " &
+    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, level, year_of_entry,session_idr_of_entry, mode_of_entry) " &
                                                 "VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}');"
 
     'Course reg combo
@@ -416,20 +416,20 @@ Module ModuleGeneral
 
         frm.BackColor = RGBColors.colorBackground
         frm.ForeColor = RGBColors.colorForeground
-        For Each cnt In cntls
-                If cntls.GetType = Type.GetType("TextBox") Then
+        'For Each cnt In cntls
+        '        If cntls.GetType = Type.GetType("TextBox") Then
 
 
-                ElseIf cntls.GetType = Type.GetType("DataGridView") Then
-                    cnt.BackgroundColor = RGBColors.colorBackground
-                cnt.RowsDefaultCellStyle.BackColor = RGBColors.colorBackground
-                cnt.RowsDefaultCellStyle.ForeColor = RGBColors.colorForeground
-            Else
-                    cnt.backcolor = RGBColors.colorBackground
-                    cnt.backcolor = RGBColors.colorForeground
-                End If
+        '        ElseIf cntls.GetType = Type.GetType("DataGridView") Then
+        '            cnt.BackgroundColor = RGBColors.colorBackground
+        '        cnt.RowsDefaultCellStyle.BackColor = RGBColors.colorBackground
+        '        cnt.RowsDefaultCellStyle.ForeColor = RGBColors.colorForeground
+        '    Else
+        '            cnt.backcolor = RGBColors.colorBackground
+        '            cnt.backcolor = RGBColors.colorForeground
+        '        End If
 
-            Next
+        '    Next
 
         If darkTheme Then
             'do some corrections
@@ -478,6 +478,16 @@ Module ModuleGeneral
 
     '    End Try
     'End Sub
+
+    Public Function getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) As Boolean
+        Try
+            dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
+            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Public Function combolistDict(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, Optional dConnMode As String = "local") As Dictionary(Of String, String)
         Try
             Dim oad As Object

@@ -388,7 +388,7 @@ Partial Class FormSettings
         '
         Me.ComboBoxCourses.FormattingEnabled = True
         Me.ComboBoxCourses.Items.AddRange(New Object() {"GST111"})
-        Me.ComboBoxCourses.Location = New System.Drawing.Point(15, 136)
+        Me.ComboBoxCourses.Location = New System.Drawing.Point(256, 64)
         Me.ComboBoxCourses.Name = "ComboBoxCourses"
         Me.ComboBoxCourses.Size = New System.Drawing.Size(84, 21)
         Me.ComboBoxCourses.TabIndex = 25
@@ -398,7 +398,7 @@ Partial Class FormSettings
         '
         Me.ButtonRemoveCourses.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRemoveCourses.ForeColor = System.Drawing.Color.Black
-        Me.ButtonRemoveCourses.Location = New System.Drawing.Point(300, 61)
+        Me.ButtonRemoveCourses.Location = New System.Drawing.Point(300, 97)
         Me.ButtonRemoveCourses.Name = "ButtonRemoveCourses"
         Me.ButtonRemoveCourses.Size = New System.Drawing.Size(36, 22)
         Me.ButtonRemoveCourses.TabIndex = 19
@@ -409,7 +409,7 @@ Partial Class FormSettings
         '
         Me.ButtonAddCourse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAddCourse.ForeColor = System.Drawing.Color.Black
-        Me.ButtonAddCourse.Location = New System.Drawing.Point(258, 61)
+        Me.ButtonAddCourse.Location = New System.Drawing.Point(258, 97)
         Me.ButtonAddCourse.Name = "ButtonAddCourse"
         Me.ButtonAddCourse.Size = New System.Drawing.Size(36, 22)
         Me.ButtonAddCourse.TabIndex = 18
@@ -444,12 +444,12 @@ Partial Class FormSettings
         Me.ButtonRefereshListFirst.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRefereshListFirst.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonRefereshListFirst.ForeColor = System.Drawing.Color.Black
-        Me.ButtonRefereshListFirst.Location = New System.Drawing.Point(258, 119)
+        Me.ButtonRefereshListFirst.Location = New System.Drawing.Point(258, 129)
         Me.ButtonRefereshListFirst.Name = "ButtonRefereshListFirst"
         Me.ButtonRefereshListFirst.Size = New System.Drawing.Size(79, 34)
         Me.ButtonRefereshListFirst.TabIndex = 6
         Me.ButtonRefereshListFirst.Tag = ""
-        Me.ButtonRefereshListFirst.Text = "Refresh"
+        Me.ButtonRefereshListFirst.Text = "Save"
         Me.ButtonRefereshListFirst.UseVisualStyleBackColor = True
         '
         'LabelClosePanelModify
@@ -505,6 +505,7 @@ Partial Class FormSettings
         'LightTheme
         '
         Me.LightTheme.AutoSize = True
+        Me.LightTheme.Enabled = False
         Me.LightTheme.Location = New System.Drawing.Point(21, 109)
         Me.LightTheme.Name = "LightTheme"
         Me.LightTheme.Size = New System.Drawing.Size(84, 17)
@@ -516,6 +517,7 @@ Partial Class FormSettings
         '
         Me.RadioButtonDarkTheme.AutoSize = True
         Me.RadioButtonDarkTheme.Checked = True
+        Me.RadioButtonDarkTheme.Enabled = False
         Me.RadioButtonDarkTheme.Location = New System.Drawing.Point(21, 49)
         Me.RadioButtonDarkTheme.Name = "RadioButtonDarkTheme"
         Me.RadioButtonDarkTheme.Size = New System.Drawing.Size(84, 17)
@@ -628,7 +630,7 @@ Partial Class FormSettings
         Me.ButtonRefresh.Name = "ButtonRefresh"
         Me.ButtonRefresh.Size = New System.Drawing.Size(88, 30)
         Me.ButtonRefresh.TabIndex = 34
-        Me.ButtonRefresh.Text = "Refresh"
+        Me.ButtonRefresh.Text = "Save"
         Me.ButtonRefresh.UseVisualStyleBackColor = False
         '
         'DataGridViewCoursesOrder
