@@ -38,6 +38,10 @@ Public Class FormGenerateBroadsheet
             ElseIf dLevel = "Yr.2" Then
                 dLevel = "200"
             End If
+            footers(0) = TextBoxCourseAdviser.Text
+            footers(1) = TextBoxDean.Text
+            footers(2) = TextBoxHOD.Text
+
             ButtonProcessBroadsheet.Enabled = False
             TimerBS.Enabled = True
             TimerBS.Start()
@@ -192,26 +196,35 @@ Public Class FormGenerateBroadsheet
                 Dim nExtraCols As Integer = 1
                 'MsgBox("After empty db")
                 'Note col85 and Col6 are for repeated courses hence Text datatype
+                Dim strTimeStamp As String = Now.Ticks.ToString
+                dRow = dSFtomDB.Tables(0).Rows.Add("ColNames_will_be_re_written") 'add mock header row
                 For i = 0 To dtSource.Rows.Count - 1
                     dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
+
                     For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors
                         If j > dtSource.Columns.Count - 1 Then Exit For    'avoid errors bcos table has more cols
-                        dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
-                        If strColNames = "" Then
-                            strColNames = dtSource.Columns(j).ColumnName
+                        If i = 0 Then
+                            dSFtomDB.Tables(0).Rows(0).Item(j) = dtSource.Columns(j).ColumnName  'update the row with data
+                            dSFtomDB.Tables(0).Rows(0).Item("ColNames") = strTimeStamp      'useful for grouping
+                            ' handle these specially( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'))
+                            dSFtomDB.Tables(0).Rows(0).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
+                            dSFtomDB.Tables(0).Rows(0).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
+                            dSFtomDB.Tables(0).Rows(0).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
+
                         Else
-                            strColNames = strColNames & "," & dtSource.Columns(j).ColumnName
+                            dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i - 1).Item(j)   'update the row with data
+
                         End If
-
                     Next
-                    dRow.Item("ColNames") = strColNames
-                    dRow.Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
-
-                    dRow.Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
-                    dRow.Item("Col173") = objBroadsheet.FacultyName
-                    dRow.Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
-                    dRow.Item("Col175") = Array2sTR(footers)        'todo:
+                    'todo let everything be processed into the tables before this point
+                    dSFtomDB.Tables(0).Rows(i).Item("ColNames") = strTimeStamp
+                    dSFtomDB.Tables(0).Rows(i).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
+                    dSFtomDB.Tables(0).Rows(i).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
+                    dSFtomDB.Tables(0).Rows(i).Item("Col173") = objBroadsheet.FacultyName
+                    dSFtomDB.Tables(0).Rows(i).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
+                    dSFtomDB.Tables(0).Rows(i).Item("Col175") = Array2sTR(footers)        'todo:
                 Next
+
 
                 DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
 
@@ -398,6 +411,7 @@ Public Class FormGenerateBroadsheet
             ButtonProcessBroadsheet.Enabled = True
             Me.ProgressBarBS.Value = 100
         Catch ex As Exception
+            ButtonProcessBroadsheet.Enabled = True
             MsgBox("An error occured during the creation of the broadsheet" & vbCrLf & vbCrLf & ex.Message)
         End Try
 
@@ -407,6 +421,9 @@ Public Class FormGenerateBroadsheet
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
 
         'TODO: create UI to configure order
+
+        'TODO: get all the data (such as level, dept, fac, hod etc) from the datagrivView only
+
         footers(0) = TextBoxCourseAdviser.Text
         footers(1) = TextBoxDean.Text
         footers(2) = TextBoxHOD.Text

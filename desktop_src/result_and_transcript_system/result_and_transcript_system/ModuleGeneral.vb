@@ -186,9 +186,13 @@ Module ModuleGeneral
                                                     FROM Results
                                                     GROUP BY Results.Session_idr, Results.course_code_idr, Results.result_timestamp;"
 
-    Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col171,count(broadsheets_all.Col2) AS NumStudents,broadsheets_all.col172, first(broadsheets_all.col173) AS Faculty, broadsheets_all.Col174, first(broadsheets_all.Col175) AS Footers
+    Public STR_SQL_ALL_BROADSHEETS_SUMMARY As String = "SELECT broadsheets_all.Col171,count(broadsheets_all.Col2) AS NumStudents,broadsheets_all.col172, first(broadsheets_all.col173) AS Faculty, broadsheets_all.Col174, first(broadsheets_all.Col175) AS Footers, ColNames
                                                     FROM broadsheets_all
-                                                    GROUP BY broadsheets_all.Col171,broadsheets_all.Col172,broadsheets_all.Col174;"   'todo "Col" & LAST_COL
+                                                    WHERE Not(Col1='matno')
+                                                    GROUP BY ColNames,broadsheets_all.Col171,broadsheets_all.Col172,broadsheets_all.Col174;"   'todo "Col" & LAST_COL
+    Public STR_SQL_ALL_BROADSHEETS_WHERE_COLNAMES As String = "SELECT * FROM broadsheets_all 
+                                                                WHERE ((Col1='matno') AND (ColNames='{0}'))"
+
     Public STR_SQL_ALL_REG_SUMMARY As String = "SELECT reg.session_idr, reg.dept_idr, reg.level, count(reg.matno) AS NumStudents
                                                     FROM reg
                                                     GROUP BY reg.session_idr,reg.dept_idr,reg.level;"   'todo "Col" & LAST_COL
@@ -315,7 +319,7 @@ Module ModuleGeneral
 
     'BroadSheets
     Public STR_SQL_ALL_BROADSHEET As String = "SELECT * FROM broadsheets_all" ' WHERE( (session='{0}') And (level={1}));"
-    Public STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL As String = "SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'));"
+    Public STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL As String = "SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And (ColNames='{3}') And Not(Col1='matno')) ORDER BY Col0,Col1;"
 
     Public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';"
 

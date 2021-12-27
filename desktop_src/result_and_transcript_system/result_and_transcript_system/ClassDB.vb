@@ -258,7 +258,7 @@ Public Class ClassDB
         Return returnVal
     End Function
     Public Function doQuery(dstrSQL As String) As Boolean
-        Dim returnVal As String = ""
+        Dim returnVal As Boolean = False
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
                 xConn.ConnectionString = getCorrectConnectionstring()
@@ -267,12 +267,13 @@ Public Class ClassDB
                 cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
                 closeConn(xConn) 'safely close it
             End Using
-            Return True
+            returnVal = True
         Catch ex As Exception
-            Return False
+            returnVal = False
             logError("Database access problem, connect and try again" & vbCrLf & ex.Message)
             ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+        Return returnVal
 
     End Function
 

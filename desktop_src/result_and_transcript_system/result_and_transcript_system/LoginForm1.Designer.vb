@@ -66,7 +66,7 @@ Partial Class LoginForm1
         Me.GroupBox1.Controls.Add(Me.LoginOKButton)
         Me.GroupBox1.Controls.Add(Me.ButtonChangePassword)
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.GroupBox1.Location = New System.Drawing.Point(111, 56)
+        Me.GroupBox1.Location = New System.Drawing.Point(154, 28)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(340, 394)
         Me.GroupBox1.TabIndex = 12
@@ -74,10 +74,11 @@ Partial Class LoginForm1
         '
         'ButtonAddUser
         '
-        Me.ButtonAddUser.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ButtonAddUser.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonAddUser.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.ButtonAddUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!)
-        Me.ButtonAddUser.Location = New System.Drawing.Point(35, 350)
+        Me.ButtonAddUser.Location = New System.Drawing.Point(35, 338)
         Me.ButtonAddUser.Name = "ButtonAddUser"
         Me.ButtonAddUser.Size = New System.Drawing.Size(271, 51)
         Me.ButtonAddUser.TabIndex = 13
@@ -86,9 +87,10 @@ Partial Class LoginForm1
         '
         'CheckBox1
         '
-        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.CheckBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(35, 152)
+        Me.CheckBox1.Location = New System.Drawing.Point(35, 140)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox1.TabIndex = 15
@@ -97,9 +99,10 @@ Partial Class LoginForm1
         '
         'LabelNewPassword
         '
-        Me.LabelNewPassword.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LabelNewPassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LabelNewPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelNewPassword.Location = New System.Drawing.Point(32, 175)
+        Me.LabelNewPassword.Location = New System.Drawing.Point(32, 163)
         Me.LabelNewPassword.Name = "LabelNewPassword"
         Me.LabelNewPassword.Size = New System.Drawing.Size(274, 21)
         Me.LabelNewPassword.TabIndex = 13
@@ -109,10 +112,11 @@ Partial Class LoginForm1
         '
         'TextBoxNewPassword
         '
-        Me.TextBoxNewPassword.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.TextBoxNewPassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxNewPassword.BackColor = System.Drawing.Color.FromArgb(CType(CType(82, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.TextBoxNewPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxNewPassword.Location = New System.Drawing.Point(35, 200)
+        Me.TextBoxNewPassword.Location = New System.Drawing.Point(35, 188)
         Me.TextBoxNewPassword.Name = "TextBoxNewPassword"
         Me.TextBoxNewPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.TextBoxNewPassword.Size = New System.Drawing.Size(274, 29)
@@ -122,9 +126,10 @@ Partial Class LoginForm1
         '
         'UsernameLabel
         '
-        Me.UsernameLabel.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.UsernameLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.UsernameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.UsernameLabel.Location = New System.Drawing.Point(35, 33)
+        Me.UsernameLabel.Location = New System.Drawing.Point(35, 21)
         Me.UsernameLabel.Name = "UsernameLabel"
         Me.UsernameLabel.Size = New System.Drawing.Size(274, 23)
         Me.UsernameLabel.TabIndex = 6
@@ -133,10 +138,11 @@ Partial Class LoginForm1
         '
         'UsernameTextBox
         '
-        Me.UsernameTextBox.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.UsernameTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.UsernameTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(82, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.UsernameTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.UsernameTextBox.Location = New System.Drawing.Point(35, 61)
+        Me.UsernameTextBox.Location = New System.Drawing.Point(35, 49)
         Me.UsernameTextBox.Name = "UsernameTextBox"
         Me.UsernameTextBox.Size = New System.Drawing.Size(274, 29)
         Me.UsernameTextBox.TabIndex = 7
@@ -144,10 +150,11 @@ Partial Class LoginForm1
         '
         'LoginCancelButton
         '
-        Me.LoginCancelButton.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LoginCancelButton.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LoginCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.LoginCancelButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!)
-        Me.LoginCancelButton.Location = New System.Drawing.Point(35, 293)
+        Me.LoginCancelButton.Location = New System.Drawing.Point(35, 281)
         Me.LoginCancelButton.Name = "LoginCancelButton"
         Me.LoginCancelButton.Size = New System.Drawing.Size(271, 51)
         Me.LoginCancelButton.TabIndex = 11
@@ -155,9 +162,10 @@ Partial Class LoginForm1
         '
         'PasswordLabel
         '
-        Me.PasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PasswordLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PasswordLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.PasswordLabel.Location = New System.Drawing.Point(32, 93)
+        Me.PasswordLabel.Location = New System.Drawing.Point(32, 81)
         Me.PasswordLabel.Name = "PasswordLabel"
         Me.PasswordLabel.Size = New System.Drawing.Size(274, 21)
         Me.PasswordLabel.TabIndex = 8
@@ -166,10 +174,11 @@ Partial Class LoginForm1
         '
         'PasswordTextBox
         '
-        Me.PasswordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PasswordTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PasswordTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(82, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.PasswordTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.PasswordTextBox.Location = New System.Drawing.Point(35, 117)
+        Me.PasswordTextBox.Location = New System.Drawing.Point(35, 105)
         Me.PasswordTextBox.Name = "PasswordTextBox"
         Me.PasswordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.PasswordTextBox.Size = New System.Drawing.Size(274, 29)
@@ -178,10 +187,11 @@ Partial Class LoginForm1
         '
         'LoginOKButton
         '
-        Me.LoginOKButton.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LoginOKButton.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LoginOKButton.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.LoginOKButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LoginOKButton.Location = New System.Drawing.Point(35, 237)
+        Me.LoginOKButton.Location = New System.Drawing.Point(35, 225)
         Me.LoginOKButton.Name = "LoginOKButton"
         Me.LoginOKButton.Size = New System.Drawing.Size(271, 51)
         Me.LoginOKButton.TabIndex = 10
@@ -189,10 +199,11 @@ Partial Class LoginForm1
         '
         'ButtonChangePassword
         '
-        Me.ButtonChangePassword.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ButtonChangePassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonChangePassword.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.ButtonChangePassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!)
-        Me.ButtonChangePassword.Location = New System.Drawing.Point(35, 237)
+        Me.ButtonChangePassword.Location = New System.Drawing.Point(35, 225)
         Me.ButtonChangePassword.Name = "ButtonChangePassword"
         Me.ButtonChangePassword.Size = New System.Drawing.Size(271, 51)
         Me.ButtonChangePassword.TabIndex = 12

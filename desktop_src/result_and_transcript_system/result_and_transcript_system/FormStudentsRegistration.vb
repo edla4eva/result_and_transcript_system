@@ -280,8 +280,8 @@ Public Class FormStudentsRegistration
                 '2. put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
                 dgvImportCourses.DataSource = dSFtomDB.Tables(0).DefaultView
                 'MsgBox("After fresh fill")
-                adapter.InsertCommand = builder.GetInsertCommand
-                MsgBox(adapter.InsertCommand.CommandText)
+                'adapter.InsertCommand = builder.GetInsertCommand
+                'MsgBox(adapter.InsertCommand.CommandText)
                 dSFtomDB.Tables(0).Clear()  'empty table
                 adapter.Update(dSFtomDB)    'persist in db
 
@@ -1216,14 +1216,18 @@ Public Class FormStudentsRegistration
                 dLevel = "500"
             Case "Add All Departmetal Courses"
                 MsgBox("Haba! fear God now :)")
-                For Each item In CheckedListBoxCourses.Items
-                    If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then item.checked = True
+                For i = 0 To CheckedListBoxCourses.Items.Count - 1
+                    If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(CheckedListBoxCourses.Items(i).ToString) Then
+                        If dictAllCourseCodeKeyAndCourseLevelVal(CheckedListBoxCourses.Items(i).ToString) = 100 Then CheckedListBoxCourses.SetItemChecked(i, True)
+                    End If
                 Next
                 PanelCourses.Visible = True
             Case "Add All Faculty Courses"
                 MsgBox("Haba! fear God now")
-                For Each item In CheckedListBoxCourses.Items
-                    If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then item.checked = True
+                For i = 0 To CheckedListBoxCourses.Items.Count - 1
+                    If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(CheckedListBoxCourses.Items(i).ToString) Then
+                        If dictAllCourseCodeKeyAndCourseLevelVal(CheckedListBoxCourses.Items(i).ToString) = 100 Then CheckedListBoxCourses.SetItemChecked(i, True)
+                    End If
                 Next
                 PanelCourses.Visible = True
         End Select

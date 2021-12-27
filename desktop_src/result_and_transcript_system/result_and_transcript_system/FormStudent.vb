@@ -275,7 +275,7 @@
         Dim dLevel, dSession, dDeptID As String
         dLevel = dgvStudents.Rows(0).Cells("level").Value
         dSession = dgvStudents.Rows(0).Cells("session_idr").Value
-        dDeptID = dgvStudents.Rows(0).Cells("department_idr").Value
+        dDeptID = dgvStudents.Rows(0).Cells("student_dept_idr").Value
 
         'todo: use course order ds or dict to auto register
         If Not dictCoursesOrderFS.Count > 0 Then
