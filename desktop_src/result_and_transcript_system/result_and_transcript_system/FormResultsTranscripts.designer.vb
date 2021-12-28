@@ -37,6 +37,8 @@ Partial Class FormResultsTranscripts
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim ReportDataSource1 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
+        Dim ReportDataSource2 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
+        Me.ClassBroadsheetsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxMATNO = New System.Windows.Forms.TextBox()
@@ -62,22 +64,28 @@ Partial Class FormResultsTranscripts
         Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
         Me.ButtonOpen = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonGPACard = New System.Windows.Forms.Button()
         Me.ButtonFullScreen = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ReportViewer1 = New Microsoft.Reporting.WinForms.ReportViewer()
-        Me.ClassBroadsheetsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.ReportViewerTranscript = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.PictureBoxImg = New System.Windows.Forms.PictureBox()
-        Me.ButtonGPACard = New System.Windows.Forms.Button()
+        Me.ReportViewerGPCard = New Microsoft.Reporting.WinForms.ReportViewer()
+        Me.ClassReportsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvTranscripts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCourses, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ClassReportsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'ClassBroadsheetsBindingSource
+        '
+        Me.ClassBroadsheetsBindingSource.DataMember = "ClassBroadsheets"
         '
         'Label1
         '
@@ -93,7 +101,7 @@ Partial Class FormResultsTranscripts
         '
         Me.Label2.AutoSize = True
         Me.Label2.ForeColor = System.Drawing.Color.Silver
-        Me.Label2.Location = New System.Drawing.Point(27, 92)
+        Me.Label2.Location = New System.Drawing.Point(27, 55)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(38, 13)
         Me.Label2.TabIndex = 10
@@ -135,7 +143,7 @@ Partial Class FormResultsTranscripts
         Me.dgvTranscripts.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgvTranscripts.EnableHeadersVisualStyles = False
         Me.dgvTranscripts.GridColor = System.Drawing.Color.White
-        Me.dgvTranscripts.Location = New System.Drawing.Point(30, 366)
+        Me.dgvTranscripts.Location = New System.Drawing.Point(30, 385)
         Me.dgvTranscripts.MultiSelect = False
         Me.dgvTranscripts.Name = "dgvTranscripts"
         Me.dgvTranscripts.ReadOnly = True
@@ -158,11 +166,13 @@ Partial Class FormResultsTranscripts
         Me.dgvTranscripts.RowTemplate.Height = 18
         Me.dgvTranscripts.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgvTranscripts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvTranscripts.Size = New System.Drawing.Size(309, 197)
+        Me.dgvTranscripts.Size = New System.Drawing.Size(309, 178)
         Me.dgvTranscripts.TabIndex = 41
         '
         'Panel2
         '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel2.BackColor = System.Drawing.Color.RoyalBlue
         Me.Panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Panel2.Controls.Add(Me.lblSet)
@@ -197,14 +207,14 @@ Partial Class FormResultsTranscripts
         'TextBoxName
         '
         Me.TextBoxName.Enabled = False
-        Me.TextBoxName.Location = New System.Drawing.Point(81, 89)
+        Me.TextBoxName.Location = New System.Drawing.Point(81, 52)
         Me.TextBoxName.Name = "TextBoxName"
         Me.TextBoxName.Size = New System.Drawing.Size(254, 20)
         Me.TextBoxName.TabIndex = 43
         '
         'TextBoxDate
         '
-        Me.TextBoxDate.Location = New System.Drawing.Point(81, 124)
+        Me.TextBoxDate.Location = New System.Drawing.Point(81, 87)
         Me.TextBoxDate.Name = "TextBoxDate"
         Me.TextBoxDate.Size = New System.Drawing.Size(10, 20)
         Me.TextBoxDate.TabIndex = 47
@@ -213,7 +223,7 @@ Partial Class FormResultsTranscripts
         '
         Me.Label4.AutoSize = True
         Me.Label4.ForeColor = System.Drawing.Color.Silver
-        Me.Label4.Location = New System.Drawing.Point(27, 131)
+        Me.Label4.Location = New System.Drawing.Point(27, 94)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(33, 13)
         Me.Label4.TabIndex = 46
@@ -221,7 +231,7 @@ Partial Class FormResultsTranscripts
         '
         'DateTimePicker1
         '
-        Me.DateTimePicker1.Location = New System.Drawing.Point(95, 125)
+        Me.DateTimePicker1.Location = New System.Drawing.Point(95, 88)
         Me.DateTimePicker1.Name = "DateTimePicker1"
         Me.DateTimePicker1.Size = New System.Drawing.Size(240, 20)
         Me.DateTimePicker1.TabIndex = 58
@@ -285,7 +295,7 @@ Partial Class FormResultsTranscripts
         Me.dgvStudents.Cursor = System.Windows.Forms.Cursors.Hand
         Me.dgvStudents.EnableHeadersVisualStyles = False
         Me.dgvStudents.GridColor = System.Drawing.Color.White
-        Me.dgvStudents.Location = New System.Drawing.Point(30, 167)
+        Me.dgvStudents.Location = New System.Drawing.Point(30, 120)
         Me.dgvStudents.MultiSelect = False
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.ReadOnly = True
@@ -331,7 +341,7 @@ Partial Class FormResultsTranscripts
         Me.dgvCourses.Cursor = System.Windows.Forms.Cursors.Hand
         Me.dgvCourses.EnableHeadersVisualStyles = False
         Me.dgvCourses.GridColor = System.Drawing.Color.White
-        Me.dgvCourses.Location = New System.Drawing.Point(30, 307)
+        Me.dgvCourses.Location = New System.Drawing.Point(30, 260)
         Me.dgvCourses.MultiSelect = False
         Me.dgvCourses.Name = "dgvCourses"
         Me.dgvCourses.ReadOnly = True
@@ -355,7 +365,7 @@ Partial Class FormResultsTranscripts
         Me.dgvCourses.RowTemplate.Height = 45
         Me.dgvCourses.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgvCourses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvCourses.Size = New System.Drawing.Size(309, 53)
+        Me.dgvCourses.Size = New System.Drawing.Size(309, 119)
         Me.dgvCourses.TabIndex = 65
         '
         'ButtonEport
@@ -445,6 +455,19 @@ Partial Class FormResultsTranscripts
         Me.SidePanel.Size = New System.Drawing.Size(134, 624)
         Me.SidePanel.TabIndex = 71
         '
+        'ButtonGPACard
+        '
+        Me.ButtonGPACard.FlatAppearance.BorderSize = 0
+        Me.ButtonGPACard.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonGPACard.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonGPACard.ForeColor = System.Drawing.Color.White
+        Me.ButtonGPACard.Location = New System.Drawing.Point(5, 176)
+        Me.ButtonGPACard.Name = "ButtonGPACard"
+        Me.ButtonGPACard.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonGPACard.TabIndex = 68
+        Me.ButtonGPACard.Text = "GPA Card"
+        Me.ButtonGPACard.UseVisualStyleBackColor = True
+        '
         'ButtonFullScreen
         '
         Me.ButtonFullScreen.FlatAppearance.BorderSize = 0
@@ -482,47 +505,49 @@ Partial Class FormResultsTranscripts
         Me.Panel1.Size = New System.Drawing.Size(836, 42)
         Me.Panel1.TabIndex = 72
         '
-        'ReportViewer1
+        'ReportViewerTranscript
         '
-        Me.ReportViewer1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ReportViewerTranscript.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         ReportDataSource1.Name = "DataSetReportBoadSheet"
         ReportDataSource1.Value = Me.ClassBroadsheetsBindingSource
-        Me.ReportViewer1.LocalReport.DataSources.Add(ReportDataSource1)
-        Me.ReportViewer1.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.ReportTranscript.rdlc"
-        Me.ReportViewer1.Location = New System.Drawing.Point(352, 115)
-        Me.ReportViewer1.Name = "ReportViewer1"
-        Me.ReportViewer1.ServerReport.BearerToken = Nothing
-        Me.ReportViewer1.Size = New System.Drawing.Size(514, 448)
-        Me.ReportViewer1.TabIndex = 73
-        Me.ReportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
-        '
-        'ClassBroadsheetsBindingSource
-        '
-        Me.ClassBroadsheetsBindingSource.DataMember = "ClassBroadsheets"
+        Me.ReportViewerTranscript.LocalReport.DataSources.Add(ReportDataSource1)
+        Me.ReportViewerTranscript.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.ReportTranscript.rdlc"
+        Me.ReportViewerTranscript.Location = New System.Drawing.Point(352, 115)
+        Me.ReportViewerTranscript.Name = "ReportViewerTranscript"
+        Me.ReportViewerTranscript.ServerReport.BearerToken = Nothing
+        Me.ReportViewerTranscript.Size = New System.Drawing.Size(514, 448)
+        Me.ReportViewerTranscript.TabIndex = 73
+        Me.ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         '
         'PictureBoxImg
         '
         Me.PictureBoxImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBoxImg.Location = New System.Drawing.Point(159, 167)
+        Me.PictureBoxImg.Location = New System.Drawing.Point(159, 120)
         Me.PictureBoxImg.Name = "PictureBoxImg"
         Me.PictureBoxImg.Size = New System.Drawing.Size(180, 134)
         Me.PictureBoxImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBoxImg.TabIndex = 59
         Me.PictureBoxImg.TabStop = False
         '
-        'ButtonGPACard
+        'ReportViewerGPCard
         '
-        Me.ButtonGPACard.FlatAppearance.BorderSize = 0
-        Me.ButtonGPACard.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonGPACard.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonGPACard.ForeColor = System.Drawing.Color.White
-        Me.ButtonGPACard.Location = New System.Drawing.Point(6, 176)
-        Me.ButtonGPACard.Name = "ButtonGPACard"
-        Me.ButtonGPACard.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonGPACard.TabIndex = 68
-        Me.ButtonGPACard.Text = "GPA Card"
-        Me.ButtonGPACard.UseVisualStyleBackColor = True
+        Me.ReportViewerGPCard.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        ReportDataSource2.Name = "DataSet1"
+        ReportDataSource2.Value = Me.ClassReportsBindingSource
+        Me.ReportViewerGPCard.LocalReport.DataSources.Add(ReportDataSource2)
+        Me.ReportViewerGPCard.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.ReportGPCard.rdlc"
+        Me.ReportViewerGPCard.Location = New System.Drawing.Point(352, 116)
+        Me.ReportViewerGPCard.Name = "ReportViewerGPCard"
+        Me.ReportViewerGPCard.ServerReport.BearerToken = Nothing
+        Me.ReportViewerGPCard.Size = New System.Drawing.Size(514, 448)
+        Me.ReportViewerGPCard.TabIndex = 74
+        Me.ReportViewerGPCard.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        '
+        'ClassReportsBindingSource
+        '
+        Me.ClassReportsBindingSource.DataSource = GetType(result_and_transcript_system.ClassReports)
         '
         'FormResultsTranscripts
         '
@@ -530,7 +555,8 @@ Partial Class FormResultsTranscripts
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1019, 624)
-        Me.Controls.Add(Me.ReportViewer1)
+        Me.Controls.Add(Me.ReportViewerGPCard)
+        Me.Controls.Add(Me.ReportViewerTranscript)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.dgvCourses)
@@ -548,6 +574,7 @@ Partial Class FormResultsTranscripts
         Me.Name = "FormResultsTranscripts"
         Me.Tag = "Front"
         Me.Text = "Results - Transcript"
+        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvTranscripts, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
@@ -557,8 +584,8 @@ Partial Class FormResultsTranscripts
         Me.SidePanel.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        CType(Me.ClassBroadsheetsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBoxImg, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ClassReportsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -591,8 +618,10 @@ Partial Class FormResultsTranscripts
     Friend WithEvents SidePanel As Panel
     Friend WithEvents Button2 As Button
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents ReportViewer1 As Microsoft.Reporting.WinForms.ReportViewer
+    Friend WithEvents ReportViewerTranscript As Microsoft.Reporting.WinForms.ReportViewer
     Friend WithEvents ClassBroadsheetsBindingSource As BindingSource
     Friend WithEvents ButtonFullScreen As Button
     Friend WithEvents ButtonGPACard As Button
+    Friend WithEvents ReportViewerGPCard As Microsoft.Reporting.WinForms.ReportViewer
+    Friend WithEvents ClassReportsBindingSource As BindingSource
 End Class

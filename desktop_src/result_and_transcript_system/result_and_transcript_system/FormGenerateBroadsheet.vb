@@ -198,7 +198,7 @@ Public Class FormGenerateBroadsheet
                 'Note col85 and Col6 are for repeated courses hence Text datatype
                 Dim strTimeStamp As String = Now.Ticks.ToString
                 dRow = dSFtomDB.Tables(0).Rows.Add("ColNames_will_be_re_written") 'add mock header row
-                For i = 0 To dtSource.Rows.Count - 1
+                For i = 0 To dtSource.Rows.Count - 1 + 1 '+ to account for extra row used for headers
                     dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
 
                     For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors

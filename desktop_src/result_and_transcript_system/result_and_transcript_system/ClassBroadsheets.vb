@@ -345,6 +345,24 @@ Public Class ClassBroadsheets
             dr("Surname") = RegStudentsDS.Tables(0).Rows(i).Item("student_surname")
             dr("FullName") = RegStudentsDS.Tables(0).Rows(i).Item("student_firstname") & " " & RegStudentsDS.Tables(0).Rows(i).Item("student_othernames") & " " & RegStudentsDS.Tables(0).Rows(i).Item("student_surname")
             dr("sn") = (i + 1).ToString
+            'todo: call sub for these
+            'Col171	Col172	Col173	Col174	Col175	ColNames	credits	course_titles	gpa100	gpa200	gpa300	gpa400	gpa500	gpa600	gpa700	gpa800	gpa900	wgpa100	wgpa200	wgpa300	wgpa400	wgpa500	wgpa600	wgpa700	wgpa800	wgpa900	fgpa	dob	session_of_entry	mode_of_entry	CourseCode_1	CourseCode_2	cummulative_credits	outstanding_credits	approved_credits	failed_screening	school_fees
+            dr("approved_credits") = "501"
+            dr("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
+            dr("gpa100") = "0.000"
+            dr("gpa200") = "0.000"
+            dr("gpa300") = "0.000"
+            dr("gpa400") = "0.000"
+            dr("gpa500") = "0.000"
+            dr("gpa600") = "0.000"
+            dr("gpa700") = "0.000"
+            dr("gpa800") = "0.000"
+            dr("gpa900") = "0.000"
+            dr("wgpa100") = "0.000"
+
+            '...
+            dr("dob") = "0.000"
+            dr("session_of_entry") = "2018"
             dt.Rows.Add(dr)
         Next
 
@@ -511,18 +529,91 @@ Public Class ClassBroadsheets
         'others
         tmpCol = New DataColumn("Session", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
+        'Note when numbered this corresponds to
+        'Col0->sn to Col167->GPA to Col170->Failed to Col171->Session
 
-        'gpa100
-        'gpa200
-        '...
-        'wgpa100
-        '...
-        'fgpa
-        'dob
-        'session_of_entry
-        'mode_of_entry
-        'CourseCode_1
-
+        'broadsheet_all has some extra cols that are named thus
+        'Col172	Col173	Col174	Col175	ColNames	
+        'credits course_titles	
+        tmpCol = New DataColumn("Col172", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Col173", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Col174", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Col175", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("ColNames", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("course_titles", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        'gpa100  gpa200	gpa300	gpa400  gpa500	gpa600	gpa700	gpa800	gpa900
+        'wgpa100 wgpa200	wgpa300	wgpa400	wgpa500	
+        'wgpa600 wgpa700	wgpa800	wgpa900		
+        tmpCol = New DataColumn("gpa100", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa200", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa300", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa400", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa500", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa600", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa700", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa800", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa900", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa100", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa200", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa300", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa400", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa500", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa600", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa700", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa800", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa900", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        'fpga dob session_of_entry	mode_of_entry	
+        'CourseCode_1    CourseCode_2	cummulative_credits	
+        'outstanding_credits approved_credits	failed_screening	
+        'school_fees
+        tmpCol = New DataColumn("fpga", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("dob", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("session_of_entry", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("mode_of_entry", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("CourseCode_1", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("CourseCode_2", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("cummulative_credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("outstanding_credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("approved_credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("failed_screening", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("school_fees", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
         Return dt
     End Function
     Function doMATNos(dictCol As Dictionary(Of String, Integer), FSBroadsheetDS As DataSet) As Dictionary(Of String, Integer)

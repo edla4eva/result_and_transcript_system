@@ -183,9 +183,13 @@ Public Class FormViewBroadsheets
                 'leave name intact or change to session
             ElseIf col.Columnname = "Col172" Then
                 'leave name intact or change to department
+            ElseIf col.Columnname = "Col173" Then
+                'leave name intact or change to ?
             ElseIf col.Columnname = "Col174" Then
                 'leave name intact or change to level
-            ElseIf col.Columnname = "Col173" Then
+            ElseIf col.Columnname = "Col175" Then
+                'leave name intact or change to footers
+            ElseIf col.Columnname = "ColNames" Then
                 'leave name intact or change to level
             ElseIf isdbnull(dtHeaders.Tables(0).Rows(0).Item(col.ordinal)) Then
                 'avoid nasty errors, leave name intact

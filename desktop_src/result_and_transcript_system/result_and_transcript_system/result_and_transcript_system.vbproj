@@ -359,6 +359,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ReportGPCard.rdlc" />
     <EmbeddedResource Include="ReportSenateCover.rdlc" />
     <EmbeddedResource Include="ReportTranscript.rdlc" />
     <EmbeddedResource Include="ReportBroadSheet.rdlc" />
