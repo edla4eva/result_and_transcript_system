@@ -92,9 +92,9 @@ Partial Class LoginForm1
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.Location = New System.Drawing.Point(35, 140)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(164, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(170, 17)
         Me.CheckBox1.TabIndex = 15
-        Me.CheckBox1.Text = "I want to chane my password"
+        Me.CheckBox1.Text = "I want to change my password"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'LabelNewPassword

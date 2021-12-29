@@ -92,7 +92,7 @@ Public Class FormViewRegs
             LoginForm1.Close()
 
             If LoginForm1.ShowDialog() = DialogResult.OK Then
-                mappDB.doQuery(String.Format(strSQL, dSession, dCourse))
+                mappDB.doQuery(String.Format(strSQL, dSession, dCourse, dlevel))
                 ButtonShowAll.PerformClick()
                 MsgBox("Results deleted sucessfully")
             End If
