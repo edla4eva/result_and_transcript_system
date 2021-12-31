@@ -54,7 +54,16 @@ Public Class ClassBroadsheets
     Private _facultyName As String = "Faculty Name"
     Private _schoolName As String = "University Name"
     Private _deptId As Integer = 1
-
+    'colA = 1
+    Public Enum statusBS
+        REGISTERED = 0
+        SUCCESSFUL = 1
+        REFFERED = 2
+        PROBATION = 3
+        FAIL_WITHDRAW = 7
+        UNREGISTERED = 9
+    End Enum
+    Public dictStatusBS As Dictionary(Of String, String)
 
     Public Property dataTablesScoresAndGrades() As DataTable()
         Get
@@ -369,26 +378,24 @@ Public Class ClassBroadsheets
 
         dictCourseCodeKeyCourseOrderSNVal_1.Clear()
         dictCourseCodeKeyCourseOrderSNVal_2.Clear()
+
         objBroadsheet.progressStr = "Creating DataSets " & " ..."
         '# Rename Cols with Course Code 'Use the Courses_order take one by one and check if it exists.  'If it exists in coursesAllList, add it to courses for each level
         Dim colStartPos As Integer = 0
         For i = 0 To NUM_LEVELS - 1
             colStartPos = COURSE_START_COL + (i * NUM_COURSES_PER_LEVEL_1)
+            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, (i + 1).ToString & "00")  'get course order for 100, 200...levels
             For j = 0 To 15 - 1 'create columns for courses 'TODO: 1st and second
-                tmpStr = "FS" & (i + 1).ToString & "00L"
-                tmpStr = coursesOrderDS.Tables(0).Rows(j).Item(tmpStr).ToString ''TODO: throws error if session does not exist an error once e.g coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
-                'tmpStr = coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
+                tmpStr = ""
+                If dictCoursesOrderFS.ContainsKey(j + 1) Then tmpStr = dictCoursesOrderFS(j + 1)
                 courses(colStartPos + j) = "ColUNIQUE" & (colStartPos + j).ToString     'initialize on the fly to avoid nulls
                 If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
-                    'dictCourseCodeKeyCourseOrderSNVal_1.Add(0 + j, tmpStr)
                     dt.Columns(colStartPos + j).ColumnName = tmpStr
                     courses(colStartPos + j) = tmpStr
                 End If
-                tmpStr = "SS" & (i + 1).ToString & "00L"
-                tmpStr = coursesOrderDS.Tables(0).Rows(j).Item(tmpStr).ToString 'e.g coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
-                'tmpStr = coursesOrderDS.Tables(0).Rows(j).Item("SS100L").ToString
+                tmpStr = ""
+                If dictCoursesOrderSS.ContainsKey(j + 1) Then tmpStr = dictCoursesOrderSS(j + 1)
                 If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
-                    'dictCourseCodeKeyCourseOrderSNVal_2.Add(0 + j, tmpStr)
                     dt.Columns(colStartPos + MAX_COURSES_1 + 4 + j).ColumnName = tmpStr
                     courses(colStartPos + MAX_COURSES_1 + NUM_COLS_BETWEEN_COURSES_1_AND_COURSES_2 + j) = tmpStr
                 End If
@@ -396,6 +403,7 @@ Public Class ClassBroadsheets
         Next
 
 
+        getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)     'get order for the curren level
 
         'For each ColName(CourseCode), query database to get result scores for that course
         'NB: in broadsheet template scores starts From col H (i.e 7 counting From 0)
@@ -798,6 +806,18 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("TCR") = TCRs(2)
             dt.Rows(i).Item("TCP") = TCPs(2)
             dt.Rows(i).Item("TCF") = dt.Rows(i).Item("TCR") - dt.Rows(i).Item("TCP")
+            'sTATUS
+            If IsDBNull(dt.Rows(i).Item("Status")) Then dt.Rows(i).Item("Status") = ""
+            If dt.Rows(i).Item("Status") = "UNREGISTERED" Then
+                'leave intact
+            Else
+                If CInt(dt.Rows(i).Item("TCF")) = 0 Then
+                    dt.Rows(i).Item("Status") = "SUCCESSFUL"   'statusBS.SUCCESSFUL
+                Else
+                    dt.Rows(i).Item("Status") = "REFFERED"
+                End If
+            End If
+
 
             objBroadsheet.progress = (i / countRows * 95)  'max 80+16 = 96%
         Next
@@ -1935,4 +1955,7 @@ Public Class ClassBroadsheets
         If tmpCr > 0 Then tmpGPA = tmpGP / tmpCr Else tmpGPA = -1
         Return tmpGPA
     End Function
+
+
+
 End Class

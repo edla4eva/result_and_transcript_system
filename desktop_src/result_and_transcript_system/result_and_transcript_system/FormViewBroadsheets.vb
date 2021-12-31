@@ -108,11 +108,7 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
-
-        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-
-        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-
+        getDeptSessionsIntoDictionaries()
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
@@ -135,8 +131,8 @@ Public Class FormViewBroadsheets
         TextBoxLevel.Text = ComboBoxLevel.Items(0).ToString
     End Sub
 
-    Private Sub ButtonAdjustTemplate_Click(sender As Object, e As EventArgs) Handles ButtonAdjustTemplate.Click
-
+    Private Sub ButtonAdjustTemplate_Click(sender As Object, e As EventArgs) Handles ButtonApprove.Click
+        MsgBox("This featre is only supported in the Commercial version")
     End Sub
 
     Private Sub ButtonSearchBroadheet_Click(sender As Object, e As EventArgs) Handles ButtonSearchBroadheet.Click
@@ -219,19 +215,22 @@ Public Class FormViewBroadsheets
         Dim dDept As String = DataGridView1.SelectedRows(0).Cells("Col172").Value.ToString
         Dim dLevel As String = DataGridView1.SelectedRows(0).Cells("Col174").Value.ToString
         Dim strTimeStamp As String = DataGridView1.SelectedRows(0).Cells("ColNames").Value.ToString
-
+        'todo: ColNames is now used as timestamp may make soft difficult to maintain, change to timestamp across db, queries and code
         If MessageBox.Show("Are you sure you want to delete the selected broadsheet?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
             LoginForm1.Close()
+            LoginForm1.Tag = "adminCheck"
 
             If LoginForm1.ShowDialog() = DialogResult.OK Then
-                'todo if loginForm.isSignedInAsAdmin then
-                If mappDB.doQuery(String.Format(strSQL, dSession, dDept, dLevel, strTimeStamp)) Then
-                    ButtonShowAllBroadsheet.PerformClick()
-                    MsgBox("Broadsheet deleted sucessfully")
-                Else
-                    MsgBox("Something went wrong")
-                End If
+                If LoginForm1.Tag = "adminOk" Then
+                    'todo if loginForm.isSignedInAsAdmin then
+                    If mappDB.doQuery(String.Format(strSQL, dSession, dDept, dLevel, strTimeStamp)) Then
+                        ButtonShowAllBroadsheet.PerformClick()
+                        MsgBox("Broadsheet deleted sucessfully")
+                    Else
+                        MsgBox("Something went wrong")
+                    End If
 
+                End If
             End If
         End If
     End Sub

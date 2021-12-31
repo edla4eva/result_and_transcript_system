@@ -40,7 +40,7 @@ Partial Class FormViewBroadsheets
         Me.ButtonSearchBroadheet = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonShowAllBroadsheet = New System.Windows.Forms.Button()
-        Me.ButtonAdjustTemplate = New System.Windows.Forms.Button()
+        Me.ButtonApprove = New System.Windows.Forms.Button()
         Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
         Me.PanelModify = New System.Windows.Forms.Panel()
         Me.LabelClosePanelModify = New System.Windows.Forms.Label()
@@ -144,7 +144,7 @@ Partial Class FormViewBroadsheets
         Me.SidePanel.Controls.Add(Me.ButtonSearchBroadheet)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonShowAllBroadsheet)
-        Me.SidePanel.Controls.Add(Me.ButtonAdjustTemplate)
+        Me.SidePanel.Controls.Add(Me.ButtonApprove)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(761, 0)
         Me.SidePanel.Name = "SidePanel"
@@ -157,7 +157,7 @@ Partial Class FormViewBroadsheets
         Me.ButtonShowDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonShowDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonShowDetails.ForeColor = System.Drawing.Color.White
-        Me.ButtonShowDetails.Location = New System.Drawing.Point(0, 222)
+        Me.ButtonShowDetails.Location = New System.Drawing.Point(-3, 163)
         Me.ButtonShowDetails.Name = "ButtonShowDetails"
         Me.ButtonShowDetails.Size = New System.Drawing.Size(128, 55)
         Me.ButtonShowDetails.TabIndex = 11
@@ -235,25 +235,25 @@ Partial Class FormViewBroadsheets
         Me.ButtonShowAllBroadsheet.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonShowAllBroadsheet.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonShowAllBroadsheet.ForeColor = System.Drawing.Color.White
-        Me.ButtonShowAllBroadsheet.Location = New System.Drawing.Point(3, 161)
+        Me.ButtonShowAllBroadsheet.Location = New System.Drawing.Point(0, 102)
         Me.ButtonShowAllBroadsheet.Name = "ButtonShowAllBroadsheet"
         Me.ButtonShowAllBroadsheet.Size = New System.Drawing.Size(128, 55)
         Me.ButtonShowAllBroadsheet.TabIndex = 1
         Me.ButtonShowAllBroadsheet.Text = "Show All"
         Me.ButtonShowAllBroadsheet.UseVisualStyleBackColor = True
         '
-        'ButtonAdjustTemplate
+        'ButtonApprove
         '
-        Me.ButtonAdjustTemplate.FlatAppearance.BorderSize = 0
-        Me.ButtonAdjustTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonAdjustTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonAdjustTemplate.ForeColor = System.Drawing.Color.White
-        Me.ButtonAdjustTemplate.Location = New System.Drawing.Point(3, 100)
-        Me.ButtonAdjustTemplate.Name = "ButtonAdjustTemplate"
-        Me.ButtonAdjustTemplate.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonAdjustTemplate.TabIndex = 0
-        Me.ButtonAdjustTemplate.Text = "Refresh"
-        Me.ButtonAdjustTemplate.UseVisualStyleBackColor = True
+        Me.ButtonApprove.FlatAppearance.BorderSize = 0
+        Me.ButtonApprove.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonApprove.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonApprove.ForeColor = System.Drawing.Color.White
+        Me.ButtonApprove.Location = New System.Drawing.Point(6, 224)
+        Me.ButtonApprove.Name = "ButtonApprove"
+        Me.ButtonApprove.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonApprove.TabIndex = 0
+        Me.ButtonApprove.Text = "Approve"
+        Me.ButtonApprove.UseVisualStyleBackColor = True
         '
         'ComboBoxSessions
         '
@@ -365,7 +365,7 @@ Partial Class FormViewBroadsheets
     Friend WithEvents ButtonSearchBroadheet As Button
     Friend WithEvents ButtonCloud As Button
     Friend WithEvents ButtonShowAllBroadsheet As Button
-    Friend WithEvents ButtonAdjustTemplate As Button
+    Friend WithEvents ButtonApprove As Button
     Friend WithEvents ComboBoxSessions As ComboBox
     Friend WithEvents PanelModify As Panel
     Friend WithEvents LabelClosePanelModify As Label

@@ -84,18 +84,25 @@ Public Class FormViewRegs
         If DataGridView2.SelectedRows Is Nothing Or DataGridView2.Columns.Contains("matno") Then
             Exit Sub
         End If
-        Dim strSQL As String = "DELETE * FROM Regs WHERE session_idr='{0}' AND dept_idr='{1}' AND level='{2}'"
+        Dim strSQL As String = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
         Dim dSession As String = DataGridView2.SelectedRows(0).Cells("session_idr").Value.ToString
         Dim dCourse As String = DataGridView2.SelectedRows(0).Cells("dept_idr").Value.ToString
         Dim dlevel As String = DataGridView2.SelectedRows(0).Cells("level").Value.ToString
         If MessageBox.Show("Are you sure you want to delete all the selected registration data?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
+
             LoginForm1.Close()
+            LoginForm1.Tag = "adminCheck"
 
             If LoginForm1.ShowDialog() = DialogResult.OK Then
-                mappDB.doQuery(String.Format(strSQL, dSession, dCourse, dlevel))
-                ButtonShowAll.PerformClick()
-                MsgBox("Results deleted sucessfully")
-            End If
+                If LoginForm1.Tag = "adminOk" Then
+                    If mappDB.doQuery(String.Format(strSQL, dSession, dCourse, dlevel)) = True Then
+                        ButtonShowAll.PerformClick()
+                        MsgBox("Registration data deleted sucessfully")
+                    Else
+                        MsgBox("Could not delete Registratin data")
+                    End If
+                End If
+                End If
         End If
     End Sub
 
@@ -126,7 +133,7 @@ Public Class FormViewRegs
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         TimerBS.Start()
         bgwLoad.ReportProgress(20)
-        getResultSummary()
+        getRegSummary()
         bgwLoad.ReportProgress(90)
     End Sub
 
@@ -140,7 +147,7 @@ Public Class FormViewRegs
     Private Sub bgwLoad_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles bgwLoad.ProgressChanged
         ProgressBarBS.Value = e.ProgressPercentage
     End Sub
-    Private Function getResultSummary() As DataView
+    Private Function getRegSummary() As DataView
 
         Try
             resultSummarryDV = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0).DefaultView

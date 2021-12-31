@@ -27,6 +27,7 @@ Partial Class MainForm
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.Buttonhelp = New System.Windows.Forms.Button()
         Me.PanelBtn = New System.Windows.Forms.Panel()
         Me.ButtonSettings = New System.Windows.Forms.Button()
         Me.ButtonCurrent = New System.Windows.Forms.Button()
@@ -39,7 +40,6 @@ Partial Class MainForm
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabelMax = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.Buttonhelp = New System.Windows.Forms.Button()
         Me.PanelContainer.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -104,6 +104,19 @@ Partial Class MainForm
         Me.SidePanel.Size = New System.Drawing.Size(134, 500)
         Me.SidePanel.TabIndex = 4
         '
+        'Buttonhelp
+        '
+        Me.Buttonhelp.FlatAppearance.BorderSize = 0
+        Me.Buttonhelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Buttonhelp.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.Buttonhelp.ForeColor = System.Drawing.Color.White
+        Me.Buttonhelp.Location = New System.Drawing.Point(3, 278)
+        Me.Buttonhelp.Name = "Buttonhelp"
+        Me.Buttonhelp.Size = New System.Drawing.Size(128, 55)
+        Me.Buttonhelp.TabIndex = 7
+        Me.Buttonhelp.Text = "Help"
+        Me.Buttonhelp.UseVisualStyleBackColor = True
+        '
         'PanelBtn
         '
         Me.PanelBtn.Anchor = System.Windows.Forms.AnchorStyles.Right
@@ -112,7 +125,6 @@ Partial Class MainForm
         Me.PanelBtn.Name = "PanelBtn"
         Me.PanelBtn.Size = New System.Drawing.Size(19, 15)
         Me.PanelBtn.TabIndex = 6
-        Me.PanelBtn.Visible = False
         '
         'ButtonSettings
         '
@@ -255,19 +267,6 @@ Partial Class MainForm
         Me.LinkLabel1.TabIndex = 0
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Close (X)"
-        '
-        'Buttonhelp
-        '
-        Me.Buttonhelp.FlatAppearance.BorderSize = 0
-        Me.Buttonhelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Buttonhelp.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.Buttonhelp.ForeColor = System.Drawing.Color.White
-        Me.Buttonhelp.Location = New System.Drawing.Point(3, 278)
-        Me.Buttonhelp.Name = "Buttonhelp"
-        Me.Buttonhelp.Size = New System.Drawing.Size(128, 55)
-        Me.Buttonhelp.TabIndex = 7
-        Me.Buttonhelp.Text = "Help"
-        Me.Buttonhelp.UseVisualStyleBackColor = True
         '
         'MainForm
         '

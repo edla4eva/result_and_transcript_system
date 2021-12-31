@@ -414,10 +414,7 @@ Public Class FormUploadResult
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         'may not be a good idea to do ui stuff here
 
-        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-        dictCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
-        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-
+        getDeptSessionsIntoDictionaries()
         'Not working in BGWorker
         'dsDepts = combolistDS(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
         'dsCourses = combolistDS(STR_SQL_ALL_COURSES, "course_code", "course_code")

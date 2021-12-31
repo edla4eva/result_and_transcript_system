@@ -212,8 +212,8 @@ Module ModuleGeneral
 
     Public STR_SQL_ALL_COURSES As String = "SELECT * FROM courses order by course_code" ' 
 
-    Public STR_SQL_ALL_COURSES_ORDER As String = "SELECT * FROM courses_order WHERE (session_idr='{0}' AND dept_idr={1}) order by sn" ' 
-    Public STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA As String = "SELECT * FROM courses_order  order by session_idr, dept_idr,sn" ' 
+    Public STR_SQL_ALL_COURSES_ORDER As String = "SELECT * FROM courses_order_new WHERE (session_idr='{0}' AND dept_idr={1}  AND course_level={2});" ' 
+    Public STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA As String = "SELECT * FROM courses_order_new  order by session_idr, dept_idr,course_level" ' 
 
     Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments"
     Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
@@ -292,10 +292,12 @@ Module ModuleGeneral
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
     Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, year_of_entry,session_idr_of_entry, mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1, CourseCode_2, Fees_Status, level, dept_idr) " &
-                                                "VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}');"
-    '.MatNo, Reg.student_firstname, Reg.student_surname, Reg.student_othernames, Reg.student_dept_idr, Reg.status, Reg.year_of_entry, Reg.session_idr_of_entry, Reg.mode_of_entry, Reg.dob, Reg.phone, Reg.email, Reg.gender, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr
-    'Course reg combo
-    '"SELECT course_code, course_title, course_unit, course_semester FROM Courses WHERE (((course_semester)=2)) ORDER BY Courses.course_code;"
+                                                "VALUES ('{0}','{1}','{2}','{3}',{4},'{5}',{6},'{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}',{17},{18});"
+
+
+    'DELETES
+    Public DELETE_FROM_RESULTS_WHERE_SESSION_COURSECODE_TIMESAMP As String = "DELETE * FROM results WHERE session_idr='{0}' AND course_code_idr='{1}' AND result_timestamp='{2}'"
+    Public DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Reg WHERE session_idr='{0}' AND dept_idr={1} AND level={2}"
 
     Public STR_SQL_COURSE_REG_FIRST_SEMESTER = "SELECT FC.CourseCode, FC.CourseTitle, FC.CourseCredit FROM FC WHERE (((FC.CourseSemester)=1)) ORDER BY FC.CourseCode;"
     Public STR_SQL_COURSE_REG_SECOND_SEMESTER = "SELECT CourseCode,CourseTitle,CourseCredit FROM FC WHERE (((CourseSemester)=2)) ORDER BY CourseCode;"
@@ -320,6 +322,7 @@ Module ModuleGeneral
     'BroadSheets
     Public STR_SQL_ALL_BROADSHEET As String = "SELECT * FROM broadsheets_all" ' WHERE( (session='{0}') And (level={1}));"
     Public STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL As String = "SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And (ColNames='{3}') And Not(Col1='matno')) ORDER BY Col0,Col1;"
+    Public STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP As String = "SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
 
     Public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';"
 
@@ -483,10 +486,49 @@ Module ModuleGeneral
     '    End Try
     'End Sub
 
+    Function getDeptSessionsIntoDictionaries() As Boolean
+        'Todo create an event to auto refresh these when data is added or deleted
+        'if recorsHaveChanged
+        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
+        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
+        dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+        Return True
+    End Function
     Public Function getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) As Boolean
         Try
-            dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
-            dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
+            'old
+            'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
+            'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
+            'new (traspose of old)
+            Dim ds As New DataSet
+            Dim strColNameFS As String = ""
+            Dim strColNameSS As String = ""
+            ds = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr, dLevel))
+
+            dictCoursesOrderFS.Clear()
+            dictCoursesOrderSS.Clear()
+
+            If ds.Tables(0).Rows.Count = 0 Then Return False
+
+
+
+            For i = 0 To ds.Tables(0).Rows.Count - 1
+                For j = 0 To 14
+                    strColNameFS = "FS" & (j + 1).ToString("D3")
+                    strColNameSS = "SS" & (j + 1).ToString("D3")
+                    If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameFS)) Then
+                        ds.Tables(0).Rows(i).Item(strColNameFS) = ""
+                    Else
+                        dictCoursesOrderFS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameFS))
+                    End If
+                    If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameSS)) Then
+                        ds.Tables(0).Rows(i).Item(strColNameSS) = ""    'dnt add em
+                    Else
+                        dictCoursesOrderSS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameSS))
+                    End If
+
+                Next
+            Next
             Return True
         Catch ex As Exception
             Return False
@@ -833,6 +875,34 @@ Module ModuleGeneral
         StrDate = StrDate & ":" & dtp.Minute.ToString("00")
         StrDate = StrDate & ":" & dtp.Second.ToString("00")
         Return StrDate
+    End Function
+    Public Function generateCodeGetSetForBroadsheet() As Boolean
+        Dim ds As DataSet = mappDB.GetDataWhere("SELECT * FROM broadsheets_all WHERE Col1=''")
+        Dim dt As DataTable = ds.Tables(0)
+        Dim strDeclaration As String = ""
+        Dim strGetandSet As String = ""
+        Dim pptyName As String = ""
+        Dim pptyPrivateName As String = ""
+        For j = 0 To dt.Columns.Count - 1
+            pptyName = dt.Columns(j).ColumnName
+            pptyPrivateName = "_" & pptyName.ToLower
+            strDeclaration = "Public " & pptyPrivateName & " as String"
+            strGetandSet = ""
+            strGetandSet = strGetandSet & vbCrLf & "Public Property " & pptyName & "() As String"
+            strGetandSet = strGetandSet & vbCrLf & "Get"
+            strGetandSet = strGetandSet & vbCrLf & "Return " & pptyPrivateName
+            strGetandSet = strGetandSet & vbCrLf & "End Get"
+            strGetandSet = strGetandSet & vbCrLf & "Set(ByVal value As String)"
+
+            strGetandSet = strGetandSet & vbCrLf & pptyPrivateName & " = value"
+            strGetandSet = strGetandSet & vbCrLf & "End Set"
+            strGetandSet = strGetandSet & vbCrLf & "End Property" & vbCrLf
+            Debug.Print(strDeclaration)
+            Debug.Print(strGetandSet)
+        Next
+        'output it
+
+        Return True
     End Function
 End Module
 

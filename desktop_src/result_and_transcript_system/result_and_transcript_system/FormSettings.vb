@@ -29,14 +29,12 @@ Public Class FormSettings
 
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         ds = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA))
-        dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "FS" & course_level & "L", "FS" & course_level & "L")
 
-        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-        dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
-        dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "SS" & course_level & "L", "SS" & course_level & "L")
-        dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+        getCoursesOrderIntoDictionaries(Session_idr, course_dept_idr, course_level)
+        'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "FS" & course_level & "L", "FS" & course_level & "L")
+        'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "SS" & course_level & "L", "SS" & course_level & "L")
 
+        getDeptSessionsIntoDictionaries()
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted

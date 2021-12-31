@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassAnswerEventArgs.vb" />
+    <Compile Include="ClassBroadsheet.partial.vb" />
     <Compile Include="ClassBroadsheets.vb" />
     <Compile Include="ClassDB.vb" />
     <Compile Include="ClasseEF.vb" />
@@ -373,7 +374,6 @@
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
     <None Include="My Project\DataSources\ClassBroadsheets.datasource" />
-    <None Include="My Project\DataSources\ClassDB.datasource" />
     <None Include="My Project\DataSources\ClassReports.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -413,5 +413,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

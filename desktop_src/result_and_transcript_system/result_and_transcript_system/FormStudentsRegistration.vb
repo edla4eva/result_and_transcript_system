@@ -494,8 +494,14 @@ Public Class FormStudentsRegistration
 
     End Sub
     Sub captureReg(dRowIndex As Integer)
-        Dim recNo As Integer = BindingSourceStudents.Find("matno", dgvCourses.Rows(0).Cells("matno").Value)
-        BindingSourceStudents.Position = recNo
+        Try
+
+
+            Dim recNo As Integer = BindingSourceStudents.Find("matno", dgvCourses.Rows(dRowIndex).Cells("matno").Value)
+            BindingSourceStudents.Position = recNo
+        Catch ex As Exception
+            logError(ex.ToString)
+        End Try
     End Sub
     Sub showCoursesList()
         PanelCourses.Visible = True
@@ -574,16 +580,10 @@ Public Class FormStudentsRegistration
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         Select Case e.Argument
             Case 1
-                dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-                dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-                dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
-                dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+                getDeptSessionsIntoDictionaries()
                 GetData()
             Case Else
-                dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-                dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-                dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
-                dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+                getDeptSessionsIntoDictionaries()
                 GetData()
         End Select
     End Sub
@@ -711,11 +711,11 @@ Public Class FormStudentsRegistration
             dgvImportCourses.Refresh()
             dgvImportCourses.DataSource = dtCorrectFormat
             dgvImportCourses.Refresh()
-
+            Return True
         Catch ex As Exception
             MessageBox.Show("Result is not in the correct format, please correct ant try again")
             logError(ex.ToString)
-            Exit Sub
+            Return False
         End Try
     End Function
 
@@ -1187,6 +1187,7 @@ Public Class FormStudentsRegistration
     Private Sub ComboBoxShortCuts1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxShortCuts1.SelectedIndexChanged
         'Todo: improe code remove multipe exit sub
         Dim dLevel, dSession, dDeptID As String
+        dLevel = "100"
         Select Case ComboBoxShortCuts1.SelectedItem
             Case "Add All 100L Courses"
                 dLevel = "100"
@@ -1225,8 +1226,8 @@ Public Class FormStudentsRegistration
         session_idr = ComboBoxSessions.SelectedItem
         course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedIndex.ToString)
 
-        'todo: use course order ds or dict to auto register
-        If Not dictCoursesOrderFS.Count > 0 Then
+
+        If dictCoursesOrderFS.Count = 0 Then
             If getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) = False Then
                 MsgBox("Cannot load authorized course list")
                 Exit Sub
@@ -1234,15 +1235,23 @@ Public Class FormStudentsRegistration
         End If
 
         If dictCoursesOrderFS.Count > 0 Then
-            For Each cKey In dictCoursesOrderFS.Keys
+            For Each cVal In dictCoursesOrderFS.Values
                 If TextBoxCourse_1.Text = "" Then
-                    TextBoxCourse_1.Text = cKey
+                    TextBoxCourse_1.Text = cVal
                 Else
-                    TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & TextBoxCourse_1.Text & cKey
+                    TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & cVal
                 End If
             Next
         End If
-
+        If dictCoursesOrderFS.Count > 0 Then
+            For Each cVal In dictCoursesOrderSS.Values
+                If TextBoxCourse_2.Text = "" Then
+                    TextBoxCourse_2.Text = cVal
+                Else
+                    TextBoxCourse_2.Text = TextBoxCourse_2.Text & ";" & cVal
+                End If
+            Next
+        End If
 
 
     End Sub

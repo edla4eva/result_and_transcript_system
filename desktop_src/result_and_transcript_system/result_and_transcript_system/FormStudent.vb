@@ -283,20 +283,20 @@
         End If
 
         If dictCoursesOrderFS.Count > 0 Then
-            For Each cKey In dictCoursesOrderFS.Keys
+            For Each cVal In dictCoursesOrderFS.Values
                 If txtCourses_1 = "" Then
-                    txtCourses_1 = cKey
+                    txtCourses_1 = cVal
                 Else
-                    txtCourses_1 = txtCourses_1 & ";" & txtCourses_1 & cKey
+                    txtCourses_1 = txtCourses_1 & ";" & txtCourses_1 & cVal
                 End If
             Next
         End If
         If dictCoursesOrderFS.Count > 0 Then
-            For Each cKey In dictCoursesOrderSS.Keys
+            For Each cVal In dictCoursesOrderSS.Keys
                 If txtCourses_2 = "" Then
-                    txtCourses_2 = cKey
+                    txtCourses_2 = cVal
                 Else
-                    txtCourses_2 = txtCourses_2 & ";" & txtCourses_2 & cKey
+                    txtCourses_2 = txtCourses_2 & ";" & txtCourses_2 & cVal
                 End If
             Next
         End If
