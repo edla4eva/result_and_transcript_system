@@ -294,8 +294,16 @@ Module ModuleGeneral
     Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, year_of_entry,session_idr_of_entry, mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1, CourseCode_2, Fees_Status, level, dept_idr) " &
                                                 "VALUES ('{0}','{1}','{2}','{3}',{4},'{5}',{6},'{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}',{17},{18});"
 
+    Public STR_SQL_INSERT_STUDENTS_WITH_PARAMS = "INSERT INTO Reg matno,student_firstname,student_surname,student_othernames,student_dept_idr,status,year_of_entry,session_idr_of_entry,mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1,CourseCode_2,Fees_Status,level,dept_idr
+                                                    VALUES(@matno,@student_firstname,@student_surname,@student_othernames,@student_dept_idr,@status,@year_of_entry,@session_idr_of_entry,@mode_of_entry,@dob,@phone,@email,@gender,@session_idr,@CourseCode_1,@CourseCode_2,@Fees_Status,@level,@dept_idr);"
+
+
+    'UPDATES
+    Public STR_SQL_UPDATESTUDENTS_WITH_PARAMS = "UPDATE Reg SET matno=@matno,student_firstname=@student_firstname,student_surname=@student_surname,student_othernames=@student_othernames,student_dept_idr=@student_dept_idr,status=@status,year_of_entry=@year_of_entry,session_idr_of_entry=@session_idr_of_entry,mode_of_entry=@mode_of_entry,dob=@dob,phone=@phone,email=@email,gender=@gender,session_idr=@session_idr,CourseCode_1=@CourseCode_1,CourseCode_2=@CourseCode_2,Fees_Status=@Fees_Status,level=@level,dept_idr=@dept_idr
+                                                WHERE matno=@matno"
 
     'DELETES
+    Public STR_SQL_DELETE_STUDENTS_WITH_PARAMS As String = "DELETE FROM Reg WHERE matno=@matno"
     Public DELETE_FROM_RESULTS_WHERE_SESSION_COURSECODE_TIMESAMP As String = "DELETE * FROM results WHERE session_idr='{0}' AND course_code_idr='{1}' AND result_timestamp='{2}'"
     Public DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Reg WHERE session_idr='{0}' AND dept_idr={1} AND level={2}"
 
@@ -489,10 +497,18 @@ Module ModuleGeneral
     Function getDeptSessionsIntoDictionaries() As Boolean
         'Todo create an event to auto refresh these when data is added or deleted
         'if recorsHaveChanged
-        dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-        dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-        dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
-        Return True
+        Try
+            dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
+            dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
+            dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+            dictCourses = dictAllCourses
+
+            Return True
+        Catch ex As Exception
+            logError(ex.ToString)
+            Return False
+        End Try
+
     End Function
     Public Function getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) As Boolean
         Try
@@ -903,6 +919,82 @@ Module ModuleGeneral
         'output it
 
         Return True
+    End Function
+
+    Function generateCodeBindings(dt As DataTable) As String
+        Dim strRet As String = ""
+        Dim cntName As String = ""
+        Dim paramName As String = ""
+        Dim fieldName As String = ""
+        For j = 0 To dt.Columns.Count - 1
+            fieldName = dt.Columns(j).ColumnName
+            cntName = "TextBox" & dt.Columns(j).ColumnName
+            If j = 0 Then
+                strRet = cntName & ".DataBindings.Add(" & dblQuoted("Text") & ", BindingSourceStudents, " & dblQuoted(fieldName) & ")"
+            Else
+                strRet = strRet & vbCrLf & cntName & ".DataBindings.Add(" & dblQuoted("Text") & ", BindingSourceStudents, " & dblQuoted(fieldName) & ")"
+            End If
+        Next
+        'TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
+
+
+        Return strRet
+    End Function
+    Function generateSQLUpdate(dt As DataTable, tblname As String, dCriteriaField As String) As String
+        'UPDATE Reg SET student_firstname=@first,student_othernames=@middle,student_surname=@last WHERE matno=@matno"
+        Dim strRet As String = "UPDATE " & tblname & " SET"
+        Dim paramName As String = ""
+        Dim fieldName As String = ""
+        For j = 0 To dt.Columns.Count - 1
+
+            fieldName = dt.Columns(j).ColumnName
+            paramName = "@" & fieldName
+            If j = 0 Then
+                strRet = strRet & fieldName & "=" & paramName
+            Else
+                strRet = strRet & "," & fieldName & "=" & paramName
+            End If
+
+        Next
+        strRet = strRet & vbCrLf & "WHERE " & dCriteriaField & "=@" & dCriteriaField
+
+        Return strRet
+    End Function
+    Function generateSQLInsert(dt As DataTable, tblName As String) As String
+        Dim strRet As String = "INSERT INTO " & tblName & " "
+        Dim valS As String = " VALUES("
+        Dim paramName As String = ""
+        Dim fieldName As String = ""
+        For j = 0 To dt.Columns.Count - 1
+
+            fieldName = dt.Columns(j).ColumnName
+            paramName = "@" & fieldName
+            If j = 0 Then
+                strRet = strRet & fieldName
+                valS = valS & paramName
+            Else
+                strRet = strRet & "," & fieldName
+                valS = valS & "," & paramName
+            End If
+
+        Next
+        strRet = strRet & vbCrLf & valS & ");"
+
+        Return strRet
+    End Function
+
+    Function generateParams(dt As DataTable) As String
+        Dim strRet As String = ""
+        Dim valS As String = " VALUES("
+        Dim paramName As String = ""
+        Dim fieldName As String = ""
+        For j = 0 To dt.Columns.Count - 1
+            paramName = "@" & fieldName
+            fieldName = dt.Columns(j).ColumnName
+            ' lstupdateParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
+            strRet = strRet & vbCrLf & "lstupdateParams.Add(New OleDb.OleDbParameter(" & dblQuoted(paramName) & ", OleDb.OleDbType.VarChar, 100, " & dblQuoted(fieldName) & "))"
+        Next
+        Return strRet
     End Function
 End Module
 

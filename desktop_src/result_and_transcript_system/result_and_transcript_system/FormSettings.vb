@@ -287,5 +287,23 @@ Public Class FormSettings
         End If
     End Sub
 
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        Dim dt As DataTable = mappDB.GetDataWhere("SELECT * FROM Reg WHERE matno=''").Tables(0)
+        TextBoxDev.Text = generateSQLInsert(dt, "Reg")
+    End Sub
 
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim dt As DataTable = mappDB.GetDataWhere("SELECT * FROM Reg WHERE matno=''").Tables(0)
+        TextBoxDev.Text = generateCodeBindings(dt)
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        Dim dt As DataTable = mappDB.GetDataWhere("SELECT * FROM Reg WHERE matno=''").Tables(0)
+        TextBoxDev.Text = generateParams(dt)
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        Dim dt As DataTable = mappDB.GetDataWhere("SELECT * FROM Reg WHERE matno=''").Tables(0)
+        TextBoxDev.Text = generateSQLUpdate(dt, "Reg", "matno")
+    End Sub
 End Class

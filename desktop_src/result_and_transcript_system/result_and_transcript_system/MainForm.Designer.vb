@@ -121,10 +121,11 @@ Partial Class MainForm
         '
         Me.PanelBtn.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.PanelBtn.BackgroundImage = Global.result_and_transcript_system.My.Resources.Resources.panel
-        Me.PanelBtn.Location = New System.Drawing.Point(96, 37)
+        Me.PanelBtn.Location = New System.Drawing.Point(90, 37)
         Me.PanelBtn.Name = "PanelBtn"
         Me.PanelBtn.Size = New System.Drawing.Size(19, 15)
         Me.PanelBtn.TabIndex = 6
+        Me.PanelBtn.Visible = False
         '
         'ButtonSettings
         '

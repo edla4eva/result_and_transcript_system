@@ -428,7 +428,12 @@ Public Class FormUploadResult
         'arr.find
         'ComboBoxDepartments.Items.Addarray(dictDepts.ToArray)
 
-
+        If dictCourses.Count = 0 Then
+            If getDeptSessionsIntoDictionaries() = False Then
+                MsgBox("Cannot retrieve Department and Course info from database")
+                Exit Sub
+            End If
+        End If
         'for dictonaries
         ComboBoxCourseCode.Items.Clear()
         For Each key In dictCourses.Keys

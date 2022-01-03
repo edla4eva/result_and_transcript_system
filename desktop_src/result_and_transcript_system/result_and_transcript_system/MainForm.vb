@@ -248,7 +248,7 @@
     Private Sub PanelBtn_Click(sender As Object, e As EventArgs) Handles PanelBtn.Click
 
         'Test code area
-        generateCodeGetSetForBroadsheet()
+
     End Sub
 
     Private Sub LinkLabelShowHide_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelShowHide.LinkClicked
@@ -285,6 +285,10 @@
     Private Sub Buttonhelp_Click(sender As Object, e As EventArgs) Handles Buttonhelp.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         ChangeMenu("Help")
+    End Sub
+
+    Private Sub PanelBtn_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn.Paint
+
     End Sub
 End Class
 

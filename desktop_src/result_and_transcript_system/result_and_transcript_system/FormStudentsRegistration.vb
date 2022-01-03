@@ -10,6 +10,13 @@ Public Class FormStudentsRegistration
     Dim tmpDS As DataSet
     Dim dsStudents, dsReg As New DataSet
 
+    'forced to do this
+    Dim regConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
+    Dim adapter As New OleDb.OleDbDataAdapter()
+    Dim dtReg As DataTable
+    Dim bnd As New BindingSource
+
+
     Private Sub FormStudentsRegistration_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.WindowState = FormWindowState.Maximized
 
@@ -39,8 +46,8 @@ Public Class FormStudentsRegistration
         Dim dDept As Integer = 1
         Try
             'mappDB.Dept = 1 'TODO
-            If CInt(TextBoxDeptID.Text) > 0 Then
-                dDept = CInt(TextBoxDeptID.Text) 'TODO
+            If CInt(TextBoxstudent_dept_idr.Text) > 0 Then
+                dDept = CInt(TextBoxstudent_dept_idr.Text) 'TODO
             Else
 
             End If
@@ -136,8 +143,8 @@ Public Class FormStudentsRegistration
         Dim units As Integer
         Dim MATNO As String = dgvCourses.SelectedRows(0).Cells("matno").Value.ToString
 
-        Dim courseCodes1 As String() = TextBoxCourse_1.Text.Split(";")
-        Dim courseCodes2 As String() = TextBoxCourse_2.Text.Split(";")
+        Dim courseCodes1 As String() = TextBoxCourseCode_1.Text.Split(";")
+        Dim courseCodes2 As String() = TextBoxCourseCode_2.Text.Split(";")
         Dim sumUnits As Integer = 0
 
         'todo check if dictionary is lready loaded if not load
@@ -174,23 +181,23 @@ Public Class FormStudentsRegistration
     End Sub
     Public Sub unregisterStudent()
         Dim oldLen As Integer = 0
-        If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+        If TextBoxCourseCode_1.Text.Contains(TextBoxCourseCode.Text) Then
             'If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
             'If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
             'MsgBox("Already Registered")
             'Else
             'If TextBoxCourse_1.Text = "" Then
-            oldLen = TextBoxCourse_1.Text.Length
-            TextBoxCourse_1.Text.Replace(TextBoxCourseCode.Text & ";", "")
-            If TextBoxCourse_1.Text.Length = oldLen Then
-                TextBoxCourse_1.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
+            oldLen = TextBoxCourseCode_1.Text.Length
+            TextBoxCourseCode_1.Text.Replace(TextBoxCourseCode.Text & ";", "")
+            If TextBoxCourseCode_1.Text.Length = oldLen Then
+                TextBoxCourseCode_1.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
             End If
 
-        ElseIf TextBoxCourse_2.Text.Contains(TextBoxCourseCode.Text) Then
-            oldLen = TextBoxCourse_2.Text.Length
-            TextBoxCourse_2.Text.Replace(TextBoxCourseCode.Text & ";", "")
-            If TextBoxCourse_2.Text.Length = oldLen Then
-                TextBoxCourse_2.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
+        ElseIf TextBoxCourseCode_2.Text.Contains(TextBoxCourseCode.Text) Then
+            oldLen = TextBoxCourseCode_2.Text.Length
+            TextBoxCourseCode_2.Text.Replace(TextBoxCourseCode.Text & ";", "")
+            If TextBoxCourseCode_2.Text.Length = oldLen Then
+                TextBoxCourseCode_2.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
             End If
         Else
 
@@ -313,8 +320,8 @@ Public Class FormStudentsRegistration
 
         Try
 
-            If My.Computer.FileSystem.FileExists(tmpileName) Then
-                PictureBox1.Image = Image.FromFile(tmpileName)
+            If My.Computer.FileSystem.FileExists(TMPileNAME) Then
+                PictureBox1.Image = Image.FromFile(TMPileNAME)
             ElseIf My.Computer.FileSystem.FileExists(TMP_PIC_FILE_NAME2) Then
                 PictureBox1.Image = Image.FromFile(TMP_PIC_FILE_NAME2)
             ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
@@ -326,6 +333,47 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
+    Private Function fillRegUsingdataAdapter() As Boolean
+        Try
+            Dim strSQL As String
+
+            strSQL = "SELECT * FROM Reg" ' WHERE session_idr={1}"
+            regConn.ConnectionString = mappDB.getCorrectConnectionstring()
+            regConn.Open()
+            dtReg = mappDB.GetDataWhere(strSQL).Tables(0)
+            adapter = New OleDb.OleDbDataAdapter(strSQL, regConn)
+            adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
+
+                '1. fill it
+                adapter.Fill(dtReg)
+                bnd.DataSource = dtReg
+                dgvStudents.DataSource = bnd
+
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
+    End Function
+    Private Function updateRegUsingdataAdapter() As Boolean
+        Try
+            Dim strSQL As String
+
+            strSQL = "SELECT * FROM Reg" ' WHERE session_idr={1}"
+
+            'regConn.ConnectionString = mappDB.getCorrectConnectionstring()
+            'regConn.Open()
+
+            Dim builder As New OleDb.OleDbCommandBuilder(adapter)
+                builder.QuotePrefix = "["
+                builder.QuoteSuffix = "]"
+                adapter.Update(dtReg)    'persist in db
+
+
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
+    End Function
     Public Function UpdateRecordWhere(s As String) As String
         Dim returnVal As String = ""
         Try
@@ -405,6 +453,9 @@ Public Class FormStudentsRegistration
 
     Private Sub FormStudentsRegistration_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
+        On Error Resume Next
+        regConn.Close()
+        regConn = Nothing
     End Sub
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
         If ProgressBarBS.Value < 97 Then ProgressBarBS.Value = (ProgressBarBS.Value + 3)
@@ -440,7 +491,7 @@ Public Class FormStudentsRegistration
                 ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
                     dt.Rows.Add({mappDB.MATNO, TextBoxCourseCode.Text, ""})
                 End If
-                dt.Rows(0).Item("session_idr").Value = TextBoxSession.Text
+                dt.Rows(0).Item("session_idr").Value = TextBoxsession_idr.Text
 
                 dgvCourses.DataSource = dt.DefaultView
             End If
@@ -450,29 +501,29 @@ Public Class FormStudentsRegistration
     Private Sub ButtonRegister_Click(sender As Object, e As EventArgs) Handles ButtonRegister.Click
 
         If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
-                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+            If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+                If TextBoxCourseCode_1.Text.Contains(TextBoxCourseCode.Text) Then
                     MsgBox("Already Registered")
                 Else
-                    If TextBoxCourse_1.Text = "" Then
-                        TextBoxCourse_1.Text = TextBoxCourseCode.Text
+                    If TextBoxCourseCode_1.Text = "" Then
+                        TextBoxCourseCode_1.Text = TextBoxCourseCode.Text
                     Else
-                        TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & TextBoxCourseCode.Text
+                        TextBoxCourseCode_1.Text = TextBoxCourseCode_1.Text & ";" & TextBoxCourseCode.Text
                     End If
                 End If
             ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                If TextBoxCourse_2.Text.Contains(TextBoxCourseCode.Text) Then
+                If TextBoxCourseCode_2.Text.Contains(TextBoxCourseCode.Text) Then
                     MsgBox("Already Registered")
                 Else
-                    If TextBoxCourse_2.Text = "" Then
-                        TextBoxCourse_2.Text = TextBoxCourseCode.Text
+                    If TextBoxCourseCode_2.Text = "" Then
+                        TextBoxCourseCode_2.Text = TextBoxCourseCode.Text
                     Else
-                        TextBoxCourse_2.Text = TextBoxCourse_2.Text & ";" & TextBoxCourseCode.Text
+                        TextBoxCourseCode_2.Text = TextBoxCourseCode_2.Text & ";" & TextBoxCourseCode.Text
                     End If
                 End If
             End If
 
-            End If
+        End If
 
     End Sub
 
@@ -506,9 +557,9 @@ Public Class FormStudentsRegistration
     Sub showCoursesList()
         PanelCourses.Visible = True
         For i = 0 To CheckedListBoxCourses.Items.Count - 1
-            If TextBoxCourse_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            If TextBoxCourseCode_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
                 CheckedListBoxCourses.SetItemChecked(i, True)
-            ElseIf TextBoxCourse_2.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            ElseIf TextBoxCourseCode_2.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
                 CheckedListBoxCourses.SetItemChecked(i, True)
             End If
         Next
@@ -567,11 +618,15 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
-
-
     Private Sub ComboBoxDepartments_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDepartments.SelectedIndexChanged
         Try
-            If dictDepts.Count > 0 Then TextBoxDeptID.Text = dictDepts.Keys(0).ToString
+            If dictDepts.Count > 0 Then
+                TextBoxstudent_dept_idr.Text = dictDepts.Keys(ComboBoxDepartments.SelectedIndex).ToString
+                TextBoxdept_idr.Text = dictDepts.Keys(ComboBoxDepartments.SelectedIndex).ToString
+            Else
+                TextBoxstudent_dept_idr.Text = "99"
+                TextBoxstudent_dept_idr.Text = "99"
+            End If
 
         Catch ex As Exception
 
@@ -581,10 +636,12 @@ Public Class FormStudentsRegistration
         Select Case e.Argument
             Case 1
                 getDeptSessionsIntoDictionaries()
-                GetData()
+                'GetData()
+                'fillRegUsingdataAdapter()
             Case Else
                 getDeptSessionsIntoDictionaries()
-                GetData()
+                'GetData()
+                'fillRegUsingdataAdapter()
         End Select
     End Sub
 
@@ -595,7 +652,7 @@ Public Class FormStudentsRegistration
             ComboBoxDepartments.Items.Add(dictDepts(key))
         Next
         If ComboBoxDepartments.Items.Count > 0 Then ComboBoxDepartments.SelectedIndex = 0
-        TextBoxDeptID.Text = dictDepts.Keys(0).ToString
+        TextBoxstudent_dept_idr.Text = dictDepts.Keys(0).ToString
         ComboBoxSessions.Items.Clear()
         For Each key In dictSessions.Keys
             ComboBoxSessions.Items.Add(dictSessions(key))
@@ -775,7 +832,7 @@ Public Class FormStudentsRegistration
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
         'TODO: create a user control for these combo box. it should have events that are aware o dictionary storing sessions, new session added, auto load, auto update etc
         Try
-            TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+            TextBoxsession_idr.Text = ComboBoxSessions.SelectedItem.ToString
 
         Catch ex As Exception
 
@@ -802,10 +859,10 @@ Public Class FormStudentsRegistration
 
 
             If exportRegToFERMA(False, resultFileName) Then
-                    MsgBox("Exported to FERMA")
-                Else
-                    MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
-                End If
+                MsgBox("Exported to FERMA")
+            Else
+                MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
+            End If
 
 
         Else
@@ -857,14 +914,14 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub ComboBoxSessions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSessions.SelectedIndexChanged
-        If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+        If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxsession_idr.Text = ComboBoxSessions.SelectedItem.ToString
 
     End Sub
 
 
     Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
         'TODO: ComboBoxCourseCode.filter(level)
-        If Not ComboBoxLevel.SelectedItem = Nothing Then TextBoxLevelreg.Text = ComboBoxLevel.SelectedItem.ToString
+        If Not ComboBoxLevel.SelectedItem = Nothing Then TextBoxlevel.Text = ComboBoxLevel.SelectedItem.ToString
 
     End Sub
 
@@ -894,21 +951,21 @@ Public Class FormStudentsRegistration
 
         If MsgBox("Are the courses corectly displayed" & vbCrLf & strReg1 & vbCrLf & vbCrLf & strReg2, MsgBoxStyle.YesNo) = vbYes Then
             PanelCourses.Visible = False
-            TextBoxCourse_1.Text = strReg1
-            TextBoxCourse_2.Text = strReg2
+            TextBoxCourseCode_1.Text = strReg1
+            TextBoxCourseCode_2.Text = strReg2
         End If
     End Sub
 
     Private Sub dgvStudents_RowStateChanged(sender As Object, e As DataGridViewRowStateChangedEventArgs) Handles dgvStudents.RowStateChanged
         ' If dgvStudents.Rows.dirty
-        If tmpDS.Tables("Students").Rows.Count > 0 And dgvStudents.SelectedRows.Count > 0 Then
+        'If tmpDS.Tables("Students").Rows.Count > 0 And dgvStudents.SelectedRows.Count > 0 Then
 
-            filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
-                CaptureCourses()
+        '    filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
+        '    CaptureCourses()
 
 
-            updatePix()
-        End If
+        '    updatePix()
+        'End If
     End Sub
 
     Private Sub ButtonCancelReg_Click(sender As Object, e As EventArgs) Handles ButtonCancelReg.Click
@@ -958,7 +1015,7 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefreshFormview.Click
 
-        bindControlsToReg
+        bindcontrolsToReg()
     End Sub
     Sub bindcontrolsToReg()
         'Dim rd As OleDb.OleDbDataReader
@@ -969,33 +1026,146 @@ Public Class FormStudentsRegistration
         BindingNavigator1.BindingSource = BindingSourceStudents
         'TextBoxMATNO.DataBindings.Item(0).DataSource =
         If TextBoxMATNO.DataBindings.Count = 0 Then
+            'TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
+            'TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
+            'TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
+            'TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
+            'TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
+            'TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
+            'TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
+            'TextBoxEntryYear.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
+            'TextBoxdob.DataBindings.Add("Text", BindingSourceStudents, "dob")
+            'TextBoxphone.DataBindings.Add("Text", BindingSourceStudents, "phone")
+            'TextBoxemail.DataBindings.Add("Text", BindingSourceStudents, "email")
+            'TextBoxgender.DataBindings.Add("Text", BindingSourceStudents, "gender")
+
             TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
-            TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
-            TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
-            TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
-            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
-
+            TextBoxstudent_surname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
+            TextBoxstudent_firstname.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
+            TextBoxstudent_othernames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
+            TextBoxstudent_dept_idr.DataBindings.Add("Text", BindingSourceStudents, "student_dept_idr")
             TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
-
-
-            TextBoxEntryYear.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
+            TextBoxyear_of_entry.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
+            TextBoxsession_idr_of_entry.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
+            TextBoxmode_of_entry.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
             TextBoxdob.DataBindings.Add("Text", BindingSourceStudents, "dob")
             TextBoxphone.DataBindings.Add("Text", BindingSourceStudents, "phone")
             TextBoxemail.DataBindings.Add("Text", BindingSourceStudents, "email")
             TextBoxgender.DataBindings.Add("Text", BindingSourceStudents, "gender")
+            TextBoxsession_idr.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
+            TextBoxCourseCode_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
+            TextBoxCourseCode_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
+            TextBoxFees_Status.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
+            TextBoxlevel.DataBindings.Add("Text", BindingSourceStudents, "level")
+            TextBoxdept_idr.DataBindings.Add("Text", BindingSourceStudents, "dept_idr")
 
             'reg specific
-            TextBoxSession.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
+            'TextBoxsession_idr.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
 
-            TextBoxCourse_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
-            TextBoxCourse_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
-            TextBoxFeesReg.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
-            TextBoxLevelreg.DataBindings.Add("Text", BindingSourceStudents, "level")
-            'TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
+            'TextBoxCourseCode_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
+            'TextBoxCourseCode_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
+            'TextBoxFees_Status.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
+            'TextBoxlevel.DataBindings.Add("Text", BindingSourceStudents, "level")
+
 
         End If
     End Sub
+    Private Function UpdateDBromDGVUsingDataAdapter(dt As DataTable)
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = mappDB.getCorrectConnectionstring()
+                xConn.Open()
+
+                'Insert, update And delete queries
+                Dim updateQuery As String = STR_SQL_UPDATESTUDENTS_WITH_PARAMS ' "UPDATE Reg SET student_firstname=@first,student_othernames=@middle,student_surname=@last WHERE matno=@matno"
+                Dim deleteQuery As String = STR_SQL_DELETE_STUDENTS_WITH_PARAMS '"DELETE FROM Reg WHERE matno=@matno"
+                Dim insertQuery As String = STR_SQL_INSERT_STUDENTS_WITH_PARAMS ' "INSERT INTO Reg (`student_firstname`, `student_othernames`, `student_surname`, matno) VALUES(@first,@middle,@last,@matno)"
+                'Create the parameters for the queries above
+                'Dim insertParams As New OleDb.OleDbParameter()
+
+                Dim lstInsertParams As New List(Of OleDb.OleDbParameter)
+                'lstInsertParams.Add(New OleDb.OleDbParameter("@first", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+                'lstInsertParams.Add(New OleDb.OleDbParameter("@middle", OleDb.OleDbType.VarChar, 100, "student_othernames"))
+                'lstInsertParams.Add(New OleDb.OleDbParameter("@last", OleDb.OleDbType.VarChar, 100, "student_surname"))
+                'lstInsertParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
+
+                '// the first parameter (e.g. @first) has to match with the declaration in the query
+                '// the second parameter (e.g.SqlDbType.NVarChar) Is the data type of the actual column in the source table
+                '// the third paramter (e.g. 100) Is the length of the data in the database table's column
+                '// the last parameter (e.g. "fname") Is the DataPropertyName of the source column which Is
+                '// basically the name of the database table column that the DGV column represents
+
+                lstInsertParams.Add(New OleDb.OleDbParameter("@", OleDb.OleDbType.VarChar, 100, "matno"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_surname"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_othernames"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "status"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "mode_of_entry"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@mode_of_entry", OleDb.OleDbType.VarChar, 100, "dob"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@dob", OleDb.OleDbType.VarChar, 100, "phone"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@phone", OleDb.OleDbType.VarChar, 100, "email"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@email", OleDb.OleDbType.VarChar, 100, "gender"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@gender", OleDb.OleDbType.VarChar, 100, "session_idr"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "level"))
+                lstInsertParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+
+                Dim lstupdateParams As New List(Of OleDb.OleDbParameter)
+
+                'lstupdateParams.Add(New OleDb.OleDbParameter("@first", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@", OleDb.OleDbType.VarChar, 100, "matno"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_surname"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_othernames"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "status"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "mode_of_entry"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@mode_of_entry", OleDb.OleDbType.VarChar, 100, "dob"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@dob", OleDb.OleDbType.VarChar, 100, "phone"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@phone", OleDb.OleDbType.VarChar, 100, "email"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@email", OleDb.OleDbType.VarChar, 100, "gender"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@gender", OleDb.OleDbType.VarChar, 100, "session_idr"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "level"))
+                lstupdateParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+
+                Dim DeleteParams As New OleDb.OleDbParameter("@matno", OleDb.OleDbType.Integer, 100, "matno")
+
+
+                ' Create the SqlCommand objects that will be used by the DataAdapter to modify the source table
+                Dim insertComm As New OleDb.OleDbCommand(insertQuery, xConn)
+                Dim updateComm As New OleDb.OleDbCommand(updateQuery, xConn)
+                Dim deleteComm As New OleDb.OleDbCommand(deleteQuery, xConn)
+
+                ' Associate the parameters with the proper SqlCommand object
+                insertComm.Parameters.AddRange(lstInsertParams.ToArray)
+                updateComm.Parameters.AddRange(lstupdateParams.ToArray)
+                deleteComm.Parameters.Add(DeleteParams)
+
+                'Give the DataAdapter the commands it needs to be able to properly update your database table
+                Dim dataAdapter As New OleDb.OleDbDataAdapter() '(insertComm, updateComm, deleteComm)
+                dataAdapter.InsertCommand = insertComm
+                dataAdapter.UpdateCommand = updateComm
+                dataAdapter.DeleteCommand = deleteComm
+                '// Calling the Update method executes the proper command based on the modifications to the specified
+                '// DataTable object then commits these changes to the database
+                dataAdapter.Update(dt)
+                xConn.Close()
+            End Using
+
+        Catch ex As Exception
+            MsgBox("Could not save records" & vbCrLf & ex.Message)
+        End Try
+    End Function
     Public Sub InsertOrUpdateUsingDataAdapter(dMATno As String, insert As Boolean)
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
@@ -1113,7 +1283,7 @@ Public Class FormStudentsRegistration
     End Sub
 
 
-    Private Sub TextBoxCourse_1_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_1.Click
+    Private Sub TextBoxCourse_1_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_1.Click
         showCoursesList()
     End Sub
 
@@ -1122,7 +1292,7 @@ Public Class FormStudentsRegistration
         'dsStudents.Tables(0).update?   'todo
         Try
             For Each itm In ComboBoxEntryMode.Items
-                If itm.ToString.Contains(TextBoxEntryMode.Text) Then
+                If itm.ToString.Contains(TextBoxmode_of_entry.Text) Then
                     ComboBoxEntryMode.SelectedItem = itm
                 End If
             Next
@@ -1136,7 +1306,8 @@ Public Class FormStudentsRegistration
     Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
         Try
             'always update  table on save
-            InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, False)
+            'InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, False)
+            UpdateDBromDGVUsingDataAdapter(BindingSourceStudents.DataSource)
 
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -1218,8 +1389,8 @@ Public Class FormStudentsRegistration
                 ButtonOKReg.PerformClick()
                 Exit Sub
             Case "Clear all/Unregister All"
-                TextBoxCourse_1.Text = ""
-                TextBoxCourse_2.Text = ""
+                TextBoxCourseCode_1.Text = ""
+                TextBoxCourseCode_2.Text = ""
                 Exit Sub
         End Select
 
@@ -1236,19 +1407,19 @@ Public Class FormStudentsRegistration
 
         If dictCoursesOrderFS.Count > 0 Then
             For Each cVal In dictCoursesOrderFS.Values
-                If TextBoxCourse_1.Text = "" Then
-                    TextBoxCourse_1.Text = cVal
+                If TextBoxCourseCode_1.Text = "" Then
+                    TextBoxCourseCode_1.Text = cVal
                 Else
-                    TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & cVal
+                    TextBoxCourseCode_1.Text = TextBoxCourseCode_1.Text & ";" & cVal
                 End If
             Next
         End If
         If dictCoursesOrderFS.Count > 0 Then
             For Each cVal In dictCoursesOrderSS.Values
-                If TextBoxCourse_2.Text = "" Then
-                    TextBoxCourse_2.Text = cVal
+                If TextBoxCourseCode_2.Text = "" Then
+                    TextBoxCourseCode_2.Text = cVal
                 Else
-                    TextBoxCourse_2.Text = TextBoxCourse_2.Text & ";" & cVal
+                    TextBoxCourseCode_2.Text = TextBoxCourseCode_2.Text & ";" & cVal
                 End If
             Next
         End If
@@ -1256,7 +1427,16 @@ Public Class FormStudentsRegistration
 
     End Sub
 
-    Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_2.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        updateRegUsingdataAdapter()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        fillRegUsingdataAdapter()
+    End Sub
+
+    Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_2.Click
         showCoursesList()
     End Sub
 End Class
