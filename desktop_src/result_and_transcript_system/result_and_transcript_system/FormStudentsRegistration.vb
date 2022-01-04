@@ -51,7 +51,8 @@ Public Class FormStudentsRegistration
             Else
 
             End If
-            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, dDept.ToString), "students")
+            'tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, dDept.ToString), "students")
+            fillRegUsingdataAdapter()
             'TODO:
             If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then mappDB.getAllCourses()
             CheckedListBoxCourses.Items.Clear()
@@ -64,9 +65,9 @@ Public Class FormStudentsRegistration
         End Try
     End Sub
     Public Sub resizeDatagrids(dGrid As String)
-        If dgvCourses.Rows.Count > 0 And dGrid = "Courses" Then
+        If DataGridViewAlReg.Rows.Count > 0 And dGrid = "Courses" Then
 
-            For Each col As DataGridViewColumn In dgvCourses.Columns
+            For Each col As DataGridViewColumn In DataGridViewAlReg.Columns
                 col.Width = 0
                 col.Visible = False
                 If col.HeaderText = "matno" Then
@@ -95,17 +96,17 @@ Public Class FormStudentsRegistration
         End If
     End Sub
     Public Sub getRegisteredCoursesForStudent(dMATNO As String)
-        Try
-            Dim tmpDSCourses As DataSet
-            mappDB.MATNO = dMATNO
-            tmpDSCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
-            dgvCourses.DataSource = tmpDSCourses.Tables("Courses").DefaultView
+        'Try
+        '    Dim tmpDSCourses As DataSet
+        '    mappDB.MATNO = dMATNO
+        '    tmpDSCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
+        '    dgvCourses.DataSource = tmpDSCourses.Tables("Courses").DefaultView
 
-            dgvCourses.Refresh()
-            resizeDatagrids("courses")
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        '    dgvCourses.Refresh()
+        '    resizeDatagrids("courses")
+        'Catch ex As Exception
+        '    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        'End Try
     End Sub
 
     Private Sub txtStudentMATNO_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentMATNO.TextChanged
@@ -138,11 +139,7 @@ Public Class FormStudentsRegistration
     End Sub
 
     Public Sub CaptureCourses()
-        If dgvCourses.Rows.Count < 1 Then Exit Sub
-        dgvCourses.Rows(0).Selected = True
         Dim units As Integer
-        Dim MATNO As String = dgvCourses.SelectedRows(0).Cells("matno").Value.ToString
-
         Dim courseCodes1 As String() = TextBoxCourseCode_1.Text.Split(";")
         Dim courseCodes2 As String() = TextBoxCourseCode_2.Text.Split(";")
         Dim sumUnits As Integer = 0
@@ -158,20 +155,28 @@ Public Class FormStudentsRegistration
                 sumUnits = sumUnits + units
             End If
         Next
-        ''Capture Studennt TODO
-        mappDB.MATNO = MATNO
+        For Each c2 In courseCodes2
+            If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c2) Then
+                units = dictAllCourseCodeKeyAndCourseUnitVal(c2)
+                sumUnits = sumUnits + units
+            End If
+        Next
 
         'Me.TextBoxCourseCode.Text = courseCode.ToString
         'Me.TextBoxSemester.Text = semester.ToString
         'Me.TextBoxUnits.Text = sumUnits.ToString
         Me.TextBoxTotalCredits.Text = sumUnits.ToString
-
+        If CInt(TextBoxTotalCredits.Text) > 50 Then
+            TextBoxTotalCredits.BackColor = Color.Pink
+        Else
+            TextBoxTotalCredits.BackColor = Color.White
+        End If
 
     End Sub
 
     Sub filterReg(dMATNO As String)
-        If dgvCourses.Rows.Count > 0 Then
-            dgvCourses.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO, dMATNO)
+        If DataGridViewAlReg.Rows.Count > 0 Then
+            DataGridViewAlReg.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO, dMATNO)
         End If
     End Sub
     Sub filterStudents(dMATNO As String)
@@ -214,8 +219,6 @@ Public Class FormStudentsRegistration
             'insert record by record
 
             Dim dt As DataTable
-
-
             dgvImportCourses.EndEdit()
             dgvImportCourses.Update()
             If Not (IsDBNull(dgvImportCourses.DataSource) Or (dgvImportCourses.Rows.Count = 0)) Then
@@ -254,10 +257,10 @@ Public Class FormStudentsRegistration
     Private Function importRegUsingdataAdapter() As Boolean
         Try
             Dim strSQL As String
-            Dim dv As DataView = dgvCourses.DataSource
+            Dim dv As DataView = dgvImportCourses.DataSource
             Dim dtSource As DataTable
             Dim dtDestination As New DataTable
-            Dim dSFtomDB As New DataSet ' = dv.ToTable
+            Dim dSReg As New DataSet ' = dv.ToTable
             dtSource = dv.ToTable
 
             'createBroadsheetTables()
@@ -273,29 +276,29 @@ Public Class FormStudentsRegistration
                 'adapter.UpdateCommand = ""
                 'adapter.InsertCommand = ""
                 '1. fill it
-                adapter.Fill(dSFtomDB)
+                adapter.Fill(dsReg)
                 '2. put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
-                dgvImportCourses.DataSource = dSFtomDB.Tables(0).DefaultView
+                dgvImportCourses.DataSource = dSReg.Tables(0)
                 'MsgBox("After fresh fill")
-                'adapter.InsertCommand = builder.GetInsertCommand
-                'MsgBox(adapter.InsertCommand.CommandText)
-                dSFtomDB.Tables(0).Clear()  'empty table
-                adapter.Update(dSFtomDB)    'persist in db
+
+
+                dSReg.Tables(0).Clear()  'empty table
+                adapter.Update(dSReg)    'persist in db
 
                 Dim dRow As DataRow
                 'MsgBox("After empty db")
                 '3. edit it
                 For i = 0 To dtSource.Rows.Count - 1
-                    dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
-                    For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1       'Take as much as we have cols for to avoid errors
+                    dRow = dSReg.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
+                    For j = 0 To dSReg.Tables(0).Columns.Count - 1       'Take as much as we have cols for to avoid errors
                         If j > dtSource.Columns.Count - 1 Then Exit For
-                        dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
+                        dSReg.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
                         'strColNames = strColNames & "," & dtSource.Columns(j).ColumnName
                     Next
                 Next
 
-                '4. load the mock data it in another datagridview
-                dgvImportCourses.DataSource = dSFtomDB.Tables(0).DefaultView
+                '4. load the mock data  in another datagridview
+                dgvImportCourses.DataSource = dSReg.Tables(0)
                 'MsgBox("After add to datatable")
 
                 '5. use datagridview tecnique to capture it as edited
@@ -304,7 +307,7 @@ Public Class FormStudentsRegistration
                 ' MsgBox("After refresh")
 
                 '6. save the underlying data (change from mock to real) to database (works bcos of datagridview technique)
-                adapter.Update(dSFtomDB) 'save
+                adapter.Update(dSReg) 'save
             End Using
         Catch ex As Exception
             MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
@@ -347,7 +350,6 @@ Public Class FormStudentsRegistration
                 '1. fill it
                 adapter.Fill(dtReg)
                 bnd.DataSource = dtReg
-                dgvStudents.DataSource = bnd
 
         Catch ex As Exception
             MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
@@ -427,9 +429,10 @@ Public Class FormStudentsRegistration
     End Sub
     Private Sub dgvStudents_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.RowEnter
         On Error Resume Next
-        If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
-            filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
+        If e.RowIndex >= 0 Then
+            captureReg(e.RowIndex)
         End If
+
     End Sub
 
     Private Function computeCredits() As Integer
@@ -441,15 +444,6 @@ Public Class FormStudentsRegistration
             Return False
         End Try
     End Function
-
-    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
-        PictureBox2.Visible = False
-    End Sub
-
-    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        PictureBox2.Image = PictureBox1.Image
-        PictureBox2.Visible = Not PictureBox2.Visible
-    End Sub
 
     Private Sub FormStudentsRegistration_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
@@ -463,39 +457,39 @@ Public Class FormStudentsRegistration
 
 
     Private Sub ButtonRegister_DataGridVersion(sender As Object, e As EventArgs)
-        Dim dv As DataView
-        Dim dt As DataTable
-        dv = dgvCourses.DataSource
-        dt = dv.ToTable
-        If dgvCourses.Rows.Count > 0 Then
-            If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
-                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                    If dt.Rows(0).Item("CourseCode_1").ToString.Contains(TextBoxCourseCode.Text) Then
-                        MsgBox("Already Registered")
-                    Else
-                        dt.Rows(0).Item("CourseCode_1") = dt.Rows(0).Item("CourseCode_2").Value.ToString & ";" & TextBoxCourseCode.Text
-                    End If
-                ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                    If dt.Rows(0).Item("CourseCode_2").ToString.Contains(TextBoxCourseCode.Text) Then
-                        MsgBox("Already Registered")
-                    Else
-                        dt.Rows(0).Item("CourseCode_2").Value = dt.Rows(0).Item("CourseCode_1").ToString & ";" & TextBoxCourseCode.Text
-                    End If
-                End If
-                dgvCourses.DataSource = dt.DefaultView
-            End If
-        Else    'no course reg entry before
-            If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
-                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                    dt.Rows.Add({mappDB.MATNO, "", TextBoxCourseCode.Text}) '2nd sem
-                ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                    dt.Rows.Add({mappDB.MATNO, TextBoxCourseCode.Text, ""})
-                End If
-                dt.Rows(0).Item("session_idr").Value = TextBoxsession_idr.Text
+        'Dim dv As DataView
+        'Dim dt As DataTable
+        'dv = dgvCourses.DataSource
+        'dt = dv.ToTable
+        'If dgvCourses.Rows.Count > 0 Then
+        '    If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
+        '        If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+        '            If dt.Rows(0).Item("CourseCode_1").ToString.Contains(TextBoxCourseCode.Text) Then
+        '                MsgBox("Already Registered")
+        '            Else
+        '                dt.Rows(0).Item("CourseCode_1") = dt.Rows(0).Item("CourseCode_2").Value.ToString & ";" & TextBoxCourseCode.Text
+        '            End If
+        '        ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
+        '            If dt.Rows(0).Item("CourseCode_2").ToString.Contains(TextBoxCourseCode.Text) Then
+        '                MsgBox("Already Registered")
+        '            Else
+        '                dt.Rows(0).Item("CourseCode_2").Value = dt.Rows(0).Item("CourseCode_1").ToString & ";" & TextBoxCourseCode.Text
+        '            End If
+        '        End If
+        '        dgvCourses.DataSource = dt.DefaultView
+        '    End If
+        'Else    'no course reg entry before
+        '    If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
+        '        If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
+        '            dt.Rows.Add({mappDB.MATNO, "", TextBoxCourseCode.Text}) '2nd sem
+        '        ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+        '            dt.Rows.Add({mappDB.MATNO, TextBoxCourseCode.Text, ""})
+        '        End If
+        '        dt.Rows(0).Item("session_idr").Value = TextBoxsession_idr.Text
 
-                dgvCourses.DataSource = dt.DefaultView
-            End If
-        End If
+        '        dgvCourses.DataSource = dt.DefaultView
+        '    End If
+        'End If
     End Sub
 
     Private Sub ButtonRegister_Click(sender As Object, e As EventArgs) Handles ButtonRegister.Click
@@ -527,29 +521,20 @@ Public Class FormStudentsRegistration
 
     End Sub
 
-
-
-
-
-
-
     Private Sub ButtonImportStudentsFromExcel_Click(sender As Object, e As EventArgs) Handles ButtonImportStudentsFromExcel.Click
         MainForm.ChangeMenu("Student")
     End Sub
-    Private Sub dgv_courses_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCourses.CellContentClick
 
-        ButtonFormView.PerformClick()
-        If e.RowIndex >= 0 Then
-            captureReg(e.RowIndex)
-        End If
-
-    End Sub
     Sub captureReg(dRowIndex As Integer)
         Try
+            TextBoxFancyDisplayCourse1.Text = ""
+            TextBoxFancyDisplayCourse1.Text = dgvStudents.Rows(dRowIndex).Cells("CourseCode_1").Value
+            TextBoxFancyDisplayCourse1.Text = TextBoxFancyDisplayCourse1.Text.Replace(";", vbCrLf)
+            
+            TextBoxFancyDisplayCourse1.Text=""
+            TextBoxFancyDisplayCourse2.Text = dgvStudents.Rows(dRowIndex).Cells("CourseCode_2").Value
+            TextBoxFancyDisplayCourse2.Text = TextBoxFancyDisplayCourse1.Text.Replace(";", vbCrLf)
 
-
-            Dim recNo As Integer = BindingSourceStudents.Find("matno", dgvCourses.Rows(dRowIndex).Cells("matno").Value)
-            BindingSourceStudents.Position = recNo
         Catch ex As Exception
             logError(ex.ToString)
         End Try
@@ -592,7 +577,7 @@ Public Class FormStudentsRegistration
                     Next
                     dt.Rows(0).Delete()
                 Else
-                    MsgBox("On first check, the file you selected is not in the FERMA format")
+                    MsgBox("On first check, the file you selected Is Not In the FERMA format")
 
                 End If
 
@@ -608,7 +593,7 @@ Public Class FormStudentsRegistration
                 dgvImportCourses.BringToFront()
 
 
-                If MsgBox("Do you want to save the imported Registration data into the database (cannot be undone)." & vbCrLf & "You can also do it later by clicking the Save Imported button", MsgBoxStyle.YesNo) = vbYes Then
+                If MsgBox("Do you want To save the imported Registration data into the database (cannot be undone)." & vbCrLf & "You can also do it later by clicking the Save Imported button", MsgBoxStyle.YesNo) = vbYes Then
                     ButtonSaveReg.PerformClick()
                 End If
             End If
@@ -636,12 +621,12 @@ Public Class FormStudentsRegistration
         Select Case e.Argument
             Case 1
                 getDeptSessionsIntoDictionaries()
-                'GetData()
-                'fillRegUsingdataAdapter()
+                GetData()
+
             Case Else
                 getDeptSessionsIntoDictionaries()
-                'GetData()
-                'fillRegUsingdataAdapter()
+                GetData()
+
         End Select
     End Sub
 
@@ -667,14 +652,10 @@ Public Class FormStudentsRegistration
         Next
         ComboBoxCourseCode.SelectedIndex = 0
 
-
-        dgvStudents.DataSource = tmpDS.Tables("students").DefaultView
+        dgvStudents.DataSource = bnd
         If dgvStudents.Rows.Count > 0 Then
-            getRegisteredCoursesForStudent(dgvStudents.Rows(0).Cells("matno").Value.ToString)
-            'resize cols
             resizeDatagrids("students")
         End If
-
 
         TimerBS.Stop()
         btnReset.Enabled = True
@@ -685,7 +666,15 @@ Public Class FormStudentsRegistration
         'save to db 
         If dgvImportCourses.Tag = "RTPS" Then
             MsgBox("Registration data will now be inserted into database")
-            importRegUsingdataAdapter()
+            'importRegUsingdataAdapter() 'METHOD 1: issues
+            TextBoxImport.Text = mappDB.manualRegInsertDB(dgvImportCourses.DataSource.totable)         'METHOD 2
+            'status
+            If TextBoxImport.Text.Length > 5 Then
+                TextBoxImport.Visible = True
+                logError(TextBoxImport.Text.Length)
+            Else
+                TextBoxImport.Visible = False
+            End If
 
             CaptureCourses()
             dgvImportCourses.SendToBack()
@@ -694,7 +683,7 @@ Public Class FormStudentsRegistration
             MsgBox("A lot has to be done to convert from this format to the required format for Registration")
             If checkRegTransformFromFERMA_To_RTPS() Then
                 dgvImportCourses.SendToBack()
-                MsgBox("Could not convert format")
+                MsgBox("Could Not convert format")
                 Exit Sub
             End If
             'importReg() 'import reg manually
@@ -703,7 +692,7 @@ Public Class FormStudentsRegistration
                 dgvImportCourses.SendToBack()
                 MsgBox("Saved successfully")
             Else
-                MsgBox("Could not Save")
+                MsgBox("Could Not Save")
             End If
 
         End If
@@ -818,9 +807,7 @@ Public Class FormStudentsRegistration
 
     End Function
     Private Sub dgvStudents_Click(sender As Object, e As EventArgs) Handles dgvStudents.Click
-        If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
-            filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
-        End If
+
     End Sub
 
 
@@ -1006,7 +993,7 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub dgvStudents_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentClick
-        ButtonFormView.PerformClick()
+        On Error Resume Next
         If e.RowIndex >= 0 Then
             captureReg(e.RowIndex)
         End If
@@ -1026,19 +1013,6 @@ Public Class FormStudentsRegistration
         BindingNavigator1.BindingSource = BindingSourceStudents
         'TextBoxMATNO.DataBindings.Item(0).DataSource =
         If TextBoxMATNO.DataBindings.Count = 0 Then
-            'TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
-            'TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
-            'TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
-            'TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            'TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
-            'TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
-            'TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
-            'TextBoxEntryYear.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
-            'TextBoxdob.DataBindings.Add("Text", BindingSourceStudents, "dob")
-            'TextBoxphone.DataBindings.Add("Text", BindingSourceStudents, "phone")
-            'TextBoxemail.DataBindings.Add("Text", BindingSourceStudents, "email")
-            'TextBoxgender.DataBindings.Add("Text", BindingSourceStudents, "gender")
-
             TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
             TextBoxstudent_surname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
             TextBoxstudent_firstname.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
@@ -1059,15 +1033,6 @@ Public Class FormStudentsRegistration
             TextBoxlevel.DataBindings.Add("Text", BindingSourceStudents, "level")
             TextBoxdept_idr.DataBindings.Add("Text", BindingSourceStudents, "dept_idr")
 
-            'reg specific
-            'TextBoxsession_idr.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
-
-            'TextBoxCourseCode_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
-            'TextBoxCourseCode_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
-            'TextBoxFees_Status.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
-            'TextBoxlevel.DataBindings.Add("Text", BindingSourceStudents, "level")
-
-
         End If
     End Sub
     Private Function UpdateDBromDGVUsingDataAdapter(dt As DataTable)
@@ -1080,66 +1045,11 @@ Public Class FormStudentsRegistration
                 Dim updateQuery As String = STR_SQL_UPDATESTUDENTS_WITH_PARAMS ' "UPDATE Reg SET student_firstname=@first,student_othernames=@middle,student_surname=@last WHERE matno=@matno"
                 Dim deleteQuery As String = STR_SQL_DELETE_STUDENTS_WITH_PARAMS '"DELETE FROM Reg WHERE matno=@matno"
                 Dim insertQuery As String = STR_SQL_INSERT_STUDENTS_WITH_PARAMS ' "INSERT INTO Reg (`student_firstname`, `student_othernames`, `student_surname`, matno) VALUES(@first,@middle,@last,@matno)"
+
                 'Create the parameters for the queries above
-                'Dim insertParams As New OleDb.OleDbParameter()
-
-                Dim lstInsertParams As New List(Of OleDb.OleDbParameter)
-                'lstInsertParams.Add(New OleDb.OleDbParameter("@first", OleDb.OleDbType.VarChar, 100, "student_firstname"))
-                'lstInsertParams.Add(New OleDb.OleDbParameter("@middle", OleDb.OleDbType.VarChar, 100, "student_othernames"))
-                'lstInsertParams.Add(New OleDb.OleDbParameter("@last", OleDb.OleDbType.VarChar, 100, "student_surname"))
-                'lstInsertParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
-
-                '// the first parameter (e.g. @first) has to match with the declaration in the query
-                '// the second parameter (e.g.SqlDbType.NVarChar) Is the data type of the actual column in the source table
-                '// the third paramter (e.g. 100) Is the length of the data in the database table's column
-                '// the last parameter (e.g. "fname") Is the DataPropertyName of the source column which Is
-                '// basically the name of the database table column that the DGV column represents
-
-                lstInsertParams.Add(New OleDb.OleDbParameter("@", OleDb.OleDbType.VarChar, 100, "matno"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "student_firstname"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_surname"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_othernames"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "status"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "mode_of_entry"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@mode_of_entry", OleDb.OleDbType.VarChar, 100, "dob"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@dob", OleDb.OleDbType.VarChar, 100, "phone"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@phone", OleDb.OleDbType.VarChar, 100, "email"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@email", OleDb.OleDbType.VarChar, 100, "gender"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@gender", OleDb.OleDbType.VarChar, 100, "session_idr"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "level"))
-                lstInsertParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "dept_idr"))
-
-                Dim lstupdateParams As New List(Of OleDb.OleDbParameter)
-
-                'lstupdateParams.Add(New OleDb.OleDbParameter("@first", OleDb.OleDbType.VarChar, 100, "student_firstname"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@", OleDb.OleDbType.VarChar, 100, "matno"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "student_firstname"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_surname"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_othernames"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "status"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "mode_of_entry"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@mode_of_entry", OleDb.OleDbType.VarChar, 100, "dob"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@dob", OleDb.OleDbType.VarChar, 100, "phone"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@phone", OleDb.OleDbType.VarChar, 100, "email"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@email", OleDb.OleDbType.VarChar, 100, "gender"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@gender", OleDb.OleDbType.VarChar, 100, "session_idr"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "level"))
-                lstupdateParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+                'Call getInsertParamsRegForm()          'Dim insertParams As New OleDb.OleDbParameter()
 
                 Dim DeleteParams As New OleDb.OleDbParameter("@matno", OleDb.OleDbType.Integer, 100, "matno")
-
 
                 ' Create the SqlCommand objects that will be used by the DataAdapter to modify the source table
                 Dim insertComm As New OleDb.OleDbCommand(insertQuery, xConn)
@@ -1147,8 +1057,8 @@ Public Class FormStudentsRegistration
                 Dim deleteComm As New OleDb.OleDbCommand(deleteQuery, xConn)
 
                 ' Associate the parameters with the proper SqlCommand object
-                insertComm.Parameters.AddRange(lstInsertParams.ToArray)
-                updateComm.Parameters.AddRange(lstupdateParams.ToArray)
+                insertComm.Parameters.AddRange(getInsertParamsRegForm.ToArray)
+                updateComm.Parameters.AddRange(getUpdateParamsRegForm.ToArray)
                 deleteComm.Parameters.Add(DeleteParams)
 
                 'Give the DataAdapter the commands it needs to be able to properly update your database table
@@ -1296,6 +1206,16 @@ Public Class FormStudentsRegistration
                     ComboBoxEntryMode.SelectedItem = itm
                 End If
             Next
+            For Each itm In ComboBoxStatus.Items
+                If itm.ToString.Contains(TextBoxstatus.Text) Then
+                    ComboBoxStatus.SelectedItem = itm
+                End If
+            Next
+            For Each itm In ComboBoxGender.Items
+                If itm.ToString.Contains(TextBoxgender.Text) Then
+                    ComboBoxGender.SelectedItem = itm
+                End If
+            Next
             CaptureCourses()
             BindingSourceStudents.EndEdit()
         Catch ex As Exception
@@ -1432,8 +1352,20 @@ Public Class FormStudentsRegistration
         updateRegUsingdataAdapter()
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
         fillRegUsingdataAdapter()
+    End Sub
+
+    Private Sub ComboBoxStatus_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxStatus.SelectedIndexChanged
+        TextBoxstatus.Text = ComboBoxStatus.SelectedItem
+    End Sub
+
+    Private Sub TextBoxmode_of_entry_TextChanged(sender As Object, e As EventArgs) Handles TextBoxmode_of_entry.TextChanged
+
+    End Sub
+
+    Private Sub ComboBoxGender_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxGender.SelectedIndexChanged
+        TextBoxgender.Text = ComboBoxGender.SelectedItem
     End Sub
 
     Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_2.Click

@@ -1,6 +1,4 @@
-﻿
-
-Imports System.Configuration
+﻿Imports System.Configuration
 Imports MySql.Data.MySqlClient
 Imports ExcelInterop = Microsoft.Office.Interop.Excel
 'Imports Microsoft.Office.Core
@@ -11,8 +9,6 @@ Imports System.Windows.Controls
 Imports System.Windows.Forms.Control
 
 Module ModuleGeneral
-
-
     'Create db objects
     Public mappDB As New ClassDB()
     Public mappDBCloud As New ClassDB() '(cloud)
@@ -95,7 +91,24 @@ Module ModuleGeneral
     Public endRowTemplate As Integer = 280
     Public startColLevel As Integer = 20
     Public endColLevel As Integer = 7
+    'Constants Broadsheet
 
+    Public CATEGORY_SUCCESSFUL As String = "A"
+    Public CATEGORY_STUDENTS_WITH_CARRY_OVER As String = "B"
+    Public CATEGORY_PROBATION As String = "C"
+    Public CATEGORY_FAIL_WITHDRAW As String = "D"
+    Public CATEGORY_TEMP_WITHDRAWAL As String = "E"
+    Public CATEGORY_UNREGISTERED As String = "K"
+
+    Public CATEGORY_DESCRIPTION_UNREGISTERED As String = "UNREGISTERED"
+    Public CATEGORY_DESCRIPTION_SUCCESSFUL As String = "SUCCESSFUL"
+    Public CATEGORY_DESCRIPTION_STUDENTS_WITH_CARRY_OVER As String = "STUDENTS WITH CARRY OVER"
+    Public CATEGORY_DESCRIPTION_PROBATION As String = "PROBATION"
+    Public CATEGORY_DESCRIPTION_FAIL_WITHDRAW As String = "FAIL/WITHDRAW"
+    Public CATEGORY_DESCRIPTION_TEMP_WITHDRAWAL As String = "TEMPORARY WITHDRAWAL"
+
+    'Constants NPOI Excel
+#Region "Constants NPOI Excel"
     'NPOI BASE=0
     Public NUM_COURSES_PER_LEVEL_1 As Integer = 15
     Public NUM_COURSES_PER_LEVEL_2 As Integer = 15
@@ -170,15 +183,13 @@ Module ModuleGeneral
     Public BGW_EXPORT_EXCEL_1ST_SEM_GRADES As Integer = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + BGW_EXPORT_EXCEL_1ST_SEM_SCORES
     Public BGW_EXPORT_EXCEL_2ND_SEM_GRADES As Integer = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + BGW_EXPORT_EXCEL_2ND_SEM_SCORES
     Public BGW_EXPORT_EXCEL_ALL_SEM_GRADES As Integer = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + BGW_EXPORT_EXCEL_ALL_SEM_SCORES
-
-
-
-
     'mutiplier
     Public BGW_PROCESS_INTERROP_YR_SCORES As Integer = -1
     Public BGW_PROCESS_BUILTIN_NPOI_LEVEL As Integer = 1
+#End Region
 
     'Queries
+#Region "queries"
     'FormResult
     'all
     Public STR_SQL_ALL_RESULTS As String = "SELECT * FROM results order by result_id" ' "SELECT `id`, `matno`, `score` FROM `tableResults` WHERE matno='{0}' order by id"
@@ -199,7 +210,7 @@ Module ModuleGeneral
     Public STR_SQL_ALL_REG As String = "SELECT reg.session_idr As Session, count(reg.matno) AS NumStudents
                                                     FROM reg
                                                     GROUP BY reg.session_idr;"   'todo "Col" & LAST_COL
-
+    'COUNTS
     Public STR_SQL_ALL_REG_COUNT As String = "SELECT  count(reg.matno) AS NumStudents
                                                     FROM reg;"   'todo "Col" & LAST_COL
 
@@ -215,9 +226,9 @@ Module ModuleGeneral
     Public STR_SQL_ALL_COURSES_ORDER As String = "SELECT * FROM courses_order_new WHERE (session_idr='{0}' AND dept_idr={1}  AND course_level={2});" ' 
     Public STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA As String = "SELECT * FROM courses_order_new  order by session_idr, dept_idr,course_level" ' 
 
-    Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments"
-    Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions" ' 
-    Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM Reg" ' 
+    Public STR_SQL_ALL_DEPARTMENTS_COMBO As String = "SELECT dept_id, dept_name FROM departments ORDER BY dept_id"
+    Public STR_SQL_ALL_SESSIONS_COMBO As String = "SELECT session_id FROM sessions ORDER BY session_id" ' 
+    Public STR_SQL_ALL_STUDENTS_COMBO As String = "SELECT * FROM Reg ORDER BY matno" ' 
 
     'Broadsheets
     Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_INSERT_IN_BROADSHEET As String = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
@@ -237,12 +248,9 @@ Module ModuleGeneral
     '                        students.status
     '                        FROM Reg INNER JOIN students ON Reg.MatNo = students.matno 
     '                        WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1} AND (Reg.level)={2}));"
-    Public STR_SQL_REGISTERED_STUDENTS As String = "SELECT Reg.MatNo, Reg.session_idr, Reg.CourseCode_1, Reg.CourseCode_2, Reg.Fees_Status, Reg.level, Reg.dept_idr,   
-                            Reg.student_firstname, Reg.student_surname, Reg.student_othernames, 
-                            Reg.mode_of_entry, Reg.session_idr_of_entry, Reg.year_of_entry, 
-                            Reg.status
-                            FROM Reg 
+    Public STR_SQL_REGISTERED_STUDENTS As String = "SELECT * FROM Reg 
                             WHERE (((Reg.session_idr)='{0}' AND (Reg.dept_idr)={1} AND (Reg.level)={2}));"
+    '"matno,student_firstname,student_surname,student_othernames,student_dept_idr,status,year_of_entry,session_idr_of_entry,mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1,CourseCode_2,Fees_Status,level,dept_idr
 
     'Transcripts
     'Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO_SESSION As String = "SELECT Students.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
@@ -295,7 +303,7 @@ Module ModuleGeneral
                                                 "VALUES ('{0}','{1}','{2}','{3}',{4},'{5}',{6},'{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}',{17},{18});"
 
     Public STR_SQL_INSERT_STUDENTS_WITH_PARAMS = "INSERT INTO Reg matno,student_firstname,student_surname,student_othernames,student_dept_idr,status,year_of_entry,session_idr_of_entry,mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1,CourseCode_2,Fees_Status,level,dept_idr
-                                                    VALUES(@matno,@student_firstname,@student_surname,@student_othernames,@student_dept_idr,@status,@year_of_entry,@session_idr_of_entry,@mode_of_entry,@dob,@phone,@email,@gender,@session_idr,@CourseCode_1,@CourseCode_2,@Fees_Status,@level,@dept_idr);"
+                                                VALUES(@matno,@student_firstname,@student_surname,@student_othernames,@student_dept_idr,@status,@year_of_entry,@session_idr_of_entry,@mode_of_entry,@dob,@phone,@email,@gender,@session_idr,@CourseCode_1,@CourseCode_2,@Fees_Status,@level,@dept_idr);"
 
 
     'UPDATES
@@ -344,7 +352,7 @@ Module ModuleGeneral
     'Public STR_SQL_EDIT_BOOKING As String = "UPDATE `crimpsof_ehotel`.`bookings` SET `booking_status` = '{0}' WHERE `bookings`.`booking_id` = {1};"
     'Public STR_SQL_EDIT_ROOMS As String = "UPDATE `crimpsof_ehotel`.`rooms` SET `room_status` = '{0}' WHERE `rooms`.`room_id` = {1};"
     'Public SQL_UPDATE_ROOMS As String = "UPDATE rooms set room_status='{0}' where room_id='{1}'"
-
+#End Region
     Public Function buildConnectionStringFromAccessFile(dfileName As String, Is32bit As Boolean) As String
         ' '32 bit Access
         Dim connectionString32 As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};" '& "User ID=admin;" & "Password=" & m_password
@@ -583,8 +591,7 @@ Module ModuleGeneral
                     If IsDBNull(ds.Tables(0).Rows(i).Item(this_value)) Then
                         'retDict.Add(i.ToString, "") 
                     Else
-                        retDict.Add(ds.Tables(0).Rows(i).Item(this_value), ds.Tables(0).Rows(i).Item(this_member))  'TODO: avoid nulls
-
+                        retDict.Add(ds.Tables(0).Rows(i).Item(this_value), ds.Tables(0).Rows(i).Item(this_member))
                     End If
                 Next
 
@@ -892,6 +899,102 @@ Module ModuleGeneral
         StrDate = StrDate & ":" & dtp.Second.ToString("00")
         Return StrDate
     End Function
+    Public Function getInsertParamsRegForm() As List(Of OleDb.OleDbParameter)
+        Dim lstInsertParams As New List(Of OleDb.OleDbParameter)
+
+        'lstInsertParams.Add(New OleDb.OleDbParameter("@first", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+        'lstInsertParams.Add(New OleDb.OleDbParameter("@middle", OleDb.OleDbType.VarChar, 100, "student_othernames"))
+        'lstInsertParams.Add(New OleDb.OleDbParameter("@last", OleDb.OleDbType.VarChar, 100, "student_surname"))
+        'lstInsertParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
+
+        '// the first parameter (e.g. @first) has to match with the declaration in the query
+        '// the second parameter (e.g.SqlDbType.NVarChar) Is the data type of the actual column in the source table
+        '// the third paramter (e.g. 100) Is the length of the data in the database table's column
+        '// the last parameter (e.g. "fname") Is the DataPropertyName of the source column which Is
+        '// basically the name of the database table column that the DGV column represents
+        lstInsertParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_surname"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_othernames"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "status"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@mode_of_entry", OleDb.OleDbType.VarChar, 100, "mode_of_entry"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@dob", OleDb.OleDbType.VarChar, 100, "dob"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@phone", OleDb.OleDbType.VarChar, 100, "phone"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@email", OleDb.OleDbType.VarChar, 100, "email"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@gender", OleDb.OleDbType.VarChar, 100, "gender"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "session_idr"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "level"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+
+        Return lstInsertParams
+    End Function
+    Public Function getUpdateParamsRegForm() As List(Of OleDb.OleDbParameter)
+        Dim lstupdateParams As New List(Of OleDb.OleDbParameter)
+
+        'lstupdateParams.Add(New OleDb.OleDbParameter("@first", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_firstname"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_surname"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_othernames"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "status"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@mode_of_entry", OleDb.OleDbType.VarChar, 100, "mode_of_entry"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@dob", OleDb.OleDbType.VarChar, 100, "dob"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@phone", OleDb.OleDbType.VarChar, 100, "phone"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@email", OleDb.OleDbType.VarChar, 100, "email"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@gender", OleDb.OleDbType.VarChar, 100, "gender"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "session_idr"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "level"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+        Return lstupdateParams
+    End Function
+    Public Function getParamsFromDatatable(dt As DataTable) As List(Of OleDb.OleDbParameter)
+        Dim lstupdateParams As New List(Of OleDb.OleDbParameter)
+        For i = 0 To dt.Rows.Count - 1
+            For j = 0 To dt.Columns.Count - 1
+                If IsDBNull(dt.Rows(i).Item(j)) Or dt.Rows(i).Item(j).ToString = "" Then
+                    dt.Rows(i).Item(j) = "1"
+                    lstupdateParams.Add(New OleDb.OleDbParameter("@" & dt.Columns(j).ColumnName, dt.Rows(i).Item(j).ToString))
+                    Debug.Print(" lstupdateParams.Add(New OleDb.OleDbParameter(@" & dt.Columns(j).ColumnName & "," & dt.Rows(i).Item(j) & "))")
+                Else
+                    'Debug.Print(dt.Columns(j).ColumnName & ":" & dt.Columns(j).DataType.ToString)
+                    lstupdateParams.Add(New OleDb.OleDbParameter("@" & dt.Columns(j).ColumnName, dt.Rows(i).Item(j).ToString))
+                    Debug.Print(" lstupdateParams.Add(New OleDb.OleDbParameter(@" & dt.Columns(j).ColumnName & "," & dt.Rows(i).Item(j) & "))")
+                End If
+            Next
+        Next
+        Return lstupdateParams
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@matno, 1202111))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@student_firstname, Aminu))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@student_surname, AMALACHI))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@student_othernames, John))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@student_dept_idr, 1))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@status, Successful))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@year_of_entry, 2018))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@session_idr_of_entry, 2018 / 2019))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@mode_of_entry, UME))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@dob, 12 / 2 / 1994))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@phone, 80900000))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@email,))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@gender, male))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@session_idr, 2018 / 2019))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@CourseCode_1, GST112;GST111;MTH110;MTH112;CVE211;ECP281;EEE211;ELA201;EMA281;ENS211;MEE211;MEE221;PRE211;CPE311;CPE313;CPE321;CPE371;CPE375;CPE377;ELA301;EMA381))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@CourseCode_2, MEE211))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@Fees_Status, False))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@level, 100))
+        'lstupdateParams.Add(New OleDb.OleDbParameter(@dept_idr, 1))
+    End Function
     Public Function generateCodeGetSetForBroadsheet() As Boolean
         Dim ds As DataSet = mappDB.GetDataWhere("SELECT * FROM broadsheets_all WHERE Col1=''")
         Dim dt As DataTable = ds.Tables(0)
@@ -989,8 +1092,9 @@ Module ModuleGeneral
         Dim paramName As String = ""
         Dim fieldName As String = ""
         For j = 0 To dt.Columns.Count - 1
-            paramName = "@" & fieldName
+
             fieldName = dt.Columns(j).ColumnName
+            paramName = "@" & fieldName
             ' lstupdateParams.Add(New OleDb.OleDbParameter("@matno", OleDb.OleDbType.VarChar, 100, "matno"))
             strRet = strRet & vbCrLf & "lstupdateParams.Add(New OleDb.OleDbParameter(" & dblQuoted(paramName) & ", OleDb.OleDbType.VarChar, 100, " & dblQuoted(fieldName) & "))"
         Next

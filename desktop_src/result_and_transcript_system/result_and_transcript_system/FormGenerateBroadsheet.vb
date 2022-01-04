@@ -198,21 +198,21 @@ Public Class FormGenerateBroadsheet
                 'Note col85 and Col6 are for repeated courses hence Text datatype
                 Dim strTimeStamp As String = Now.Ticks.ToString
                 dRow = dSFtomDB.Tables(0).Rows.Add("ColNames_will_be_re_written") 'add mock header row
-                For i = 0 To dtSource.Rows.Count - 1 + 1 '+ to account for extra row used for headers
+                For i = 0 To dtSource.Rows.Count - 1  '
                     dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
+                    dSFtomDB.Tables(0).Rows(0).Item("ColNames") = strTimeStamp      'useful for grouping
+                    ' handle these specially( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'))
+                    dSFtomDB.Tables(0).Rows(0).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
+                    dSFtomDB.Tables(0).Rows(0).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
+                    dSFtomDB.Tables(0).Rows(0).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
 
                     For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors
                         If j > dtSource.Columns.Count - 1 Then Exit For    'avoid errors bcos table has more cols
                         If i = 0 Then
                             dSFtomDB.Tables(0).Rows(0).Item(j) = dtSource.Columns(j).ColumnName  'update the row with data
-                            dSFtomDB.Tables(0).Rows(0).Item("ColNames") = strTimeStamp      'useful for grouping
-                            ' handle these specially( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'))
-                            dSFtomDB.Tables(0).Rows(0).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
-                            dSFtomDB.Tables(0).Rows(0).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
-                            dSFtomDB.Tables(0).Rows(0).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
-
+                            dSFtomDB.Tables(0).Rows(i + 1).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
                         Else
-                            dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i - 1).Item(j)   'update the row with data
+                            dSFtomDB.Tables(0).Rows(i + 1).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
 
                         End If
                     Next
@@ -364,7 +364,8 @@ Public Class FormGenerateBroadsheet
         Try
             If objBroadsheet.broadsheetDataDS.Tables(0).Columns(0).ColumnName.Contains("Error") Then
                 DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
-                DataGridViewBroadSheet.Columns(0).Width = 120
+                DataGridViewBroadSheet.Columns(0).Width = 340
+                'DataGridViewBroadSheet.Columns(1).Frozen = True
                 Exit Sub
             ElseIf objBroadsheet.broadsheetDataDS.Tables(0).Rows.Count < 1 Then
                 MsgBox("No broadsheet data generated, students must be registered")
@@ -393,6 +394,8 @@ Public Class FormGenerateBroadsheet
             DataGridViewBroadSheet.Columns(3).Visible = False   'hide
             DataGridViewBroadSheet.Columns(4).Visible = False   'hide
             DataGridViewBroadSheet.Columns(5).Visible = False   'hide
+            DataGridViewBroadSheet.Columns(0).Frozen = True
+            DataGridViewBroadSheet.Columns(1).Frozen = True
             If RadioButtonScores.Checked = True Then
 
             Else
@@ -446,7 +449,6 @@ Public Class FormGenerateBroadsheet
                     retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
                 Else 'default
                     retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
-
                 End If
 
 

@@ -185,7 +185,7 @@
             dgvStudents.EndEdit()
             dgvStudents.Update()
             If Not ((IsDBNull(dgvStudents.DataSource) Or (dgvStudents.Rows.Count = 0))) Then
-                dgvStudents.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
+                'dgvStudents.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
                 If dgvStudents.DataSource.GetType Is dv.GetType Then
                     dv = dgvStudents.DataSource
                     dt = dv.ToTable

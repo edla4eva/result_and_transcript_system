@@ -106,7 +106,7 @@ Public Class FormUploadResult
                 If dCourse = (mappDB.GetRecordWhere(String.Format("SELECT course_code FROM courses WHERE course_code='{0}'", dCourse))) Then boolCourse = True
 
                 If boolSession And boolDept And boolCourse Then
-                    mappDB.manualInsertDB(dt, dSession, CInt(dDeptID), dCourse)
+                    mappDB.manualResultInsertDB(dt, dSession, CInt(dDeptID), dCourse)
                 ElseIf dSession.Length > 10 Then
                     MsgBox("Input correct Session, department and level")
 
@@ -822,7 +822,7 @@ Public Class FormUploadResult
             If dCourse = (mappDB.GetRecordWhere(String.Format("SELECT course_code FROM courses WHERE course_code='{0}'", dCourse))) Then boolCourse = True
 
             If boolSession And boolDept And boolCourse Then
-                mappDB.manualInsertDB(dt, dSession, CInt(dDeptID), dCourse)
+                mappDB.manualResultInsertDB(dt, dSession, CInt(dDeptID), dCourse)
             ElseIf dSession.Length > 10 Then
                 logError("Input correct Session, department and level") 'todo
             End If
