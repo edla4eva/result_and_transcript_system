@@ -726,11 +726,11 @@ Module ModuleGeneral
         End Using
         Return dMD5Hsh
     End Function
-    Function Array2sTR(s As String()) As String
+    Function Array2sTR(s As String(), Optional strSeperator As String = ",") As String
         Dim tmpStr As String = ""
 
         For i = 0 To s.Length - 1
-            tmpStr = tmpStr & s(i) & ","
+            tmpStr = tmpStr & s(i) & strSeperator
         Next
         Return tmpStr
     End Function

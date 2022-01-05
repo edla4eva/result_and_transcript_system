@@ -438,7 +438,6 @@ Partial Class FormStudentsRegistration
         Me.TextBoxFancyDisplayCourse2.Location = New System.Drawing.Point(345, 15)
         Me.TextBoxFancyDisplayCourse2.Multiline = True
         Me.TextBoxFancyDisplayCourse2.Name = "TextBoxFancyDisplayCourse2"
-        Me.TextBoxFancyDisplayCourse2.ReadOnly = True
         Me.TextBoxFancyDisplayCourse2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBoxFancyDisplayCourse2.Size = New System.Drawing.Size(311, 235)
         Me.TextBoxFancyDisplayCourse2.TabIndex = 82
@@ -448,7 +447,6 @@ Partial Class FormStudentsRegistration
         Me.TextBoxFancyDisplayCourse1.Location = New System.Drawing.Point(3, 15)
         Me.TextBoxFancyDisplayCourse1.Multiline = True
         Me.TextBoxFancyDisplayCourse1.Name = "TextBoxFancyDisplayCourse1"
-        Me.TextBoxFancyDisplayCourse1.ReadOnly = True
         Me.TextBoxFancyDisplayCourse1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBoxFancyDisplayCourse1.Size = New System.Drawing.Size(341, 235)
         Me.TextBoxFancyDisplayCourse1.TabIndex = 81
@@ -1370,7 +1368,7 @@ Partial Class FormStudentsRegistration
         '
         Me.ComboBoxGender.AutoCompleteCustomSource.AddRange(New String() {"male", "female"})
         Me.ComboBoxGender.FormattingEnabled = True
-        Me.ComboBoxGender.Items.AddRange(New Object() {"REGISTERED", "SUCCESSFUL", "STUDENTS WITH CARRY OVER", "PROBATION", "FAIL/WITHDRAW", "TEMPORARY WITHDRAWAL", "UNREGISTERED"})
+        Me.ComboBoxGender.Items.AddRange(New Object() {"male", "female"})
         Me.ComboBoxGender.Location = New System.Drawing.Point(247, 292)
         Me.ComboBoxGender.Name = "ComboBoxGender"
         Me.ComboBoxGender.Size = New System.Drawing.Size(75, 24)

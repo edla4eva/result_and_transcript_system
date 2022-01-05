@@ -449,137 +449,135 @@ Public Class ClassBroadsheets
         '##For each ColName(CourseCode), query database to get result scores for that course
         'NB: in broadsheet template scores starts From col H (i.e 7 counting From 0)
 
-        'TODO: Improvements. load all results (level by level) from db into dataTable array
-        'then search correspondind dataTable for matno to retrive reult
-        'loadResults
-        'eg Dim tmpdR As DataRow() = RegStudentsDS.Tables(0).Select("matno='ENG1208888'")
-        'for i=0 to dt.rows
-        'dt.row.col=lookupResult(matno)
-        'next
-        Dim inxC As Integer = 0
-        Dim levelPos = 0
-        Dim dtGrades As New DataTable
-        Dim dtLocalResults(MAX_COURSES_1 + MAX_COURSES_2) As DataTable
-        Dim resultCount As Integer = -1
-        Dim tmpStrSQLs(MAX_COURSES_1 + MAX_COURSES_2) As String
-        Dim tblNames(MAX_COURSES_1 + MAX_COURSES_2) As String
-        Dim dsResults As New DataSet
-        '## iteratively query database and get all results into array of DataTables
-        For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
-            If dt.Columns(inxC).ColumnName.ToUpper.Contains("REPEAT") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
-            If dt.Columns(inxC).ColumnName.Contains("TCP_") Or dt.Columns(inxC).ColumnName.Contains("TCR_") Then Continue For
-            resultCount = resultCount + 1
-            If Not dt.Columns(inxC).ColumnName.Contains("ColUNIQUE") Then
-                'Now query db with coursecode
-                tmpStrCourseCode = dt.Columns(inxC).ColumnName
-                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(tmpStrCourseCode) Then
-                    If dictAllCourseCodeKeyAndCourseLevelVal(tmpStrCourseCode) > course_level Then Continue For  'ignore higher levels
-                End If
-
-                'Method 1: iterative calls
-                tmpStr = String.Format("SELECT matno,total FROM Results WHERE course_code_idr='{0}' AND session_idr='{1}'", tmpStrCourseCode, session_idr)
-                dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
-                'Method 2: OPTIONAM Method batch 
-                'tmpStrSQLs(resultCount) = String.Format("SELECT matno,total FROM Results WHERE course_code_idr='{0}' AND session_idr='{1}'", tmpStrCourseCode, session_idr)
-                'tblNames(resultCount) = tmpStrCourseCode 'dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
-            End If
-        Next
-        'dsResults = mappDB.BatchGetDataWhere(tmpStrSQLs, tblNames)    'OPTIONAL MeTHOD
-        'dsResults.Tables.CopyTo(dtLocalResults, 0)
-
-        '---#Update dataset with result values and general values
-        Dim tmpdR As DataRow() = Nothing
-        Dim tmpResult As Integer = DEFAULT_CODE
-        Dim tmpMATNO As String = ""
-
-        'dt.row.col=lookupResult(matno)
-
-        For iMainDS = 0 To dt.Rows.Count - 1
-            countResultsBS = dtLocalResults.Count
-            tmpMATNO = dt.Rows(iMainDS).Item("matno")
-            '------Function lookupResult(dMATNO) As integer
-            For resC = 0 To countResultsBS - 1      'iterate through all the results for the level
-                If dtLocalResults(resC) Is Nothing Then Continue For
-                tmpdR = dtLocalResults(resC).Select(String.Format("matno='{0}'", tmpMATNO))
-                If tmpdR.Count = 0 Then Continue For
-                tmpResult = tmpdR(0).Item(1)
-                tmpStrCourseCode = dtLocalResults(resC).TableName
-                'update the retrived result score
-                dt.Rows(iMainDS).Item(tmpStrCourseCode) = tmpResult '.ToString & ", " & tmpStrCourseCode
-                'overwrite score if not rgistered / assign appropriate codes
-                If (IsRegistered(tmpStrCourseCode, dictRegistered_1, tmpMATNO) = False And (IsRegistered(tmpStrCourseCode, dictRegistered_2, tmpMATNO) = False)) Then
-                    tmpResult = NR_CODE  'ignore not registered NR courses
-                Else 'it is a registered course
-                    If tmpResult < 0 Then tmpResult = ABS_CODE  'ABS 'if no score for registered then it is absent
-                End If
-                dt.Rows(iMainDS).Item(tmpStrCourseCode) = tmpResult '.ToString & ", " & tmpStrCourseCode
-            Next
-            '-----------End function
-
-
-            'do other things todo: move to other loops
-            dt.Rows(iMainDS).Item("approved_credits") = approvedCredits.ToString
-            dt.Rows(iMainDS).Item("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
-
-            objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
-        Next
-        dtLocalResults = Nothing
-
-
-
-
-
-
-
-
+        '''----------------------MTHD2---------------------------------------
         ''Dim inxC As Integer = 0
         ''Dim levelPos = 0
-
         ''Dim dtGrades As New DataTable
-
+        ''Dim dtLocalResults(MAX_COURSES_1 + MAX_COURSES_2) As DataTable
+        ''Dim resultCount As Integer = -1
+        ''Dim tmpStrSQLs(MAX_COURSES_1 + MAX_COURSES_2) As String
+        ''Dim tblNames(MAX_COURSES_1 + MAX_COURSES_2) As String
+        ''Dim dsResults As New DataSet
+        '''## iteratively query database and get all results into array of DataTables
         ''For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
-        ''    If dt.Columns(inxC).ColumnName.Contains("REPEATED") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
+        ''    If dt.Columns(inxC).ColumnName.ToUpper.Contains("REPEAT") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
         ''    If dt.Columns(inxC).ColumnName.Contains("TCP_") Or dt.Columns(inxC).ColumnName.Contains("TCR_") Then Continue For
+        ''    resultCount = resultCount + 1
         ''    If Not dt.Columns(inxC).ColumnName.Contains("ColUNIQUE") Then
         ''        'Now query db with coursecode
         ''        tmpStrCourseCode = dt.Columns(inxC).ColumnName
         ''        If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(tmpStrCourseCode) Then
         ''            If dictAllCourseCodeKeyAndCourseLevelVal(tmpStrCourseCode) > course_level Then Continue For  'ignore higher levels
         ''        End If
-        ''        objBroadsheet.progressStr = "Generating results for " & tmpStrCourseCode & " ..."
-        ''        tmpStr = String.Format(strSQLJoin, tmpStrCourseCode, session_idr)   'SELECT ... LEFT JOIN
-        ''        FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
-        ''        countResultsBS = FSBroadsheetDS.Tables(0).Rows.Count
-        ''        dictCol.Clear()
-        ''        '|-
-        ''        dictCol = doMATNos(dictCol, FSBroadsheetDS)
-        ''        '|----
-        ''        dictMATNO = doCourses(dictMATNO, dictCol, dictRegistered_1, dictRegistered_2, tmpStrCourseCode) 'transfer matching score to dictMATNO
-        ''        '|----
 
-        ''        '---#Update dataset with result values and general values
-        ''        If dictCol.Count > 0 Then
-        ''            For iMainDS = 0 To dt.Rows.Count - 1
-        ''                'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
-        ''                tmpStrCourseCode = dt.Columns(inxC).ColumnName
-        ''                tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
-        ''                dt.Rows(iMainDS).Item("approved_credits") = approvedCredits.ToString
-        ''                dt.Rows(iMainDS).Item("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
-
-        ''                If dictMATNO.ContainsKey(tmpStrMATNO) Then
-        ''                    'todo
-        ''                    dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
-        ''                Else
-        ''                    dt.Rows(iMainDS).Item(tmpStrCourseCode) = NR_CODE
-        ''                End If
-
-        ''            Next
-        ''        End If
-
+        ''        'Method 1: iterative calls
+        ''        tmpStr = String.Format("SELECT matno,total FROM Results WHERE course_code_idr='{0}' AND session_idr='{1}'", tmpStrCourseCode, session_idr)
+        ''        dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
+        ''        'Method 2: OPTIONAM Method batch 
+        ''        'tmpStrSQLs(resultCount) = String.Format("SELECT matno,total FROM Results WHERE course_code_idr='{0}' AND session_idr='{1}'", tmpStrCourseCode, session_idr)
+        ''        'tblNames(resultCount) = tmpStrCourseCode 'dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
         ''    End If
+        ''Next
+        '''dsResults = mappDB.BatchGetDataWhere(tmpStrSQLs, tblNames)    'OPTIONAL MeTHOD
+        '''dsResults.Tables.CopyTo(dtLocalResults, 0)
+
+        '''---#Update dataset with result values and general values
+        ''Dim tmpdR As DataRow() = Nothing
+        ''Dim tmpResult As Integer = NR_CODE
+        ''Dim tmpMATNO As String = ""
+
+        '''dt.row.col=lookupResult(matno)
+
+        ''For iMainDS = 0 To dt.Rows.Count - 1
+        ''    countResultsBS = dtLocalResults.Count
+        ''    tmpMATNO = dt.Rows(iMainDS).Item("matno")
+        ''    '------Function lookupResult(dMATNO) As integer
+        ''    For resC = 0 To countResultsBS - 1      'iterate through all the results for the level
+        ''        If dtLocalResults(resC) Is Nothing Then Continue For
+        ''        tmpdR = dtLocalResults(resC).Select(String.Format("matno='{0}'", tmpMATNO))
+        ''        If tmpdR.Count = 0 Then
+        ''            Continue For 'no result, ignore = 1 To 10
+        ''        Else
+        ''            tmpResult = tmpdR(0).Item(1)
+        ''            tmpStrCourseCode = dtLocalResults(resC).TableName
+        ''            'update the retrived result score
+        ''            dt.Rows(iMainDS).Item(tmpStrCourseCode) = tmpResult '.ToString & ", " & tmpStrCourseCode
+        ''            'overwrite score if not rgistered / assign appropriate codes
+        ''            If (IsRegistered(tmpStrCourseCode, dictRegistered_1, tmpMATNO) = False And (IsRegistered(tmpStrCourseCode, dictRegistered_2, tmpMATNO) = False)) Then
+        ''                tmpResult = NR_CODE  'ignore not registered NR courses
+        ''            Else 'it is a registered course
+        ''                If tmpResult < 0 Then tmpResult = ABS_CODE  'ABS 'if no score for registered then it is absent
+        ''            End If
+        ''        End If
+        ''        dt.Rows(iMainDS).Item(tmpStrCourseCode) = tmpResult '.ToString & ", " & tmpStrCourseCode
+        ''    Next
+        ''    '-----------End function
+
+
+        ''    'do other things todo: move to other loops
+        ''    dt.Rows(iMainDS).Item("approved_credits") = approvedCredits.ToString
+        ''    dt.Rows(iMainDS).Item("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
 
         ''    objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
         ''Next
+        ''dtLocalResults = Nothing
+        '''-----------------------------------------------------------------------------
+
+
+
+
+
+
+        '-------------------------------- MTHD 1--------------------------------------------
+        Dim inxC As Integer = 0
+        Dim levelPos = 0
+
+        Dim dtGrades As New DataTable
+
+        For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
+            If dt.Columns(inxC).ColumnName.Contains("REPEATED") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
+            If dt.Columns(inxC).ColumnName.Contains("TCP_") Or dt.Columns(inxC).ColumnName.Contains("TCR_") Then Continue For
+            If Not dt.Columns(inxC).ColumnName.Contains("ColUNIQUE") Then
+                'Now query db with coursecode
+                tmpStrCourseCode = dt.Columns(inxC).ColumnName
+                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(tmpStrCourseCode) Then
+                    If dictAllCourseCodeKeyAndCourseLevelVal(tmpStrCourseCode) > course_level Then Continue For  'ignore higher levels
+                End If
+                objBroadsheet.progressStr = "Generating results for " & tmpStrCourseCode & " ..."
+                tmpStr = String.Format(strSQLJoin, tmpStrCourseCode, session_idr)   'SELECT ... LEFT JOIN
+                FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
+                countResultsBS = FSBroadsheetDS.Tables(0).Rows.Count
+                dictCol.Clear()
+                '|-
+                dictCol = doMATNos(dictCol, FSBroadsheetDS)
+                '|----
+                dictMATNO = doCourses(dictMATNO, dictCol, dictRegistered_1, dictRegistered_2, tmpStrCourseCode) 'transfer matching score to dictMATNO
+                '|----
+
+                '---#Update dataset with result values and general values
+                If dictCol.Count > 0 Then
+                    For iMainDS = 0 To dt.Rows.Count - 1
+                        'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
+                        tmpStrCourseCode = dt.Columns(inxC).ColumnName
+                        tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
+                        dt.Rows(iMainDS).Item("approved_credits") = approvedCredits.ToString
+                        dt.Rows(iMainDS).Item("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
+
+                        If dictMATNO.ContainsKey(tmpStrMATNO) Then
+                            'todo
+                            dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
+                        Else
+                            dt.Rows(iMainDS).Item(tmpStrCourseCode) = NR_CODE
+                        End If
+
+                    Next
+                End If
+
+            End If
+
+            objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
+        Next
+        '-------------------------------------------------------
 
         dtGrades = dt.Copy
 
@@ -839,6 +837,7 @@ Public Class ClassBroadsheets
         Dim iMarker(5) As Integer
         Dim tmpStrColName As String = ""
         Dim tmpStrR As String = ""
+        Dim tmpStrRFailed As String = ""
         Dim tmpStrRGrades As String = ""
         Dim scores(160) As String
         Dim grades(160) As String
@@ -860,7 +859,7 @@ Public Class ClassBroadsheets
         For i = 0 To countRows - 1
             For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
                 tmpStrColName = dt.Columns(j).ColumnName
-                scores(j) = -4.ToString 'initialize on the fly  'TODO
+                scores(j) = DEFAULT_CODE.ToString 'initialize on the fly  'TODO
                 credits(j) = 0 'initialize on the fly  'TODO
                 ''Attempt to seperate 1st nd nd semester scores/credits
                 'If j <= scores_1.Length - 1 Then scores_1(j) = scores(j)
@@ -886,6 +885,7 @@ Public Class ClassBroadsheets
                             tmpStrRGrades = tmpStrRGrades & ", " & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)
                         End If
                     End If
+
                 Else
                     scores(j) = 0
                     If iMarker(0) = Nothing Then iMarker(0) = j   'on off marker
@@ -897,6 +897,9 @@ Public Class ClassBroadsheets
             Next
             dt.Rows(i).Item("RepeatCourses_1") = tmpStrR
             dtGrades.Rows(i).Item("RepeatCourses_1") = tmpStrRGrades
+
+
+
 
             tmpStrR = ""
             tmpStrRGrades = ""
@@ -960,8 +963,24 @@ Public Class ClassBroadsheets
             'levelPercentages(8) = 0
             'objBroadsheet.levelcgpaPercentages = levelPercentages
 
+            dt.Rows(i).Item("failed_screening") = "NO" 'todo determine from status RegStudentsDS.Tables(0).Rows(i).Item("failed_screening")
+            dt.Rows(i).Item("cummulative_credits") = 0 'todo determine when creating senate 
+            dt.Rows(i).Item("outstanding_credits") = 0   'RegStudentsDS.Tables(0).Rows(i).Item("outstanding_credits")
+
+            dt.Rows(i).Item("gpa100") = "0.000"
+            dt.Rows(i).Item("gpa200") = "0.000"
+            dt.Rows(i).Item("gpa300") = "0.000"
+            dt.Rows(i).Item("gpa400") = "0.000"
+            dt.Rows(i).Item("gpa500") = "0.000"
+            dt.Rows(i).Item("gpa600") = "0.000"
+            dt.Rows(i).Item("gpa700") = "0.000"
+            dt.Rows(i).Item("gpa800") = "0.000"
+            dt.Rows(i).Item("gpa900") = "0.000"
+            dt.Rows(i).Item("wgpa100") = "0.000"
             gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             dt.Rows(i).Item("GPA") = gpa.ToString
+            objBroadsheet.progressStr = "Computing Failed Courses" & " ..."
+            dt.Rows(i).Item("failed") = getAllFailed(scores, courses, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits registered" & " ..."
             TCRs = getAllTCR(scores, credits, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits passed" & " ..."
@@ -2085,6 +2104,29 @@ Public Class ClassBroadsheets
 
         Catch ex As Exception
             Return {-4, -4, -4}
+        End Try
+    End Function
+    Function getAllFailed(dScore As String(), dCourse As String(), dlevel As Integer) As String
+        Dim retVal As New List(Of String)
+        Dim retStr As String = ""
+        Dim nLastColInSem_1_ForLevel As Integer = LastColInSem_1_ForLevel(dlevel)
+        Dim nLastColInSem_2_ForLevel As Integer = LastColInSem_2_ForLevel(dlevel)
+        Try
+            For i = 0 To dScore.Count - 1
+                'If isPassed(toNum(dScore(i))) Then sumTCP = sumTCP + dCredit(i)
+                If i >= COURSE_START_COL And i <= nLastColInSem_1_ForLevel Then 'dScore_1.lenght - 1 Then
+
+                    If isPassed(toNum(dScore(i))) Then retVal.Add(dCourse(i))
+                ElseIf i >= COURSE_START_COL_2 And i <= nLastColInSem_2_ForLevel Then
+                    If isPassed(toNum(dScore(i))) Then retVal.Add(dCourse(i))
+                End If
+            Next
+
+            retStr = Array2sTR(retVal.ToArray, ", ")
+            Return retStr
+
+        Catch ex As Exception
+            Return "#"
         End Try
     End Function
 

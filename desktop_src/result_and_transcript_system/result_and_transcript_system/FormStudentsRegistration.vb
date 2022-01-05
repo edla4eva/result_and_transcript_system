@@ -1315,7 +1315,7 @@ Public Class FormStudentsRegistration
         End Select
 
         session_idr = ComboBoxSessions.SelectedItem
-        course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedIndex.ToString)
+        course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedItem.ToString)
 
 
         If dictCoursesOrderFS.Count = 0 Then
