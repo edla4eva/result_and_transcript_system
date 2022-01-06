@@ -887,7 +887,7 @@ Public Class ClassBroadsheets
                     End If
 
                 Else
-                    scores(j) = 0
+                    scores(j) = DEFAULT_CODE
                     If iMarker(0) = Nothing Then iMarker(0) = j   'on off marker
                 End If
                 'dtGrades.Columns(j).DataType = Type.GetType("System.String")
@@ -905,7 +905,7 @@ Public Class ClassBroadsheets
             tmpStrRGrades = ""
             For j = COURSE_START_COL_2 To COURSE_END_COL_2 - 1  'Second semester
                 tmpStrColName = dt.Columns(j).ColumnName
-                scores(j) = -4.ToString 'initialize on the fly  'TODO
+                scores(j) = DEFAULT_CODE 'initialize on the fly  'TODO
                 credits(j) = 0 'initialize on the fly  'TODO
                 ''attempt to seperate 1st and 2nd sem courses
                 'If j - COURSE_START_COL_2 <= scores_2.Length - 1 Then scores_1(j - COURSE_START_COL_2) = scores(j)
@@ -932,7 +932,7 @@ Public Class ClassBroadsheets
                         End If
                     End If
                 Else
-                    scores(j) = 0
+                    scores(j) = DEFAULT_CODE
                     If iMarker(1) = Nothing Then iMarker(1) = j
                 End If
                 If IsDBNull(dt.Rows(i).Item(j)) Then dt.Rows(i).Item(j) = ""
@@ -963,7 +963,7 @@ Public Class ClassBroadsheets
             'levelPercentages(8) = 0
             'objBroadsheet.levelcgpaPercentages = levelPercentages
 
-            dt.Rows(i).Item("failed_screening") = "NO" 'todo determine from status RegStudentsDS.Tables(0).Rows(i).Item("failed_screening")
+            dt.Rows(i).Item("failed_screening") = "N0" 'todo determine from status RegStudentsDS.Tables(0).Rows(i).Item("failed_screening")
             dt.Rows(i).Item("cummulative_credits") = 0 'todo determine when creating senate 
             dt.Rows(i).Item("outstanding_credits") = 0   'RegStudentsDS.Tables(0).Rows(i).Item("outstanding_credits")
 
@@ -980,7 +980,7 @@ Public Class ClassBroadsheets
             gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             dt.Rows(i).Item("GPA") = gpa.ToString
             objBroadsheet.progressStr = "Computing Failed Courses" & " ..."
-            dt.Rows(i).Item("failed") = getAllFailed(scores, courses, objBroadsheet.Level)
+            dt.Rows(i).Item("Failed") = getAllFailed(scores, courses, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits registered" & " ..."
             TCRs = getAllTCR(scores, credits, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits passed" & " ..."
@@ -2112,13 +2112,13 @@ Public Class ClassBroadsheets
         Dim nLastColInSem_1_ForLevel As Integer = LastColInSem_1_ForLevel(dlevel)
         Dim nLastColInSem_2_ForLevel As Integer = LastColInSem_2_ForLevel(dlevel)
         Try
-            For i = 0 To dScore.Count - 1
+            For j = 0 To dScore.Count - 1
                 'If isPassed(toNum(dScore(i))) Then sumTCP = sumTCP + dCredit(i)
-                If i >= COURSE_START_COL And i <= nLastColInSem_1_ForLevel Then 'dScore_1.lenght - 1 Then
-
-                    If isPassed(toNum(dScore(i))) Then retVal.Add(dCourse(i))
-                ElseIf i >= COURSE_START_COL_2 And i <= nLastColInSem_2_ForLevel Then
-                    If isPassed(toNum(dScore(i))) Then retVal.Add(dCourse(i))
+                If j >= COURSE_START_COL And j <= nLastColInSem_1_ForLevel Then 'dScore_1.lenght - 1 Then
+                    'todo: optimize by avoiding the .contains function
+                    If Not isPassed(toNum(dScore(j))) And IsRegisteredScore(toNum(dScore(j))) Then retVal.Add(dCourse(j))
+                ElseIf j >= COURSE_START_COL_2 And j <= nLastColInSem_2_ForLevel Then
+                    If Not isPassed(toNum(dScore(j))) And IsRegisteredScore(toNum(dScore(j))) Then retVal.Add(dCourse(j))  'And Not dCourse(j).Contains("ColUNIQUE")
                 End If
             Next
 

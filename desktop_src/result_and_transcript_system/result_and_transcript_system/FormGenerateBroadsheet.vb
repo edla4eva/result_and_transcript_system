@@ -192,15 +192,26 @@ Public Class FormGenerateBroadsheet
                 'MsgBox("After empty db")
                 'Note col85 and Col6 are for repeated courses hence Text datatype
                 Dim strTimeStamp As String = Now.Ticks.ToString
+                Dim dictColNamesMap As New Dictionary(Of String, String)
+                'use, columnName in broadsheet_all
+                dictColNamesMap.Add("TCR", "Col166")
+                dictColNamesMap.Add("GPA", "Col167")
+                dictColNamesMap.Add("Class", "Col168")
+                dictColNamesMap.Add("Status", "Col169")         'changed something to category
+                dictColNamesMap.Add("Failed", "Col170")
+                dictColNamesMap.Add("2018/2019", "Col171")      'the actual session is used as column name
+                dictColNamesMap.Add("Department_Name", "Col172")
+                dictColNamesMap.Add("Faculty_Name", "Col173")
+                dictColNamesMap.Add("Level", "Col174")
+                dictColNamesMap.Add("Footers", "Col174")
+                dictColNamesMap.Add("637762324436721630", "ColNames")      'actual timestamp
+                'Category
+                'Course_title
+                'gpa100
+                '...
                 dRow = dSFtomDB.Tables(0).Rows.Add("ColNames_will_be_re_written") 'add mock header row
                 For i = 0 To dtSource.Rows.Count - 1  '
                     dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
-                    dSFtomDB.Tables(0).Rows(0).Item("ColNames") = strTimeStamp      'useful for grouping
-                    ' handle these specially( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'))
-                    dSFtomDB.Tables(0).Rows(0).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
-                    dSFtomDB.Tables(0).Rows(0).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
-                    dSFtomDB.Tables(0).Rows(0).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
-
                     For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors
                         If j > dtSource.Columns.Count - 1 Then Exit For    'avoid errors bcos table has more cols
                         If i = 0 Then
@@ -219,7 +230,6 @@ Public Class FormGenerateBroadsheet
                     dSFtomDB.Tables(0).Rows(i).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
                     dSFtomDB.Tables(0).Rows(i).Item("Col175") = Array2sTR(footers)        'todo:
                 Next
-
 
                 DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
 

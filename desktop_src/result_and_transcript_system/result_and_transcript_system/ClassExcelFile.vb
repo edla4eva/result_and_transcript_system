@@ -126,7 +126,7 @@ Public Class ClassExcelFile
         If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
             dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
             dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
-            row1.GetCell(0).SetCellValue("YEAR " & (objBS.Level / 100).ToString)
+            row1.CreateCell(0).SetCellValue("YEAR " & (objBS.Level / 100).ToString)
         Else
             row1.CreateCell(0).SetCellValue("LEVEL: " & objBS.Level.ToString)
         End If
@@ -274,10 +274,15 @@ Public Class ClassExcelFile
         row1.GetCell(CLASS_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
 
         style = changeStyle(workbook)
+        style.VerticalAlignment = VerticalAlignment.Center
+
         styleCenter = changeStyle(workbook)
         styleCenter.Alignment = HorizontalAlignment.Center
+        styleCenter.VerticalAlignment = HorizontalAlignment.Center
+
         styleWrap = changeStyle(workbook)
         styleWrap.WrapText = True
+        styleWrap.VerticalAlignment = VerticalAlignment.Center
 
         For iRow = 0 To dt.Rows.Count - 1
             row1 = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
@@ -293,10 +298,12 @@ Public Class ClassExcelFile
                 End If
             Next
             'style
-            row1.GetCell(2).CellStyle = styleWrap   'ColC name
+            row1.GetCell(FULLNAME_COL).CellStyle = styleWrap   'ColC name
             row1.GetCell(4).CellStyle = styleWrap
-            row1.GetCell(6).CellStyle = styleWrap   'repeated
+            row1.GetCell(REPEATED_ALL_COL).CellStyle = styleWrap   'repeated
             row1.GetCell(7).CellStyle = styleWrap
+
+            row1.GetCell(COURSE_FAIL_COL).CellStyle = styleWrap
         Next
         'TODO: Get footer fro db category table NO dont do any database call here
         Dim dtCateGory As DataTable = objBroadsheet.dtCategory
@@ -329,7 +336,7 @@ Public Class ClassExcelFile
         "(G)              EXPELLED/RUSTICATED/SUSPENDED STUDENTS:",
         "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
         "(I)              UNREGISTERED STUDENTS:", "", ""}
-        ReDim strFooter(dtCategory.Rows.Count)
+        ReDim strFooter500(dtCateGory.Rows.Count)
         For i = 0 To dtCategory.Rows.Count - 1
             strFooter500(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description_final_year")
         Next
@@ -362,7 +369,7 @@ Public Class ClassExcelFile
 
         setWidthHeight(sheet1)   'todo test
 
-        setFormatPerLevel(sheet1, objBS.Level)
+        setFormatPerLevel(sheet1, objBS.Level, dt.Columns.Count - 1)
         setFormatPerSemester(sheet1, objBS.broadsheetSemester)
 
         'sheet1.setRepeatingRows(CellRangeAddress.ValueOf("1:2")) ' Set repeating rows For printing
@@ -531,14 +538,16 @@ Public Class ClassExcelFile
         End Select
         Return True
     End Function
-    Public Function setFormatPerLevel(sheet1 As ISheet, dLevel As Integer) As Boolean
-
+    Public Function setFormatPerLevel(sheet1 As ISheet, dLevel As Integer, lastExtraCol As Integer) As Boolean
         'Hide unused columns such as extra cols for courses '0=A, 1=B, 2=C, 3=D but the Enum has a base of 1
         hideCols(sheet1, OTHER_NAMES_COL)
         hideCols(sheet1, SURNAME_COL)
         hideCols(sheet1, REPEATED_1_COL)
+        For x = LAST_COL To lastExtraCol
+            hideCols(sheet1, x)
+        Next
         'ColG is repeated course wrap;  'col H to AG 100-400L courses; 'colAG = colz+colg; 'colBJ = colz + colz + colj
-        For x = COURSE_START_COL To LAST_COL    ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
+        For x = COURSE_START_COL To LAST_COL   ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
             If sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
                 hideCols(sheet1, x)
                 sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).SetCellValue("")         'display nothing
@@ -582,11 +591,11 @@ Public Class ClassExcelFile
 
         sheet1.SetColumnWidth(REPEATED_1_COL, 60 * 256)  'repeated Fist Semester
         For j = COURSE_START_COL To LAST_COL + 6
-            sheet1.SetColumnWidth(j, 4 * 256)  '3.71 or approx 4 for Result cols
+            sheet1.SetColumnWidth(j, 4 * 260)  'approx 4 for Result cols note 260 instead  of 256
         Next
 
         For j = LAST_COL To LAST_COL + 6
-            sheet1.SetColumnWidth(j, 4 * 256)  '5 for GPA ...
+            sheet1.SetColumnWidth(j, 4 * 260)  '
         Next
 
         sheet1.SetColumnWidth(REPEATED_2_COL, 60 * 256)  'repeated 2nd Sem

@@ -754,7 +754,12 @@ Module ModuleGeneral
         Dim tmpStr As String = ""
 
         For i = 0 To s.Length - 1
-            tmpStr = tmpStr & s(i) & strSeperator
+            If tmpStr = "" Then
+                tmpStr = s(i)
+            Else
+                tmpStr = tmpStr & strSeperator & s(i)
+            End If
+
         Next
         Return tmpStr
     End Function
