@@ -56,6 +56,7 @@ Module ModuleGeneral
 
     'Data
     Public dictDepts As New Dictionary(Of String, String)
+    'Public dictDeptsID As New Dictionary(Of String, String)
     Public dictCourses As New Dictionary(Of String, String)
     Public dictCoursesOrderFS As New Dictionary(Of String, String)
     Public dictCoursesOrderSS As New Dictionary(Of String, String)
@@ -100,12 +101,25 @@ Module ModuleGeneral
     Public CATEGORY_TEMP_WITHDRAWAL As String = "E"
     Public CATEGORY_UNREGISTERED As String = "K"
 
+    Public CATEGORY_DESCRIPTION_REGISTERED As String = "REGISTERED"
     Public CATEGORY_DESCRIPTION_UNREGISTERED As String = "UNREGISTERED"
     Public CATEGORY_DESCRIPTION_SUCCESSFUL As String = "SUCCESSFUL"
     Public CATEGORY_DESCRIPTION_STUDENTS_WITH_CARRY_OVER As String = "STUDENTS WITH CARRY OVER"
     Public CATEGORY_DESCRIPTION_PROBATION As String = "PROBATION"
     Public CATEGORY_DESCRIPTION_FAIL_WITHDRAW As String = "FAIL/WITHDRAW"
     Public CATEGORY_DESCRIPTION_TEMP_WITHDRAWAL As String = "TEMPORARY WITHDRAWAL"
+
+
+    Public MODE_OF_ENTRY_UME As String = "UME"
+    Public MODE_OF_ENTRY_DE As String = "DE"
+    Public MODE_OF_ENTRY_DIP As String = "DIP"
+
+    'TODO: ORM may be needed in he future
+    Public COL_CourseCode_1 As String = "CourseCode_1"
+    Public COL_matno As String = "matno"
+    Public COL_CourseCode_2 As String = "CourseCode_2"
+    'getcorrectDBCol(col_courseCode_1, tablename, dataBaseEngine) as string if talename="results" return CourseCode_1
+    'function COL_CourseCode_1(tablename, dataBaseEngine) as string ...
 
     'Constants NPOI Excel
 #Region "Constants NPOI Excel"
@@ -207,6 +221,11 @@ Module ModuleGeneral
     Public STR_SQL_ALL_REG_SUMMARY As String = "SELECT reg.session_idr, reg.dept_idr, reg.level, count(reg.matno) AS NumStudents
                                                     FROM reg
                                                     GROUP BY reg.session_idr,reg.dept_idr,reg.level;"   'todo "Col" & LAST_COL
+
+    Public STR_SQL_ALL_REGS_SUMMARY As String = "SELECT regs.session_idr, regs.dept_idr, regs.level, count(regs.matno) AS NumStudents
+                                                    FROM regs
+                                                    GROUP BY regs.session_idr,regs.dept_idr,regs.level;"   'todo "Col" & LAST_COL
+
     Public STR_SQL_ALL_REG As String = "SELECT reg.session_idr As Session, count(reg.matno) AS NumStudents
                                                     FROM reg
                                                     GROUP BY reg.session_idr;"   'todo "Col" & LAST_COL
@@ -283,6 +302,9 @@ Module ModuleGeneral
     Public STR_FILTER_STUDENTS = "matno like '%{0}%' OR student_surname='%{1}%'  OR student_firstname='%{2}%'"
     Public STR_FILTER_RESULTS_BYCOURSECODE = "Course_code_idr like '%{0}%'"
     Public STR_FILTER_RESULTS_BYSESSION = "session_idr like '%{0}%'"
+
+    Public STR_FILTER_REG_BY_LEVEL = "level like '%{0}%'"
+    Public STR_FILTER_REG_BYSESSION = "session_idr like '%{0}%'"
     Public STR_FILTER_REG_BY_MATNO = "matno = '{0}'"
     Public STR_FILTER_GEENERIC = "{0} like '%{1}%'"
 
@@ -314,6 +336,8 @@ Module ModuleGeneral
     Public STR_SQL_DELETE_STUDENTS_WITH_PARAMS As String = "DELETE FROM Reg WHERE matno=@matno"
     Public DELETE_FROM_RESULTS_WHERE_SESSION_COURSECODE_TIMESAMP As String = "DELETE * FROM results WHERE session_idr='{0}' AND course_code_idr='{1}' AND result_timestamp='{2}'"
     Public DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Reg WHERE session_idr='{0}' AND dept_idr={1} AND level={2}"
+    Public DELETE_FROM_REGS_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Regs WHERE session_idr='{0}' AND dept_idr={1} AND level={2}"
+
 
     Public STR_SQL_COURSE_REG_FIRST_SEMESTER = "SELECT FC.CourseCode, FC.CourseTitle, FC.CourseCredit FROM FC WHERE (((FC.CourseSemester)=1)) ORDER BY FC.CourseCode;"
     Public STR_SQL_COURSE_REG_SECOND_SEMESTER = "SELECT CourseCode,CourseTitle,CourseCredit FROM FC WHERE (((CourseSemester)=2)) ORDER BY CourseCode;"
@@ -510,7 +534,7 @@ Module ModuleGeneral
             dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
             dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
             dictCourses = dictAllCourses
-
+            'dictDeptsID = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_name", "dept_ID")
             Return True
         Catch ex As Exception
             logError(ex.ToString)

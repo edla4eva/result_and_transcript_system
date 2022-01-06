@@ -163,6 +163,7 @@ C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcrip
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\Excel.Helper.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.DataSet.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\ExcelDataReader.dll
+C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\FontAwesome.Sharp.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\ICSharpCode.SharpZipLib.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\Microsoft.ReportViewer.Common.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\Microsoft.ReportViewer.DataVisualization.dll
@@ -234,7 +235,6 @@ C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcrip
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\ru\Microsoft.ReportViewer.WinForms.resources.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\zh-CHT\Microsoft.ReportViewer.WinForms.resources.dll
-C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.vbprojAssemblyReference.cache
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.FormAbout.resources
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.FormAddNewStuff.resources
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.FormAdmin.resources
@@ -265,4 +265,4 @@ C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcrip
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.exe
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.xml
 C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.pdb
-C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\bin\Debug\FontAwesome.Sharp.dll
+C:\xampp7.3\htdocs\result_and_transcript_system\desktop_src\result_and_transcript_system\result_and_transcript_system\obj\Debug\result_and_transcript_system.vbprojAssemblyReference.cache

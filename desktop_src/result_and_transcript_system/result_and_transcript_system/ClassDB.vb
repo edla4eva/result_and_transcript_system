@@ -394,28 +394,34 @@ Public Class ClassDB
         Return table
     End Function
 
-    Public Function bulkInsertDB(dt As DataTable, strSQL As String, tmpTableName As String) As DataTable
-        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            xConn.ConnectionString = getCorrectConnectionstring()
-            xConn.Open()
-            Dim cmd As OleDbCommand = New OleDbCommand(strSQL, xConn)
-            Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd)
-            cmd.ExecuteNonQuery()
+    Public Function bulkInsertDBUsingDataAdapter(dt As DataTable, tmpTableName As String) As DataTable
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
+                'Pull the table records and insert new
+                Using adapter = New OleDbDataAdapter("SELECT * FROM " & tmpTableName, xConn)
+                    Using builder = New OleDbCommandBuilder(adapter)
+                        'builder.QuotePrefix = "["
+                        'builder.QuoteSuffix = "]"
+                        'adapter.InsertCommand = builder.GetInsertCommand()
+                        If dt.HasErrors Then
+                            MsgBox("Some errors are contained in records: " & dt.GetErrors(0).ToString)
+                            dt = Nothing
+                        Else
+                            adapter.Update(dt)
+                        End If
 
-            closeConn(cmd.Connection)
-
-            'Pull the table records and insert new
-            Using adapter = New OleDbDataAdapter("SELECT * FROM " & tmpTableName, xConn)
-
-                Using builder = New OleDbCommandBuilder(adapter)
-                    'adapter.InsertCommand = builder.GetInsertCommand()
-                    adapter.Update(dt)
+                    End Using
                 End Using
-                closeConn(adapter.SelectCommand.Connection)
+                closeConn(xConn)
             End Using
-            closeConn(xConn)
-        End Using
-        Return dt
+            Return dt
+
+        Catch ex As Exception
+            Return Nothing
+            'todo return datatable wit error info
+        End Try
     End Function
     Public Function changeUserPassword(usr As String, pass As String) As Boolean
         Dim retVal As Boolean
@@ -524,8 +530,25 @@ Public Class ClassDB
         End Using
         Return True
     End Function
-
+    'TODO: copy documentation from here
     Public Function genericManualInsertDB(dt As DataTable, sql As String, values As String()) As Boolean
+        '
+        ' Summary:
+        '     Manually  inserts records into a database table 
+        '
+        ' Parameters:
+        '   dt:
+        '     The DataTable from which records will be obtained
+        '
+        ' Returns:
+        '     True if successful, False otherwise.
+        '
+        ' Exceptions:
+        '   T:System.InvalidOperationException:
+        '     Cannot execute a command within a transaction context that differs from the context
+        '     in which the connection was originally enlisted.
+
+
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             xConn.ConnectionString = getCorrectConnectionstring()
             xConn.Open()
@@ -728,13 +751,18 @@ Public Class ClassDB
 
     'TODO:: incomplete
     Function getDeptName(strDept As String, Optional forceStrict As Boolean = False) As String
-        Dim retVal As String
-        If forceStrict = True Then
-            retVal = strDept
-        Else
-            retVal = strDept
-        End If
-        Return retVal
+        Dim retVal As String = "COMPUTER ENGINEERING"
+        Try
+            If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
+                retVal = dictDepts(strDept)
+            Else
+                getDeptSessionsIntoDictionaries()
+                retVal = dictDepts(strDept)
+            End If
+            Return retVal
+        Catch ex As Exception
+            Return retVal
+        End Try
     End Function
     'TODO:: use dictonaries
     Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
@@ -742,7 +770,7 @@ Public Class ClassDB
         If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
             retVal = CInt(dictDepts.Keys(strDept))
         Else
-
+            getDeptSessionsIntoDictionaries()  'so we dont have to do db call again
             If forceStrict = True Then
                 retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
             Else

@@ -1,7 +1,8 @@
 ﻿Imports System.ComponentModel
 
 Public Class FormViewRegs
-    Dim resultSummarryDV As New DataView
+    Dim summarryRegsDV As New DataView
+    Dim summarryRegDV As New DataView
     Private Sub FormViewResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = RGBColors.colorBlack2
 
@@ -42,21 +43,21 @@ Public Class FormViewRegs
 
     Private Sub ButtonSearch_Click(sender As Object, e As EventArgs) Handles ButtonSearch.Click
         Dim myDataSet As DataSet
-        If TextBoxCourseCode.Text = "" And TextBoxSession.Text = "" Then
+        If TextBoxLevel.Text = "" And TextBoxSession.Text = "" Then
             TextBoxSession.BackColor = Color.Pink
-            TextBoxCourseCode.BackColor = Color.Pink
+            TextBoxLevel.BackColor = Color.Pink
             MessageBox.Show("Please enter the Session or CourseCode and retry again")
             Exit Sub
-        ElseIf Not TextBoxCourseCode.Text = "" Then
-            myDataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text, TextBoxCourseCode.Text)
-            DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
-            TextBoxCourseCode.BackColor = Color.White
-            TextBoxCourseCode.BackColor = Color.White
+        ElseIf Not TextBoxLevel.Text = "" Then
+            myDataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text, TextBoxLevel.Text)
+            DataGridViewRegs.DataSource = myDataSet.Tables(0).DefaultView
+            TextBoxLevel.BackColor = Color.White
+            TextBoxLevel.BackColor = Color.White
         ElseIf Not TextBoxSession.Text = "" Then
-            myDataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text, TextBoxCourseCode.Text)
-            DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+            myDataSet = objResult.getFromDBResultssDataset(TextBoxSession.Text, TextBoxLevel.Text)
+            DataGridViewRegs.DataSource = myDataSet.Tables(0).DefaultView
             TextBoxSession.BackColor = Color.White
-            TextBoxCourseCode.BackColor = Color.White
+            TextBoxLevel.BackColor = Color.White
         End If
     End Sub
 
@@ -71,62 +72,68 @@ Public Class FormViewRegs
         Me.Close()
     End Sub
 
-    Private Sub TextBoxSession_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCourseCode.TextChanged
+    Private Sub TextBoxSession_TextChanged(sender As Object, e As EventArgs) Handles TextBoxLevel.TextChanged
         'get col headers
         ' rowHeades("Session")
         On Error Resume Next
-        If DataGridView2.Rows.Count > 0 Then
-            DataGridView2.DataSource.RowFilter = String.Format(STR_FILTER_RESULTS_BYCOURSECODE, TextBoxCourseCode.Text)
+        If DataGridViewRegs.Rows.Count > 0 Then
+            DataGridViewRegs.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_LEVEL, TextBoxLevel.Text)
         End If
     End Sub
 
     Private Sub ButtonDelete_Click(sender As Object, e As EventArgs) Handles ButtonDelete.Click
-        If DataGridView2.SelectedRows Is Nothing Or DataGridView2.Columns.Contains("matno") Then
+        Dim strSQL As String = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
+        Dim dSession As String = DataGridViewRegs.SelectedRows(0).Cells("session_idr").Value.ToString
+        Dim dDeptID As String = DataGridViewRegs.SelectedRows(0).Cells("dept_idr").Value.ToString
+        Dim dlevel As String = DataGridViewRegs.SelectedRows(0).Cells("level").Value.ToString
+
+        If Not DataGridViewRegs.SelectedRows Is Nothing Or DataGridViewRegs.Columns.Contains("matno") Then
+            strSQL = DELETE_FROM_REGS_WHERE_SESSION_DEPTID_LEVEL
+        ElseIf Not DataGridViewReg.SelectedRows Is Nothing Or DataGridViewRegs.Columns.Contains("matno") Then
+            strSQL = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
+        Else
             Exit Sub
         End If
-        Dim strSQL As String = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
-        Dim dSession As String = DataGridView2.SelectedRows(0).Cells("session_idr").Value.ToString
-        Dim dCourse As String = DataGridView2.SelectedRows(0).Cells("dept_idr").Value.ToString
-        Dim dlevel As String = DataGridView2.SelectedRows(0).Cells("level").Value.ToString
-        If MessageBox.Show("Are you sure you want to delete all the selected registration data?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
 
+        If MessageBox.Show("Are you sure you want to delete all the selected registration data?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
             LoginForm1.Close()
             LoginForm1.Tag = "adminCheck"
 
             If LoginForm1.ShowDialog() = DialogResult.OK Then
                 If LoginForm1.Tag = "adminOk" Then
-                    If mappDB.doQuery(String.Format(strSQL, dSession, dCourse, dlevel)) = True Then
+                    If mappDB.doQuery(String.Format(strSQL, dSession, dDeptID, dlevel)) = True Then
                         ButtonShowAll.PerformClick()
                         MsgBox("Registration data deleted sucessfully")
                     Else
                         MsgBox("Could not delete Registratin data")
                     End If
                 End If
-                End If
+            End If
         End If
+
     End Sub
 
     Private Sub TextBoxSession_TextChanged_1(sender As Object, e As EventArgs) Handles TextBoxSession.TextChanged
         On Error Resume Next
-        If DataGridView2.Rows.Count > 0 Then
-            DataGridView2.DataSource.RowFilter = String.Format(STR_FILTER_RESULTS_BYSESSION, TextBoxSession.Text)
+        If DataGridViewRegs.Rows.Count > 0 Then
+            DataGridViewRegs.DataSource.RowFilter = String.Format(STR_FILTER_RESULTS_BYSESSION, TextBoxSession.Text)
         End If
     End Sub
 
-    Private Sub DataGridView2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentClick
+    Private Sub DataGridView2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewRegs.CellContentClick
 
     End Sub
 
-    Private Sub DataGridView2_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentDoubleClick
+    Private Sub DataGridView2_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewRegs.CellContentDoubleClick
         Dim txtCourseCode, txtSession As String
         Dim myDataSet As DataSet
-        If DataGridView2.SelectedRows.Count > 0 And
-            DataGridView2.Columns.Contains("course_code_idr") And
-            DataGridView2.Columns.Contains("session_idr") Then
-            txtCourseCode = DataGridView2.SelectedRows(0).Cells("course_code_idr").Value
-            txtSession = DataGridView2.SelectedRows(0).Cells("session_idr").Value
+        If DataGridViewRegs.SelectedRows.Count > 0 And
+            DataGridViewRegs.Columns.Contains("course_code_idr") And
+            DataGridViewRegs.Columns.Contains("session_idr") Then
+            txtCourseCode = DataGridViewRegs.SelectedRows(0).Cells("course_code_idr").Value
+            txtSession = DataGridViewRegs.SelectedRows(0).Cells("session_idr").Value
             myDataSet = objResult.getFromDBResultssDataset(txtSession, txtCourseCode)
-            DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+            DataGridViewRegs.DataSource = myDataSet.Tables(0).DefaultView
         End If
     End Sub
 
@@ -138,7 +145,8 @@ Public Class FormViewRegs
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
-        DataGridView2.DataSource = resultSummarryDV
+        DataGridViewRegs.DataSource = summarryRegsDV
+        DataGridViewReg.DataSource = summarryRegDV
         Me.ButtonShowAll.Enabled = True
         TimerBS.Stop()
         ProgressBarBS.Value = 100
@@ -150,12 +158,14 @@ Public Class FormViewRegs
     Private Function getRegSummary() As DataView
 
         Try
-            resultSummarryDV = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0).DefaultView
+            summarryRegsDV = mappDB.GetDataWhere(STR_SQL_ALL_REGS_SUMMARY).Tables(0).DefaultView
+            '
+            summarryRegDV = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0).DefaultView
 
         Catch ex As Exception
 
         End Try
-        Return resultSummarryDV
+        Return summarryRegsDV
     End Function
 
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
@@ -168,5 +178,57 @@ Public Class FormViewRegs
 
     Private Sub ButtonCoursereg_Click(sender As Object, e As EventArgs) Handles ButtonCoursereg.Click
         MainForm.ChangeMenu("StudentsRegistration")
+    End Sub
+
+    Private Sub ButtonUse_Click(sender As Object, e As EventArgs) Handles ButtonUse.Click
+        If DataGridViewRegs.SelectedRows Is Nothing Or DataGridViewRegs.Columns.Contains("matno") Then
+            MsgBox("Select one of the previously backed up registration data")
+            Exit Sub
+        End If
+        Dim strSQLDelete As String = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
+        Dim strSQL As String = "SELECT * FROM Reg" ' DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
+        Dim dSession As String = DataGridViewRegs.SelectedRows(0).Cells("session_idr").Value.ToString
+        Dim dDeptID As String = DataGridViewRegs.SelectedRows(0).Cells("dept_idr").Value.ToString
+        Dim dlevel As String = DataGridViewRegs.SelectedRows(0).Cells("level").Value.ToString
+
+        If mappDB.doQuery(String.Format(strSQLDelete, dSession, dDeptID, dlevel)) = True Then
+            ButtonShowAll.PerformClick()
+            MsgBox("Existing Registration data deleted sucessfully")
+        Else
+            MsgBox("Could not delete Registratin data")
+        End If
+
+        strSQL = String.Format("Select * From Regs WHERE session_idr='{0}' AND dept_idr={1} AND level={2}", dSession, dDeptID, dlevel)
+        Dim dtCurrentReg As DataTable = mappDB.GetDataWhere(strSQL, "Reg").Tables(0)
+
+
+        If Not mappDB.bulkInsertDBUsingDataAdapter(dtCurrentReg, "Reg") Is Nothing Then
+            ButtonShowAll.PerformClick()
+            MsgBox("New Registration data copied sucessfully")
+        Else
+            MsgBox("Could not copy Registratin data")
+        End If
+
+
+
+
+    End Sub
+
+    Private Sub ButtonBackup_Click(sender As Object, e As EventArgs) Handles ButtonBackup.Click
+        If DataGridViewReg.Rows.Count < 1 Then
+            Exit Sub
+        End If
+        Dim strSQL As String = "SELECT * FROM Reg" ' Get the data
+        Dim dtReg As DataTable = mappDB.GetDataWhere(strSQL, "Reg").Tables(0)
+
+        DataGridViewReg.DataSource = mappDB.bulkInsertDBUsingDataAdapter(dtReg, "Regs") 'back it up
+        If Not DataGridViewReg.DataSource Is Nothing Then
+            ButtonShowAll.PerformClick()
+            MsgBox("New Registration data backed up sucessfully")
+        Else
+            MsgBox("Could not back up Registratin data")
+        End If
+
+
     End Sub
 End Class

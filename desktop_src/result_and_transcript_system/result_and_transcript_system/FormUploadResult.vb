@@ -620,33 +620,37 @@ Public Class FormUploadResult
 
 
         Try
+            'use deterministic fixed template approac
+            trialTmpDept = tmpDT.Rows(0).Item(0).Value.ToString
+            trialTmpSession = mappDB.getSessionID(tmpDT.Rows(3).Item(0).ToString)
+            trialTtmpCourseCode = mappDB.getCourseCode(tmpDT.Rows(5).Item(0).ToString)
+
+            trialTtmpCourseCode = trialTtmpCourseCode.Split(";")(1)
             'attempt to get course code dept and other data
+            'For j = 0 To snRow - 1
+            '    For i = 0 To tmpDT.Columns.Count - 1
+            '        'TODO: test for null to avoid errors
+            '        If tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("DEPARTMENT") Then
+            '            'note it
+            '            trialTmpDept = mappDB.getDeptName(tmpDT.Rows(j).Item(i).Value.ToString)
+            '        ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("COURSE") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains(":") Then
+            '            trialTtmpCourseCode = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
+            '        ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("LEVEL") Then
+            '            trialTtmpLevel = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
+            '        ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/") Then
+            '            trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+            '        ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("SESSION") Then
+            '            trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+            '        ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/201") Then '201X eg 2019 2018
+            '            trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
+            '            'todo: fix millenum kind of bug after 2050. e.g for i=205 to 999 if contains i.tostring
+            '        ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/202") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("203") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("204") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("205") Then '202X eg 2020 2021
+            '            trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
 
-
-            For j = 0 To snRow - 1
-                For i = 0 To tmpDT.Columns.Count - 1
-                    'TODO: test for null to avoid errors
-                    If tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("DEPARTMENT") Then
-                        'note it
-                        trialTmpDept = mappDB.getDeptName(tmpDT.Rows(j).Item(i).Value.ToString)
-                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("COURSE") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains(":") Then
-                        trialTtmpCourseCode = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
-                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("LEVEL") Then
-                        trialTtmpLevel = mappDB.getCourseCode(tmpDT.Rows(j).Item(i).ToString)
-                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/") Then
-                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
-                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("SESSION") Then
-                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
-                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/201") Then '201X eg 2019 2018
-                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
-                        'todo: fix millenum kind of bug after 2050. e.g for i=205 to 999 if contains i.tostring
-                    ElseIf tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("/202") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("203") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("204") Or tmpDT.Rows(j).Item(i).ToString.ToUpper.Contains("205") Then '202X eg 2020 2021
-                        trialTmpSession = mappDB.getSessionID(tmpDT.Rows(j).Item(i).ToString)
-
-                    Else
-                    End If
-                Next
-            Next
+            '        Else
+            '        End If
+            '    Next
+            'Next
 
 
             'If dictAllCourseCodeKeyAndCourseLevelVal.Count = 0 Then
@@ -678,7 +682,7 @@ Public Class FormUploadResult
 
             For Each item In arrDept
                 If trialTmpDept.ToUpper.Contains(item.ToString.ToUpper) Then
-                    tmpDept = item.ToString
+                    tmpDept = mappDB.getDeptID(item.ToString)
                     Exit For
                 End If
             Next

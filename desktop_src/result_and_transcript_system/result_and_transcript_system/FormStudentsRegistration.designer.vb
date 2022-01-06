@@ -195,7 +195,7 @@ Partial Class FormStudentsRegistration
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(2288, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(656, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2

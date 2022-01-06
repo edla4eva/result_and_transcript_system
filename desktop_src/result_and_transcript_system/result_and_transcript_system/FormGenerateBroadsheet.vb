@@ -5,6 +5,9 @@ Public Class FormGenerateBroadsheet
     Dim session_idr As String = "2018/2019"
     Dim course_level = "300"
 
+    Dim strRegisteredStudents As String() = {}
+    Dim strParamsSessionDeptLevel As String()
+
     Dim footers(3) As String
     Dim retFileName As String = ""
 
@@ -29,15 +32,7 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonProcessBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonProcessBroadsheet.Click
-        Dim dLevel As String
         Try
-            TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
-            dLevel = TextBoxLevel.Text
-            If dLevel = "Yr.1" Then
-                dLevel = "100"
-            ElseIf dLevel = "Yr.2" Then
-                dLevel = "200"
-            End If
             footers(0) = TextBoxCourseAdviser.Text
             footers(1) = TextBoxDean.Text
             footers(2) = TextBoxHOD.Text
@@ -45,19 +40,19 @@ Public Class FormGenerateBroadsheet
             ButtonProcessBroadsheet.Enabled = False
             TimerBS.Enabled = True
             TimerBS.Start()
-            session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
-            course_level = dLevel '.SelectedItem.ToString  'not databound
-            course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
+            'session_idr = TextBoxSession.Text 'ComboBoxSessions.SelectedItem.ToString
+            'course_level = dLevel '.SelectedItem.ToString  'not databound
+            'course_dept_idr = mappDB.getDeptID(TextBoxDepartment.Text)
             objBroadsheet.DeptId = course_dept_idr
+            objBroadsheet.Level = course_level
+            objBroadsheet.Session = session_idr
 
-            objBroadsheet.Level = dLevel
-            objBroadsheet.Session = TextBoxSession.Text
             If CheckBoxSecondSemester.Checked Then
                 objBroadsheet.broadsheetSemester = 2
             Else
                 objBroadsheet.broadsheetSemester = 1
             End If
-            objBroadsheet.departmentName = TextBoxDepartment.Text
+            objBroadsheet.DepartmentName = mappDB.getDeptName(course_dept_idr)
             objBroadsheet.FacultyName = "Faculty of Engineering"    'TODO: remove hard code
             objBroadsheet.SchoolName = "University of Benin"
 
@@ -328,19 +323,12 @@ Public Class FormGenerateBroadsheet
 
     Private Sub FormGenerateBroadsheet_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
-        Dim dLevel As String
-        TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
-        dLevel = TextBoxLevel.Text
-        If dLevel = "Yr.1" Then
-            dLevel = "100"
-        ElseIf dLevel = "Yr.2" Then
-            dLevel = "200"
-        End If
+
         'Me.TextBoxTemplateFileName.Text = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
         Me.ButtonProcessBroadsheet.Enabled = False
         Me.ButtonExportToExcel.Enabled = False
         Me.ButtonExportPDF.Enabled = False
-        bgwLoad.RunWorkerAsync(dLevel)
+        bgwLoad.RunWorkerAsync()
     End Sub
 
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
@@ -509,10 +497,6 @@ Public Class FormGenerateBroadsheet
         Else
             Exit Sub
         End If
-        Dim dLevel As String
-        TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
-        dLevel = TextBoxLevel.Text
-
         If DataGridViewBroadSheet.DataSource Is Nothing Then
             Exit Sub
         Else
@@ -528,7 +512,7 @@ Public Class FormGenerateBroadsheet
 
         'get broadsheetDatta from result and students table
         Dim tmpPARAM As Integer = 0
-        objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & dLevel & ".xlsx"
+        objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & course_level & ".xlsx"
 
         If RadioButtonScores.Checked = True Then
                 If CheckBoxSecondSemester.Checked = True And CheckBoxFirsrSemester.Checked = False Then
@@ -538,16 +522,16 @@ Public Class FormGenerateBroadsheet
                 Else
                     tmpPARAM = (BGW_EXPORT_EXCEL_ALL_SEM_SCORES)
                 End If
-                If dLevel.Contains("Yr.") Then
-                    tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
-                End If
-            Else
+            If RadioButtonDIP.Checked Then
+                tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
+            End If
+        Else
                 If dvGrades Is Nothing Then ButtonGrades.PerformClick() 'todo: call function computeGrades
                 tmpPARAM = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + tmpPARAM
-                If dLevel.Contains("Yr.") Then
-                    tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
-                End If
+            If RadioButtonDIP.Checked Then
+                tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
             End If
+        End If
 
         If Me.RadioButtonUseExcel.Checked = True Or Me.RadioButtonUseExcelWithFormula.Checked = True Then
             objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm"
@@ -572,70 +556,56 @@ Public Class FormGenerateBroadsheet
         End Try
     End Sub
 
-    Private Sub ComboBoxDepartments_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDepartments.SelectedIndexChanged
-        ' On Error Resume Next 'TextBoxDepartment.Text = ComboBoxDepartments.Items(ComboBoxDepartments.SelectedIndex).ToString()
-        Try
 
-            course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedItem.ToString)
-            TextBoxDepartment.Text = ComboBoxDepartments.SelectedItem.ToString 'its a data view
-        Catch ex As Exception
 
-        End Try
-    End Sub
 
-    Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
-        Dim dLevel As String = ""
 
-        Try
-            TextBoxLevel.Text = ComboBoxLevel.Items(ComboBoxLevel.SelectedIndex).ToString()
-            dLevel = TextBoxLevel.Text
-            If dLevel = "Yr.1" Then
-                dLevel = "100"
-            ElseIf dLevel = "Yr.2" Then
-                dLevel = "200"
-            End If
-            ' bgwCourses.RunWorkerAsync()
-            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel)
-            'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
-            'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
-        Catch ex As Exception
 
-        End Try
-    End Sub
-
-    Private Sub ComboBoxSessions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSessions.SelectedIndexChanged
-        Try
-            TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
-
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
+    Public Function getRegisteredStudents() As String()
+        Dim retList As New List(Of String)
+        Dim tmpDT As DataTable
+        Dim tmpRecordEntry As String = ""
+        tmpDT = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0)
+        If tmpDT.Rows.Count > 0 Then
+            For i = 0 To tmpDT.Rows.Count - 1
+                If dictSessions.ContainsKey(tmpDT.Rows(i).Item("session_idr")) And CInt(tmpDT.Rows(i).Item("level")) > 99 And CInt(tmpDT.Rows(i).Item("dept_idr")) >= 0 Then
+                    tmpRecordEntry = tmpDT.Rows(i).Item("session_idr") & "," & mappDB.getDeptName(tmpDT.Rows(i).Item("dept_idr")) & "," & tmpDT.Rows(i).Item("level")
+                    retList.Add(tmpRecordEntry)
+                End If
+            Next
+        End If
+        'todo: list all regs in Regs and call a function to use the reg if it is selected
+        Return retList.ToArray
+    End Function
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         getDeptSessionsIntoDictionaries()
+        strRegisteredStudents = getRegisteredStudents()
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
         Me.ButtonProcessBroadsheet.Enabled = True
         Me.ButtonExportToExcel.Enabled = True
         Me.ButtonExportPDF.Enabled = True
-        'for dictonaries
+
+        If strRegisteredStudents.Count > 0 Then
+            ComboBoxRegisteredStudents.Items.Clear()
+            ComboBoxRegisteredStudents.Items.AddRange(strRegisteredStudents)
+            ComboBoxRegisteredStudents.SelectedIndex = 0
+
+            strParamsSessionDeptLevel = ComboBoxRegisteredStudents.SelectedItem.ToString.Split(",")
+            course_level = strParamsSessionDeptLevel(0)
+            course_dept_idr = mappDB.getDeptID(strParamsSessionDeptLevel(1))
+            session_idr = strParamsSessionDeptLevel(2)
+        Else
+            ComboBoxRegisteredStudents.Items.Clear()
+            ComboBoxRegisteredStudents.Text = "NO REGISTERED STUDENTS"
+            course_level = 100
+            course_dept_idr = 1
+            session_idr = "2018/2019"
+        End If
 
 
-        ComboBoxDepartments.Items.Clear()
-        For Each key In dictDepts.Keys
-            ComboBoxDepartments.Items.Add(dictDepts(key))
-        Next
-        TextBoxDepartment.Text = ComboBoxDepartments.Items(0).ToString
-        ComboBoxDepartments.SelectedIndex = 0
 
-        ComboBoxSessions.Items.Clear()
-        For Each key In dictSessions.Keys
-            ComboBoxSessions.Items.Add(dictSessions(key))
-        Next
-        TextBoxSession.Text = ComboBoxSessions.Items(0).ToString
-        ComboBoxSessions.SelectedIndex = 0
 
 
     End Sub
@@ -666,7 +636,7 @@ Public Class FormGenerateBroadsheet
 
 
 
-    Private Sub ButtonAddSession_Click(sender As Object, e As EventArgs) Handles ButtonAddSession.Click
+    Private Sub ButtonAddSession_Click(sender As Object, e As EventArgs)
         FormAddNewStuff.ShowDialog()
         ' FormAddNewStuff.AddEm()
         'FormAddNewStuff.AddEm()
@@ -709,7 +679,7 @@ Public Class FormGenerateBroadsheet
 
     End Sub
 
-    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles Label4.Click
+    Private Sub Label4_Click(sender As Object, e As EventArgs)
 
     End Sub
 
@@ -735,6 +705,23 @@ Public Class FormGenerateBroadsheet
             showGrades()
         End If
 
+    End Sub
+
+    Private Sub ComboBoxRegisteredStudents_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxRegisteredStudents.SelectedIndexChanged
+        Try
+
+            strParamsSessionDeptLevel = ComboBoxRegisteredStudents.SelectedItem.ToString.Split(",") 'session,dep,level
+            course_level = strParamsSessionDeptLevel(2)
+            course_dept_idr = mappDB.getDeptID(strParamsSessionDeptLevel(1))
+            session_idr = strParamsSessionDeptLevel(0)
+
+            ' bgwCourses.RunWorkerAsync()
+            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)
+
+            'todo: validations
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub UpgradeWith2MarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith2MarksToolStripMenuItem.Click

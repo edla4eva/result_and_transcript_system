@@ -437,7 +437,7 @@ Public Class ClassBroadsheets
                 tmpStr = ""
                 If dictCoursesOrderSS.ContainsKey(j + 1) Then tmpStr = dictCoursesOrderSS(j + 1)
                 If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
-                    dt.Columns(colStartPos + MAX_COURSES_1 + 4 + j).ColumnName = tmpStr
+                    dt.Columns(colStartPos + MAX_COURSES_1 + 4 + j).ColumnName = tmpStr 'todo: avoid error columnName already exists
                     courses(colStartPos + MAX_COURSES_1 + NUM_COLS_BETWEEN_COURSES_1_AND_COURSES_2 + j) = tmpStr
                 End If
             Next

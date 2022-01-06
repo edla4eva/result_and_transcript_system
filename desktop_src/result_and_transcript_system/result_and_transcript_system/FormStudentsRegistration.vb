@@ -82,7 +82,7 @@ Public Class FormStudentsRegistration
                 End If
             Next
         ElseIf dgvStudents.Rows.Count > 0 And dGrid = "Students" Then
-
+            dgvStudents.Columns("matno").Frozen = True
             For Each col As DataGridViewColumn In dgvStudents.Columns
                 col.Width = 50
                 If col.HeaderText = "matno" Then
@@ -417,15 +417,16 @@ Public Class FormStudentsRegistration
 
     Private Sub dgvStudents_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvStudents.RowsAdded
         On Error Resume Next
-        'For Each row As DataGridViewRow In Me.dgvStudents.Rows
-        '    If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
-        '        row.DefaultCellStyle.BackColor = Color.White
+        dgvStudents.Rows(e.RowIndex).Cells("session_idr") = ComboBoxSessions.SelectedItem
 
-        '    ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
-        '        row.DefaultCellStyle.BackColor = Color.PaleVioletRed
+        dgvStudents.Rows(e.RowIndex).Cells("status").Value = CATEGORY_DESCRIPTION_REGISTERED
+        dgvStudents.Rows(e.RowIndex).Cells("level").Value = ComboBoxLevel.SelectedItem
+        dgvStudents.Rows(e.RowIndex).Cells("dept_idr").Value = mappDB.getDeptID(ComboBoxDepartments.SelectedItem)
 
-        '    End If
-        'Next
+        dgvStudents.Rows(e.RowIndex).Cells("mode_of_entry").Value = MODE_OF_ENTRY_UME
+
+
+
     End Sub
     Private Sub dgvStudents_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.RowEnter
         On Error Resume Next
@@ -944,15 +945,24 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub dgvStudents_RowStateChanged(sender As Object, e As DataGridViewRowStateChangedEventArgs) Handles dgvStudents.RowStateChanged
-        ' If dgvStudents.Rows.dirty
-        'If tmpDS.Tables("Students").Rows.Count > 0 And dgvStudents.SelectedRows.Count > 0 Then
+        Try
 
-        '    filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
-        '    CaptureCourses()
+            'For i = 0 To dgvStudents.Rows.Count - 1
+            '    If Not dgvStudents.Rows(i).Cells.Item("CourseCode_1").Value.ToString = "" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.Green
+            '    ElseIf Not dgvStudents.Rows(i).Cells.Item("CourseCode_2").Value.ToString = "" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.Green
+            '    ElseIf dgvStudents.Rows(i).Cells.Item("Fees_Status").Value.ToString = "Yes" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.White
+            '    ElseIf dgvStudents.Rows(i).Cells.Item("Fees_Status").Value.ToString = "No" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.Pink
 
+            '    End If
+            'Next
 
-        '    updatePix()
-        'End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub ButtonCancelReg_Click(sender As Object, e As EventArgs) Handles ButtonCancelReg.Click
