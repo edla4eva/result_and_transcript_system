@@ -978,7 +978,12 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("gpa900") = "0.000"
             dt.Rows(i).Item("wgpa100") = "0.000"
             gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
-            dt.Rows(i).Item("GPA") = gpa.ToString
+            'MsgBox("Original" & gpa.ToString)
+            'MsgBox("To zero " & Math.Round(gpa, 3, MidpointRounding.AwayFromZero).ToString) 3Dp roundng up
+            'MsgBox("floor " & (Math.Floor(gpa * 1000) / 1000).ToString) '3dp chopping
+
+
+            dt.Rows(i).Item("GPA") = (Math.Floor(gpa * 1000) / 1000).ToString
             objBroadsheet.progressStr = "Computing Failed Courses" & " ..."
             dt.Rows(i).Item("Failed") = getAllFailed(scores, courses, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits registered" & " ..."
@@ -1941,17 +1946,26 @@ Public Class ClassBroadsheets
     Function toNum(str As String) As Integer
         Try
             Dim strR As String = ""
-            Dim i As Integer
+            Dim retVal As Integer = DEFAULT_CODE
+            Dim dSign As Integer = 1
+            If Mid(str, 1, 1) = "-" Then dSign = -1     'take note of sign
             For i = 1 To Len(str)
                 Select Case Asc(Mid(str, i, 1))
                     Case 48 To 57
                         strR = strR & Mid(str, i, 1)
                 End Select
             Next
-            If str = "" Then strR = -4
-            Return CInt(strR)
+            If str = "" Then
+                retVal = DEFAULT_CODE
+            ElseIf str = NR_DISP Then
+                retVal = NR_CODE
+            Else
+                retVal = CInt(strR) * dSign
+            End If
+
+            Return retVal
         Catch ex As Exception
-            Return -4
+            Return DEFAULT_CODE
         End Try
     End Function
     Function IsRegistered(tmpStrCourseCode As String, dictRegistered_n As Dictionary(Of String, String), dMatno As String) As Boolean
@@ -1993,7 +2007,6 @@ Public Class ClassBroadsheets
         Try
             If dScore < 0 Then
                 Return False        'error
-                Exit Function
             ElseIf dScore >= passScore Then
                 Return True
             Else
@@ -2003,25 +2016,8 @@ Public Class ClassBroadsheets
             Return False
         End Try
     End Function
-    Function getRegisteredCourse(dScore As String) As Boolean
-        Try
-            If dScore = "" Or dScore = "NR" Or dScore = "NA" Then
-                Return False        'error
-            ElseIf dScore = "R" Then
-                Return True
-            Else
-                Return True
-            End If
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
 
-    Function getRepeatCourses(scores As String(), dCredit As Integer(), dLevel As Integer, dCourses As String(), dLevelCourses As Dictionary(Of Integer, String)) As String
-        Dim tmpStr As String = ""
 
-        Return -4
-    End Function
     'Function TCP(scores As String(), dCredit As Integer()) As Integer
     '    Dim sumTCP As Integer
     '    Try
@@ -2071,7 +2067,7 @@ Public Class ClassBroadsheets
             Return retVal
 
         Catch ex As Exception
-            Return {-4, -4, -4}
+            Return {DEFAULT_CODE, DEFAULT_CODE, DEFAULT_CODE}
         End Try
     End Function
     'Returns array wrth computd values for
@@ -2111,14 +2107,14 @@ Public Class ClassBroadsheets
         Dim retStr As String = ""
         Dim nLastColInSem_1_ForLevel As Integer = LastColInSem_1_ForLevel(dlevel)
         Dim nLastColInSem_2_ForLevel As Integer = LastColInSem_2_ForLevel(dlevel)
+        Dim currentScore As Integer = DEFAULT_CODE
         Try
             For j = 0 To dScore.Count - 1
-                'If isPassed(toNum(dScore(i))) Then sumTCP = sumTCP + dCredit(i)
+                currentScore = toNum(dScore(j))
                 If j >= COURSE_START_COL And j <= nLastColInSem_1_ForLevel Then 'dScore_1.lenght - 1 Then
-                    'todo: optimize by avoiding the .contains function
-                    If Not isPassed(toNum(dScore(j))) And IsRegisteredScore(toNum(dScore(j))) Then retVal.Add(dCourse(j))
+                    If Not isPassed(currentScore) And IsRegisteredScore(currentScore) And dictCoursesOrderFS.ContainsValue(dCourse(j)) Then retVal.Add(dCourse(j))
                 ElseIf j >= COURSE_START_COL_2 And j <= nLastColInSem_2_ForLevel Then
-                    If Not isPassed(toNum(dScore(j))) And IsRegisteredScore(toNum(dScore(j))) Then retVal.Add(dCourse(j))  'And Not dCourse(j).Contains("ColUNIQUE")
+                    If Not isPassed(currentScore) And IsRegisteredScore(currentScore) And dictCoursesOrderFS.ContainsValue(dCourse(j)) Then retVal.Add(dCourse(j)) 'And Not dCourse(j).Contains("ColUNIQUE")
                 End If
             Next
 

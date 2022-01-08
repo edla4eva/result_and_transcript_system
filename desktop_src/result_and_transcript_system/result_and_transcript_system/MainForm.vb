@@ -82,7 +82,7 @@
 
     'This method changes the form displayed on the panel in the main form
     Private Sub addForm(frm As Form)
-
+        On Error Resume Next
         PanelContainer.Controls.Clear()     'This first clears the panel
         frm.TopLevel = False
         frm.TopMost = True

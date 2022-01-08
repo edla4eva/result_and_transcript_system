@@ -91,6 +91,7 @@ Public Class FormGenerateBroadsheet
             End If
         Catch ex As Exception
             MsgBox("Broadsheet process failed due to an error, see log for details")
+            ButtonProcessBroadsheet.Enabled = True
             logError(ex.ToString)
         End Try
     End Sub
@@ -133,9 +134,9 @@ Public Class FormGenerateBroadsheet
     Public Sub createBroadsheetTables()
         Dim strSQL As String
         Try
-            strSQL = "Create Table Broadsheet500 ("
+            strSQL = "Create Table Broadsheet_all ("
             For i = 0 To LAST_COL + 5 'broadshetCols+ headings(comma seperated), session, dept, level,CA,HOD,Dean,Summary1(comma seperated)
-                If i = 6 Or i = 81 Then
+                If i = REPEATED_1_COL Or i = REPEATED_1_COL Or i = REPEATED_ALL_COL Or i = COURSE_FAIL_COL Then
                     strSQL += "[" & "Col" & i.ToString & "] " & "varchar(500)" & ","    'repeated courses
                 Else
                     strSQL += "[" & "Col" & i.ToString & "] " & "varchar(50)" & ","
@@ -363,7 +364,7 @@ Public Class FormGenerateBroadsheet
             If objBroadsheet.broadsheetDataDS.Tables(0).Columns(0).ColumnName.Contains("Error") Then
                 DataGridViewBroadSheet.DataSource = objBroadsheet.broadsheetDataDS.Tables(0).DefaultView
                 DataGridViewBroadSheet.Columns(0).Width = 340
-                'DataGridViewBroadSheet.Columns(1).Frozen = True
+                ButtonProcessBroadsheet.Enabled = True
                 Exit Sub
             ElseIf objBroadsheet.broadsheetDataDS.Tables(0).Rows.Count < 1 Then
                 MsgBox("No broadsheet data generated, students must be registered")
@@ -603,9 +604,11 @@ Public Class FormGenerateBroadsheet
             ComboBoxRegisteredStudents.SelectedIndex = 0
 
             strParamsSessionDeptLevel = ComboBoxRegisteredStudents.SelectedItem.ToString.Split(",")
-            course_level = strParamsSessionDeptLevel(0)
+            session_idr = strParamsSessionDeptLevel(0)
             course_dept_idr = mappDB.getDeptID(strParamsSessionDeptLevel(1))
-            session_idr = strParamsSessionDeptLevel(2)
+            course_level = strParamsSessionDeptLevel(2)
+
+
         Else
             ComboBoxRegisteredStudents.Items.Clear()
             ComboBoxRegisteredStudents.Text = "NO REGISTERED STUDENTS"

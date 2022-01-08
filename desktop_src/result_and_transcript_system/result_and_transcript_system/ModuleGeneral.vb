@@ -945,7 +945,7 @@ Module ModuleGeneral
         lstInsertParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_firstname"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_surname"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_othernames"))
-        lstInsertParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.Integer, 4, "student_dept_idr"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "status"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
@@ -958,8 +958,8 @@ Module ModuleGeneral
         lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
-        lstInsertParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "level"))
-        lstInsertParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.Integer, 4, "level"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.Integer, 4, "dept_idr"))
 
         Return lstInsertParams
     End Function
@@ -971,7 +971,7 @@ Module ModuleGeneral
         lstupdateParams.Add(New OleDb.OleDbParameter("@student_firstname", OleDb.OleDbType.VarChar, 100, "student_firstname"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@student_surname", OleDb.OleDbType.VarChar, 100, "student_surname"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@student_othernames", OleDb.OleDbType.VarChar, 100, "student_othernames"))
-        lstupdateParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.VarChar, 100, "student_dept_idr"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@student_dept_idr", OleDb.OleDbType.Integer, 4, "student_dept_idr"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@status", OleDb.OleDbType.VarChar, 100, "status"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@year_of_entry", OleDb.OleDbType.VarChar, 100, "year_of_entry"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr_of_entry", OleDb.OleDbType.VarChar, 100, "session_idr_of_entry"))
@@ -984,8 +984,8 @@ Module ModuleGeneral
         lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
-        lstupdateParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.VarChar, 100, "level"))
-        lstupdateParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.VarChar, 100, "dept_idr"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.Integer, 4, "level"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.Integer, 4, "dept_idr"))
         Return lstupdateParams
     End Function
     Public Function getParamsFromDatatable(dt As DataTable) As List(Of OleDb.OleDbParameter)
