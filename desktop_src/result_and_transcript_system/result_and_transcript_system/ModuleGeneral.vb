@@ -190,7 +190,7 @@ Module ModuleGeneral
     Public BGW_EXPORT_EXCEL_TEMPLATE_BASE_CONSTANT As Integer = 1000
 
     'scores
-    Public BGW_EXPORT_EXCEL_1ST_SEM_SCORES As Integer = 1
+    Public BGW_EXPORT_EXCEL_1ST_SEM_SCORES As Integer = 1       'todo make it less complicated by removing semester directly set objBroasheet
     Public BGW_EXPORT_EXCEL_2ND_SEM_SCORES As Integer = 2
     Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
     'Grades
@@ -283,6 +283,19 @@ Module ModuleGeneral
     Public STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Reg.MatNo, Last(Results.total) AS Score, Results.course_code_idr, 
                       Results.Session_idr   FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
                       Results.Session_idr HAVING (((Reg.matno)='{0}'));"
+
+    Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Col171,Col172,Col174,count(Col1) FROM broadsheets_all 
+                      WHERE (((Col1)='{0}') AND Not(Col1='matno')) GROUP BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+
+    Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_WITH_COLNAMES_BY_MATNO As String = "SELECT * FROM broadsheets_all 
+                      WHERE (((Col1)='{0}')) ORDER BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+
+    Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_MATNO As String = "SELECT * FROM broadsheets_all 
+                      WHERE (((Col1)='{0}') AND Not(Col1='matno')) ORDER BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+    Public STR_SQL_EXTRACT_COLNAMES_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_COLNAMES_SESSION_DEPT_LEVEL As String = "SELECT * FROM broadsheets_all 
+                      WHERE (((ColNames)='{0}') AND ((Col171)='{1}') AnD ((Col172)='{2}') AnD ((Col174)='{3}') And (Col1='matno')) ORDER BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+
+
     Public STR_SQL_STUDENTS_FULL_NAME As String = "SELECT * FROM Reg WHERE matno='{0}'"
 
     'Import reg students from existing Access sofware

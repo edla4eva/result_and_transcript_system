@@ -432,6 +432,7 @@ Public Class FormStudentsRegistration
         On Error Resume Next
         If e.RowIndex >= 0 Then
             captureReg(e.RowIndex)
+            CapturePicture(dgvStudents.Rows(e.RowIndex).Cells("matno").Value)
         End If
 
     End Sub
@@ -1227,12 +1228,37 @@ Public Class FormStudentsRegistration
                 End If
             Next
             CaptureCourses()
+            CapturePicture(TextBoxMATNO.Text)
             BindingSourceStudents.EndEdit()
         Catch ex As Exception
             logError(ex.ToString)
         End Try
     End Sub
+    Sub CapturePicture(dMATNO As String)
+        Try
 
+
+            Dim TMPileNAME As String = Application.StartupPath & "\photos\" & dMATNO & ".jpg"
+            Dim TMP_PIC_FILE_NAME2 As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\photos\" & dMATNO & ".jpg"
+            Dim tmpileName3 As String = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\photos\" & dMATNO & ".jpg"
+            Dim TMPileNAME4 As String = Application.StartupPath & "\photos\photo_female.jpg"
+
+
+
+
+            If My.Computer.FileSystem.FileExists(TMPileNAME) Then
+                PictureBox1.Image = Image.FromFile(TMPileNAME)
+            ElseIf My.Computer.FileSystem.FileExists(TMP_PIC_FILE_NAME2) Then
+                PictureBox1.Image = Image.FromFile(TMP_PIC_FILE_NAME2)
+            ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
+                PictureBox1.Image = Image.FromFile(tmpileName3)
+            Else
+                PictureBox1.Image = Image.FromFile(TMPileNAME4)
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
     Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
         Try
             'always update  table on save

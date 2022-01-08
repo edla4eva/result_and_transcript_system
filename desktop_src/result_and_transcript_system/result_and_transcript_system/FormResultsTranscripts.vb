@@ -67,7 +67,7 @@ Public Class FormResultsTranscripts
         Try
             mappDB.MATNO = dMATNO
             tmpDSStudent = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
-            dgvStudents.DataSource = tmpDSStudent.Tables(0).DefaultView
+            dgvStudents.DataSource = tmpDSStudent.Tables(0)
             dgvStudents.Refresh()
             resizeDatagrids("Students")
 
@@ -154,19 +154,49 @@ Public Class FormResultsTranscripts
         Dim tmpDSRegCourses As DataSet
 
         Dim tmpDSResults As New DataSet
+        Dim tmpDSGroupedResults As New DataSet
         Dim tmpDSBroadsheets As New DataSet
+        Dim tmpColNamesDT(1) As DataTable
+        Dim colN, ses, deptN, lvl As String
         Try
             mappDB.MATNO = dMATNO
-            tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
-            tmpDSResults = mappDB.GetDataWhere(String.Format(STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
-            Debug.Print(String.Format(STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
+            '---------MTHD1: bring in the data with the header rows
+            tmpDSResults = mappDB.GetDataWhere(String.Format(STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_WITH_COLNAMES_BY_MATNO, dMATNO), "Results") 'todo
+            'we can them manipulate it in-memory instead of all that crap in MTHD below
 
-            dgvCourses.DataSource = tmpDSRegCourses.Tables(0).DefaultView
-            dgvTranscripts.DataSource = tmpDSResults.Tables(0).DefaultView
+            '---------MTHD2: DO we really need to do these?????
+            ''tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
+            ''tmpDSResults = mappDB.GetDataWhere(String.Format(STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
+            ''tmpDSGroupedResults = mappDB.GetDataWhere(String.Format(STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
+            ''dgvTranscripts.DataSource = tmpDSGroupedResults.Tables(0)
+            ''dgvTranscripts.BringToFront()
+            ''MsgBox("Grouped")
+            ''ReDim tmpColNamesDT(tmpDSGroupedResults.Tables(0).Rows.Count)
+            ''Dim dRow As DataRow
+            ''For i = 0 To tmpColNamesDT.Count - 1
+            ''    colN = tmpDSResults.Tables(0).Rows(0).Item("ColNames") 'NB these colNames  change from session to session
+            ''    ses = tmpDSResults.Tables(0).Rows(0).Item("Col171")
+            ''    deptN = (tmpDSResults.Tables(0).Rows(0).Item("Col172"))
+            ''    lvl = tmpDSResults.Tables(0).Rows(0).Item("Col174")
+            ''    'Debug.Print(String.Format(STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_MATNO, dMATNO))
+            ''    'Debug.Print(String.Format(STR_SQL_EXTRACT_COLNAMES_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_COLNAMES_SESSION_DEPT_LEVEL, dMATNO))
+            ''    Debug.Print(String.Format(STR_SQL_EXTRACT_COLNAMES_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_COLNAMES_SESSION_DEPT_LEVEL, colN, ses, deptN, lvl))
+            ''    'now get the headers
+            ''    tmpColNamesDT(i) = mappDB.GetDataWhere(String.Format(STR_SQL_EXTRACT_COLNAMES_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_COLNAMES_SESSION_DEPT_LEVEL, colN, ses, deptN, lvl), "Results").Tables(0)
+            ''    dgvTranscripts.DataSource = tmpColNamesDT(i)
 
-            dgvCourses.Refresh()
+            ''    MsgBox("Col Name" & i)
+            ''    dRow = tmpDSResults.Tables(0).Rows.Add("mock")
+            ''    For j = 0 To tmpColNamesDT(i).Columns.Count - 1
+            ''        dRow.Item(j) = tmpColNamesDT(i).Rows(0).Item(j).ToString
+            ''    Next
+            ''    'tmpDSResults.Tables(0).Rows.InsertAt(drow, 0)
+            ''Next
+
+
+            dgvTranscripts.DataSource = tmpDSResults.Tables(0)
+
             dgvTranscripts.Refresh()
-
             resizeDatagrids("courses")
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -184,8 +214,8 @@ Public Class FormResultsTranscripts
             tmpDSResults = mappDB.GetDataWhere(String.Format(STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
             Debug.Print(String.Format(STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
 
-            dgvCourses.DataSource = tmpDSRegCourses.Tables(0).DefaultView
-            dgvTranscripts.DataSource = tmpDSResults.Tables(0).DefaultView
+            dgvCourses.DataSource = tmpDSRegCourses.Tables(0)
+            dgvTranscripts.DataSource = tmpDSResults.Tables(0)
 
             dgvCourses.Refresh()
             dgvTranscripts.Refresh()
@@ -279,8 +309,12 @@ Public Class FormResultsTranscripts
         objReports.MATNO = "ENG0000001" 'TODO
         If dgvStudents.Rows.Count > 0 Then
             getGPCard(dgvStudents.Rows(0).Cells("matno").Value.ToString)
-            Dim dv As DataView = dgvTranscripts.DataSource
-            objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCard, dv.ToTable)
+            Dim dt As DataTable
+            If Not dgvTranscripts.DataSource Is Nothing Then
+                dt = dgvTranscripts.DataSource
+                objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCard, dt)
+
+            End If
         End If
         ReportViewerGPCard.BringToFront()
     End Sub

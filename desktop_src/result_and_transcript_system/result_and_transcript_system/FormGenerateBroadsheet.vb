@@ -527,12 +527,15 @@ Public Class FormGenerateBroadsheet
 
         If RadioButtonScores.Checked = True Then
                 If CheckBoxSecondSemester.Checked = True And CheckBoxFirsrSemester.Checked = False Then
-                    tmpPARAM = BGW_EXPORT_EXCEL_1ST_SEM_SCORES
-                ElseIf CheckBoxSecondSemester.Checked = False And CheckBoxSecondSemester.Checked = True Then
-                    tmpPARAM = (BGW_EXPORT_EXCEL_1ST_SEM_SCORES)
-                Else
-                    tmpPARAM = (BGW_EXPORT_EXCEL_ALL_SEM_SCORES)
-                End If
+                tmpPARAM = BGW_EXPORT_EXCEL_1ST_SEM_SCORES
+                objBroadsheet.broadsheetSemester = 1
+            ElseIf CheckBoxSecondSemester.Checked = False And CheckBoxSecondSemester.Checked = True Then
+                tmpPARAM = (BGW_EXPORT_EXCEL_1ST_SEM_SCORES)
+                objBroadsheet.broadsheetSemester = 2
+            Else
+                tmpPARAM = (BGW_EXPORT_EXCEL_ALL_SEM_SCORES)
+                objBroadsheet.broadsheetSemester = 2
+            End If
             If RadioButtonDIP.Checked Then
                 tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
             End If
@@ -549,6 +552,11 @@ Public Class FormGenerateBroadsheet
             tmpPARAM = BGW_EXPORT_EXCEL_TEMPLATE_BASE_CONSTANT + tmpPARAM
         End If
 
+        If CheckBoxSecondSemester.Checked Then
+            objBroadsheet.broadsheetSemester = 2
+        Else
+            objBroadsheet.broadsheetSemester = 1
+        End If
         bgwExportToExcel.RunWorkerAsync(tmpPARAM)
 
     End Sub

@@ -109,6 +109,8 @@ Public Class ClassExcelFile
 
         styleMediumBorderCenter = workbook.CreateCellStyle()
         styleMediumBorderCenter.Alignment = HorizontalAlignment.Center
+        styleMediumBorderCenter.WrapText = True
+        styleMediumBorderCenter.VerticalAlignment = VerticalAlignment.Center
         styleMediumBorderCenter.SetFont(dFont)
 
         '# Insert values for header
@@ -192,7 +194,7 @@ Public Class ClassExcelFile
 
                 If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FULLNAME") Then rowHeaders.GetCell(jCol).SetCellValue("NAME OF CANDIDATE (SURNAME LAST AND IN BLOCK LETTERS)")
                 If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then rowHeaders.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then row1.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
+                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
                 'TCP_1_COL
                 If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCP_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCP (1st Sem)")
                 If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCF_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCF (1st Sem)")
@@ -248,6 +250,8 @@ Public Class ClassExcelFile
         styleMediumBorder.BorderTop = BorderStyle.Medium
         styleMediumBorder.BorderBottom = BorderStyle.Medium
         styleMediumBorder.VerticalAlignment = VerticalAlignment.Center
+        styleMediumBorder.Alignment = HorizontalAlignment.Center
+        styleMediumBorder.WrapText = True
 
         styleMediumBorderVertical = workbook.CreateCellStyle()
         styleMediumBorderVertical.Alignment = HorizontalAlignment.Center
@@ -261,7 +265,14 @@ Public Class ClassExcelFile
         rowCourseCodes = sheet1.GetRow(ROW_HEADER + 1)
         rowCredits = sheet1.GetRow(ROW_CREDIT)  '8=row 9
 
+        rowHeaders.GetCell(SN_COL).CellStyle = styleMediumBorder 'horzontal
+        rowHeaders.GetCell(MATNO_COL).CellStyle = styleMediumBorder 'horzontal
+        rowHeaders.GetCell(FULLNAME_COL).CellStyle = styleMediumBorder 'horzontal
+        rowHeaders.GetCell(REPEATED_ALL_COL).CellStyle = styleMediumBorder 'horzontal
+        rowHeaders.GetCell(REPEATED_1_COL).CellStyle = styleMediumBorder 'horzontal
+        rowHeaders.GetCell(REPEATED_2_COL).CellStyle = styleMediumBorder 'horzontal
         rowHeaders.GetCell(COURSE_FAIL_COL).CellStyle = styleMediumBorder 'horzontal
+
         rowHeaders.GetCell(TCP_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
         rowHeaders.GetCell(TCP_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
         rowHeaders.GetCell(TCF_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
@@ -290,18 +301,19 @@ Public Class ClassExcelFile
             For jCol = 0 To dt.Columns.Count - 1
                 rowResults.Cells(jCol).CellStyle = (style)
                 rowCourseCodes.Cells(jCol).CellStyle = (styleMediumBorderVertical)
-                If jCol >= COURSE_START_COL Then row1.Cells(jCol).CellStyle = styleCenter
+                If jCol >= COURSE_START_COL Then rowResults.Cells(jCol).CellStyle = styleCenter
                 'If jCol = GPA_COL Then row1.Cells(jCol).CellStyle = style
                 'If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
                 'ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
                 'End If
+                If iRow = rowCredits.RowNum Then rowCredits.GetCell(jCol).CellStyle = styleMediumBorder 'horzontal
             Next
             'style
             rowResults.GetCell(FULLNAME_COL).CellStyle = styleWrap   'ColC name
             rowResults.GetCell(4).CellStyle = styleWrap
             rowResults.GetCell(REPEATED_ALL_COL).CellStyle = styleWrap   'repeated
             rowResults.GetCell(7).CellStyle = styleWrap
-            rowResults.GetCell(COURSE_FAIL_COL).CellStyle = styleWrap
+
         Next
         'TODO: Get footer fro db category table NO dont do any database call here
         Dim dtCateGory As DataTable = objBroadsheet.dtCategory
@@ -355,7 +367,9 @@ Public Class ClassExcelFile
         End If
 
         'OR
-        Dim rowFooter As IRow
+        Dim rowFooter, rowHashCodesInfo As IRow
+        rowFooter = sheet1.CreateRow(dt.Rows.Count + ALL_HEADERS_COUNT + 1)
+
         For i = 0 To 9
             rowFooter = sheet1.CreateRow(dt.Rows.Count + ALL_HEADERS_COUNT + i + 1)    'account for 9 header rows
             rowFooter.CreateCell(FULLNAME_COL).SetCellValue(strFooter(i))
@@ -372,9 +386,9 @@ Public Class ClassExcelFile
         'setFomula(sheet1, cell, "D2+D3+6")
 
         setWidthHeight(sheet1)   'todo test
+        setFormatPerSemesterThenPerLevel(sheet1, objBS.broadsheetSemester, objBS.Level, dt.Columns.Count - 1)
 
-        setFormatPerLevel(sheet1, objBS.Level, dt.Columns.Count - 1)
-        setFormatPerSemester(sheet1, objBS.broadsheetSemester)
+
 
         'sheet1.setRepeatingRows(CellRangeAddress.ValueOf("1:2")) ' Set repeating rows For printing
         '        // set print setup; fit all columns to one page width
@@ -383,6 +397,14 @@ Public Class ClassExcelFile
         'PrintSetup printSetup = sheet.getPrintSetup();
         'printSetup.setFitHeight((Short)0);
         'printSetup.setFitWidth((Short)1);
+        sheet1.PrintSetup.FitHeight = 9999
+        'sheet1.PrintSetup.FitWidth = 1
+        sheet1.SetRowBreak(rowFooter.RowNum + footers.Count)
+        rowHashCodesInfo = sheet1.CreateRow(rowFooter.RowNum + footers.Count + 5)
+        rowHashCodesInfo.CreateCell(FULLNAME_COL).SetCellValue("Auto generated Info:" & dt.Rows.Count & "Students; " & Now.Ticks.ToString & "; " & "(special code used to verify authenticity of results only availiable in commercial version)")
+        sheet1.RepeatingRows = New CellRangeAddress(rowHeaders.RowNum - 1, rowCredits.RowNum, 0, LAST_COL)
+
+
 
         If showGrades = True Then
             dtGrades = dvGrades.ToTable
@@ -408,6 +430,17 @@ Public Class ClassExcelFile
 
             Next
         End If
+
+        'todo: finally delete are unused columns here
+        For iRow = 0 To dt.Rows.Count - 1
+            row1 = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
+            For jCol = 0 To dt.Columns.Count - 1
+                If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL_2 Then
+                    'sheet1.deletecol 'row1.CreateCell(jCol).SetCellValue("S/N")
+
+                End If
+            Next
+        Next
 
         'save work
         'todo: if file exists(fileName) create new filename
@@ -521,7 +554,7 @@ Public Class ClassExcelFile
     End Sub
     'TODO: Create UI settings form and mae all these configurations accessible to user
     'on apply settings, objects are created with these settings appled
-    Public Function setFormatPerSemester(sheet1 As ISheet, dSem As Integer) As Boolean
+    Public Function setFormatPerSemesterThenPerLevel(sheet1 As ISheet, dSem As Integer, dLevel As Integer, lastExtraCol As Integer) As Boolean
         Select Case dSem
             Case 1  'First emester broadsheet
                 'hide all second semester courses
@@ -536,27 +569,41 @@ Public Class ClassExcelFile
                 hideCols(sheet1, TCF_COL)
                 hideCols(sheet1, GPA_COL)
                 hideCols(sheet1, STATUS_COL)
-                hideCols(sheet1, REPEATED_ALL_COL)
+
+                showCols(sheet1, REPEATED_1_COL) 'show 1st sm repeat
                 hideCols(sheet1, REPEATED_2_COL)
+                hideCols(sheet1, REPEATED_ALL_COL)  'affected by level also
                 hideCols(sheet1, CLASS_COL)
                 hideCols(sheet1, SESSION_COL)
-
-                sheet1.SetColumnHidden(REPEATED_1_COL, True)'show first sem repeat
-            Case 2
+                'it also depends on level
+                Select Case dLevel
+                    Case 100
+                        hideCols(sheet1, REPEATED_ALL_COL)
+                    Case 200
+                    Case 300
+                    Case 400
+                    Case 500
+                        hideCols(sheet1, GPA_COL)   'show em
+                        hideCols(sheet1, CLASS_COL)
+                End Select
+            Case 2  'Second semester included 
                 hideCols(sheet1, REPEATED_1_COL)
+                hideCols(sheet1, REPEATED_2_COL)
+                showCols(sheet1, REPEATED_ALL_COL)  'also deal with thi in level 
+                'it also depends on level
+                Select Case dLevel
+                    Case 100
+                        hideCols(sheet1, REPEATED_ALL_COL)
+                    Case 200
+                    Case 300
+                    Case 400
+                    Case 500
+                        showCols(sheet1, GPA_COL)   'show em
+                        showCols(sheet1, CLASS_COL)
+                End Select
         End Select
-        Return True
-    End Function
-    Public Function setFormatPerLevel(sheet1 As ISheet, dLevel As Integer, lastExtraCol As Integer) As Boolean
-        'Hide unused columns such as extra cols for courses '0=A, 1=B, 2=C, 3=D but the Enum has a base of 1
-        hideCols(sheet1, OTHER_NAMES_COL)
-        hideCols(sheet1, SURNAME_COL)
 
-
-        For x = LAST_COL To lastExtraCol
-            hideCols(sheet1, x)
-        Next
-        'ColG is repeated course wrap;  'col H to AG 100-400L courses; 'colAG = colz+colg; 'colBJ = colz + colz + colj
+        'Now lets format per level
         For x = COURSE_START_COL To LAST_COL   ' ExcelColumns.colH To (ExcelColumns.colZ * 4 + ExcelColumns.colP) - 1    'H-DP
             If sheet1.GetRow(COURSE_CODE_HEADER).Cells(x).StringCellValue.Contains("ColUNIQUE") Then
                 hideCols(sheet1, x)
@@ -567,29 +614,20 @@ Public Class ClassExcelFile
                 End If
             End If
         Next
-
-
-        sheet1.SetColumnHidden(GPA_COL, False)
-        Select Case dLevel
-            Case 100
-                sheet1.SetColumnHidden(REPEATED_ALL_COL, False)
-            Case 200
-
-            Case 300
-            Case 400
-                'all 2nd sem
-
-            Case 500
-                sheet1.SetColumnHidden(GPA_COL, True)
-                sheet1.SetColumnHidden(CLASS_COL, True)
-                sheet1.SetColumnHidden(GPA_COL, True)
-        End Select
-
+        hideCols(sheet1, OTHER_NAMES_COL)
+        hideCols(sheet1, SURNAME_COL)
+        For x = LAST_COL To lastExtraCol
+            hideCols(sheet1, x)
+        Next
+        showCols(sheet1, GPA_COL)     'todo hide it later, lets just enjoy the cool effect for now
         'Cos we may have missed
-        sheet1.SetColumnHidden(MATNO_COL, True)       'always show this
-        sheet1.SetColumnHidden(COURSE_FAIL_COL, True)       'always show this
+        showCols(sheet1, MATNO_COL)      'always show this
+        showCols(sheet1, COURSE_FAIL_COL)       'always show this
+
         Return True
     End Function
+
+
     Public Function setWidthHeight(sheet1 As ISheet) As Boolean
         'set the width of columns
         sheet1.SetColumnWidth(SN_COL, 5 * 256)   'colA   sn
@@ -613,7 +651,7 @@ Public Class ClassExcelFile
         sheet1.SetColumnWidth(GPA_COL, 6 * 256)  'GPA
         sheet1.SetColumnWidth(SESSION_COL, 12 * 256)  'GPA
 
-        sheet1.GetRow(COURSE_CODE_HEADER).Height = (6 * 256)    'bcos its vertically aligned NOTE different scale from width
+        sheet1.GetRow(COURSE_CODE_HEADER).Height = (4 * 256)    'bcos its vertically aligned NOTE different scale from width
         Return True
     End Function
     Public Function mergeCells(sheet As ISheet, cell As ICell, fRow As Integer, lRow As Integer, fCol As Integer, lCol As Integer) As Boolean
@@ -638,6 +676,9 @@ Public Class ClassExcelFile
     End Function
     Public Sub hideCols(s As ISheet, colNum As Integer)
         s.SetColumnHidden(colNum, True)
+    End Sub
+    Public Sub showCols(s As ISheet, colNum As Integer)
+        s.SetColumnHidden(colNum, False)
     End Sub
     Public Sub hideRows(s As ISheet, colNum As Integer)
         Dim r1 As IRow = s.GetRow(0)
