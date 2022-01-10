@@ -185,6 +185,33 @@ Public Class ClassDB
             Return Nothing
         End Try
     End Function
+    'todo: problem with function if dTableName(i) is Nothing or empty or invalid 
+    Public Function BatchGetDataWhere(dstrSQL As String(), dTableName As String()) As DataSet
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
+                Dim dt(dstrSQL.Count) As DataTable
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL(0), xConn)
+                Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
+                Dim myDataSet As DataSet = New DataSet
+                For i = 0 To dstrSQL.Count
+                    cmdLocal = New OleDb.OleDbCommand(dstrSQL(i), xConn)
+                    myDA = New OleDb.OleDbDataAdapter(cmdLocal)
+                    myDA.Fill(myDataSet, dTableName(i))
+                Next
+
+                'dgw.DataSource = myDataSet.Tables("Result").DefaultView
+                Return myDataSet
+                xConn.Close()
+            End Using
+        Catch ex As Exception
+            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
+            'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return Nothing
+        End Try
+    End Function
 
     Public Function GetDataWhereCloud(dstrSQL As String, Optional dTableName As String = "Table") As DataSet
         Dim retVal As DataSet = Nothing
@@ -258,7 +285,7 @@ Public Class ClassDB
         Return returnVal
     End Function
     Public Function doQuery(dstrSQL As String) As Boolean
-        Dim returnVal As String = ""
+        Dim returnVal As Boolean = False
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
                 xConn.ConnectionString = getCorrectConnectionstring()
@@ -267,12 +294,13 @@ Public Class ClassDB
                 cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
                 closeConn(xConn) 'safely close it
             End Using
-            Return True
+            returnVal = True
         Catch ex As Exception
-            Return False
+            returnVal = False
             logError("Database access problem, connect and try again" & vbCrLf & ex.Message)
             ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+        Return returnVal
 
     End Function
 
@@ -366,28 +394,34 @@ Public Class ClassDB
         Return table
     End Function
 
-    Public Function bulkInsertDB(dt As DataTable, strSQL As String, tmpTableName As String) As DataTable
-        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            xConn.ConnectionString = getCorrectConnectionstring()
-            xConn.Open()
-            Dim cmd As OleDbCommand = New OleDbCommand(strSQL, xConn)
-            Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd)
-            cmd.ExecuteNonQuery()
+    Public Function bulkInsertDBUsingDataAdapter(dt As DataTable, tmpTableName As String) As DataTable
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
+                'Pull the table records and insert new
+                Using adapter = New OleDbDataAdapter("SELECT * FROM " & tmpTableName, xConn)
+                    Using builder = New OleDbCommandBuilder(adapter)
+                        'builder.QuotePrefix = "["
+                        'builder.QuoteSuffix = "]"
+                        'adapter.InsertCommand = builder.GetInsertCommand()
+                        If dt.HasErrors Then
+                            MsgBox("Some errors are contained in records: " & dt.GetErrors(0).ToString)
+                            dt = Nothing
+                        Else
+                            adapter.Update(dt)
+                        End If
 
-            closeConn(cmd.Connection)
-
-            'Pull the table records and insert new
-            Using adapter = New OleDbDataAdapter("SELECT * FROM " & tmpTableName, xConn)
-
-                Using builder = New OleDbCommandBuilder(adapter)
-                    'adapter.InsertCommand = builder.GetInsertCommand()
-                    adapter.Update(dt)
+                    End Using
                 End Using
-                closeConn(adapter.SelectCommand.Connection)
+                closeConn(xConn)
             End Using
-            closeConn(xConn)
-        End Using
-        Return dt
+            Return dt
+
+        Catch ex As Exception
+            Return Nothing
+            'todo return datatable wit error info
+        End Try
     End Function
     Public Function changeUserPassword(usr As String, pass As String) As Boolean
         Dim retVal As Boolean
@@ -412,43 +446,6 @@ Public Class ClassDB
         Dim usrFromDB As String = ""
         usrFromDB = GetRecordWhere(String.Format("SELECT name FROM users WHERE name='{0}' AND password='{1}'", usr, pass))
         If usrFromDB = usr Then Return True Else Return False
-    End Function
-    Public Function manualRegInsertDB(dt As DataTable) As String
-        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            xConn.ConnectionString = getCorrectConnectionstring()
-            xConn.Open()
-            '1. check for duplicates and delete
-            Dim sql As String = ""  'todo: move sql to module
-            'access
-            Dim retFailed As String = "Failed to insert the following records"
-            Dim cmd As New OleDbCommand
-            For Each row As DataRow In dt.Rows
-                'todo: use parameters
-                sql = "INSERT INTO Reg (matno,session_idr,CourseCode_1,CourseCode2, Fees_Status, level,dept_idr) "
-                sql = sql & "VALUES (" & row.Item("matno") & ",'" & row.Item("session_idr") & "','" & row.Item("session_idr") & "'," & row.Item("CourseCode_1") & "," & row.Item("CourseCode_2") & ",'" & row.Item("Fees_Status") & "','" & row.Item("level") & "','" & row.Item("dept_idr") & "');"
-
-                'Debug.Print(sql)
-                cmd = New OleDbCommand(sql, xConn)
-                'cmd.Transaction.Begin()
-                'da = New OleDbDataAdapter(cmd)
-                'da.Update(dt) 'da.fill() this is a promising mthd
-                Try
-                    cmd.ExecuteNonQuery()
-                Catch ex As Exception
-                    retFailed = retFailed & vbCrLf & row.Item("matno")
-                End Try
-
-                'TODO: Show progress (trigger event)
-
-            Next
-
-            'cmd.Transaction.Commit()
-
-            closeConn(xConn)
-            cmd.Dispose()
-            Return retFailed
-        End Using
-
     End Function
     'TODO: incomplete
     Public Function manualRegExportToEmbeddedAccessSPD(dt As DataTable) As Boolean
@@ -533,8 +530,25 @@ Public Class ClassDB
         End Using
         Return True
     End Function
-
+    'TODO: copy documentation from here
     Public Function genericManualInsertDB(dt As DataTable, sql As String, values As String()) As Boolean
+        '
+        ' Summary:
+        '     Manually  inserts records into a database table 
+        '
+        ' Parameters:
+        '   dt:
+        '     The DataTable from which records will be obtained
+        '
+        ' Returns:
+        '     True if successful, False otherwise.
+        '
+        ' Exceptions:
+        '   T:System.InvalidOperationException:
+        '     Cannot execute a command within a transaction context that differs from the context
+        '     in which the connection was originally enlisted.
+
+
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             xConn.ConnectionString = getCorrectConnectionstring()
             xConn.Open()
@@ -592,7 +606,7 @@ Public Class ClassDB
         Return True
     End Function
 
-    Public Function manualInsertDB(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
+    Public Function manualResultInsertDB(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             xConn.ConnectionString = getCorrectConnectionstring()
             xConn.Open()
@@ -623,6 +637,56 @@ Public Class ClassDB
 
             'cmd.Transaction.Commit()
 
+            closeConn(xConn)
+            cmd.Dispose()
+        End Using
+        Return True
+    End Function
+    Public Function manualRegInsertDB(dt As DataTable) As Boolean
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+            xConn.ConnectionString = getCorrectConnectionstring()
+            xConn.Open()
+            '1. check for duplicates and delete
+            Dim sql As String = STR_SQL_INSERT_STUDENTS_WITH_PARAMS ' "INSERT INTO Reg (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
+            Dim strTimestmp As String = Now.ToString
+            'access
+            Dim cmd As New OleDbCommand
+            'Dim da As OleDbDataAdapter
+            Dim matno As String = ""
+            Dim retmatno As String = ""
+            Dim dtSingleRow As DataTable
+            Dim retFailed As String = "Failed to insert the following: "
+            For Each row As DataRow In dt.Rows
+                matno = row.Item("matno")
+                retmatno = mappDB.GetRecordWhere(String.Format("select matno from Reg WHERE matno='{0}'", matno))
+                If retmatno = matno Then
+                    ' record already exits
+                    'option 1. update (ovewrite)
+                    'option 2 donothing and add it to a datatable to tell the user
+                Else
+                    'todo: use parameters
+                    sql = STR_SQL_INSERT_STUDENTS_WITH_PARAMS   ' "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,result_timestamp) "
+                    dtSingleRow = dt.Copy
+                    dtSingleRow.Rows.Clear()
+                    dtSingleRow.Rows.Add(row.ItemArray)
+                    dtSingleRow.AcceptChanges()
+
+                    cmd = New OleDbCommand(sql, xConn)
+                    cmd.Parameters.AddRange(getParamsFromDatatable(dt).ToArray)
+                    'cmd.Transaction.Begin()
+                    'da = New OleDbDataAdapter(cmd)
+                    'da.Update(dt) 'da.fill() this is a promising mthd
+
+                    Try
+                        cmd.ExecuteNonQuery()
+                    Catch ex As Exception
+                        retFailed = retFailed & vbCrLf & row.Item("matno")
+                    End Try
+                    'TODO: Show progress (trigger event)
+                End If
+            Next
+            'cmd.Transaction.Commit()
+            MsgBox(retFailed)
             closeConn(xConn)
             cmd.Dispose()
         End Using
@@ -687,13 +751,18 @@ Public Class ClassDB
 
     'TODO:: incomplete
     Function getDeptName(strDept As String, Optional forceStrict As Boolean = False) As String
-        Dim retVal As String
-        If forceStrict = True Then
-            retVal = strDept
-        Else
-            retVal = strDept
-        End If
-        Return retVal
+        Dim retVal As String = "COMPUTER ENGINEERING"
+        Try
+            If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
+                retVal = dictDepts(strDept)
+            Else
+                getDeptSessionsIntoDictionaries()
+                retVal = dictDepts(strDept)
+            End If
+            Return retVal
+        Catch ex As Exception
+            Return retVal
+        End Try
     End Function
     'TODO:: use dictonaries
     Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
@@ -701,7 +770,7 @@ Public Class ClassDB
         If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
             retVal = CInt(dictDepts.Keys(strDept))
         Else
-
+            getDeptSessionsIntoDictionaries()  'so we dont have to do db call again
             If forceStrict = True Then
                 retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
             Else

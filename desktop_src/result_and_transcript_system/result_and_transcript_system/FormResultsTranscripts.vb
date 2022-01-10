@@ -26,7 +26,7 @@ Public Class FormResultsTranscripts
         Me.dgvStudents.BackgroundColor = RGBColors.colorBackground
         Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
         Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
-        Me.ReportViewer1.RefreshReport
+        Me.ReportViewerTranscript.RefreshReport()
     End Sub
 
     Private Sub reset()
@@ -146,10 +146,33 @@ Public Class FormResultsTranscripts
         If dgvStudents.Rows.Count > 0 Then
             getTranscripts(dgvStudents.Rows(0).Cells("matno").Value.ToString)
             Dim dv As DataView = dgvTranscripts.DataSource
-            objReports.updateReportDataSource("DataSet1", Me.ReportViewer1, dv.ToTable)
+            objReports.updateReportDataSource("DataSet1", Me.ReportViewerTranscript, dv.ToTable)
         End If
+        ReportViewerTranscript.BringToFront()
     End Sub
+    Private Function getGPCard(dMATNO As String) As DataSet
+        Dim tmpDSRegCourses As DataSet
 
+        Dim tmpDSResults As New DataSet
+        Dim tmpDSBroadsheets As New DataSet
+        Try
+            mappDB.MATNO = dMATNO
+            tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
+            tmpDSResults = mappDB.GetDataWhere(String.Format(STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
+            Debug.Print(String.Format(STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_TRANSCRIPT_BY_MATNO, dMATNO), "Results") 'todo
+
+            dgvCourses.DataSource = tmpDSRegCourses.Tables(0).DefaultView
+            dgvTranscripts.DataSource = tmpDSResults.Tables(0).DefaultView
+
+            dgvCourses.Refresh()
+            dgvTranscripts.Refresh()
+
+            resizeDatagrids("courses")
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+        Return tmpDSResults
+    End Function
     Private Function getTranscripts(dMATNO As String) As DataSet
         Dim tmpDSRegCourses As DataSet
 
@@ -237,17 +260,28 @@ Public Class FormResultsTranscripts
     End Sub
 
     Private Sub ButtonFullScreen_Click(sender As Object, e As EventArgs) Handles ButtonFullScreen.Click
-        If ReportViewer1.Dock = DockStyle.Fill Then
-            ReportViewer1.Dock = DockStyle.None
-            ReportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        If ReportViewerTranscript.Dock = DockStyle.Fill Then
+            ReportViewerTranscript.Dock = DockStyle.None
+            ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         Else
-            ReportViewer1.Dock = DockStyle.Fill
-            ReportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+            ReportViewerTranscript.Dock = DockStyle.Fill
+            ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         End If
 
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Me.Close()
+    End Sub
+
+    Private Sub ButtonGPACard_Click(sender As Object, e As EventArgs) Handles ButtonGPACard.Click
+        searchTranscripts(TextBoxMATNO.Text)
+        objReports.MATNO = "ENG0000001" 'TODO
+        If dgvStudents.Rows.Count > 0 Then
+            getGPCard(dgvStudents.Rows(0).Cells("matno").Value.ToString)
+            Dim dv As DataView = dgvTranscripts.DataSource
+            objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCard, dv.ToTable)
+        End If
+        ReportViewerGPCard.BringToFront()
     End Sub
 End Class

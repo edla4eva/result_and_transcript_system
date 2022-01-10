@@ -196,7 +196,7 @@
             Case "viewBroadsheets"
                 addForm(FormViewBroadsheets)
             Case "viewSenate"
-                addForm(FormReport)
+                addForm(FormSenateResult)
             Case "viewRegs"
                 addForm(FormViewRegs)
                 'Me.WindowState = FormWindowState.Maximized
@@ -243,16 +243,11 @@
         ChangeMenu("Settings")
     End Sub
 
-    Private Sub PanelBtn_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn.Paint
 
-    End Sub
 
     Private Sub PanelBtn_Click(sender As Object, e As EventArgs) Handles PanelBtn.Click
-        If SidePanel.Width = PanelBtn.Width Then
-            SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 8
-        Else
-            SidePanel.Width = PanelBtn.Width
-        End If
+
+        'Test code area
 
     End Sub
 
@@ -290,6 +285,10 @@
     Private Sub Buttonhelp_Click(sender As Object, e As EventArgs) Handles Buttonhelp.Click
         ActiveButton(sender, RGBColors.colorCrimson)
         ChangeMenu("Help")
+    End Sub
+
+    Private Sub PanelBtn_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn.Paint
+
     End Sub
 End Class
 

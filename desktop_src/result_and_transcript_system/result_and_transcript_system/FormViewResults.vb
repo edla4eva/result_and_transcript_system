@@ -135,18 +135,25 @@ Public Class FormViewResults
         If DataGridView2.SelectedRows Is Nothing Or DataGridView2.Columns.Contains("matno") Then
             Exit Sub
         End If
-        Dim strSQL As String = "DELETE * FROM results WHERE session_idr='{0}' AND course_code_idr='{1}'"
+        Dim strSQL As String = DELETE_FROM_RESULTS_WHERE_SESSION_COURSECODE_TIMESAMP
         Dim dSession As String = DataGridView2.SelectedRows(0).Cells("session_idr").Value.ToString
         Dim dCourse As String = DataGridView2.SelectedRows(0).Cells("course_code_idr").Value.ToString
+        Dim strTimeStamp As String = DataGridView2.SelectedRows(0).Cells("result_timestamp").Value.ToString
         If MessageBox.Show("Are you sure you want to delete all the selected results?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
             LoginForm1.Close()
+            LoginForm1.Tag = "adminCheck"
 
             If LoginForm1.ShowDialog() = DialogResult.OK Then
-                mappDB.doQuery(String.Format(strSQL, dSession, dCourse))
-                ButtonShowAll.PerformClick()
-                MsgBox("Results deleted sucessfully")
+                If LoginForm1.Tag = "adminOk" Then
+                    If mappDB.doQuery(String.Format(strSQL, dSession, dCourse, strTimeStamp)) = True Then
+                        ButtonShowAll.PerformClick()
+                        MsgBox("Results deleted sucessfully")
+                    Else
+                        MsgBox("Could not Delete Result")
+                    End If
+                End If
+                End If
             End If
-        End If
     End Sub
 
     Private Sub TextBoxSession_TextChanged_1(sender As Object, e As EventArgs) Handles TextBoxSession.TextChanged

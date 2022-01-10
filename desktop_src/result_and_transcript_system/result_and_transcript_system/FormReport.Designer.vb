@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class FormReport
+Partial Class FormSenateResult
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,7 +24,6 @@ Partial Class FormReport
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim ReportDataSource1 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
-        Me.ClassDBBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.ReportViewer1 = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.SidePanel = New System.Windows.Forms.Panel()
@@ -34,21 +33,31 @@ Partial Class FormReport
         Me.ButtonPrint = New System.Windows.Forms.Button()
         Me.ButtonEport = New System.Windows.Forms.Button()
         Me.ReportViewerSenateCover = New Microsoft.Reporting.WinForms.ReportViewer()
-        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelModify = New System.Windows.Forms.Panel()
+        Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxLevel = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
+        Me.TextBoxDepartment = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.TextBoxLevel = New System.Windows.Forms.TextBox()
+        Me.TextBoxSession = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
+        Me.BgWProcess = New System.ComponentModel.BackgroundWorker()
+        Me.ClassDBBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
+        Me.PanelModify.SuspendLayout()
+        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'ClassDBBindingSource
-        '
-        Me.ClassDBBindingSource.DataSource = GetType(result_and_transcript_system.ClassDB)
         '
         'DataGridView1
         '
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Location = New System.Drawing.Point(7, 12)
+        Me.DataGridView1.Location = New System.Drawing.Point(7, 160)
         Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.Size = New System.Drawing.Size(131, 426)
+        Me.DataGridView1.Size = New System.Drawing.Size(171, 464)
         Me.DataGridView1.TabIndex = 1
         '
         'ReportViewer1
@@ -56,10 +65,10 @@ Partial Class FormReport
         Me.ReportViewer1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ReportViewer1.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.Report1.rdlc"
-        Me.ReportViewer1.Location = New System.Drawing.Point(144, 12)
+        Me.ReportViewer1.Location = New System.Drawing.Point(184, 12)
         Me.ReportViewer1.Name = "ReportViewer1"
         Me.ReportViewer1.ServerReport.BearerToken = Nothing
-        Me.ReportViewer1.Size = New System.Drawing.Size(659, 426)
+        Me.ReportViewer1.Size = New System.Drawing.Size(619, 612)
         Me.ReportViewer1.TabIndex = 2
         '
         'SidePanel
@@ -73,7 +82,7 @@ Partial Class FormReport
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.SidePanel.Location = New System.Drawing.Point(809, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 450)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 636)
         Me.SidePanel.TabIndex = 72
         '
         'ButtonFullScreen
@@ -149,28 +158,138 @@ Partial Class FormReport
         ReportDataSource1.Value = Me.ClassDBBindingSource
         Me.ReportViewerSenateCover.LocalReport.DataSources.Add(ReportDataSource1)
         Me.ReportViewerSenateCover.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.ReportSenateCover.rdlc"
-        Me.ReportViewerSenateCover.Location = New System.Drawing.Point(144, 12)
+        Me.ReportViewerSenateCover.Location = New System.Drawing.Point(184, 12)
         Me.ReportViewerSenateCover.Name = "ReportViewerSenateCover"
         Me.ReportViewerSenateCover.ServerReport.BearerToken = Nothing
-        Me.ReportViewerSenateCover.Size = New System.Drawing.Size(659, 426)
+        Me.ReportViewerSenateCover.Size = New System.Drawing.Size(619, 426)
         Me.ReportViewerSenateCover.TabIndex = 73
         '
-        'FormReport
+        'PanelModify
+        '
+        Me.PanelModify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelModify.Controls.Add(Me.ComboBoxSessions)
+        Me.PanelModify.Controls.Add(Me.ComboBoxLevel)
+        Me.PanelModify.Controls.Add(Me.Label2)
+        Me.PanelModify.Controls.Add(Me.ComboBoxDepartments)
+        Me.PanelModify.Controls.Add(Me.TextBoxDepartment)
+        Me.PanelModify.Controls.Add(Me.Label5)
+        Me.PanelModify.Controls.Add(Me.TextBoxLevel)
+        Me.PanelModify.Controls.Add(Me.TextBoxSession)
+        Me.PanelModify.Controls.Add(Me.Label4)
+        Me.PanelModify.Location = New System.Drawing.Point(7, 12)
+        Me.PanelModify.Name = "PanelModify"
+        Me.PanelModify.Size = New System.Drawing.Size(171, 142)
+        Me.PanelModify.TabIndex = 74
+        '
+        'ComboBoxSessions
+        '
+        Me.ComboBoxSessions.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
+        Me.ComboBoxSessions.FormattingEnabled = True
+        Me.ComboBoxSessions.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
+        Me.ComboBoxSessions.Location = New System.Drawing.Point(13, 118)
+        Me.ComboBoxSessions.Name = "ComboBoxSessions"
+        Me.ComboBoxSessions.Size = New System.Drawing.Size(153, 21)
+        Me.ComboBoxSessions.TabIndex = 29
+        Me.ComboBoxSessions.Text = "2018/2019"
+        '
+        'ComboBoxLevel
+        '
+        Me.ComboBoxLevel.FormattingEnabled = True
+        Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
+        Me.ComboBoxLevel.Location = New System.Drawing.Point(10, 70)
+        Me.ComboBoxLevel.Name = "ComboBoxLevel"
+        Me.ComboBoxLevel.Size = New System.Drawing.Size(156, 21)
+        Me.ComboBoxLevel.TabIndex = 25
+        Me.ComboBoxLevel.Text = "100"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(10, 9)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(62, 13)
+        Me.Label2.TabIndex = 13
+        Me.Label2.Text = "Department"
+        '
+        'ComboBoxDepartments
+        '
+        Me.ComboBoxDepartments.FormattingEnabled = True
+        Me.ComboBoxDepartments.Items.AddRange(New Object() {"Computer Engineering", "Production Engineering"})
+        Me.ComboBoxDepartments.Location = New System.Drawing.Point(10, 26)
+        Me.ComboBoxDepartments.Name = "ComboBoxDepartments"
+        Me.ComboBoxDepartments.Size = New System.Drawing.Size(156, 21)
+        Me.ComboBoxDepartments.TabIndex = 24
+        Me.ComboBoxDepartments.Text = "Computer Engineering"
+        '
+        'TextBoxDepartment
+        '
+        Me.TextBoxDepartment.Location = New System.Drawing.Point(10, 28)
+        Me.TextBoxDepartment.Name = "TextBoxDepartment"
+        Me.TextBoxDepartment.Size = New System.Drawing.Size(33, 20)
+        Me.TextBoxDepartment.TabIndex = 12
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(10, 99)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(44, 13)
+        Me.Label5.TabIndex = 23
+        Me.Label5.Text = "Session"
+        '
+        'TextBoxLevel
+        '
+        Me.TextBoxLevel.Location = New System.Drawing.Point(10, 70)
+        Me.TextBoxLevel.Name = "TextBoxLevel"
+        Me.TextBoxLevel.Size = New System.Drawing.Size(33, 20)
+        Me.TextBoxLevel.TabIndex = 15
+        '
+        'TextBoxSession
+        '
+        Me.TextBoxSession.Location = New System.Drawing.Point(10, 118)
+        Me.TextBoxSession.Name = "TextBoxSession"
+        Me.TextBoxSession.Size = New System.Drawing.Size(33, 20)
+        Me.TextBoxSession.TabIndex = 22
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(10, 51)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(33, 13)
+        Me.Label4.TabIndex = 16
+        Me.Label4.Text = "Level"
+        '
+        'bgwLoad
+        '
+        '
+        'BgWProcess
+        '
+        Me.BgWProcess.WorkerSupportsCancellation = True
+        '
+        'ClassDBBindingSource
+        '
+        Me.ClassDBBindingSource.DataSource = GetType(result_and_transcript_system.ClassDB)
+        '
+        'FormSenateResult
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.ClientSize = New System.Drawing.Size(943, 450)
+        Me.ClientSize = New System.Drawing.Size(943, 636)
+        Me.Controls.Add(Me.PanelModify)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.ReportViewer1)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.ReportViewerSenateCover)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-        Me.Name = "FormReport"
+        Me.Name = "FormSenateResult"
         Me.Text = "Reports"
-        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
+        Me.PanelModify.ResumeLayout(False)
+        Me.PanelModify.PerformLayout()
+        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -184,4 +303,16 @@ Partial Class FormReport
     Friend WithEvents ButtonEport As Button
     Friend WithEvents ReportViewerSenateCover As Microsoft.Reporting.WinForms.ReportViewer
     Friend WithEvents ClassDBBindingSource As BindingSource
+    Friend WithEvents PanelModify As Panel
+    Friend WithEvents ComboBoxSessions As ComboBox
+    Friend WithEvents ComboBoxLevel As ComboBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents ComboBoxDepartments As ComboBox
+    Friend WithEvents TextBoxDepartment As TextBox
+    Friend WithEvents Label5 As Label
+    Friend WithEvents TextBoxLevel As TextBox
+    Friend WithEvents TextBoxSession As TextBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
+    Friend WithEvents BgWProcess As System.ComponentModel.BackgroundWorker
 End Class

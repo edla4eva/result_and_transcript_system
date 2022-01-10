@@ -22,6 +22,7 @@ Partial Class FormViewBroadsheets
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxDepartment = New System.Windows.Forms.TextBox()
@@ -32,17 +33,22 @@ Partial Class FormViewBroadsheets
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
         Me.ComboBoxLevel = New System.Windows.Forms.ComboBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonShowDetails = New System.Windows.Forms.Button()
         Me.ButtonDelete = New System.Windows.Forms.Button()
         Me.ButtonRework = New System.Windows.Forms.Button()
         Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonSearchBroadheet = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonShowAllBroadsheet = New System.Windows.Forms.Button()
-        Me.ButtonAdjustTemplate = New System.Windows.Forms.Button()
+        Me.ButtonApprove = New System.Windows.Forms.Button()
         Me.ComboBoxSessions = New System.Windows.Forms.ComboBox()
         Me.PanelModify = New System.Windows.Forms.Panel()
         Me.LabelClosePanelModify = New System.Windows.Forms.Label()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
+        Me.BgWProcess = New System.ComponentModel.BackgroundWorker()
+        Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
+        Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
+        Me.LabelProgress = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
@@ -56,8 +62,9 @@ Partial Class FormViewBroadsheets
         Me.DataGridView1.Location = New System.Drawing.Point(29, 179)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(628, 326)
+        Me.DataGridView1.Size = New System.Drawing.Size(723, 346)
         Me.DataGridView1.TabIndex = 9
+        Me.DataGridView1.Tag = "summary"
         '
         'Label2
         '
@@ -130,18 +137,32 @@ Partial Class FormViewBroadsheets
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonShowDetails)
         Me.SidePanel.Controls.Add(Me.ButtonDelete)
         Me.SidePanel.Controls.Add(Me.ButtonRework)
         Me.SidePanel.Controls.Add(Me.ButtonClose)
         Me.SidePanel.Controls.Add(Me.ButtonSearchBroadheet)
         Me.SidePanel.Controls.Add(Me.ButtonCloud)
         Me.SidePanel.Controls.Add(Me.ButtonShowAllBroadsheet)
-        Me.SidePanel.Controls.Add(Me.ButtonAdjustTemplate)
+        Me.SidePanel.Controls.Add(Me.ButtonApprove)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
-        Me.SidePanel.Location = New System.Drawing.Point(666, 0)
+        Me.SidePanel.Location = New System.Drawing.Point(761, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(134, 517)
+        Me.SidePanel.Size = New System.Drawing.Size(134, 582)
         Me.SidePanel.TabIndex = 27
+        '
+        'ButtonShowDetails
+        '
+        Me.ButtonShowDetails.FlatAppearance.BorderSize = 0
+        Me.ButtonShowDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonShowDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonShowDetails.ForeColor = System.Drawing.Color.White
+        Me.ButtonShowDetails.Location = New System.Drawing.Point(-3, 163)
+        Me.ButtonShowDetails.Name = "ButtonShowDetails"
+        Me.ButtonShowDetails.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonShowDetails.TabIndex = 11
+        Me.ButtonShowDetails.Text = "Show Details"
+        Me.ButtonShowDetails.UseVisualStyleBackColor = True
         '
         'ButtonDelete
         '
@@ -149,7 +170,7 @@ Partial Class FormViewBroadsheets
         Me.ButtonDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonDelete.ForeColor = System.Drawing.Color.White
-        Me.ButtonDelete.Location = New System.Drawing.Point(3, 247)
+        Me.ButtonDelete.Location = New System.Drawing.Point(3, 289)
         Me.ButtonDelete.Name = "ButtonDelete"
         Me.ButtonDelete.Size = New System.Drawing.Size(128, 55)
         Me.ButtonDelete.TabIndex = 10
@@ -162,7 +183,7 @@ Partial Class FormViewBroadsheets
         Me.ButtonRework.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRework.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonRework.ForeColor = System.Drawing.Color.White
-        Me.ButtonRework.Location = New System.Drawing.Point(3, 311)
+        Me.ButtonRework.Location = New System.Drawing.Point(3, 353)
         Me.ButtonRework.Name = "ButtonRework"
         Me.ButtonRework.Size = New System.Drawing.Size(128, 55)
         Me.ButtonRework.TabIndex = 9
@@ -175,7 +196,7 @@ Partial Class FormViewBroadsheets
         Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(3, 423)
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 465)
         Me.ButtonClose.Name = "ButtonClose"
         Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
         Me.ButtonClose.TabIndex = 8
@@ -201,7 +222,7 @@ Partial Class FormViewBroadsheets
         Me.ButtonCloud.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonCloud.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonCloud.ForeColor = System.Drawing.Color.White
-        Me.ButtonCloud.Location = New System.Drawing.Point(3, 362)
+        Me.ButtonCloud.Location = New System.Drawing.Point(3, 404)
         Me.ButtonCloud.Name = "ButtonCloud"
         Me.ButtonCloud.Size = New System.Drawing.Size(128, 55)
         Me.ButtonCloud.TabIndex = 3
@@ -214,25 +235,25 @@ Partial Class FormViewBroadsheets
         Me.ButtonShowAllBroadsheet.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonShowAllBroadsheet.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonShowAllBroadsheet.ForeColor = System.Drawing.Color.White
-        Me.ButtonShowAllBroadsheet.Location = New System.Drawing.Point(3, 161)
+        Me.ButtonShowAllBroadsheet.Location = New System.Drawing.Point(0, 102)
         Me.ButtonShowAllBroadsheet.Name = "ButtonShowAllBroadsheet"
         Me.ButtonShowAllBroadsheet.Size = New System.Drawing.Size(128, 55)
         Me.ButtonShowAllBroadsheet.TabIndex = 1
         Me.ButtonShowAllBroadsheet.Text = "Show All"
         Me.ButtonShowAllBroadsheet.UseVisualStyleBackColor = True
         '
-        'ButtonAdjustTemplate
+        'ButtonApprove
         '
-        Me.ButtonAdjustTemplate.FlatAppearance.BorderSize = 0
-        Me.ButtonAdjustTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonAdjustTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonAdjustTemplate.ForeColor = System.Drawing.Color.White
-        Me.ButtonAdjustTemplate.Location = New System.Drawing.Point(3, 100)
-        Me.ButtonAdjustTemplate.Name = "ButtonAdjustTemplate"
-        Me.ButtonAdjustTemplate.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonAdjustTemplate.TabIndex = 0
-        Me.ButtonAdjustTemplate.Text = "Refresh"
-        Me.ButtonAdjustTemplate.UseVisualStyleBackColor = True
+        Me.ButtonApprove.FlatAppearance.BorderSize = 0
+        Me.ButtonApprove.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonApprove.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonApprove.ForeColor = System.Drawing.Color.White
+        Me.ButtonApprove.Location = New System.Drawing.Point(6, 224)
+        Me.ButtonApprove.Name = "ButtonApprove"
+        Me.ButtonApprove.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonApprove.TabIndex = 0
+        Me.ButtonApprove.Text = "Approve"
+        Me.ButtonApprove.UseVisualStyleBackColor = True
         '
         'ComboBoxSessions
         '
@@ -262,14 +283,14 @@ Partial Class FormViewBroadsheets
         Me.PanelModify.Controls.Add(Me.Label4)
         Me.PanelModify.Location = New System.Drawing.Point(32, 31)
         Me.PanelModify.Name = "PanelModify"
-        Me.PanelModify.Size = New System.Drawing.Size(625, 142)
+        Me.PanelModify.Size = New System.Drawing.Size(720, 142)
         Me.PanelModify.TabIndex = 30
         '
         'LabelClosePanelModify
         '
         Me.LabelClosePanelModify.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LabelClosePanelModify.AutoSize = True
-        Me.LabelClosePanelModify.Location = New System.Drawing.Point(606, 6)
+        Me.LabelClosePanelModify.Location = New System.Drawing.Point(701, 6)
         Me.LabelClosePanelModify.Name = "LabelClosePanelModify"
         Me.LabelClosePanelModify.Size = New System.Drawing.Size(14, 13)
         Me.LabelClosePanelModify.TabIndex = 1
@@ -278,12 +299,45 @@ Partial Class FormViewBroadsheets
         'bgwLoad
         '
         '
+        'BgWProcess
+        '
+        Me.BgWProcess.WorkerSupportsCancellation = True
+        '
+        'TimerBS
+        '
+        Me.TimerBS.Enabled = True
+        Me.TimerBS.Interval = 500
+        '
+        'ProgressBarBS
+        '
+        Me.ProgressBarBS.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProgressBarBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer), CType(CType(44, Byte), Integer))
+        Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
+        Me.ProgressBarBS.Location = New System.Drawing.Point(33, 546)
+        Me.ProgressBarBS.Name = "ProgressBarBS"
+        Me.ProgressBarBS.Size = New System.Drawing.Size(720, 23)
+        Me.ProgressBarBS.TabIndex = 33
+        Me.ProgressBarBS.Value = 1
+        '
+        'LabelProgress
+        '
+        Me.LabelProgress.AutoSize = True
+        Me.LabelProgress.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelProgress.Location = New System.Drawing.Point(29, 528)
+        Me.LabelProgress.Name = "LabelProgress"
+        Me.LabelProgress.Size = New System.Drawing.Size(437, 18)
+        Me.LabelProgress.TabIndex = 32
+        Me.LabelProgress.Text = "This broadsheet can be used to make final adjustments to scores"
+        '
         'FormViewBroadsheets
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSize = True
-        Me.ClientSize = New System.Drawing.Size(800, 517)
+        Me.ClientSize = New System.Drawing.Size(895, 582)
+        Me.Controls.Add(Me.ProgressBarBS)
+        Me.Controls.Add(Me.LabelProgress)
         Me.Controls.Add(Me.PanelModify)
         Me.Controls.Add(Me.SidePanel)
         Me.Controls.Add(Me.DataGridView1)
@@ -295,6 +349,7 @@ Partial Class FormViewBroadsheets
         Me.PanelModify.ResumeLayout(False)
         Me.PanelModify.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents DataGridView1 As DataGridView
@@ -310,7 +365,7 @@ Partial Class FormViewBroadsheets
     Friend WithEvents ButtonSearchBroadheet As Button
     Friend WithEvents ButtonCloud As Button
     Friend WithEvents ButtonShowAllBroadsheet As Button
-    Friend WithEvents ButtonAdjustTemplate As Button
+    Friend WithEvents ButtonApprove As Button
     Friend WithEvents ComboBoxSessions As ComboBox
     Friend WithEvents PanelModify As Panel
     Friend WithEvents LabelClosePanelModify As Label
@@ -318,4 +373,9 @@ Partial Class FormViewBroadsheets
     Friend WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
     Friend WithEvents ButtonRework As Button
     Friend WithEvents ButtonDelete As Button
+    Friend WithEvents ButtonShowDetails As Button
+    Friend WithEvents BgWProcess As System.ComponentModel.BackgroundWorker
+    Friend WithEvents TimerBS As Timer
+    Friend WithEvents ProgressBarBS As ProgressBar
+    Friend WithEvents LabelProgress As Label
 End Class

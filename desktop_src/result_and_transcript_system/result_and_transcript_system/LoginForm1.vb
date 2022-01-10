@@ -19,13 +19,18 @@ Public Class LoginForm1
 
     'This is for when the ok button is clicked
     Private Sub OK_Click(sender As Object, e As EventArgs) Handles LoginOKButton.Click
-        If Me.UsernameTextBox.Text = "admin" Then
+        'do admin authetication first
+        If Me.UsernameTextBox.Text = "admin" And Me.Tag = "adminCheck" Then
             'admin mode
-            If PasswordTextBox.Text = "admin" Then
+            If mappDB.getUser(UsernameTextBox.Text, getMD5HashCode(PasswordTextBox.Text)) Then
                 Me.Close()
+                Me.Tag = "adminOk"
                 Exit Sub
             Else
+                Me.Tag = "adminCancel"
                 MsgBox("Only Admin can access this feature")
+                Me.Tag = ""
+                Exit Sub
             End If
         End If
 
@@ -47,10 +52,9 @@ Public Class LoginForm1
                 MainForm.ChangeMenu("CourseLecturer")
                 MainForm.setDCurrentForm("CourseLecturer")
             ElseIf Me.UsernameTextBox.Text = "admin" Then
-                Me.PasswordTextBox.Text = "admin"
-            MainForm.ChangeMenu("admin")
-            MainForm.setDCurrentForm("admin")
-        End If
+                MainForm.ChangeMenu("admin")
+                MainForm.setDCurrentForm("admin")
+            End If
             'clear passwordsothat an unauthorized person cannot use it
             UsernameTextBox.Text = ""
             PasswordTextBox.Text = ""

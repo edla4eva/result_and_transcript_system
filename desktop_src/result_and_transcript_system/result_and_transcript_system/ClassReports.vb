@@ -160,53 +160,78 @@ Public Class ClassReports
             _score = value
         End Set
     End Property
-    Function creatDataSetSenate() As DataSet
+    Function creatDataSetSenate(strSQL As String) As DataSet
         'Very good!
         Dim ds As New DataSet
+        Dim dsBS As New DataSet
         Dim dt As DataTable
         Dim dr As DataRow
-        Dim idCoulumn, matnoCoulumn As DataColumn
-        Dim nameCoulumn, surnameCoulumn, statusCoulumn, creditsCoulumn As DataColumn
+        Dim snCoulumn, matnoCoulumn As DataColumn
+        Dim nameCoulumn, surnameCoulumn, statusCoulumn, creditsCoulumn, deptNameCoulumn, SessionCoulumn As DataColumn
 
         Dim i As Integer
         Dim sumCr As Double = 0
         Dim SumDr As Double = 0
 
+        dsBS = mappDB.GetDataWhere(strSQL)   'todo: query criteria
+
         dt = New DataTable()
-        idCoulumn = New DataColumn("SN", Type.GetType("System.Int32"))
-        matnoCoulumn = New DataColumn("MATNO", Type.GetType("System.String"))
-        surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
-        nameCoulumn = New DataColumn("Other Names", Type.GetType("System.String"))
+
+        'snCoulumn = New DataColumn("SN", Type.GetType("System.Int32"))
+        'matnoCoulumn = New DataColumn("MATNO", Type.GetType("System.String"))
+        'surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
+        'nameCoulumn = New DataColumn("Other Names", Type.GetType("System.String"))
+        'statusCoulumn = New DataColumn("Status", Type.GetType("System.String"))
+        'creditsCoulumn = New DataColumn("Credits", Type.GetType("System.Double"))
+        snCoulumn = New DataColumn("Col0", Type.GetType("System.String"))
+        matnoCoulumn = New DataColumn("Col1", Type.GetType("System.String"))
+        surnameCoulumn = New DataColumn("Col2", Type.GetType("System.String"))
+        nameCoulumn = New DataColumn("Col3", Type.GetType("System.String"))
         statusCoulumn = New DataColumn("Status", Type.GetType("System.String"))
-        creditsCoulumn = New DataColumn("Credits", Type.GetType("System.Double"))
+        deptNameCoulumn = New DataColumn("Col172", Type.GetType("System.String"))
+        SessionCoulumn = New DataColumn("Session", Type.GetType("System.String"))
 
 
         dt.TableName = "Senate"
-        dt.Columns.Add(idCoulumn)
+        dt.Columns.Add(snCoulumn)
         dt.Columns.Add(matnoCoulumn)
         dt.Columns.Add(surnameCoulumn)
         dt.Columns.Add(nameCoulumn)
         dt.Columns.Add(statusCoulumn)
-        dt.Columns.Add(creditsCoulumn)
+        dt.Columns.Add(deptNameCoulumn)
+        dt.Columns.Add(SessionCoulumn)
 
         dr = dt.NewRow()
-        dr("SN") = 1
-        dr("MATNO") = "ENG000222111"
-        dr("SURNAME") = "OBINNA"
-        dr("Other Names") = "Amenaghawon"
+        dr("Col0") = 1
+        dr("Col1") = "ENG000222111"
+        dr("Col2") = "Amenaghawon OBINNA"
+        dr("Col172") = "Computer Engineering"
         dr("Status") = "Successful"
-        dr("Credits") = 22
-        dt.Rows.Add(dr)
+        dr("Session") = "2018/2019"
+        'dr("SURNAME") = "OBINNA"
+        'dr("Other Names") = "Amenaghawon"
+        'dr("Status") = "Successful"
+        'dr("Credits") = 22
+
         SumDr = SumDr + 1
+        dt.Rows.Add(dr)
 
 
+
+        For i = 0 To dsBS.Tables(0).Rows.Count - 1
+            dr = dt.NewRow()
+            dr("Col0") = dsBS.Tables(0).Rows(i).Item("Col0").ToString
+            dr("Col1") = dsBS.Tables(0).Rows(i).Item("Col1").ToString
+            dr("Col2") = dsBS.Tables(0).Rows(i).Item("Col2").ToString
+            dr("Col172") = dsBS.Tables(0).Rows(i).Item("Col172").ToString
+            dr("Status") = "Successful"     'todo add to db
+            dr("Session") = "2018/2019" 'dsBS.Tables(0).Rows(i).Item("Session").ToString
+            'MsgBox(ds.Tables(0).Rows(i).Item(0).ToString & "   --   " & ds.Tables(0).Rows(i).Item(1).ToString)
+            dt.Rows.Add(dr)
+        Next i
 
 
         ds.Tables.Add(dt)
-
-        For i = 0 To ds.Tables(0).Rows.Count - 1
-            'MsgBox(ds.Tables(0).Rows(i).Item(0).ToString & "   --   " & ds.Tables(0).Rows(i).Item(1).ToString)
-        Next i
 
         'Visualization
         'dgw.DataSource = ds.Tables("Senate").DefaultView

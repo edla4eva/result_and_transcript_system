@@ -10,25 +10,31 @@
     End Sub
 
     Private Sub ButtonView_Click(sender As Object, e As EventArgs) Handles ButtonView.Click
-        'Visualization
-        objReports.MATNO = "ENG0000001"
+        ''Visualization
+        'objReports.MATNO = "ENG0000001"
+        'Dim txtlevel, txtSession, txtDept As String
+        'txtlevel = "100"
+        'txtSession = "2018/2019"
+        'txtDept = "Computer Engineering".ToUpper
+        'txtlevel = ComboBoxLevel.SelectedItem
+        'txtSession = ComboBoxSessions.SelectedItem
+        'txtDept = ComboBoxDepartments.SelectedItem
+        'Dim ds As DataSet = objReports.creatDataSetSenate(String.Format(STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL, txtSession, txtDept, txtlevel))
+        'Dim dt As New DataTable()
+        'dt = ds.Tables(0)
+        'DataGridView1.DataSource = ds.Tables(0).DefaultView
 
-        Dim ds As DataSet = objReports.creatDataSetSenate()
-        Dim dt As New DataTable()
-        dt = ds.Tables(0)
-        DataGridView1.DataSource = ds.Tables(0).DefaultView
 
+        ''SqlServerTypes.Utilities.LoadNativeAssemblies(AppDomain.CurrentDomain.BaseDirectory);
+        ''Report stuff
+        'With Me.ReportViewer1.LocalReport
 
-        'SqlServerTypes.Utilities.LoadNativeAssemblies(AppDomain.CurrentDomain.BaseDirectory);
-        'Report stuff
-        With Me.ReportViewer1.LocalReport
-
-            .DataSources.Clear()
-            '.ReportPath = My.Application.Info.DirectoryPath
-            .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
-        End With
-        Me.ReportViewer1.RefreshReport()
-        'Works perfectly
+        '    .DataSources.Clear()
+        '    '.ReportPath = My.Application.Info.DirectoryPath
+        '    .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
+        'End With
+        'Me.ReportViewer1.RefreshReport()
+        ''Works perfectly
     End Sub
 
     Private Sub ButtonFullScreen_Click(sender As Object, e As EventArgs) Handles ButtonFullScreen.Click

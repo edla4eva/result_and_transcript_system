@@ -67,6 +67,7 @@ Partial Class FormViewResults
         Me.TextBoxExcelFilename.Name = "TextBoxExcelFilename"
         Me.TextBoxExcelFilename.Size = New System.Drawing.Size(541, 20)
         Me.TextBoxExcelFilename.TabIndex = 1
+        Me.TextBoxExcelFilename.Visible = False
         '
         'Label1
         '
@@ -76,6 +77,7 @@ Partial Class FormViewResults
         Me.Label1.Size = New System.Drawing.Size(357, 13)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Folder/Directory containing Scanned Results(PDF file .pdf; Image File .jpg)"
+        Me.Label1.Visible = False
         '
         'SidePanel
         '
@@ -295,9 +297,9 @@ Partial Class FormViewResults
         '
         'PictureBox1
         '
-        Me.PictureBox1.Location = New System.Drawing.Point(601, 12)
+        Me.PictureBox1.Location = New System.Drawing.Point(601, 11)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(166, 100)
+        Me.PictureBox1.Size = New System.Drawing.Size(166, 101)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox1.TabIndex = 22
         Me.PictureBox1.TabStop = False

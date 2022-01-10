@@ -27,8 +27,9 @@ Public Class ClassBroadsheets
             'Todo get from database
             ' _levelCGPAPercentages = mappDB.get_levelCGPAPercentages()
 
+
         Catch ex As Exception
-            MsgBox("Cannot create Excel Automation Object" & vbCrLf & ex.Message)
+            MsgBox("Cannot create Broadsheet Object" & vbCrLf & ex.Message)
         End Try
     End Sub
 #Region "Broadsheet Properties"
@@ -44,6 +45,7 @@ Public Class ClassBroadsheets
     Private _broadsheetDataDS As DataSet
     Private _levelCGPAPercentages(9) As Double
     Private _dts(0 To 1) As DataTable
+    Private _dtCategory As DataTable = Nothing
 
     Private _dean As String = "Name of Dean"
     Private _hod As String = "Name of HOD"
@@ -54,8 +56,24 @@ Public Class ClassBroadsheets
     Private _facultyName As String = "Faculty Name"
     Private _schoolName As String = "University Name"
     Private _deptId As Integer = 1
-
-
+    'colA = 1
+    Public Enum statusBS
+        REGISTERED = 0
+        SUCCESSFUL = 1
+        REFFERED = 2
+        PROBATION = 3
+        FAIL_WITHDRAW = 7
+        UNREGISTERED = 9
+    End Enum
+    Public dictStatusBS As Dictionary(Of String, String)
+    Public Property dtCategory() As DataTable
+        Get
+            Return _dtCategory
+        End Get
+        Set(ByVal value As DataTable)
+            _dtCategory = value
+        End Set
+    End Property
     Public Property dataTablesScoresAndGrades() As DataTable()
         Get
             Return _dts
@@ -259,6 +277,9 @@ Public Class ClassBroadsheets
         '   query students, left join results (convert null to NA -3
         '   transfer query result col to dataset col
         'next
+        'Algo 2 'TODO: More tidy
+        'load results into dataset array
+        'create lookup function and call it for each matno
 
         '#1 count courseCodes in result table = j
         Dim countC, countReg, countResultsBS As Integer
@@ -280,12 +301,7 @@ Public Class ClassBroadsheets
         Dim dt As New DataTable
         Dim dr As DataRow
         Dim dictCol, dictMATNO As New Dictionary(Of String, Integer)
-        'Dim Registered(120) as string
-
-
-        'strSQLJoin = "SELECT Reg.MatNo, Last(Results.total) AS LastOftotal, Results.course_code_idr, 
-        '              Results.Session_idr  FROM Reg INNER JOIN Results ON Reg.MatNo = Results.matno GROUP BY Reg.MatNo, Results.course_code_idr,  
-        '              Results.Session_idr HAVING (((Results.course_code_idr)='{0}') AND ((Results.Session_idr)='{1}'));"
+        Dim approvedCredits As Integer = 501
         'strSQLAllCourses = "SELECT Courses.course_code, Courses.course_level, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order, Count(Courses.course_order) AS CountOfcourse_order
         '          FROM Courses
         '         GROUP BY Courses.course_level, Courses.course_code, Courses.course_unit, Courses.course_semester, Courses.course_dept_idr, Courses.course_order
@@ -306,13 +322,15 @@ Public Class ClassBroadsheets
         RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, session_idr, course_dept_idr, course_level), "Reg")
         coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
         AllCoursesDS = mappDB.getAllCourses()   'Get All Courses in Array
+        _dtCategory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
+
         If coursesOrderDS.Tables(0).Rows.Count < 1 Then
             'maybe session does not exist, use default
             coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, "2018/2019", 1), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
             If coursesOrderDS.Tables(0).Rows.Count < 1 Then
                 'give up
                 dt.Columns.Add("Error")
-                dt.Rows.Add("There is no record for the how the Courses should be ordered in the Broadsheet for this session and Department")
+                dt.Rows.Add("There are no record of approved Courses for this session and Department")
                 ds.Tables.Add(dt)
                 Return ds
                 'Dim exInn As New Exception("There is no record for the how the Courses should be ordered in the Broadsheet for this session and Department")
@@ -320,8 +338,9 @@ Public Class ClassBroadsheets
             End If
         End If
         If RegStudentsDS.Tables(0).Rows.Count < 1 Then
+
             dt.Columns.Add("Error")
-            dt.Rows.Add("There is no record of Registered Students")
+            dt.Rows.Add("No Registered Students for the selected Session and Department")
             ds.Tables.Add(dt)
             Return ds
             'Throw New Exception("There is no record of Registered Students")
@@ -330,60 +349,188 @@ Public Class ClassBroadsheets
         countC = AllCoursesDS.Tables(0).Rows.Count
         countReg = RegStudentsDS.Tables(0).Rows.Count
 
+
+
         '#2 Dataset creation 
         dt.TableName = "BroadsheetFS"
-        dt = createColS(dt) '## Create Fixed Cols TODO: put in sub
+        dt = createColS(dt) '## Create Fixed Cols
 
-        '##'Get mat nos
+        '##'Get mat nos nd initialize fields
         For i = 0 To countReg - 1
-            dictMATNO.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), -4)   'add disting students
+            dictMATNO.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), DEFAULT_CODE)   'add disting students
             dictRegistered_1.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), RegStudentsDS.Tables(0).Rows(i).Item("CourseCode_1"))
             dictRegistered_2.Add(RegStudentsDS.Tables(0).Rows(i).Item("matno"), RegStudentsDS.Tables(0).Rows(i).Item("CourseCode_2"))
             'add em rows
             dr = dt.NewRow()
+            dr("sn") = (i + 1).ToString
             dr("matno") = RegStudentsDS.Tables(0).Rows(i).Item("matno")
             dr("Surname") = RegStudentsDS.Tables(0).Rows(i).Item("student_surname")
             dr("FullName") = RegStudentsDS.Tables(0).Rows(i).Item("student_firstname") & " " & RegStudentsDS.Tables(0).Rows(i).Item("student_othernames") & " " & RegStudentsDS.Tables(0).Rows(i).Item("student_surname")
-            dr("sn") = (i + 1).ToString
+            '-------->
+            ' Computed Coloums goes here
+            '--------->
+            'Reg-->student_firstname	student_surname	student_othernames	student_dept_idr	status	year_of_entry	session_idr_of_entry	mode_of_entry	dob	phone	email	gender	session_idr	CourseCode_1	CourseCode_2	Fees Status	level	dept_idr
+            dr("student_firstname") = RegStudentsDS.Tables(0).Rows(i).Item("student_dept_idr")
+            dr("student_surname") = RegStudentsDS.Tables(0).Rows(i).Item("status")
+            dr("student_othernames") = RegStudentsDS.Tables(0).Rows(i).Item("year_of_entry")
+            dr("student_dept_idr") = RegStudentsDS.Tables(0).Rows(i).Item("student_dept_idr")
+            dr("status") = RegStudentsDS.Tables(0).Rows(i).Item("status")
+            dr("year_of_entry") = RegStudentsDS.Tables(0).Rows(i).Item("year_of_entry")
+            dr("session_idr_of_entry") = RegStudentsDS.Tables(0).Rows(i).Item("session_idr_of_entry")
+            dr("mode_of_entry") = RegStudentsDS.Tables(0).Rows(i).Item("mode_of_entry")
+            dr("dob") = RegStudentsDS.Tables(0).Rows(i).Item("dob")
+            dr("phone") = RegStudentsDS.Tables(0).Rows(i).Item("phone")
+            dr("email") = RegStudentsDS.Tables(0).Rows(i).Item("email")
+            dr("gender") = RegStudentsDS.Tables(0).Rows(i).Item("gender")
+
+            'reg specific
+            'Reg-->session_idr	CourseCode_1	CourseCode_2	Fees Status	level	dept_idr
+            dr("session_idr") = RegStudentsDS.Tables(0).Rows(i).Item("session_idr")
+            dr("CourseCode_1") = RegStudentsDS.Tables(0).Rows(i).Item("CourseCode_1")
+            dr("CourseCode_2") = RegStudentsDS.Tables(0).Rows(i).Item("CourseCode_1")
+            dr("Fees_Status") = RegStudentsDS.Tables(0).Rows(i).Item("Fees_Status")
+            dr("level") = RegStudentsDS.Tables(0).Rows(i).Item("level")
+            dr("dept_idr") = RegStudentsDS.Tables(0).Rows(i).Item("dept_idr")
+
+            'todo: call sub for these
+            'Col171	Col172	Col173	Col174	Col175	ColNames	credits	course_titles	gpa100	gpa200	gpa300	gpa400	gpa500	gpa600	gpa700	gpa800	gpa900	wgpa100	wgpa200	wgpa300	wgpa400	wgpa500	wgpa600	wgpa700	wgpa800	wgpa900	fgpa	dob	session_of_entry	mode_of_entry	CourseCode_1	CourseCode_2	cummulative_credits	outstanding_credits	approved_credits	failed_screening	
+            dr("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
+            'senate related
+            dr("approved_credits") = approvedCredits.ToString
+            dr("failed_screening") = "NO" 'todo determine from status RegStudentsDS.Tables(0).Rows(i).Item("failed_screening")
+            dr("cummulative_credits") = 0 'todo determine
+            dr("outstanding_credits") = 0   'RegStudentsDS.Tables(0).Rows(i).Item("outstanding_credits")
+
+            dr("gpa100") = "0.000"
+            dr("gpa200") = "0.000"
+            dr("gpa300") = "0.000"
+            dr("gpa400") = "0.000"
+            dr("gpa500") = "0.000"
+            dr("gpa600") = "0.000"
+            dr("gpa700") = "0.000"
+            dr("gpa800") = "0.000"
+            dr("gpa900") = "0.000"
+            dr("wgpa100") = "0.000"
+
             dt.Rows.Add(dr)
         Next
 
 
         dictCourseCodeKeyCourseOrderSNVal_1.Clear()
         dictCourseCodeKeyCourseOrderSNVal_2.Clear()
+
         objBroadsheet.progressStr = "Creating DataSets " & " ..."
         '# Rename Cols with Course Code 'Use the Courses_order take one by one and check if it exists.  'If it exists in coursesAllList, add it to courses for each level
         Dim colStartPos As Integer = 0
         For i = 0 To NUM_LEVELS - 1
             colStartPos = COURSE_START_COL + (i * NUM_COURSES_PER_LEVEL_1)
+            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, (i + 1).ToString & "00")  'get course order for 100, 200...levels
+            approvedCredits = approvedCredits + getApprovedCredits()
             For j = 0 To 15 - 1 'create columns for courses 'TODO: 1st and second
-                tmpStr = "FS" & (i + 1).ToString & "00L"
-                tmpStr = coursesOrderDS.Tables(0).Rows(j).Item(tmpStr).ToString ''TODO: throws error if session does not exist an error once e.g coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
-                'tmpStr = coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
+                tmpStr = ""
+                If dictCoursesOrderFS.ContainsKey(j + 1) Then tmpStr = dictCoursesOrderFS(j + 1)
                 courses(colStartPos + j) = "ColUNIQUE" & (colStartPos + j).ToString     'initialize on the fly to avoid nulls
                 If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
-                    'dictCourseCodeKeyCourseOrderSNVal_1.Add(0 + j, tmpStr)
                     dt.Columns(colStartPos + j).ColumnName = tmpStr
                     courses(colStartPos + j) = tmpStr
                 End If
-                tmpStr = "SS" & (i + 1).ToString & "00L"
-                tmpStr = coursesOrderDS.Tables(0).Rows(j).Item(tmpStr).ToString 'e.g coursesOrderDS.Tables(0).Rows(j).Item("FS100L").ToString
-                'tmpStr = coursesOrderDS.Tables(0).Rows(j).Item("SS100L").ToString
+                tmpStr = ""
+                If dictCoursesOrderSS.ContainsKey(j + 1) Then tmpStr = dictCoursesOrderSS(j + 1)
                 If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpStr) Then
-                    'dictCourseCodeKeyCourseOrderSNVal_2.Add(0 + j, tmpStr)
-                    dt.Columns(colStartPos + MAX_COURSES_1 + 4 + j).ColumnName = tmpStr
+                    dt.Columns(colStartPos + MAX_COURSES_1 + 4 + j).ColumnName = tmpStr 'todo: avoid error columnName already exists
                     courses(colStartPos + MAX_COURSES_1 + NUM_COLS_BETWEEN_COURSES_1_AND_COURSES_2 + j) = tmpStr
                 End If
             Next
         Next
 
 
+        getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)     'get order for the curren level
 
-        'For each ColName(CourseCode), query database to get result scores for that course
+        '##For each ColName(CourseCode), query database to get result scores for that course
         'NB: in broadsheet template scores starts From col H (i.e 7 counting From 0)
+
+        '''----------------------MTHD2---------------------------------------
+        ''Dim inxC As Integer = 0
+        ''Dim levelPos = 0
+        ''Dim dtGrades As New DataTable
+        ''Dim dtLocalResults(MAX_COURSES_1 + MAX_COURSES_2) As DataTable
+        ''Dim resultCount As Integer = -1
+        ''Dim tmpStrSQLs(MAX_COURSES_1 + MAX_COURSES_2) As String
+        ''Dim tblNames(MAX_COURSES_1 + MAX_COURSES_2) As String
+        ''Dim dsResults As New DataSet
+        '''## iteratively query database and get all results into array of DataTables
+        ''For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
+        ''    If dt.Columns(inxC).ColumnName.ToUpper.Contains("REPEAT") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
+        ''    If dt.Columns(inxC).ColumnName.Contains("TCP_") Or dt.Columns(inxC).ColumnName.Contains("TCR_") Then Continue For
+        ''    resultCount = resultCount + 1
+        ''    If Not dt.Columns(inxC).ColumnName.Contains("ColUNIQUE") Then
+        ''        'Now query db with coursecode
+        ''        tmpStrCourseCode = dt.Columns(inxC).ColumnName
+        ''        If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(tmpStrCourseCode) Then
+        ''            If dictAllCourseCodeKeyAndCourseLevelVal(tmpStrCourseCode) > course_level Then Continue For  'ignore higher levels
+        ''        End If
+
+        ''        'Method 1: iterative calls
+        ''        tmpStr = String.Format("SELECT matno,total FROM Results WHERE course_code_idr='{0}' AND session_idr='{1}'", tmpStrCourseCode, session_idr)
+        ''        dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
+        ''        'Method 2: OPTIONAM Method batch 
+        ''        'tmpStrSQLs(resultCount) = String.Format("SELECT matno,total FROM Results WHERE course_code_idr='{0}' AND session_idr='{1}'", tmpStrCourseCode, session_idr)
+        ''        'tblNames(resultCount) = tmpStrCourseCode 'dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
+        ''    End If
+        ''Next
+        '''dsResults = mappDB.BatchGetDataWhere(tmpStrSQLs, tblNames)    'OPTIONAL MeTHOD
+        '''dsResults.Tables.CopyTo(dtLocalResults, 0)
+
+        '''---#Update dataset with result values and general values
+        ''Dim tmpdR As DataRow() = Nothing
+        ''Dim tmpResult As Integer = NR_CODE
+        ''Dim tmpMATNO As String = ""
+
+        '''dt.row.col=lookupResult(matno)
+
+        ''For iMainDS = 0 To dt.Rows.Count - 1
+        ''    countResultsBS = dtLocalResults.Count
+        ''    tmpMATNO = dt.Rows(iMainDS).Item("matno")
+        ''    '------Function lookupResult(dMATNO) As integer
+        ''    For resC = 0 To countResultsBS - 1      'iterate through all the results for the level
+        ''        If dtLocalResults(resC) Is Nothing Then Continue For
+        ''        tmpdR = dtLocalResults(resC).Select(String.Format("matno='{0}'", tmpMATNO))
+        ''        If tmpdR.Count = 0 Then
+        ''            Continue For 'no result, ignore = 1 To 10
+        ''        Else
+        ''            tmpResult = tmpdR(0).Item(1)
+        ''            tmpStrCourseCode = dtLocalResults(resC).TableName
+        ''            'update the retrived result score
+        ''            dt.Rows(iMainDS).Item(tmpStrCourseCode) = tmpResult '.ToString & ", " & tmpStrCourseCode
+        ''            'overwrite score if not rgistered / assign appropriate codes
+        ''            If (IsRegistered(tmpStrCourseCode, dictRegistered_1, tmpMATNO) = False And (IsRegistered(tmpStrCourseCode, dictRegistered_2, tmpMATNO) = False)) Then
+        ''                tmpResult = NR_CODE  'ignore not registered NR courses
+        ''            Else 'it is a registered course
+        ''                If tmpResult < 0 Then tmpResult = ABS_CODE  'ABS 'if no score for registered then it is absent
+        ''            End If
+        ''        End If
+        ''        dt.Rows(iMainDS).Item(tmpStrCourseCode) = tmpResult '.ToString & ", " & tmpStrCourseCode
+        ''    Next
+        ''    '-----------End function
+
+
+        ''    'do other things todo: move to other loops
+        ''    dt.Rows(iMainDS).Item("approved_credits") = approvedCredits.ToString
+        ''    dt.Rows(iMainDS).Item("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
+
+        ''    objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
+        ''Next
+        ''dtLocalResults = Nothing
+        '''-----------------------------------------------------------------------------
+
+
+
+
+
+
+        '-------------------------------- MTHD 1--------------------------------------------
         Dim inxC As Integer = 0
         Dim levelPos = 0
-
 
         Dim dtGrades As New DataTable
 
@@ -406,17 +553,21 @@ Public Class ClassBroadsheets
                 '|----
                 dictMATNO = doCourses(dictMATNO, dictCol, dictRegistered_1, dictRegistered_2, tmpStrCourseCode) 'transfer matching score to dictMATNO
                 '|----
-                '---#Update dataset with result values
+
+                '---#Update dataset with result values and general values
                 If dictCol.Count > 0 Then
                     For iMainDS = 0 To dt.Rows.Count - 1
                         'dt.Rows(i).Item("matno") = colKeys(i)   'already there no need to rewrite
                         tmpStrCourseCode = dt.Columns(inxC).ColumnName
                         tmpStrMATNO = dt.Rows(iMainDS).Item("matno")
+                        dt.Rows(iMainDS).Item("approved_credits") = approvedCredits.ToString
+                        dt.Rows(iMainDS).Item("course_titles") = "[Mechanics of machines];[Engineering Laboratory]"
+
                         If dictMATNO.ContainsKey(tmpStrMATNO) Then
                             'todo
                             dt.Rows(iMainDS).Item(tmpStrCourseCode) = dictMATNO(tmpStrMATNO) '.ToString & ", " & tmpStrCourseCode
                         Else
-                            dt.Rows(iMainDS).Item(tmpStrCourseCode) = -3
+                            dt.Rows(iMainDS).Item(tmpStrCourseCode) = NR_CODE
                         End If
 
                     Next
@@ -426,6 +577,7 @@ Public Class ClassBroadsheets
 
             objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
         Next
+        '-------------------------------------------------------
 
         dtGrades = dt.Copy
 
@@ -503,7 +655,7 @@ Public Class ClassBroadsheets
         dt.Columns.Add(tmpCol)
         tmpCol = New DataColumn("Class", Type.GetType("System.String"))
         dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("Status", Type.GetType("System.String"))
+        tmpCol = New DataColumn("Category", Type.GetType("System.String"))
         dt.Columns.Add(tmpCol)
         tmpCol = New DataColumn("Failed", Type.GetType("System.String"))
         dt.Columns.Add(tmpCol)
@@ -511,17 +663,124 @@ Public Class ClassBroadsheets
         'others
         tmpCol = New DataColumn("Session", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
+        'Note when numbered this corresponds to
+        'Col0->sn to Col167->GPA to Col170->Failed to Col171->Session
 
-        'gpa100
-        'gpa200
-        '...
-        'wgpa100
-        '...
-        'fgpa
-        'dob
-        'session_of_entry
-        'mode_of_entry
-        'CourseCode_1
+        'broadsheet_all has some extra cols that are named thus
+        'Col172	Col173	Col174	Col175	ColNames	
+        'credits course_titles	
+        tmpCol = New DataColumn("Col172", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Col173", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Col174", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Col175", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("ColNames", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+
+        'gpa100  gpa200	gpa300	gpa400  gpa500	gpa600	gpa700	gpa800	gpa900
+        'wgpa100 wgpa200	wgpa300	wgpa400	wgpa500	
+        'wgpa600 wgpa700	wgpa800	wgpa900		
+        tmpCol = New DataColumn("gpa100", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa200", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa300", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa400", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa500", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa600", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa700", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa800", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gpa900", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa100", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa200", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa300", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa400", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa500", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa600", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa700", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa800", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("wgpa900", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("fpga", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        'Reg Student data
+        'student_firstname	student_surname	student_othernames	student_dept_idr	status	year_of_entry	session_idr_of_entry	mode_of_entry	dob	phone	email	gender	session_idr	CourseCode_1	CourseCode_2	Fees Status	level	dept_idr
+
+        tmpCol = New DataColumn("student_firstname", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("student_surname", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("student_othernames", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("student_dept_idr", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("status", Type.GetType("System.String"))   ' This stats is different from the one in broadsheet
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("year_of_entry", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("session_idr_of_entry", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+
+        tmpCol = New DataColumn("mode_of_entry", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("dob", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("phone", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("email", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("gender", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+
+        'reg specific
+        tmpCol = New DataColumn("session_idr", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("CourseCode_1", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("CourseCode_2", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("Fees_Status", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("level", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("dept_idr", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+
+
+
+        'Senate related
+        'cummulative_credits outstanding_credits approved_credits	failed_screening	
+        'school_fees
+
+        tmpCol = New DataColumn("course_titles", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("cummulative_credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("outstanding_credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("approved_credits", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+        tmpCol = New DataColumn("failed_screening", Type.GetType("System.String"))   '131
+        dt.Columns.Add(tmpCol)
+
 
         Return dt
     End Function
@@ -537,6 +796,16 @@ Public Class ClassBroadsheets
             'OR 'dictCol(tmpStr) = findMATNO(FSBroadsheetDS.Tables(0).Rows(i).Item("matno"), dictCol(i).key.name)   '
         Next
         Return dictCol
+    End Function
+    Function getApprovedCredits() As Integer
+        Dim retVal As Integer = 0
+        For Each dVal In dictCoursesOrderFS.Values
+            If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dVal) Then retVal = retVal + dictAllCourseCodeKeyAndCourseUnitVal(dVal)
+        Next
+        For Each dVal In dictCoursesOrderSS.Values
+            If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dVal) Then retVal = retVal + dictAllCourseCodeKeyAndCourseUnitVal(dVal)
+        Next
+        Return retVal
     End Function
     Function doCourses(dictMATNO As Dictionary(Of String, Integer), dictCol As Dictionary(Of String, Integer), dictRegistered_1 As Dictionary(Of String, String), dictRegistered_2 As Dictionary(Of String, String), tmpStrCourseCode As String) As Dictionary(Of String, Integer)
         '--transfer  the matching scores to dictMATNO
@@ -568,6 +837,7 @@ Public Class ClassBroadsheets
         Dim iMarker(5) As Integer
         Dim tmpStrColName As String = ""
         Dim tmpStrR As String = ""
+        Dim tmpStrRFailed As String = ""
         Dim tmpStrRGrades As String = ""
         Dim scores(160) As String
         Dim grades(160) As String
@@ -589,7 +859,7 @@ Public Class ClassBroadsheets
         For i = 0 To countRows - 1
             For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
                 tmpStrColName = dt.Columns(j).ColumnName
-                scores(j) = -4.ToString 'initialize on the fly  'TODO
+                scores(j) = DEFAULT_CODE.ToString 'initialize on the fly  'TODO
                 credits(j) = 0 'initialize on the fly  'TODO
                 ''Attempt to seperate 1st nd nd semester scores/credits
                 'If j <= scores_1.Length - 1 Then scores_1(j) = scores(j)
@@ -615,8 +885,9 @@ Public Class ClassBroadsheets
                             tmpStrRGrades = tmpStrRGrades & ", " & courses(j) & "/" & credits(j) & "/" & getGRADE(scores(j), Nothing, Nothing)
                         End If
                     End If
+
                 Else
-                    scores(j) = 0
+                    scores(j) = DEFAULT_CODE
                     If iMarker(0) = Nothing Then iMarker(0) = j   'on off marker
                 End If
                 'dtGrades.Columns(j).DataType = Type.GetType("System.String")
@@ -627,11 +898,14 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("RepeatCourses_1") = tmpStrR
             dtGrades.Rows(i).Item("RepeatCourses_1") = tmpStrRGrades
 
+
+
+
             tmpStrR = ""
             tmpStrRGrades = ""
             For j = COURSE_START_COL_2 To COURSE_END_COL_2 - 1  'Second semester
                 tmpStrColName = dt.Columns(j).ColumnName
-                scores(j) = -4.ToString 'initialize on the fly  'TODO
+                scores(j) = DEFAULT_CODE 'initialize on the fly  'TODO
                 credits(j) = 0 'initialize on the fly  'TODO
                 ''attempt to seperate 1st and 2nd sem courses
                 'If j - COURSE_START_COL_2 <= scores_2.Length - 1 Then scores_1(j - COURSE_START_COL_2) = scores(j)
@@ -658,7 +932,7 @@ Public Class ClassBroadsheets
                         End If
                     End If
                 Else
-                    scores(j) = 0
+                    scores(j) = DEFAULT_CODE
                     If iMarker(1) = Nothing Then iMarker(1) = j
                 End If
                 If IsDBNull(dt.Rows(i).Item(j)) Then dt.Rows(i).Item(j) = ""
@@ -689,8 +963,24 @@ Public Class ClassBroadsheets
             'levelPercentages(8) = 0
             'objBroadsheet.levelcgpaPercentages = levelPercentages
 
+            dt.Rows(i).Item("failed_screening") = "N0" 'todo determine from status RegStudentsDS.Tables(0).Rows(i).Item("failed_screening")
+            dt.Rows(i).Item("cummulative_credits") = 0 'todo determine when creating senate 
+            dt.Rows(i).Item("outstanding_credits") = 0   'RegStudentsDS.Tables(0).Rows(i).Item("outstanding_credits")
+
+            dt.Rows(i).Item("gpa100") = "0.000"
+            dt.Rows(i).Item("gpa200") = "0.000"
+            dt.Rows(i).Item("gpa300") = "0.000"
+            dt.Rows(i).Item("gpa400") = "0.000"
+            dt.Rows(i).Item("gpa500") = "0.000"
+            dt.Rows(i).Item("gpa600") = "0.000"
+            dt.Rows(i).Item("gpa700") = "0.000"
+            dt.Rows(i).Item("gpa800") = "0.000"
+            dt.Rows(i).Item("gpa900") = "0.000"
+            dt.Rows(i).Item("wgpa100") = "0.000"
             gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             dt.Rows(i).Item("GPA") = gpa.ToString
+            objBroadsheet.progressStr = "Computing Failed Courses" & " ..."
+            dt.Rows(i).Item("Failed") = getAllFailed(scores, courses, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits registered" & " ..."
             TCRs = getAllTCR(scores, credits, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits passed" & " ..."
@@ -707,6 +997,20 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("TCR") = TCRs(2)
             dt.Rows(i).Item("TCP") = TCPs(2)
             dt.Rows(i).Item("TCF") = dt.Rows(i).Item("TCR") - dt.Rows(i).Item("TCP")
+            'sTATUS
+            If IsDBNull(dt.Rows(i).Item("Status")) Then dt.Rows(i).Item("Status") = ""
+            If dt.Rows(i).Item("Status") = CATEGORY_DESCRIPTION_UNREGISTERED Then
+                dt.Rows(i).Item("Category") = CATEGORY_UNREGISTERED
+            ElseIf dt.Rows(i).Item("Status") = CATEGORY_DESCRIPTION_UNREGISTERED Then
+
+            Else
+                If CInt(dt.Rows(i).Item("TCF")) = 0 Then
+                    dt.Rows(i).Item("Category") = CATEGORY_SUCCESSFUL  'statusBS.SUCCESSFUL
+                Else
+                    dt.Rows(i).Item("Status") = CATEGORY_STUDENTS_WITH_CARRY_OVER
+                End If
+            End If
+
 
             objBroadsheet.progress = (i / countRows * 95)  'max 80+16 = 96%
         Next
@@ -1802,6 +2106,29 @@ Public Class ClassBroadsheets
             Return {-4, -4, -4}
         End Try
     End Function
+    Function getAllFailed(dScore As String(), dCourse As String(), dlevel As Integer) As String
+        Dim retVal As New List(Of String)
+        Dim retStr As String = ""
+        Dim nLastColInSem_1_ForLevel As Integer = LastColInSem_1_ForLevel(dlevel)
+        Dim nLastColInSem_2_ForLevel As Integer = LastColInSem_2_ForLevel(dlevel)
+        Try
+            For j = 0 To dScore.Count - 1
+                'If isPassed(toNum(dScore(i))) Then sumTCP = sumTCP + dCredit(i)
+                If j >= COURSE_START_COL And j <= nLastColInSem_1_ForLevel Then 'dScore_1.lenght - 1 Then
+                    'todo: optimize by avoiding the .contains function
+                    If Not isPassed(toNum(dScore(j))) And IsRegisteredScore(toNum(dScore(j))) Then retVal.Add(dCourse(j))
+                ElseIf j >= COURSE_START_COL_2 And j <= nLastColInSem_2_ForLevel Then
+                    If Not isPassed(toNum(dScore(j))) And IsRegisteredScore(toNum(dScore(j))) Then retVal.Add(dCourse(j))  'And Not dCourse(j).Contains("ColUNIQUE")
+                End If
+            Next
+
+            retStr = Array2sTR(retVal.ToArray, ", ")
+            Return retStr
+
+        Catch ex As Exception
+            Return "#"
+        End Try
+    End Function
 
     'Function getTCR(dScore As String(), dCredit As Integer()) As Integer
     '    Dim sumTCP As Integer
@@ -1844,4 +2171,7 @@ Public Class ClassBroadsheets
         If tmpCr > 0 Then tmpGPA = tmpGP / tmpCr Else tmpGPA = -1
         Return tmpGPA
     End Function
+
+
+
 End Class

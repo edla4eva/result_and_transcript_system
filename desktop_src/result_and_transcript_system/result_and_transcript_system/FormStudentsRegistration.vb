@@ -10,6 +10,13 @@ Public Class FormStudentsRegistration
     Dim tmpDS As DataSet
     Dim dsStudents, dsReg As New DataSet
 
+    'forced to do this
+    Dim regConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
+    Dim adapter As New OleDb.OleDbDataAdapter()
+    Dim dtReg As DataTable
+    Dim bnd As New BindingSource
+
+
     Private Sub FormStudentsRegistration_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.WindowState = FormWindowState.Maximized
 
@@ -39,12 +46,13 @@ Public Class FormStudentsRegistration
         Dim dDept As Integer = 1
         Try
             'mappDB.Dept = 1 'TODO
-            If CInt(TextBoxDeptID.Text) > 0 Then
-                dDept = CInt(TextBoxDeptID.Text) 'TODO
+            If CInt(TextBoxstudent_dept_idr.Text) > 0 Then
+                dDept = CInt(TextBoxstudent_dept_idr.Text) 'TODO
             Else
 
             End If
-            tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, dDept.ToString), "students")
+            'tmpDS = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_STUDENTS_IN_DEPT, dDept.ToString), "students")
+            fillRegUsingdataAdapter()
             'TODO:
             If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then mappDB.getAllCourses()
             CheckedListBoxCourses.Items.Clear()
@@ -57,9 +65,9 @@ Public Class FormStudentsRegistration
         End Try
     End Sub
     Public Sub resizeDatagrids(dGrid As String)
-        If dgvCourses.Rows.Count > 0 And dGrid = "Courses" Then
+        If DataGridViewAlReg.Rows.Count > 0 And dGrid = "Courses" Then
 
-            For Each col As DataGridViewColumn In dgvCourses.Columns
+            For Each col As DataGridViewColumn In DataGridViewAlReg.Columns
                 col.Width = 0
                 col.Visible = False
                 If col.HeaderText = "matno" Then
@@ -74,7 +82,7 @@ Public Class FormStudentsRegistration
                 End If
             Next
         ElseIf dgvStudents.Rows.Count > 0 And dGrid = "Students" Then
-
+            dgvStudents.Columns("matno").Frozen = True
             For Each col As DataGridViewColumn In dgvStudents.Columns
                 col.Width = 50
                 If col.HeaderText = "matno" Then
@@ -88,17 +96,17 @@ Public Class FormStudentsRegistration
         End If
     End Sub
     Public Sub getRegisteredCoursesForStudent(dMATNO As String)
-        Try
-            Dim tmpDSCourses As DataSet
-            mappDB.MATNO = dMATNO
-            tmpDSCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
-            dgvCourses.DataSource = tmpDSCourses.Tables("Courses").DefaultView
+        'Try
+        '    Dim tmpDSCourses As DataSet
+        '    mappDB.MATNO = dMATNO
+        '    tmpDSCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
+        '    dgvCourses.DataSource = tmpDSCourses.Tables("Courses").DefaultView
 
-            dgvCourses.Refresh()
-            resizeDatagrids("courses")
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        '    dgvCourses.Refresh()
+        '    resizeDatagrids("courses")
+        'Catch ex As Exception
+        '    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        'End Try
     End Sub
 
     Private Sub txtStudentMATNO_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentMATNO.TextChanged
@@ -131,17 +139,15 @@ Public Class FormStudentsRegistration
     End Sub
 
     Public Sub CaptureCourses()
-        If dgvCourses.Rows.Count < 1 Then Exit Sub
-        dgvCourses.Rows(0).Selected = True
         Dim units As Integer
-        Dim MATNO As String = dgvCourses.SelectedRows(0).Cells("matno").Value.ToString
-        'Dim session As Double = CInt(dgvCourses.SelectedRows(0).Cells("session_idr").Value)
-        'Dim fees As Double = CInt(dgvCourses.SelectedRows(0).Cells("Fees_Status").Value)
-
-
-        Dim courseCodes1 As String() = (dgvCourses.SelectedRows(0).Cells("CourseCode_1").Value).ToString.Split(";")
-        Dim courseCodes2 As String() = (dgvCourses.SelectedRows(0).Cells("CourseCode_2").Value).ToString.Split(";")
+        Dim courseCodes1 As String() = TextBoxCourseCode_1.Text.Split(";")
+        Dim courseCodes2 As String() = TextBoxCourseCode_2.Text.Split(";")
         Dim sumUnits As Integer = 0
+
+        'todo check if dictionary is lready loaded if not load
+        If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then
+            'todo:
+        End If
 
         For Each c1 In courseCodes1
             If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c1) Then
@@ -149,20 +155,28 @@ Public Class FormStudentsRegistration
                 sumUnits = sumUnits + units
             End If
         Next
-        ''Capture Studennt TODO
-        mappDB.MATNO = MATNO
+        For Each c2 In courseCodes2
+            If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c2) Then
+                units = dictAllCourseCodeKeyAndCourseUnitVal(c2)
+                sumUnits = sumUnits + units
+            End If
+        Next
 
         'Me.TextBoxCourseCode.Text = courseCode.ToString
         'Me.TextBoxSemester.Text = semester.ToString
         'Me.TextBoxUnits.Text = sumUnits.ToString
         Me.TextBoxTotalCredits.Text = sumUnits.ToString
-
+        If CInt(TextBoxTotalCredits.Text) > 50 Then
+            TextBoxTotalCredits.BackColor = Color.Pink
+        Else
+            TextBoxTotalCredits.BackColor = Color.White
+        End If
 
     End Sub
 
     Sub filterReg(dMATNO As String)
-        If dgvCourses.Rows.Count > 0 Then
-            dgvCourses.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO, dMATNO)
+        If DataGridViewAlReg.Rows.Count > 0 Then
+            DataGridViewAlReg.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO, dMATNO)
         End If
     End Sub
     Sub filterStudents(dMATNO As String)
@@ -172,23 +186,23 @@ Public Class FormStudentsRegistration
     End Sub
     Public Sub unregisterStudent()
         Dim oldLen As Integer = 0
-        If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+        If TextBoxCourseCode_1.Text.Contains(TextBoxCourseCode.Text) Then
             'If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
             'If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
             'MsgBox("Already Registered")
             'Else
             'If TextBoxCourse_1.Text = "" Then
-            oldLen = TextBoxCourse_1.Text.Length
-            TextBoxCourse_1.Text.Replace(TextBoxCourseCode.Text & ";", "")
-            If TextBoxCourse_1.Text.Length = oldLen Then
-                TextBoxCourse_1.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
+            oldLen = TextBoxCourseCode_1.Text.Length
+            TextBoxCourseCode_1.Text.Replace(TextBoxCourseCode.Text & ";", "")
+            If TextBoxCourseCode_1.Text.Length = oldLen Then
+                TextBoxCourseCode_1.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
             End If
 
-        ElseIf TextBoxCourse_2.Text.Contains(TextBoxCourseCode.Text) Then
-            oldLen = TextBoxCourse_2.Text.Length
-            TextBoxCourse_2.Text.Replace(TextBoxCourseCode.Text & ";", "")
-            If TextBoxCourse_2.Text.Length = oldLen Then
-                TextBoxCourse_2.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
+        ElseIf TextBoxCourseCode_2.Text.Contains(TextBoxCourseCode.Text) Then
+            oldLen = TextBoxCourseCode_2.Text.Length
+            TextBoxCourseCode_2.Text.Replace(TextBoxCourseCode.Text & ";", "")
+            If TextBoxCourseCode_2.Text.Length = oldLen Then
+                TextBoxCourseCode_2.Text.Replace(TextBoxCourseCode.Text, "")    'try again incase it is the last course
             End If
         Else
 
@@ -205,23 +219,9 @@ Public Class FormStudentsRegistration
             'insert record by record
 
             Dim dt As DataTable
-            'Dim dtCorrectFormat As DataTable
-            ''Dim dv As DataView
-            'dtCorrectFormat = mappDB.GetDataWhere(STR_SQL_ALL_REG).Tables(0)
-            'dtCorrectFormat.Rows.Clear()  'we dont need the rows
-            'For i = 0 To dt.Rows.Count - 1    'for each row in data table that has the records we want
-
-            '    For j = 0 To dtCorrectFormat.Columns.Count - 1 'for each col of datatable that has the structure(format) we want
-            '        If dt.Columns(j).ColumnName.Contains("matno") Then
-            '            '...
-            '        End If
-            '    Next
-            'Next
-
             dgvImportCourses.EndEdit()
             dgvImportCourses.Update()
             If Not (IsDBNull(dgvImportCourses.DataSource) Or (dgvImportCourses.Rows.Count = 0)) Then
-                dgvImportCourses.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
                 dt = dgvImportCourses.DataSource 'causes error if dirty
             Else
                 MsgBox("Empty Registration Records")
@@ -254,13 +254,13 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
-    Private Sub importRegUsingdataAdapter()
+    Private Function importRegUsingdataAdapter() As Boolean
         Try
             Dim strSQL As String
-            Dim dv As DataView = dgvCourses.DataSource
+            Dim dv As DataView = dgvImportCourses.DataSource
             Dim dtSource As DataTable
             Dim dtDestination As New DataTable
-            Dim dSFtomDB As New DataSet ' = dv.ToTable
+            Dim dSReg As New DataSet ' = dv.ToTable
             dtSource = dv.ToTable
 
             'createBroadsheetTables()
@@ -276,29 +276,29 @@ Public Class FormStudentsRegistration
                 'adapter.UpdateCommand = ""
                 'adapter.InsertCommand = ""
                 '1. fill it
-                adapter.Fill(dSFtomDB)
+                adapter.Fill(dsReg)
                 '2. put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
-                dgvImportCourses.DataSource = dSFtomDB.Tables(0).DefaultView
+                dgvImportCourses.DataSource = dSReg.Tables(0)
                 'MsgBox("After fresh fill")
-                adapter.InsertCommand = builder.GetInsertCommand
-                MsgBox(adapter.InsertCommand.CommandText)
-                dSFtomDB.Tables(0).Clear()  'empty table
-                adapter.Update(dSFtomDB)    'persist in db
+
+
+                dSReg.Tables(0).Clear()  'empty table
+                adapter.Update(dSReg)    'persist in db
 
                 Dim dRow As DataRow
                 'MsgBox("After empty db")
                 '3. edit it
                 For i = 0 To dtSource.Rows.Count - 1
-                    dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
-                    For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1       'Take as much as we have cols for to avoid errors
+                    dRow = dSReg.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
+                    For j = 0 To dSReg.Tables(0).Columns.Count - 1       'Take as much as we have cols for to avoid errors
                         If j > dtSource.Columns.Count - 1 Then Exit For
-                        dSFtomDB.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
+                        dSReg.Tables(0).Rows(i).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
                         'strColNames = strColNames & "," & dtSource.Columns(j).ColumnName
                     Next
                 Next
 
-                '4. load the mock data it in another datagridview
-                dgvImportCourses.DataSource = dSFtomDB.Tables(0).DefaultView
+                '4. load the mock data  in another datagridview
+                dgvImportCourses.DataSource = dSReg.Tables(0)
                 'MsgBox("After add to datatable")
 
                 '5. use datagridview tecnique to capture it as edited
@@ -307,13 +307,13 @@ Public Class FormStudentsRegistration
                 ' MsgBox("After refresh")
 
                 '6. save the underlying data (change from mock to real) to database (works bcos of datagridview technique)
-                adapter.Update(dSFtomDB) 'save
+                adapter.Update(dSReg) 'save
             End Using
         Catch ex As Exception
             MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
             logError(ex.ToString)
         End Try
-    End Sub
+    End Function
     Public Sub updatePix()
         'todo: get from ser doc
         Dim TMPileNAME As String = Application.StartupPath & "\photos\" & dgvStudents.SelectedRows(0).Cells("matno").Value & ".jpg"
@@ -323,8 +323,8 @@ Public Class FormStudentsRegistration
 
         Try
 
-            If My.Computer.FileSystem.FileExists(tmpileName) Then
-                PictureBox1.Image = Image.FromFile(tmpileName)
+            If My.Computer.FileSystem.FileExists(TMPileNAME) Then
+                PictureBox1.Image = Image.FromFile(TMPileNAME)
             ElseIf My.Computer.FileSystem.FileExists(TMP_PIC_FILE_NAME2) Then
                 PictureBox1.Image = Image.FromFile(TMP_PIC_FILE_NAME2)
             ElseIf My.Computer.FileSystem.FileExists(tmpileName3) Then
@@ -336,6 +336,46 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
+    Private Function fillRegUsingdataAdapter() As Boolean
+        Try
+            Dim strSQL As String
+
+            strSQL = "SELECT * FROM Reg" ' WHERE session_idr={1}"
+            regConn.ConnectionString = mappDB.getCorrectConnectionstring()
+            regConn.Open()
+            dtReg = mappDB.GetDataWhere(strSQL).Tables(0)
+            adapter = New OleDb.OleDbDataAdapter(strSQL, regConn)
+            adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
+
+                '1. fill it
+                adapter.Fill(dtReg)
+                bnd.DataSource = dtReg
+
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
+    End Function
+    Private Function updateRegUsingdataAdapter() As Boolean
+        Try
+            Dim strSQL As String
+
+            strSQL = "SELECT * FROM Reg" ' WHERE session_idr={1}"
+
+            'regConn.ConnectionString = mappDB.getCorrectConnectionstring()
+            'regConn.Open()
+
+            Dim builder As New OleDb.OleDbCommandBuilder(adapter)
+                builder.QuotePrefix = "["
+                builder.QuoteSuffix = "]"
+                adapter.Update(dtReg)    'persist in db
+
+
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
+    End Function
     Public Function UpdateRecordWhere(s As String) As String
         Dim returnVal As String = ""
         Try
@@ -377,21 +417,23 @@ Public Class FormStudentsRegistration
 
     Private Sub dgvStudents_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvStudents.RowsAdded
         On Error Resume Next
-        'For Each row As DataGridViewRow In Me.dgvStudents.Rows
-        '    If row.Cells.Item("Fees_Status").Value.ToString = "no" Then
-        '        row.DefaultCellStyle.BackColor = Color.White
+        dgvStudents.Rows(e.RowIndex).Cells("session_idr") = ComboBoxSessions.SelectedItem
 
-        '    ElseIf row.Cells.Item("Fees_Status").Value.ToString = "yes" Then
-        '        row.DefaultCellStyle.BackColor = Color.PaleVioletRed
+        dgvStudents.Rows(e.RowIndex).Cells("status").Value = CATEGORY_DESCRIPTION_REGISTERED
+        dgvStudents.Rows(e.RowIndex).Cells("level").Value = ComboBoxLevel.SelectedItem
+        dgvStudents.Rows(e.RowIndex).Cells("dept_idr").Value = mappDB.getDeptID(ComboBoxDepartments.SelectedItem)
 
-        '    End If
-        'Next
+        dgvStudents.Rows(e.RowIndex).Cells("mode_of_entry").Value = MODE_OF_ENTRY_UME
+
+
+
     End Sub
     Private Sub dgvStudents_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.RowEnter
         On Error Resume Next
-        If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
-            filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
+        If e.RowIndex >= 0 Then
+            captureReg(e.RowIndex)
         End If
+
     End Sub
 
     Private Function computeCredits() As Integer
@@ -404,17 +446,11 @@ Public Class FormStudentsRegistration
         End Try
     End Function
 
-    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
-        PictureBox2.Visible = False
-    End Sub
-
-    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        PictureBox2.Image = PictureBox1.Image
-        PictureBox2.Visible = Not PictureBox2.Visible
-    End Sub
-
     Private Sub FormStudentsRegistration_Closed(sender As Object, e As EventArgs) Handles Me.Closed
         MainForm.doCloseForm()
+        On Error Resume Next
+        regConn.Close()
+        regConn = Nothing
     End Sub
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
         If ProgressBarBS.Value < 97 Then ProgressBarBS.Value = (ProgressBarBS.Value + 3)
@@ -422,97 +458,94 @@ Public Class FormStudentsRegistration
 
 
     Private Sub ButtonRegister_DataGridVersion(sender As Object, e As EventArgs)
-        Dim dv As DataView
-        Dim dt As DataTable
-        dv = dgvCourses.DataSource
-        dt = dv.ToTable
-        If dgvCourses.Rows.Count > 0 Then
-            If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
-                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                    If dt.Rows(0).Item("CourseCode_1").ToString.Contains(TextBoxCourseCode.Text) Then
-                        MsgBox("Already Registered")
-                    Else
-                        dt.Rows(0).Item("CourseCode_1") = dt.Rows(0).Item("CourseCode_2").Value.ToString & ";" & TextBoxCourseCode.Text
-                    End If
-                ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                    If dt.Rows(0).Item("CourseCode_2").ToString.Contains(TextBoxCourseCode.Text) Then
-                        MsgBox("Already Registered")
-                    Else
-                        dt.Rows(0).Item("CourseCode_2").Value = dt.Rows(0).Item("CourseCode_1").ToString & ";" & TextBoxCourseCode.Text
-                    End If
-                End If
-                dgvCourses.DataSource = dt.DefaultView
-            End If
-        Else    'no course reg entry before
-            If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
-                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                    dt.Rows.Add({mappDB.MATNO, "", TextBoxCourseCode.Text}) '2nd sem
-                ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                    dt.Rows.Add({mappDB.MATNO, TextBoxCourseCode.Text, ""})
-                End If
-                dt.Rows(0).Item("session_idr").Value = TextBoxSession.Text
+        'Dim dv As DataView
+        'Dim dt As DataTable
+        'dv = dgvCourses.DataSource
+        'dt = dv.ToTable
+        'If dgvCourses.Rows.Count > 0 Then
+        '    If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
+        '        If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+        '            If dt.Rows(0).Item("CourseCode_1").ToString.Contains(TextBoxCourseCode.Text) Then
+        '                MsgBox("Already Registered")
+        '            Else
+        '                dt.Rows(0).Item("CourseCode_1") = dt.Rows(0).Item("CourseCode_2").Value.ToString & ";" & TextBoxCourseCode.Text
+        '            End If
+        '        ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
+        '            If dt.Rows(0).Item("CourseCode_2").ToString.Contains(TextBoxCourseCode.Text) Then
+        '                MsgBox("Already Registered")
+        '            Else
+        '                dt.Rows(0).Item("CourseCode_2").Value = dt.Rows(0).Item("CourseCode_1").ToString & ";" & TextBoxCourseCode.Text
+        '            End If
+        '        End If
+        '        dgvCourses.DataSource = dt.DefaultView
+        '    End If
+        'Else    'no course reg entry before
+        '    If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
+        '        If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
+        '            dt.Rows.Add({mappDB.MATNO, "", TextBoxCourseCode.Text}) '2nd sem
+        '        ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+        '            dt.Rows.Add({mappDB.MATNO, TextBoxCourseCode.Text, ""})
+        '        End If
+        '        dt.Rows(0).Item("session_idr").Value = TextBoxsession_idr.Text
 
-                dgvCourses.DataSource = dt.DefaultView
-            End If
-        End If
+        '        dgvCourses.DataSource = dt.DefaultView
+        '    End If
+        'End If
     End Sub
 
     Private Sub ButtonRegister_Click(sender As Object, e As EventArgs) Handles ButtonRegister.Click
 
         If dictAllCourseCodeKeyAndCourseSemesterVal.ContainsKey(TextBoxCourseCode.Text) Then
-                If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
-                If TextBoxCourse_1.Text.Contains(TextBoxCourseCode.Text) Then
+            If dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 1 Then
+                If TextBoxCourseCode_1.Text.Contains(TextBoxCourseCode.Text) Then
                     MsgBox("Already Registered")
                 Else
-                    If TextBoxCourse_1.Text = "" Then
-                        TextBoxCourse_1.Text = TextBoxCourseCode.Text
+                    If TextBoxCourseCode_1.Text = "" Then
+                        TextBoxCourseCode_1.Text = TextBoxCourseCode.Text
                     Else
-                        TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & TextBoxCourseCode.Text
+                        TextBoxCourseCode_1.Text = TextBoxCourseCode_1.Text & ";" & TextBoxCourseCode.Text
                     End If
                 End If
             ElseIf dictAllCourseCodeKeyAndCourseSemesterVal(TextBoxCourseCode.Text) = 2 Then
-                If TextBoxCourse_2.Text.Contains(TextBoxCourseCode.Text) Then
+                If TextBoxCourseCode_2.Text.Contains(TextBoxCourseCode.Text) Then
                     MsgBox("Already Registered")
                 Else
-                    If TextBoxCourse_2.Text = "" Then
-                        TextBoxCourse_2.Text = TextBoxCourseCode.Text
+                    If TextBoxCourseCode_2.Text = "" Then
+                        TextBoxCourseCode_2.Text = TextBoxCourseCode.Text
                     Else
-                        TextBoxCourse_2.Text = TextBoxCourse_2.Text & ";" & TextBoxCourseCode.Text
+                        TextBoxCourseCode_2.Text = TextBoxCourseCode_2.Text & ";" & TextBoxCourseCode.Text
                     End If
                 End If
             End If
 
-            End If
+        End If
 
     End Sub
-
-
-
-
-
-
 
     Private Sub ButtonImportStudentsFromExcel_Click(sender As Object, e As EventArgs) Handles ButtonImportStudentsFromExcel.Click
         MainForm.ChangeMenu("Student")
     End Sub
-    Private Sub dgv_courses_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCourses.CellContentClick
 
-        ButtonFormView.PerformClick()
-        If e.RowIndex >= 0 Then
-            captureReg(e.RowIndex)
-        End If
-
-    End Sub
     Sub captureReg(dRowIndex As Integer)
-        Dim recNo As Integer = BindingSourceStudents.Find("matno", dgvCourses.Rows(0).Cells("matno").Value)
-        BindingSourceStudents.Position = recNo
+        Try
+            TextBoxFancyDisplayCourse1.Text = ""
+            TextBoxFancyDisplayCourse1.Text = dgvStudents.Rows(dRowIndex).Cells("CourseCode_1").Value
+            TextBoxFancyDisplayCourse1.Text = TextBoxFancyDisplayCourse1.Text.Replace(";", vbCrLf)
+            
+            TextBoxFancyDisplayCourse1.Text=""
+            TextBoxFancyDisplayCourse2.Text = dgvStudents.Rows(dRowIndex).Cells("CourseCode_2").Value
+            TextBoxFancyDisplayCourse2.Text = TextBoxFancyDisplayCourse1.Text.Replace(";", vbCrLf)
+
+        Catch ex As Exception
+            logError(ex.ToString)
+        End Try
     End Sub
     Sub showCoursesList()
         PanelCourses.Visible = True
         For i = 0 To CheckedListBoxCourses.Items.Count - 1
-            If TextBoxCourse_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            If TextBoxCourseCode_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
                 CheckedListBoxCourses.SetItemChecked(i, True)
-            ElseIf TextBoxCourse_2.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+            ElseIf TextBoxCourseCode_2.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
                 CheckedListBoxCourses.SetItemChecked(i, True)
             End If
         Next
@@ -529,15 +562,10 @@ Public Class FormStudentsRegistration
         Dim dLevel As Integer = 100
         Dim dSession As String = "2018/2019"
 
-        dDept = ComboBoxDepartments.Text
-        dLevel = CInt(ComboBoxLevel.Text)
-        dSession = ComboBoxSessions.Text
-
-
-
+        dDept = ComboBoxDepartments.SelectedItem
+        dLevel = CInt(ComboBoxLevel.SelectedItem)
+        dSession = ComboBoxSessions.SelectedItem
         Try
-
-
             If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
                 resultFileName = FileOpenDialogBroadsheet.FileName()
                 objExcelFile.excelFileName = resultFileName
@@ -550,25 +578,25 @@ Public Class FormStudentsRegistration
                     Next
                     dt.Rows(0).Delete()
                 Else
-                    MsgBox("On first check, the file you selected is not in the FERMA format")
+                    MsgBox("On first check, the file you selected Is Not In the FERMA format")
 
                 End If
 
+                'FERMA fields as at 2021
+                'MatNo	Surname	Other_Names	Department	Level	Year	Mode	Sex	txtImageName	CourseCode_1	CourseCode_2	Fees_Status	Pix	txtImageName1
 
                 dt.AcceptChanges()
                 dgvImportCourses.DataSource = dt.DefaultView
-                For i = 0 To dt.Rows.Count - 1
-                    dgvImportCourses.Rows(i).Cells("dept_idr").Value = mappDB.getDeptID(ComboBoxDepartments.SelectedItem.ToString)
-                    dgvImportCourses.Rows(i).Cells("session_idr").Value = dSession
 
-                Next
 
 
                 dgvImportCourses.Tag = "FERMA"
                 dgvImportCourses.BringToFront()
 
-                checkReg()
 
+                If MsgBox("Do you want To save the imported Registration data into the database (cannot be undone)." & vbCrLf & "You can also do it later by clicking the Save Imported button", MsgBoxStyle.YesNo) = vbYes Then
+                    ButtonSaveReg.PerformClick()
+                End If
             End If
         Catch ex As Exception
             logError(ex.ToString)
@@ -576,11 +604,15 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
-
-
     Private Sub ComboBoxDepartments_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDepartments.SelectedIndexChanged
         Try
-            If dictDepts.Count > 0 Then TextBoxDeptID.Text = dictDepts.Keys(0).ToString
+            If dictDepts.Count > 0 Then
+                TextBoxstudent_dept_idr.Text = dictDepts.Keys(ComboBoxDepartments.SelectedIndex).ToString
+                TextBoxdept_idr.Text = dictDepts.Keys(ComboBoxDepartments.SelectedIndex).ToString
+            Else
+                TextBoxstudent_dept_idr.Text = "99"
+                TextBoxstudent_dept_idr.Text = "99"
+            End If
 
         Catch ex As Exception
 
@@ -589,17 +621,13 @@ Public Class FormStudentsRegistration
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         Select Case e.Argument
             Case 1
-                dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-                dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-                dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
-                dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+                getDeptSessionsIntoDictionaries()
                 GetData()
+
             Case Else
-                dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-                dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-                dictCourses = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "all_courses_1", "all_courses_1")
-                dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+                getDeptSessionsIntoDictionaries()
                 GetData()
+
         End Select
     End Sub
 
@@ -610,7 +638,7 @@ Public Class FormStudentsRegistration
             ComboBoxDepartments.Items.Add(dictDepts(key))
         Next
         If ComboBoxDepartments.Items.Count > 0 Then ComboBoxDepartments.SelectedIndex = 0
-        TextBoxDeptID.Text = dictDepts.Keys(0).ToString
+        TextBoxstudent_dept_idr.Text = dictDepts.Keys(0).ToString
         ComboBoxSessions.Items.Clear()
         For Each key In dictSessions.Keys
             ComboBoxSessions.Items.Add(dictSessions(key))
@@ -625,14 +653,10 @@ Public Class FormStudentsRegistration
         Next
         ComboBoxCourseCode.SelectedIndex = 0
 
-
-        dgvStudents.DataSource = tmpDS.Tables("students").DefaultView
+        dgvStudents.DataSource = bnd
         If dgvStudents.Rows.Count > 0 Then
-            getRegisteredCoursesForStudent(dgvStudents.Rows(0).Cells("matno").Value.ToString)
-            'resize cols
             resizeDatagrids("students")
         End If
-
 
         TimerBS.Stop()
         btnReset.Enabled = True
@@ -643,18 +667,38 @@ Public Class FormStudentsRegistration
         'save to db 
         If dgvImportCourses.Tag = "RTPS" Then
             MsgBox("Registration data will now be inserted into database")
-            importRegUsingdataAdapter()
+            'importRegUsingdataAdapter() 'METHOD 1: issues
+            TextBoxImport.Text = mappDB.manualRegInsertDB(dgvImportCourses.DataSource.totable)         'METHOD 2
+            'status
+            If TextBoxImport.Text.Length > 5 Then
+                TextBoxImport.Visible = True
+                logError(TextBoxImport.Text.Length)
+            Else
+                TextBoxImport.Visible = False
+            End If
 
             CaptureCourses()
             dgvImportCourses.SendToBack()
             MsgBox("Saved successfully")
-        Else
+        Else    'FERMA
             MsgBox("A lot has to be done to convert from this format to the required format for Registration")
-            importReg()
-            MsgBox("Saved successfully")
+            If checkRegTransformFromFERMA_To_RTPS() Then
+                dgvImportCourses.SendToBack()
+                MsgBox("Could Not convert format")
+                Exit Sub
+            End If
+            'importReg() 'import reg manually
+            If importRegUsingdataAdapter() Then
+                CaptureCourses()
+                dgvImportCourses.SendToBack()
+                MsgBox("Saved successfully")
+            Else
+                MsgBox("Could Not Save")
+            End If
+
         End If
     End Sub
-    Sub checkReg()
+    Function checkRegTransformFromFERMA_To_RTPS() As Boolean     'not required
         Dim tmpDV As DataView
         Dim tmpDT As DataTable
         Dim snRow As Integer
@@ -664,77 +708,63 @@ Public Class FormStudentsRegistration
         Dim colCount As Integer = 0
         Dim lstCols As New List(Of Integer)
         Dim listcolNames As New List(Of String)
-        tmpDV = Me.dgvImportCourses.DataSource 'TODO: causes error if dirty
-        tmpDT = tmpDV.ToTable()
-
-        '# Detect header row
-        rowCount = tmpDT.Rows.Count
-        For i = 0 To rowCount - 1
-            If tmpDT.Rows(i).ItemArray().Contains("matno") Or tmpDT.Rows(i).ItemArray().Contains("MAT") Then
-                Debug.Print("ColumnHeader at row: " & i)
-                snRow = i
-                Exit For
-            End If
-        Next
-
-        Dim dictColHeaders As New Dictionary(Of Integer, String)
-        '# display header rows
-        colCount = dgvImportCourses.Columns.Count
-        For i = 0 To colCount - 1
-            dgvImportCourses.Columns(i).HeaderText = dgvImportCourses.Item(i, snRow).Value.ToString
-            dictColHeaders.Add(i, dgvImportCourses.Item(i, snRow).Value.ToString)
-        Next
-
-        '#change column names to match header text
         Try
-            For i = 0 To colCount - 1
-                If dictColHeaders.ContainsValue(dgvImportCourses.Columns(i).HeaderText) Then
-                    dgvImportCourses.Columns(i).Name = dgvImportCourses.Rows(snRow).Cells(i).Value.ToString
+            tmpDV = Me.dgvImportCourses.DataSource 'TODO: causes error if dirty
+            tmpDT = tmpDV.ToTable()
+            'FERMA fields as at 2021
+            'MatNo	Surname	Other_Names	Department	Level	Year	Mode	Sex	txtImageName	CourseCode_1	CourseCode_2	Fees_Status	Pix	txtImageName1
+            'RTPS Format
+            'matno   student_firstname	student_surname	student_othernames	student_dept_idr	status	year_of_entry	session_idr_of_entry	mode_of_entry	dob	phone	email	gender	session_idr	CourseCode_1	CourseCode_2	Fees_Status	level	dept_idr
+            Dim dtCorrectFormat As DataTable
+            Dim dRow As DataRow
+            Dim dDeprID As Integer = 1
+            'Dim dv As DataView
+            dtCorrectFormat = mappDB.GetDataWhere("SELECT * FROM Reg WHERE matno=''").Tables(0)
+            If dtCorrectFormat.Rows.Count > 0 Then dtCorrectFormat.Rows.Clear()  'we dont need the rows
+            For i = 0 To tmpDT.Rows.Count - 1    'for each row in data table that has the records we want
+                dRow = dtCorrectFormat.NewRow()
+                For j = 0 To dtCorrectFormat.Columns.Count - 1 'for each col of datatable that has the structure(format) we want
+                    'If tmpDT.Columns(j).ColumnName.Contains("matno") Then
+                    'End If
+                    dRow.Item("matno") = tmpDT.Rows(i).Item("matno")
+                    dRow.Item("student_firstname") = tmpDT.Rows(i).Item("Other_Names")
+                    dRow.Item("student_surname") = tmpDT.Rows(i).Item("Surname")
+                    dRow.Item("student_othernames") = ""
+                    dDeprID = mappDB.getDeptID(tmpDT.Rows(i).Item("Department").ToString.ToUpper)
+                    If dDeprID >= 1 Then dDeprID = 99
+                    dRow.Item("student_dept_idr") = dDeprID.ToString
+                    dRow.Item("status") = "SUCCESSFUL"
+                    dRow.Item("year_of_entry") = Now.Year
+                    dRow.Item("session_idr_of_entry") = ComboBoxSessions.SelectedItem
+                    dRow.Item("mode_of_entry") = "UME"
+                    dRow.Item("dob") = Now.ToShortDateString
+                    dRow.Item("phone") = "080"
+                    'MatNo	Surname	Other_Names	Department	Level	Year	Mode	Sex	txtImageName	CourseCode_1	CourseCode_2	Fees_Status	Pix	txtImageName1
 
-                Else
-                    'note column to delete
-                    lstCols.Add(i)
-                    listcolNames.Add(dgvImportCourses.Columns(i).Name)
-                    'DataGridView1.Columns.RemoveAt(i)
-                End If
+                    dRow.Item("email") = "Nil"
+                    dRow.Item("gender") = "male"
+                    dRow.Item("session_idr") = ComboBoxSessions.SelectedItem
 
+                    dRow.Item("CourseCode_1") = tmpDT.Rows(i).Item("CourseCode_1")
+                    dRow.Item("CourseCode_2") = tmpDT.Rows(i).Item("CourseCode_2")
+                    dRow.Item("Fees_Status") = "True"
+                    dRow.Item("level") = tmpDT.Rows(i).Item("level")
+                    dRow.Item("dept_idr") = dDeprID
+
+                Next
             Next
 
-            'delete noted useless columns
-            Dim delColCount = 0
-            For Each iName In listcolNames
-                tmpDT.Columns.Remove(iName) 'TODO: its not removing, just moving to the end
-                'DataGridView1.InvalidateColumn(iName)
-                delColCount += 1 'update count of deleted cols
-            Next
-
-            'delete header rows
-            tmpDT.AcceptChanges()
-
-            For j = 0 To snRow
-                tmpDT.Rows(0).Delete()
-                tmpDT.AcceptChanges()
-            Next
-
-            rowCount = tmpDT.Rows.Count
-            ''delete empty rows below
-            'rowCount = tmpDT.Rows.Count
-            'If emptyRow > 0 Then
-            '    For j = emptyRow To rowCount - 1
-            '        tmpDT.Rows(emptyRow).Delete()   'keep deleting the last row
-            '    Next
-            'End If
             dgvImportCourses.DataSource = Nothing
             dgvImportCourses.Refresh()
-            dgvImportCourses.DataSource = tmpDT
+            dgvImportCourses.DataSource = dtCorrectFormat
             dgvImportCourses.Refresh()
-
+            Return True
         Catch ex As Exception
             MessageBox.Show("Result is not in the correct format, please correct ant try again")
             logError(ex.ToString)
-            Exit Sub
+            Return False
         End Try
-    End Sub
+    End Function
 
     Function exportRegToFERMA(Optional internal As Boolean = True, Optional AccessFileName As String = "") As Boolean
         Try
@@ -778,9 +808,7 @@ Public Class FormStudentsRegistration
 
     End Function
     Private Sub dgvStudents_Click(sender As Object, e As EventArgs) Handles dgvStudents.Click
-        If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
-            filterReg(dgvStudents.SelectedRows(0).Cells("matno").Value.ToString)
-        End If
+
     End Sub
 
 
@@ -792,7 +820,7 @@ Public Class FormStudentsRegistration
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs)
         'TODO: create a user control for these combo box. it should have events that are aware o dictionary storing sessions, new session added, auto load, auto update etc
         Try
-            TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+            TextBoxsession_idr.Text = ComboBoxSessions.SelectedItem.ToString
 
         Catch ex As Exception
 
@@ -819,10 +847,10 @@ Public Class FormStudentsRegistration
 
 
             If exportRegToFERMA(False, resultFileName) Then
-                    MsgBox("Exported to FERMA")
-                Else
-                    MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
-                End If
+                MsgBox("Exported to FERMA")
+            Else
+                MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
+            End If
 
 
         Else
@@ -863,7 +891,7 @@ Public Class FormStudentsRegistration
 
         End If
 
-        If MsgBox("Do you want to save the imported Registration data into the database (cannot be undone)." & vbCrLf & "You ca also do it later by clicking the Save Imported button", MsgBoxStyle.YesNo) = vbYes Then
+        If MsgBox("Do you want to save the imported Registration data into the database (cannot be undone)." & vbCrLf & "You can also do it later by clicking the Save Imported button", MsgBoxStyle.YesNo) = vbYes Then
             ButtonSaveReg.PerformClick()
         End If
     End Sub
@@ -874,14 +902,14 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub ComboBoxSessions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSessions.SelectedIndexChanged
-        If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxSession.Text = ComboBoxSessions.SelectedItem.ToString
+        If Not ComboBoxSessions.SelectedItem = Nothing Then TextBoxsession_idr.Text = ComboBoxSessions.SelectedItem.ToString
 
     End Sub
 
 
     Private Sub ComboBoxLevel_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLevel.SelectedIndexChanged
         'TODO: ComboBoxCourseCode.filter(level)
-        If Not ComboBoxLevel.SelectedItem = Nothing Then TextBoxLevelreg.Text = ComboBoxLevel.SelectedItem.ToString
+        If Not ComboBoxLevel.SelectedItem = Nothing Then TextBoxlevel.Text = ComboBoxLevel.SelectedItem.ToString
 
     End Sub
 
@@ -911,21 +939,30 @@ Public Class FormStudentsRegistration
 
         If MsgBox("Are the courses corectly displayed" & vbCrLf & strReg1 & vbCrLf & vbCrLf & strReg2, MsgBoxStyle.YesNo) = vbYes Then
             PanelCourses.Visible = False
-            TextBoxCourse_1.Text = strReg1
-            TextBoxCourse_2.Text = strReg2
+            TextBoxCourseCode_1.Text = strReg1
+            TextBoxCourseCode_2.Text = strReg2
         End If
     End Sub
 
     Private Sub dgvStudents_RowStateChanged(sender As Object, e As DataGridViewRowStateChangedEventArgs) Handles dgvStudents.RowStateChanged
-        ' If dgvStudents.Rows.dirty
-        If tmpDS.Tables("Students").Rows.Count > 0 And dgvStudents.SelectedRows.Count > 0 Then
+        Try
 
-            filterReg(tmpDS.Tables("Students").Rows(0).Item("matno"))
-                CaptureCourses()
+            'For i = 0 To dgvStudents.Rows.Count - 1
+            '    If Not dgvStudents.Rows(i).Cells.Item("CourseCode_1").Value.ToString = "" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.Green
+            '    ElseIf Not dgvStudents.Rows(i).Cells.Item("CourseCode_2").Value.ToString = "" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.Green
+            '    ElseIf dgvStudents.Rows(i).Cells.Item("Fees_Status").Value.ToString = "Yes" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.White
+            '    ElseIf dgvStudents.Rows(i).Cells.Item("Fees_Status").Value.ToString = "No" Then
+            '        dgvStudents.Rows(i).DefaultCellStyle.BackColor = Color.Pink
 
+            '    End If
+            'Next
 
-            updatePix()
-        End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub ButtonCancelReg_Click(sender As Object, e As EventArgs) Handles ButtonCancelReg.Click
@@ -966,7 +1003,7 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub dgvStudents_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvStudents.CellContentClick
-        ButtonFormView.PerformClick()
+        On Error Resume Next
         If e.RowIndex >= 0 Then
             captureReg(e.RowIndex)
         End If
@@ -975,7 +1012,7 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefreshFormview.Click
 
-        bindControlsToReg
+        bindcontrolsToReg()
     End Sub
     Sub bindcontrolsToReg()
         'Dim rd As OleDb.OleDbDataReader
@@ -987,32 +1024,68 @@ Public Class FormStudentsRegistration
         'TextBoxMATNO.DataBindings.Item(0).DataSource =
         If TextBoxMATNO.DataBindings.Count = 0 Then
             TextBoxMATNO.DataBindings.Add("Text", BindingSourceStudents, "matno")
-            TextBoxSurname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
-            TextBoxFirstName.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
-            TextBoxOtherNames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
-            TextBoxEntrySession.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
-            TextBoxEntryMode.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
-
+            TextBoxstudent_surname.DataBindings.Add("Text", BindingSourceStudents, "student_surname")
+            TextBoxstudent_firstname.DataBindings.Add("Text", BindingSourceStudents, "student_firstname")
+            TextBoxstudent_othernames.DataBindings.Add("Text", BindingSourceStudents, "student_othernames")
+            TextBoxstudent_dept_idr.DataBindings.Add("Text", BindingSourceStudents, "student_dept_idr")
             TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
-
-
-            TextBoxEntryYear.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
+            TextBoxyear_of_entry.DataBindings.Add("Text", BindingSourceStudents, "year_of_entry")
+            TextBoxsession_idr_of_entry.DataBindings.Add("Text", BindingSourceStudents, "session_idr_of_entry")
+            TextBoxmode_of_entry.DataBindings.Add("Text", BindingSourceStudents, "mode_of_entry")
             TextBoxdob.DataBindings.Add("Text", BindingSourceStudents, "dob")
             TextBoxphone.DataBindings.Add("Text", BindingSourceStudents, "phone")
             TextBoxemail.DataBindings.Add("Text", BindingSourceStudents, "email")
             TextBoxgender.DataBindings.Add("Text", BindingSourceStudents, "gender")
-
-            'reg specific
-            TextBoxSession.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
-
-            TextBoxCourse_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
-            TextBoxCourse_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
-            TextBoxFeesReg.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
-            TextBoxLevelreg.DataBindings.Add("Text", BindingSourceStudents, "level")
-            'TextBoxstatus.DataBindings.Add("Text", BindingSourceStudents, "status")
+            TextBoxsession_idr.DataBindings.Add("Text", BindingSourceStudents, "session_idr")
+            TextBoxCourseCode_1.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_1")
+            TextBoxCourseCode_2.DataBindings.Add("Text", BindingSourceStudents, "CourseCode_2")
+            TextBoxFees_Status.DataBindings.Add("Text", BindingSourceStudents, "Fees_Status")
+            TextBoxlevel.DataBindings.Add("Text", BindingSourceStudents, "level")
+            TextBoxdept_idr.DataBindings.Add("Text", BindingSourceStudents, "dept_idr")
 
         End If
     End Sub
+    Private Function UpdateDBromDGVUsingDataAdapter(dt As DataTable)
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = mappDB.getCorrectConnectionstring()
+                xConn.Open()
+
+                'Insert, update And delete queries
+                Dim updateQuery As String = STR_SQL_UPDATESTUDENTS_WITH_PARAMS ' "UPDATE Reg SET student_firstname=@first,student_othernames=@middle,student_surname=@last WHERE matno=@matno"
+                Dim deleteQuery As String = STR_SQL_DELETE_STUDENTS_WITH_PARAMS '"DELETE FROM Reg WHERE matno=@matno"
+                Dim insertQuery As String = STR_SQL_INSERT_STUDENTS_WITH_PARAMS ' "INSERT INTO Reg (`student_firstname`, `student_othernames`, `student_surname`, matno) VALUES(@first,@middle,@last,@matno)"
+
+                'Create the parameters for the queries above
+                'Call getInsertParamsRegForm()          'Dim insertParams As New OleDb.OleDbParameter()
+
+                Dim DeleteParams As New OleDb.OleDbParameter("@matno", OleDb.OleDbType.Integer, 100, "matno")
+
+                ' Create the SqlCommand objects that will be used by the DataAdapter to modify the source table
+                Dim insertComm As New OleDb.OleDbCommand(insertQuery, xConn)
+                Dim updateComm As New OleDb.OleDbCommand(updateQuery, xConn)
+                Dim deleteComm As New OleDb.OleDbCommand(deleteQuery, xConn)
+
+                ' Associate the parameters with the proper SqlCommand object
+                insertComm.Parameters.AddRange(getInsertParamsRegForm.ToArray)
+                updateComm.Parameters.AddRange(getUpdateParamsRegForm.ToArray)
+                deleteComm.Parameters.Add(DeleteParams)
+
+                'Give the DataAdapter the commands it needs to be able to properly update your database table
+                Dim dataAdapter As New OleDb.OleDbDataAdapter() '(insertComm, updateComm, deleteComm)
+                dataAdapter.InsertCommand = insertComm
+                dataAdapter.UpdateCommand = updateComm
+                dataAdapter.DeleteCommand = deleteComm
+                '// Calling the Update method executes the proper command based on the modifications to the specified
+                '// DataTable object then commits these changes to the database
+                dataAdapter.Update(dt)
+                xConn.Close()
+            End Using
+
+        Catch ex As Exception
+            MsgBox("Could not save records" & vbCrLf & ex.Message)
+        End Try
+    End Function
     Public Sub InsertOrUpdateUsingDataAdapter(dMATno As String, insert As Boolean)
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
@@ -1130,7 +1203,7 @@ Public Class FormStudentsRegistration
     End Sub
 
 
-    Private Sub TextBoxCourse_1_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_1.Click
+    Private Sub TextBoxCourse_1_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_1.Click
         showCoursesList()
     End Sub
 
@@ -1139,11 +1212,21 @@ Public Class FormStudentsRegistration
         'dsStudents.Tables(0).update?   'todo
         Try
             For Each itm In ComboBoxEntryMode.Items
-                If itm.ToString.Contains(TextBoxEntryMode.Text) Then
+                If itm.ToString.Contains(TextBoxmode_of_entry.Text) Then
                     ComboBoxEntryMode.SelectedItem = itm
                 End If
             Next
-
+            For Each itm In ComboBoxStatus.Items
+                If itm.ToString.Contains(TextBoxstatus.Text) Then
+                    ComboBoxStatus.SelectedItem = itm
+                End If
+            Next
+            For Each itm In ComboBoxGender.Items
+                If itm.ToString.Contains(TextBoxgender.Text) Then
+                    ComboBoxGender.SelectedItem = itm
+                End If
+            Next
+            CaptureCourses()
             BindingSourceStudents.EndEdit()
         Catch ex As Exception
             logError(ex.ToString)
@@ -1153,7 +1236,8 @@ Public Class FormStudentsRegistration
     Private Sub ButtonSaveRecord_Click(sender As Object, e As EventArgs) Handles ButtonSaveRecord.Click
         Try
             'always update  table on save
-            InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, False)
+            'InsertOrUpdateUsingDataAdapter(TextBoxMATNO.Text, False)
+            UpdateDBromDGVUsingDataAdapter(BindingSourceStudents.DataSource)
 
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -1202,7 +1286,9 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub ComboBoxShortCuts1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxShortCuts1.SelectedIndexChanged
+        'Todo: improe code remove multipe exit sub
         Dim dLevel, dSession, dDeptID As String
+        dLevel = "100"
         Select Case ComboBoxShortCuts1.SelectedItem
             Case "Add All 100L Courses"
                 dLevel = "100"
@@ -1216,41 +1302,83 @@ Public Class FormStudentsRegistration
                 dLevel = "500"
             Case "Add All Departmetal Courses"
                 MsgBox("Haba! fear God now :)")
-                For Each item In CheckedListBoxCourses.Items
-                    If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then item.checked = True
+                For i = 0 To CheckedListBoxCourses.Items.Count - 1
+                    If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(CheckedListBoxCourses.Items(i).ToString) Then
+                        If dictAllCourseCodeKeyAndCourseLevelVal(CheckedListBoxCourses.Items(i).ToString) = 100 Then CheckedListBoxCourses.SetItemChecked(i, True)
+                    End If
                 Next
-                PanelCourses.Visible = True
+                ButtonOKReg.PerformClick()
+                Exit Sub
             Case "Add All Faculty Courses"
                 MsgBox("Haba! fear God now")
-                For Each item In CheckedListBoxCourses.Items
-                    If dictAllCourseCodeKeyAndCourseLevelVal(item) = 100 Then item.checked = True
+                For i = 0 To CheckedListBoxCourses.Items.Count - 1
+                    If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(CheckedListBoxCourses.Items(i).ToString) Then
+                        If dictAllCourseCodeKeyAndCourseLevelVal(CheckedListBoxCourses.Items(i).ToString) = 100 Then CheckedListBoxCourses.SetItemChecked(i, True)
+                    End If
                 Next
-                PanelCourses.Visible = True
+                ButtonOKReg.PerformClick()
+                Exit Sub
+            Case "Clear all/Unregister All"
+                TextBoxCourseCode_1.Text = ""
+                TextBoxCourseCode_2.Text = ""
+                Exit Sub
         End Select
 
         session_idr = ComboBoxSessions.SelectedItem
-        course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedIndex.ToString)
+        course_dept_idr = mappDB.getDeptID(ComboBoxDepartments.SelectedItem.ToString)
 
-        'todo: use course order ds or dict to auto register
-        If Not dictCoursesOrderFS.Count > 0 Then
-            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel)
+
+        If dictCoursesOrderFS.Count = 0 Then
+            If getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) = False Then
+                MsgBox("Cannot load authorized course list")
+                Exit Sub
+            End If
         End If
 
         If dictCoursesOrderFS.Count > 0 Then
-            For Each cKey In dictCoursesOrderFS.Keys
-                If TextBoxCourse_1.Text = "" Then
-                    TextBoxCourse_1.Text = cKey
+            For Each cVal In dictCoursesOrderFS.Values
+                If TextBoxCourseCode_1.Text = "" Then
+                    TextBoxCourseCode_1.Text = cVal
                 Else
-                    TextBoxCourse_1.Text = TextBoxCourse_1.Text & ";" & TextBoxCourse_1.Text & cKey
+                    TextBoxCourseCode_1.Text = TextBoxCourseCode_1.Text & ";" & cVal
+                End If
+            Next
+        End If
+        If dictCoursesOrderFS.Count > 0 Then
+            For Each cVal In dictCoursesOrderSS.Values
+                If TextBoxCourseCode_2.Text = "" Then
+                    TextBoxCourseCode_2.Text = cVal
+                Else
+                    TextBoxCourseCode_2.Text = TextBoxCourseCode_2.Text & ";" & cVal
                 End If
             Next
         End If
 
 
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        updateRegUsingdataAdapter()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
+        fillRegUsingdataAdapter()
+    End Sub
+
+    Private Sub ComboBoxStatus_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxStatus.SelectedIndexChanged
+        TextBoxstatus.Text = ComboBoxStatus.SelectedItem
+    End Sub
+
+    Private Sub TextBoxmode_of_entry_TextChanged(sender As Object, e As EventArgs) Handles TextBoxmode_of_entry.TextChanged
 
     End Sub
 
-    Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourse_2.Click
+    Private Sub ComboBoxGender_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxGender.SelectedIndexChanged
+        TextBoxgender.Text = ComboBoxGender.SelectedItem
+    End Sub
+
+    Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_2.Click
         showCoursesList()
     End Sub
 End Class

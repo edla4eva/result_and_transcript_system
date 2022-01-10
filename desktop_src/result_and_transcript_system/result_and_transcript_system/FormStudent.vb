@@ -185,7 +185,7 @@
             dgvStudents.EndEdit()
             dgvStudents.Update()
             If Not ((IsDBNull(dgvStudents.DataSource) Or (dgvStudents.Rows.Count = 0))) Then
-                dgvStudents.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
+                'dgvStudents.DataSource.AcceptChanges 'TODO: dataTable or dataView? lazy loading issues
                 If dgvStudents.DataSource.GetType Is dv.GetType Then
                     dv = dgvStudents.DataSource
                     dt = dv.ToTable
@@ -275,7 +275,7 @@
         Dim dLevel, dSession, dDeptID As String
         dLevel = dgvStudents.Rows(0).Cells("level").Value
         dSession = dgvStudents.Rows(0).Cells("session_idr").Value
-        dDeptID = dgvStudents.Rows(0).Cells("department_idr").Value
+        dDeptID = dgvStudents.Rows(0).Cells("student_dept_idr").Value
 
         'todo: use course order ds or dict to auto register
         If Not dictCoursesOrderFS.Count > 0 Then
@@ -283,20 +283,20 @@
         End If
 
         If dictCoursesOrderFS.Count > 0 Then
-            For Each cKey In dictCoursesOrderFS.Keys
+            For Each cVal In dictCoursesOrderFS.Values
                 If txtCourses_1 = "" Then
-                    txtCourses_1 = cKey
+                    txtCourses_1 = cVal
                 Else
-                    txtCourses_1 = txtCourses_1 & ";" & txtCourses_1 & cKey
+                    txtCourses_1 = txtCourses_1 & ";" & txtCourses_1 & cVal
                 End If
             Next
         End If
         If dictCoursesOrderFS.Count > 0 Then
-            For Each cKey In dictCoursesOrderSS.Keys
+            For Each cVal In dictCoursesOrderSS.Keys
                 If txtCourses_2 = "" Then
-                    txtCourses_2 = cKey
+                    txtCourses_2 = cVal
                 Else
-                    txtCourses_2 = txtCourses_2 & ";" & txtCourses_2 & cKey
+                    txtCourses_2 = txtCourses_2 & ";" & txtCourses_2 & cVal
                 End If
             Next
         End If
