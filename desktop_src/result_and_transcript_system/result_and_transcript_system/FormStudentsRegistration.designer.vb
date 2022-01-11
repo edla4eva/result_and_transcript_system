@@ -87,6 +87,8 @@ Partial Class FormStudentsRegistration
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.PanelForm = New System.Windows.Forms.Panel()
+        Me.ComboBoxGender = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxStatus = New System.Windows.Forms.ComboBox()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.TextBoxgender = New System.Windows.Forms.TextBox()
         Me.Label21 = New System.Windows.Forms.Label()
@@ -140,8 +142,6 @@ Partial Class FormStudentsRegistration
         Me.BindingSourceStudents = New System.Windows.Forms.BindingSource(Me.components)
         Me.ButtonFormView = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.ComboBoxStatus = New System.Windows.Forms.ComboBox()
-        Me.ComboBoxGender = New System.Windows.Forms.ComboBox()
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -195,7 +195,7 @@ Partial Class FormStudentsRegistration
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(656, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(731, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -892,7 +892,28 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.Name = "PanelForm"
         Me.PanelForm.Size = New System.Drawing.Size(659, 461)
         Me.PanelForm.TabIndex = 87
-        Me.PanelForm.Visible = False
+        '
+        'ComboBoxGender
+        '
+        Me.ComboBoxGender.AutoCompleteCustomSource.AddRange(New String() {"male", "female"})
+        Me.ComboBoxGender.FormattingEnabled = True
+        Me.ComboBoxGender.Items.AddRange(New Object() {"male", "female"})
+        Me.ComboBoxGender.Location = New System.Drawing.Point(247, 292)
+        Me.ComboBoxGender.Name = "ComboBoxGender"
+        Me.ComboBoxGender.Size = New System.Drawing.Size(75, 24)
+        Me.ComboBoxGender.TabIndex = 118
+        Me.ComboBoxGender.Text = "male"
+        '
+        'ComboBoxStatus
+        '
+        Me.ComboBoxStatus.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
+        Me.ComboBoxStatus.FormattingEnabled = True
+        Me.ComboBoxStatus.Items.AddRange(New Object() {"REGISTERED", "SUCCESSFUL", "STUDENTS WITH CARRY OVER", "PROBATION", "FAIL/WITHDRAW", "TEMPORARY WITHDRAWAL", "UNREGISTERED"})
+        Me.ComboBoxStatus.Location = New System.Drawing.Point(427, 306)
+        Me.ComboBoxStatus.Name = "ComboBoxStatus"
+        Me.ComboBoxStatus.Size = New System.Drawing.Size(224, 24)
+        Me.ComboBoxStatus.TabIndex = 117
+        Me.ComboBoxStatus.Text = "REGISTERED"
         '
         'Label22
         '
@@ -1352,28 +1373,6 @@ Partial Class FormStudentsRegistration
         Me.Button1.TabIndex = 89
         Me.Button1.Text = "Save Grid"
         Me.Button1.UseVisualStyleBackColor = True
-        '
-        'ComboBoxStatus
-        '
-        Me.ComboBoxStatus.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
-        Me.ComboBoxStatus.FormattingEnabled = True
-        Me.ComboBoxStatus.Items.AddRange(New Object() {"REGISTERED", "SUCCESSFUL", "STUDENTS WITH CARRY OVER", "PROBATION", "FAIL/WITHDRAW", "TEMPORARY WITHDRAWAL", "UNREGISTERED"})
-        Me.ComboBoxStatus.Location = New System.Drawing.Point(427, 306)
-        Me.ComboBoxStatus.Name = "ComboBoxStatus"
-        Me.ComboBoxStatus.Size = New System.Drawing.Size(224, 24)
-        Me.ComboBoxStatus.TabIndex = 117
-        Me.ComboBoxStatus.Text = "REGISTERED"
-        '
-        'ComboBoxGender
-        '
-        Me.ComboBoxGender.AutoCompleteCustomSource.AddRange(New String() {"male", "female"})
-        Me.ComboBoxGender.FormattingEnabled = True
-        Me.ComboBoxGender.Items.AddRange(New Object() {"male", "female"})
-        Me.ComboBoxGender.Location = New System.Drawing.Point(247, 292)
-        Me.ComboBoxGender.Name = "ComboBoxGender"
-        Me.ComboBoxGender.Size = New System.Drawing.Size(75, 24)
-        Me.ComboBoxGender.TabIndex = 118
-        Me.ComboBoxGender.Text = "male"
         '
         'FormStudentsRegistration
         '

@@ -9,10 +9,10 @@
               <Width>1.27691in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.95399in</Width>
+              <Width>1.11024in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.93316in</Width>
+              <Width>0.98524in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -28,7 +28,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>MATNO</Value>
+                              <Value>Session</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -58,7 +58,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Name</Value>
+                              <Value />
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -88,7 +88,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Course001</Value>
+                              <Value />
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -153,7 +153,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Last(Fields!Col7.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -176,21 +176,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox20">
+                    <Textbox Name="Col10">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Last(Fields!Col8.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox20</rd:DefaultName>
+                      <rd:DefaultName>Col10</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -218,7 +218,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Col1.Value</Value>
+                              <Value>=Fields!Col171.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -248,7 +248,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Col2.Value</Value>
+                              <Value>=First(Fields!Col7.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -278,7 +278,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Col7.Value</Value>
+                              <Value>=First(Fields!Col8.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -504,7 +504,7 @@
         <Top>2.01958in</Top>
         <Left>0.125in</Left>
         <Height>1in</Height>
-        <Width>7.85417in</Width>
+        <Width>5.0625in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -588,7 +588,28 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>GP CARD</Value>
+                <Value>GP CARD </Value>
+                <Style>
+                  <FontFamily>Times New Roman</FontFamily>
+                  <FontSize>16pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Name: </Value>
+                <Style>
+                  <FontFamily>Times New Roman</FontFamily>
+                  <FontSize>16pt</FontSize>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value>=First(Fields!Col2.Value, "DataSet1")</Value>
                 <Style>
                   <FontFamily>Times New Roman</FontFamily>
                   <FontSize>16pt</FontSize>

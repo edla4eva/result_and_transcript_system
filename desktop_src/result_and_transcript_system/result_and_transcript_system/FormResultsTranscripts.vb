@@ -145,8 +145,8 @@ Public Class FormResultsTranscripts
         objReports.MATNO = "ENG0000001" 'TODO
         If dgvStudents.Rows.Count > 0 Then
             getTranscripts(dgvStudents.Rows(0).Cells("matno").Value.ToString)
-            Dim dv As DataView = dgvTranscripts.DataSource
-            objReports.updateReportDataSource("DataSet1", Me.ReportViewerTranscript, dv.ToTable)
+            Dim dt As DataTable = dgvTranscripts.DataSource
+            objReports.updateReportDataSource("DataSet1", Me.ReportViewerTranscript, dt)
         End If
         ReportViewerTranscript.BringToFront()
     End Sub

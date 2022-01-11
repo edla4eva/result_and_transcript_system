@@ -306,4 +306,12 @@ Public Class FormSettings
         Dim dt As DataTable = mappDB.GetDataWhere("SELECT * FROM Reg WHERE matno=''").Tables(0)
         TextBoxDev.Text = generateSQLUpdate(dt, "Reg", "matno")
     End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        Dim dt As New DataTable
+        dt.Columns.Add("Col1", Type.GetType("System.String"))
+        dt.Rows.Add("added")
+        dt.Rows.Add("added2")
+        DataGridViewCoursesOrder.DataSource = mappDB.bulkInsertDBUsingDataAdapter(dt, "sample")
+    End Sub
 End Class

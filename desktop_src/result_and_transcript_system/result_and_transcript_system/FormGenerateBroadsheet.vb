@@ -33,6 +33,10 @@ Public Class FormGenerateBroadsheet
 
     Private Sub ButtonProcessBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonProcessBroadsheet.Click
         Try
+            If MsgBox("Are you sure you wat to generate brodsheet data? Existing data will be deleted." & vbCrLf & "Note that approved broadsheets can not be changed", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
+                Exit Sub
+            End If
+
             footers(0) = TextBoxCourseAdviser.Text
             footers(1) = TextBoxDean.Text
             footers(2) = TextBoxHOD.Text
@@ -131,116 +135,107 @@ Public Class FormGenerateBroadsheet
             logError(ex.ToString)
         End Try
     End Sub
-    Public Sub createBroadsheetTables()
-        Dim strSQL As String
-        Try
-            strSQL = "Create Table Broadsheet_all ("
-            For i = 0 To LAST_COL + 5 'broadshetCols+ headings(comma seperated), session, dept, level,CA,HOD,Dean,Summary1(comma seperated)
-                If i = REPEATED_1_COL Or i = REPEATED_1_COL Or i = REPEATED_ALL_COL Or i = COURSE_FAIL_COL Then
-                    strSQL += "[" & "Col" & i.ToString & "] " & "varchar(500)" & ","    'repeated courses
-                Else
-                    strSQL += "[" & "Col" & i.ToString & "] " & "varchar(50)" & ","
-                End If
+    Function tableExists() As Boolean
+        'Return Len(dbName.tabledefs(dName).name)
+        Return False
+    End Function
+    Public Function getBroadheetTableName(dSession As String, dDeptID As String, dLevel As String) As String
+        Return String.Format("Broadsheet_all_{0}_{1}_{2}", dSession.Replace("/", "x"), dDeptID, dLevel)
+    End Function
 
+    Public Sub createBroadsheetTables(dSession As String, dDeptID As String, dLevel As String)
+        Dim strSQL As String
+        Dim tblName As String = getBroadheetTableName(dSession, dDeptID, dLevel)
+        'tblName = "broadsheets_all" 'todo: remove
+        'If Not tableexists(tblName) Then
+        Try
+            'check if table exists or blindly delete table
+            Try
+                'strSQL = String.Format("SELECT sn FROM {0} WHERE sn='0'", tblName)
+                'If mappDB.GetDataWhere(strSQL) Is Nothing Then 'getBroadheetTableName'.Tables(0).Columns.Count > 0 Then
+                mappDB.doQuery(String.Format("DROP Table {0}", tblName))
+                'End If
+            Catch ex As Exception
+
+            End Try
+            strSQL = "Create Table " & tblName & "( "
+            For i = 0 To DataGridViewBroadSheet.Columns.Count - 1
+                If i = REPEATED_1_COL Or i = REPEATED_1_COL Or i = REPEATED_ALL_COL Or i = COURSE_FAIL_COL Then
+                    strSQL += "[" & DataGridViewBroadSheet.Columns(i).Name & "] " & "longtext" & ","    'repeated courses
+                ElseIf (i >= COURSE_START_COL And i <= COURSE_END_COL) Or (i >= COURSE_START_COL_2 And i <= LAST_COL) Then
+                    strSQL += "[" & DataGridViewBroadSheet.Columns(i).Name & "] " & "varchar(50)" & ","
+                    'strSQL += "[" & "ColUNIQUE" & i.ToString & "] " & "varchar(50)" & ","
+                ElseIf i = DataGridViewBroadSheet.Columns.Count - 1 Then
+                    strSQL += "[" & DataGridViewBroadSheet.Columns(i).Name & "] " & "varchar(100))"
+                Else
+                    strSQL += "[" & DataGridViewBroadSheet.Columns(i).Name & "] " & "longtext" & ","    'todo:wasteful
+                End If
             Next
-            strSQL += "[" & "ColNames" & "] " & "varchar(200)" & ")"
-            mappDB.doQuery(strSQL)
+            If mappDB.doQuery(strSQL) Then
+                MsgBox("Broadsheet data has been created and auto-saved")
+
+            Else
+                MsgBox("Could create table to save generated broadsheet data")
+            End If
         Catch ex As Exception
-            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            MsgBox("Error occured, see log For details" & vbCrLf & ex.Message)
             logError(ex.ToString)
         End Try
     End Sub
 
     Private Sub ButtonSaveBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonSaveBroadsheet.Click
         Try
-            Dim strSQL As String
+            Dim strSQL As String = "SELECT * FROM broadsheets_all_Colnames_tablenames"
             Dim dv As DataView = DataGridViewBroadSheet.DataSource
             Dim dtSource As DataTable
             Dim dtDestination As New DataTable
-            Dim dSFtomDB As New DataSet ' = dv.ToTable
             dtSource = dv.ToTable
 
-            'createBroadsheetTables()
-            strSQL = "SELECT * FROM Broadsheets_all" ' WHERE session_idr={1}"
-
-            Using xconn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
-                Try
-                    xconn.Open()
-                Catch ex1 As Exception
-                    xconn.ConnectionString = ModuleGeneral.STR_connectionString32
-                    xconn.Open()
-                End Try
-                Dim adapter As New OleDb.OleDbDataAdapter(strSQL, xconn)
-                'Dim insert As OleDb.OleDbCommand("INSERT INTO Broadsheet (matno) VALUES (@matno)", xconn)
-                Dim builder As New OleDb.OleDbCommandBuilder(adapter)       'easy way for single table
-                'Dim titleParam As New OleDb.OleDbParameter("@matno", Str)
-                'cmd.Parameters.Add(titleParam)
-                'adapter.InsertCommand = insert
-
-                adapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
-
-                'fill it
-                adapter.Fill(dSFtomDB)
-                'put it in a datagrid view and all the manipulations can happen there, afterwards an update is used to save in database
-                DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
-                'MsgBox("After fresh fill")
-                'edit it
-                dSFtomDB.Tables(0).Clear()
-                adapter.Update(dSFtomDB)
-                Dim dRow As DataRow
-                Dim strColNames As String = ""
-                Dim nExtraCols As Integer = 1
-                'MsgBox("After empty db")
-                'Note col85 and Col6 are for repeated courses hence Text datatype
-                Dim strTimeStamp As String = Now.Ticks.ToString
-                Dim dictColNamesMap As New Dictionary(Of String, String)
-                'use, columnName in broadsheet_all
-                dictColNamesMap.Add("TCR", "Col166")
-                dictColNamesMap.Add("GPA", "Col167")
-                dictColNamesMap.Add("Class", "Col168")
-                dictColNamesMap.Add("Status", "Col169")         'changed something to category
-                dictColNamesMap.Add("Failed", "Col170")
-                dictColNamesMap.Add("2018/2019", "Col171")      'the actual session is used as column name
-                dictColNamesMap.Add("Department_Name", "Col172")
-                dictColNamesMap.Add("Faculty_Name", "Col173")
-                dictColNamesMap.Add("Level", "Col174")
-                dictColNamesMap.Add("Footers", "Col174")
-                dictColNamesMap.Add("637762324436721630", "ColNames")      'actual timestamp
-                'Category
-                'Course_title
-                'gpa100
-                '...
-                dRow = dSFtomDB.Tables(0).Rows.Add("ColNames_will_be_re_written") 'add mock header row
-                For i = 0 To dtSource.Rows.Count - 1  '
-                    dRow = dSFtomDB.Tables(0).Rows.Add("MOCK00" & i.ToString) 'add mock row
-                    For j = 0 To dSFtomDB.Tables(0).Columns.Count - 1 - nExtraCols      'Take as much as we have cols for to avoid errors
-                        If j > dtSource.Columns.Count - 1 Then Exit For    'avoid errors bcos table has more cols
-                        If i = 0 Then
-                            dSFtomDB.Tables(0).Rows(0).Item(j) = dtSource.Columns(j).ColumnName  'update the row with data
-                            dSFtomDB.Tables(0).Rows(i + 1).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
-                        Else
-                            dSFtomDB.Tables(0).Rows(i + 1).Item(j) = dtSource.Rows(i).Item(j)   'update the row with data
-
-                        End If
-                    Next
-                    'todo let everything be processed into the tables before this point
-                    dSFtomDB.Tables(0).Rows(i).Item("ColNames") = strTimeStamp
-                    dSFtomDB.Tables(0).Rows(i).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
-                    dSFtomDB.Tables(0).Rows(i).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
-                    dSFtomDB.Tables(0).Rows(i).Item("Col173") = objBroadsheet.FacultyName
-                    dSFtomDB.Tables(0).Rows(i).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
-                    dSFtomDB.Tables(0).Rows(i).Item("Col175") = Array2sTR(footers)        'todo:
+            Dim lv, ss, dept As String
+            Dim dtColNames As DataTable
+            If DataGridViewBroadSheet.Rows.Count > 0 Then
+                'todo validate
+                lv = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value.ToString
+                dept = DataGridViewBroadSheet.Rows(0).Cells("dept_idr").Value.ToString
+                ss = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value.ToString
+                dtDestination = mappDB.bulkInsertDBUsingDataAdapter(dtSource, getBroadheetTableName(ss, dept, lv))
+                'now add colnames to seperate table
+                dtColNames = mappDB.GetDataWhere(strSQL).Tables(0)
+                dtColNames.Rows.Clear()
+                dtColNames.Rows.Add({"mock"})
+                For j = 0 To dtSource.Columns.Count - 1
+                    If j > dtColNames.Columns.Count - 1 Then Exit For
+                    dtColNames.Rows(0).Item(j) = dtSource.Columns(j).ColumnName
                 Next
+                mappDB.genericManualInsertDTtoDB(dtColNames, "broadsheets_all_Colnames_tablenames", LEVEL_COL)
 
-                DataGridViewTemp.DataSource = dSFtomDB.Tables(0).DefaultView
+                DataGridViewTemp.DataSource = dtSource.DefaultView
+                'transction?
+            End If
 
-                'MsgBox("After add to datatable")
-                DataGridViewTemp.Refresh()
-                DataGridViewTemp.EndEdit()
-                ' MsgBox("After refresh")
-                'save
-                adapter.Update(dSFtomDB)
-            End Using
+            'HIDE UNECESSARY COLS
+            For Each col In DataGridViewTemp.Columns
+                If col.name.contains("ColUNIQUE") Then col.visible = False
+                If col.name.contains("Repeat") Then col.width = 120
+                If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(col.name) Then
+                    If Not dictAllCourseCodeKeyAndCourseLevelVal(col.name) = objBroadsheet.Level Then
+                        col.visible = False
+                    Else
+                        col.width = 65
+                    End If
+                End If
+            Next
+            DataGridViewTemp.Columns(0).Width = 25   's/N
+            DataGridViewTemp.Columns(1).Width = 100   'Mat
+            DataGridViewTemp.Columns(2).Width = 150   'Name
+            DataGridViewTemp.Columns(3).Visible = False   'hide
+            DataGridViewTemp.Columns(4).Visible = False   'hide
+            DataGridViewTemp.Columns(5).Visible = False   'hide
+            DataGridViewTemp.Columns(0).Frozen = True
+            DataGridViewTemp.Columns(1).Frozen = True
+
+            DataGridViewTemp.Refresh()
+            DataGridViewTemp.EndEdit()
         Catch ex As Exception
             MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
             logError(ex.ToString)
@@ -375,6 +370,15 @@ Public Class FormGenerateBroadsheet
             DataGridViewBroadSheet.DataSource = objBroadsheet.dataTablesScoresAndGrades(0).DefaultView
             dvScores = objBroadsheet.dataTablesScoresAndGrades(0).DefaultView
             dtScores = dvScores.ToTable
+            'create tmp database table an store the result
+            Dim lv, ss, dept As String
+            If DataGridViewBroadSheet.Rows.Count > 0 Then
+                'todo validate
+                lv = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value.ToString
+                dept = DataGridViewBroadSheet.Rows(0).Cells("dept_idr").Value.ToString
+                ss = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value.ToString
+                createBroadsheetTables(ss, dept, lv)
+            End If
             'HIDE UNECESSARY COLS
             For Each col In DataGridViewBroadSheet.Columns
                 If col.name.contains("ColUNIQUE") Then col.visible = False
@@ -406,6 +410,7 @@ Public Class FormGenerateBroadsheet
             ElseIf CheckBoxSecondSemester.Checked = False Then
                 'Hide em
             End If
+
 
             TextBoxTemplateFileName.Text = retFileName
             Me.ProgressBarBS.Value = 100
@@ -739,10 +744,25 @@ Public Class FormGenerateBroadsheet
             ' bgwCourses.RunWorkerAsync()
             getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)
 
+            'load previously generated broadsheet if availiable
+            'TODO: show spinner
+
+
+
+
             'todo: validations
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub ButtonLoadSavedBS_Click(sender As Object, e As EventArgs) Handles ButtonLoadSavedBS.Click
+        On Error Resume Next
+        Dim tmpDT As New DataTable
+        tmpDT = mappDB.GetDataWhere("SELECT * FROM " & getBroadheetTableName(session_idr, course_dept_idr, course_level)).Tables(0)
+        If tmpDT.Rows.Count > 0 Then
+            DataGridViewBroadSheet.DataSource = tmpDT.DefaultView
+        End If
     End Sub
 
     Private Sub UpgradeWith2MarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith2MarksToolStripMenuItem.Click

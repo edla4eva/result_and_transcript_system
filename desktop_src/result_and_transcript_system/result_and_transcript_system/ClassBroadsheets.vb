@@ -368,7 +368,18 @@ Public Class ClassBroadsheets
             dr("FullName") = RegStudentsDS.Tables(0).Rows(i).Item("student_firstname") & " " & RegStudentsDS.Tables(0).Rows(i).Item("student_othernames") & " " & RegStudentsDS.Tables(0).Rows(i).Item("student_surname")
             '-------->
             ' Computed Coloums goes here
+            For j = COURSE_START_COL_2 To COURSE_END_COL_2
+                dr(j) = DEFAULT_CODE
+            Next
+            For j = COURSE_START_COL To COURSE_END_COL
+                dr(j) = DEFAULT_CODE
+            Next
             '--------->
+            'bs specific
+            dr("bs_session") = session_idr
+            dr("bs_level") = course_level
+            dr("bs_department_name") = mappDB.getDeptName(course_dept_idr)
+
             'Reg-->student_firstname	student_surname	student_othernames	student_dept_idr	status	year_of_entry	session_idr_of_entry	mode_of_entry	dob	phone	email	gender	session_idr	CourseCode_1	CourseCode_2	Fees Status	level	dept_idr
             dr("student_firstname") = RegStudentsDS.Tables(0).Rows(i).Item("student_dept_idr")
             dr("student_surname") = RegStudentsDS.Tables(0).Rows(i).Item("status")
@@ -661,23 +672,22 @@ Public Class ClassBroadsheets
         dt.Columns.Add(tmpCol)
 
         'others
-        tmpCol = New DataColumn("Session", Type.GetType("System.String"))   '131
+        tmpCol = New DataColumn("bs_session", Type.GetType("System.String"))
         dt.Columns.Add(tmpCol)
         'Note when numbered this corresponds to
-        'Col0->sn to Col167->GPA to Col170->Failed to Col171->Session
+        'Col0->sn to Col167->GPA to Col170->Failed to Col171->bs_Session
 
-        'broadsheet_all has some extra cols that are named thus
         'Col172	Col173	Col174	Col175	ColNames	
         'credits course_titles	
-        tmpCol = New DataColumn("Col172", Type.GetType("System.String"))   '131
+        tmpCol = New DataColumn("bs_department_name", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("Col173", Type.GetType("System.String"))   '131
+        tmpCol = New DataColumn("bs_faculty_name", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("Col174", Type.GetType("System.String"))   '131
+        tmpCol = New DataColumn("bs_level", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("Col175", Type.GetType("System.String"))   '131
+        tmpCol = New DataColumn("bs_footers", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
-        tmpCol = New DataColumn("ColNames", Type.GetType("System.String"))   '131
+        tmpCol = New DataColumn("bs_timestamp", Type.GetType("System.String"))   '131
         dt.Columns.Add(tmpCol)
 
         'gpa100  gpa200	gpa300	gpa400  gpa500	gpa600	gpa700	gpa800	gpa900
@@ -848,7 +858,7 @@ Public Class ClassBroadsheets
         Dim scores_2(NUM_COURSES_PER_LEVEL_2 * NUM_LEVELS) As String
         Dim grades_2(NUM_COURSES_PER_LEVEL_2 * NUM_LEVELS) As String
         Dim credits_2(NUM_COURSES_PER_LEVEL_2 * NUM_LEVELS) As Integer
-
+        Dim strTimeStamp As String = Now.Ticks.ToString
 
         Dim gradePoints(160) As Integer
         Dim passedCourses(160) As Boolean
@@ -944,6 +954,15 @@ Public Class ClassBroadsheets
 
             dt.Rows(i).Item("RepeatAll") = dt.Rows(i).Item("RepeatCourses_1") & " " & dt.Rows(i).Item("RepeatCourses_2")
             dtGrades.Rows(i).Item("RepeatAll") = dt.Rows(i).Item("RepeatCourses_1") & " " & dt.Rows(i).Item("RepeatCourses_2")
+            dt.Rows(i).Item("bs_session") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
+            dt.Rows(i).Item("bs_department_name") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
+            dt.Rows(i).Item("bs_faculty_name") = objBroadsheet.FacultyName
+            dt.Rows(i).Item("bs_level") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
+            dt.Rows(i).Item("bs_footers") = "stored in header"  'Array2sTR(footers)
+            dt.Rows(i).Item("bs_timestamp") = strTimeStamp 'todo:
+
+
+
 
             objBroadsheet.progressStr = "Computing grades " & " ..."
             grades = getGRADES(scores, Nothing, Nothing)

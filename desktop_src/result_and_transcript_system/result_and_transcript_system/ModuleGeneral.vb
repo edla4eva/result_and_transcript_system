@@ -165,9 +165,12 @@ Module ModuleGeneral
     Public CLASS_COL As Integer = COURSE_END_COL_2 + 8
     Public STATUS_COL As Integer = COURSE_END_COL_2 + 9
     Public COURSE_FAIL_COL As Integer = COURSE_END_COL_2 + 10
-    Public SESSION_COL As Integer = COURSE_END_COL_2 + 11
-    Public LAST_COL As Integer = COURSE_END_COL_2 + 11 - 1   '=160 + 11 - 1 '=170
 
+    Public LAST_COL As Integer = COURSE_FAIL_COL
+    'these cols are for internal uses
+    Public SESSION_COL As Integer = LAST_COL + 1
+    Public DEPT_COL As Integer = LAST_COL + 2
+    Public LEVEL_COL As Integer = LAST_COL + 3
 
     Public ABS_CODE As Integer = -1
     Public NR_CODE As Integer = -2
@@ -286,9 +289,14 @@ Module ModuleGeneral
 
     Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Col171,Col172,Col174,count(Col1) FROM broadsheets_all 
                       WHERE (((Col1)='{0}') AND Not(Col1='matno')) GROUP BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
-
+    'TODO: note broadsheets_all_Colnames_tablenames", TCF_2_COL - 1
     Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_WITH_COLNAMES_BY_MATNO As String = "SELECT * FROM broadsheets_all 
-                      WHERE (((Col1)='{0}')) ORDER BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+                      WHERE ((Col1='{0}')  OR (Col1='matno')) ORDER BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+    'SELECT broadsheets_all.Col172, broadsheets_all.Col171, broadsheets_all.Col174, broadsheets_all.ColNames, broadsheets_all.Col0, broadsheets_all.Col1, broadsheets_all.Col2, broadsheets_all.Col7
+    'FROM broadsheets_all
+    'GROUP BY broadsheets_all.Col172, broadsheets_all.Col171, broadsheets_all.Col174, broadsheets_all.ColNames, broadsheets_all.Col0, broadsheets_all.Col1, broadsheets_all.Col2, broadsheets_all.Col7
+    'HAVING (((broadsheets_all.Col172)='COMPUTER ENGINEERING') AND ((broadsheets_all.Col1)="ENG1503589")) OR (((broadsheets_all.Col1)="matno"))
+    'ORDER BY broadsheets_all.Col172, broadsheets_all.Col171, broadsheets_all.Col174, broadsheets_all.ColNames;
 
     Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_BY_MATNO As String = "SELECT * FROM broadsheets_all 
                       WHERE (((Col1)='{0}') AND Not(Col1='matno')) ORDER BY Col171,Col172,Col174;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
@@ -378,6 +386,14 @@ Module ModuleGeneral
     Public STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP As String = "SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
 
     Public STR_SQL_APPROVED_COURSES = "SELECT approved_courses_300 from sessions WHERE session_id='{0}';"
+
+
+    'UNIONS
+    'Transcripts
+    Public STR_SQL_UNION_Transcript = "SELECT Col1,Col2,Col8 FROM broadsheets_all
+                                        UNION SELECT Col1,Col2,Col9 FROM broadsheets_all
+                                        UNION SELECT Col1,Col2,Col10 FROM broadsheets_all
+                                        WHERE Col1='ENG1503589';"
 
     'Public STR_SQL_ALL_USERS As String = "SELECT user_id, username, status as STATUS from tblusers order by status"
     'Public STR_SQL_ALL_GUESTS_BILLS_WHERE As String = "SELECT `guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status` FROM `guest_account` WHERE guest_id_ref='{0}' order by date"

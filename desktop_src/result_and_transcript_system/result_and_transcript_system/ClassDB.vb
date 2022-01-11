@@ -304,25 +304,7 @@ Public Class ClassDB
 
     End Function
 
-    Public Function InsertRecord(dstrSQL As String) As String
-        'ToDo: optimize for speed
-        'support parameters
-        Dim returnVal As String = ""
-        Try
-            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-                xConn.ConnectionString = getCorrectConnectionstring()
-                xConn.Open()
-                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
-                cmdLocal.ExecuteNonQuery()  'BeginExecuteNonQuery()
-                closeConn(xConn) 'safely close it
-            End Using
-        Catch ex As Exception
-            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
-            ' MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-        Return returnVal
-    End Function
-    Public Fun
+
     'TODO: incomplete fxn
     Function getDataReader(TableName As String, Optional isLocal As Boolean = True) As Boolean
         Try
@@ -394,29 +376,29 @@ Public Class ClassDB
         Return table
     End Function
 
-    Public Function bulkInsertDBUsingDataAdapter(dt As DataTable, tmpTableName As String) As DataTable
+    Public Function bulkInsertDBUsingDataAdapter(dtRecordsToInsert As DataTable, destTableNameInDB As String) As DataTable
         Try
             Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
                 xConn.ConnectionString = getCorrectConnectionstring()
                 xConn.Open()
                 'Pull the table records and insert new
-                Using adapter = New OleDbDataAdapter("SELECT * FROM " & tmpTableName, xConn)
+                Using adapter = New OleDbDataAdapter("SELECT * FROM " & destTableNameInDB, xConn)
                     Using builder = New OleDbCommandBuilder(adapter)
-                        'builder.QuotePrefix = "["
-                        'builder.QuoteSuffix = "]"
+                        builder.QuotePrefix = "["
+                        builder.QuoteSuffix = "]"
                         'adapter.InsertCommand = builder.GetInsertCommand()
-                        If dt.HasErrors Then
-                            MsgBox("Some errors are contained in records: " & dt.GetErrors(0).ToString)
-                            dt = Nothing
+                        If dtRecordsToInsert.HasErrors Then
+                            MsgBox("Some errors are contained in records: " & dtRecordsToInsert.GetErrors(0).ToString)
+                            dtRecordsToInsert = Nothing
                         Else
-                            adapter.Update(dt)
+                            adapter.Update(dtRecordsToInsert)
                         End If
 
                     End Using
                 End Using
                 closeConn(xConn)
             End Using
-            Return dt
+            Return dtRecordsToInsert
 
         Catch ex As Exception
             Return Nothing
@@ -531,7 +513,7 @@ Public Class ClassDB
         Return True
     End Function
     'TODO: copy documentation from here
-    Public Function genericManualInsertDB(dt As DataTable, sql As String, values As String()) As Boolean
+    Public Function genericManualInsertDTtoDB(dt As DataTable, dTableName As String, Optional maxColNum As Integer = 255) As Boolean
         '
         ' Summary:
         '     Manually  inserts records into a database table 
@@ -553,21 +535,36 @@ Public Class ClassDB
             xConn.ConnectionString = getCorrectConnectionstring()
             xConn.Open()
             '1. check for duplicates and delete
-
             'access
             Dim cmd As New OleDbCommand
-            Dim tableValues As Object()
+            Dim sqlInsert, sql As String
             'Dim da As OleDbDataAdapter
-            For Each row As DataRow In dt.Rows
-                tableValues = row.ItemArray
-                'todo: use parameters
-                sql = String.Format(sql, tableValues) 'add values
-                cmd = New OleDbCommand(sql, xConn)
-                'cmd.Transaction.Begin()
-                'da = New OleDbDataAdapter(cmd)
-                'da.Update(dt) 'da.fill() this is a promising mthd
+            sqlInsert = "INSERT INTO " & dTableName & " ( "
+            For j = 0 To dt.Columns.Count - 1
+                If j = dt.Columns.Count - 1 Or j >= maxColNum Then
+                    sqlInsert = sqlInsert & "[" & dt.Columns(j).ColumnName & "]" & ")"
+                    Exit For
+                Else
+                    sqlInsert = sqlInsert & "[" & dt.Columns(j).ColumnName & "]" & ","
+                End If
+            Next
+
+            For i = 0 To dt.Rows.Count - 1
+                sql = sqlInsert & " VALUES ("
+                For j = 0 To dt.Columns.Count - 1
+                    If j = dt.Columns.Count - 1 Or j >= maxColNum Then
+                        sql = sql & "'" & dt.Rows(i).Item(j).ToString & "'); "
+                        Exit For
+                    Else
+                        sql = sql & "'" & dt.Rows(i).Item(j).ToString & "', "
+                    End If
+                    'todo: use parameters
+                    'cmd.Transaction.Begin()
+
+                    'TODO: Show progress (trigger event)
+                Next
+                cmd = New OleDbCommand(sql, xConn)     'insert row by row
                 cmd.ExecuteNonQuery()
-                'TODO: Show progress (trigger event)
             Next
             'cmd.Transaction.Commit()
             closeConn(xConn)

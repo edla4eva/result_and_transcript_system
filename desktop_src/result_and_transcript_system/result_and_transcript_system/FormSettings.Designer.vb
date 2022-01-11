@@ -22,9 +22,9 @@ Partial Class FormSettings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ButtonClose = New System.Windows.Forms.Button()
@@ -82,6 +82,8 @@ Partial Class FormSettings
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBoxDev = New System.Windows.Forms.TextBox()
         Me.Button7 = New System.Windows.Forms.Button()
@@ -90,8 +92,7 @@ Partial Class FormSettings
         Me.Button5 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.Button8 = New System.Windows.Forms.Button()
-        Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button10 = New System.Windows.Forms.Button()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -647,33 +648,33 @@ Partial Class FormSettings
         '
         'DataGridViewCoursesOrder
         '
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewCoursesOrder.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewCoursesOrder.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridViewCoursesOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewCoursesOrder.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewCoursesOrder.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridViewCoursesOrder.Location = New System.Drawing.Point(16, 47)
         Me.DataGridViewCoursesOrder.Name = "DataGridViewCoursesOrder"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewCoursesOrder.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewCoursesOrder.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridViewCoursesOrder.Size = New System.Drawing.Size(343, 280)
         Me.DataGridViewCoursesOrder.TabIndex = 33
         '
@@ -740,6 +741,7 @@ Partial Class FormSettings
         'GroupBox6
         '
         Me.GroupBox6.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GroupBox6.Controls.Add(Me.Button10)
         Me.GroupBox6.Controls.Add(Me.Button9)
         Me.GroupBox6.Controls.Add(Me.Button8)
         Me.GroupBox6.Controls.Add(Me.TextBox3)
@@ -757,6 +759,32 @@ Partial Class FormSettings
         Me.GroupBox6.TabIndex = 34
         Me.GroupBox6.TabStop = False
         '
+        'Button9
+        '
+        Me.Button9.BackColor = System.Drawing.Color.Transparent
+        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button9.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.Button9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Button9.Location = New System.Drawing.Point(6, 152)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(138, 30)
+        Me.Button9.TabIndex = 40
+        Me.Button9.Text = "Updates"
+        Me.Button9.UseVisualStyleBackColor = False
+        '
+        'Button8
+        '
+        Me.Button8.BackColor = System.Drawing.Color.Transparent
+        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button8.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.Button8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Button8.Location = New System.Drawing.Point(6, 211)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(138, 30)
+        Me.Button8.TabIndex = 39
+        Me.Button8.Text = "Params"
+        Me.Button8.UseVisualStyleBackColor = False
+        '
         'TextBox3
         '
         Me.TextBox3.Location = New System.Drawing.Point(27, 46)
@@ -766,10 +794,10 @@ Partial Class FormSettings
         '
         'TextBoxDev
         '
-        Me.TextBoxDev.Location = New System.Drawing.Point(7, 245)
+        Me.TextBoxDev.Location = New System.Drawing.Point(7, 298)
         Me.TextBoxDev.Multiline = True
         Me.TextBoxDev.Name = "TextBoxDev"
-        Me.TextBoxDev.Size = New System.Drawing.Size(137, 98)
+        Me.TextBoxDev.Size = New System.Drawing.Size(137, 45)
         Me.TextBoxDev.TabIndex = 37
         '
         'Button7
@@ -843,31 +871,18 @@ Partial Class FormSettings
         Me.Label11.Text = "Developer"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Button8
+        'Button10
         '
-        Me.Button8.BackColor = System.Drawing.Color.Transparent
-        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button8.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Button8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button8.Location = New System.Drawing.Point(6, 211)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(138, 30)
-        Me.Button8.TabIndex = 39
-        Me.Button8.Text = "Params"
-        Me.Button8.UseVisualStyleBackColor = False
-        '
-        'Button9
-        '
-        Me.Button9.BackColor = System.Drawing.Color.Transparent
-        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button9.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Button9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button9.Location = New System.Drawing.Point(6, 152)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(138, 30)
-        Me.Button9.TabIndex = 40
-        Me.Button9.Text = "Updates"
-        Me.Button9.UseVisualStyleBackColor = False
+        Me.Button10.BackColor = System.Drawing.Color.Transparent
+        Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button10.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.Button10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Button10.Location = New System.Drawing.Point(6, 247)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(138, 30)
+        Me.Button10.TabIndex = 41
+        Me.Button10.Text = "Tables"
+        Me.Button10.UseVisualStyleBackColor = False
         '
         'FormSettings
         '
@@ -973,4 +988,5 @@ Partial Class FormSettings
     Friend WithEvents TextBoxDev As TextBox
     Friend WithEvents Button8 As Button
     Friend WithEvents Button9 As Button
+    Friend WithEvents Button10 As Button
 End Class
