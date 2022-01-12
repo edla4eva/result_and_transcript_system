@@ -20,27 +20,17 @@ Public Class FormViewBroadsheets
             Dim strSQL As String = STR_SQL_ALL_BROADSHEETS_SUMMARY
             Dim dt As New DataTable
             Dim dictColHeaders As New Dictionary(Of String, String)
-            ' Dim strColNames As String
-            ' Dim strArrColNames As String()
             dt = mappDB.GetDataWhere(strSQL).Tables(0)
-            'strColNames = dt.Rows(0).Item("ColNames").ToString
-            'strArrColNames = strColNames.Split(",")
-            'DataGridView1.DataSource = dt.DefaultView
-            'For Each col In dt.Columns
-            '    If strArrColNames(col) <> "" Then col.coloumnName = strArrColNames(col)
-            '    dt.Rows(0).Item(col.index) = strArrColNames(col)
-            'Next
+            DataGridView1.Tag = "summary"
 
-
-            'Note this is necessary to add user readale headings. quer retus machine useful eadings like col172
+            'Note this is necessary to add user readale headings. query returns machine obscure headings
             DataGridView1.DataSource = dt.DefaultView
             DataGridView1.Columns(0).HeaderText = "Session"
-            DataGridView1.Columns("Col172").HeaderText = "Department"
-            'Already handled in query-->DataGridView1.Columns("Col173").HeaderText = "Faculty"
-            DataGridView1.Columns("Col174").HeaderText = "Level"
+            'DataGridView1.Columns("bs_department").HeaderText = "Department"
+
             DataGridView1.Columns("Footers").HeaderText = "Info"
             DataGridView1.Columns("Footers").Width = 160
-            DataGridView1.Tag = "summary"
+
         Catch ex As Exception
             MsgBox("Cannot get broadsheets data" & vbCrLf & ex.Message)
         End Try
@@ -48,56 +38,13 @@ Public Class FormViewBroadsheets
 
     End Sub
 
-    Private Sub ButtonResultList_Click(sender As Object, e As EventArgs)
-        ' objExcelFile.createExcelFile_NPOI(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
-        'objExcelFile.modifyExcelFile_npoi(My.Application.Info.DirectoryPath & "\GeneratedResult.xlsx")
-        'Label6.Text = "Done: check GeneratedResult.xlsx"
-        'MainForm.status("Done: generated GeneratedResult.xlsx")
-    End Sub
-
-
-
-    Sub showButtons(ButtonName As String, enableOnly As Boolean)
-        Select Case ButtonName
-            Case "Process"
-                If enableOnly Then Me.ButtonShowAllBroadsheet.Enabled = True Else Me.ButtonShowAllBroadsheet.Visible = True
-
-        End Select
-    End Sub
-    Sub hideButtons(ButtonName As String, disableOnly As Boolean)
-        Select Case ButtonName
-            Case "Process"
-                If disableOnly Then Me.ButtonShowAllBroadsheet.Enabled = False Else Me.ButtonShowAllBroadsheet.Visible = False
-
-        End Select
-    End Sub
-
-    Private Sub ButtonUpload_Click(sender As Object, e As EventArgs)
-        DataGridView1.AllowUserToAddRows = True
-        DataGridView1.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
-    End Sub
-
-
-    Function getCoursesList() As String()
-        Dim str As New List(Of String)
-        str.Add("PRE571")
-        str.Add("CPE571")
-        str.Add("CPE591")
-
-        Return str.ToArray
-    End Function
 
     Private Sub Label7_Click(sender As Object, e As EventArgs) Handles LabelClosePanelModify.Click
         PanelModify.Visible = False
     End Sub
-
-
-
-
     Private Sub FormViewBroadsheets_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         MainForm.doCloseForm()
     End Sub
-
     Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
     End Sub
@@ -132,7 +79,7 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub ButtonAdjustTemplate_Click(sender As Object, e As EventArgs) Handles ButtonApprove.Click
-        MsgBox("This featre is only supported in the Commercial version")
+        MsgBox("This feature is only supported in the Commercial version")
     End Sub
 
     Private Sub ButtonSearchBroadheet_Click(sender As Object, e As EventArgs) Handles ButtonSearchBroadheet.Click
@@ -153,56 +100,43 @@ Public Class FormViewBroadsheets
 
 
     End Sub
-    Sub showBroadsheet(strSQL As String, Optional strTimestamp As String = Nothing)
-
+    Sub showBroadsheet(Optional strTimestamp As String = Nothing)
         Dim dictColHeaders As New Dictionary(Of String, String)
         Dim dtHeaders As DataSet
-        Dim numColNames As Integer
 
-        'Dim tmpCol As DataColumn
-        dt = mappDB.GetDataWhere(strSQL).Tables(0)
-        If strTimestamp Is Nothing Then strTimestamp = dt.Rows(0).Item("ColNames").ToString
-        dtHeaders = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_BROADSHEETS_WHERE_COLNAMES, strTimestamp))
-        'col names are now at row (0)
+        'Dim dSession As String = DataGridView1.SelectedRows(0).Cells("bs_session").Value.ToString       'todo put fieldnames in constants in general module
+        'Dim dDept As String = DataGridView1.SelectedRows(0).Cells("bs_department_name").Value.ToString
+        'Dim dLevel As String = DataGridView1.SelectedRows(0).Cells("bs_level").Value.ToString
+        'GET BS DATA
+        Dim strSQL As String = STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP
+        dt = mappDB.GetDataWhere(String.Format(strSQL, txtSession, txtDept, txtlevel)).Tables(0)
+        If strTimestamp Is Nothing Then strTimestamp = ""   'dt.Rows(0).Item("bs_timestamp").ToString
 
-        'dt.Rows.InsertAt(dt.Rows(0), 0)     'Add new row at top for headers
-
+        'NOW TO HEADERS
+        strSQL = STR_SQL_ALL_BROADSHEETS_COLNAMES_WHERE_SESSION_DEPT_LEVEL
+        dtHeaders = mappDB.GetDataWhere(String.Format(strSQL, txtSession, txtDept, txtlevel))
         Dim clCount As Integer = dt.Columns.Count - 1        'todo: cross thread
         Dim j As Integer = 0
-        For Each col In dt.Columns
-            'If col.index >= numColNames Then Exit For
-            ' handle these specially( (Col171='{0}') And (Col172='{1}') And (Col174='{2}'))
-            'dSFtomDB.Tables(0).Rows(0).Item("Col171") = objBroadsheet.Session ' ComboBoxSessions.SelectedText
-            'dSFtomDB.Tables(0).Rows(0).Item("Col172") = objBroadsheet.DepartmentName ' ComboBoxDepartments.SelectedText
-            'dSFtomDB.Tables(0).Rows(0).Item("Col174") = objBroadsheet.Level   'todo getLevel(comboboxlevel)
-            If col.Columnname = "Col171" Then
-                'leave name intact or change to session
-            ElseIf col.Columnname = "Col172" Then
-                'leave name intact or change to department
-            ElseIf col.Columnname = "Col173" Then
-                'leave name intact or change to ?
-            ElseIf col.Columnname = "Col174" Then
-                'leave name intact or change to level
-            ElseIf col.Columnname = "Col175" Then
-                'leave name intact or change to footers
-            ElseIf col.Columnname = "ColNames" Then
-                'leave name intact or change to level
-            ElseIf isdbnull(dtHeaders.Tables(0).Rows(0).Item(col.ordinal)) Then
-                'avoid nasty errors, leave name intact
-            ElseIf (dtHeaders.Tables(0).Rows(0).Item(col.ordinal) = "") Then
-                'avoid nasty errors, leave name intact
-            Else
-                'col.HeaderText = dtHeaders.Tables(0).Rows(0).Item(col.index) 'get name from first row
-                col.Columnname = dtHeaders.Tables(0).Rows(0).Item(col.ordinal)   'get name from first row where it as saved
+        Try
 
-            End If
+            For j = COURSE_START_COL To LEVEL_COL
+                If (dtHeaders.Tables(0).Rows(0).Item(j) = "") Then
+                    'avoid nasty errors, leave name intact
+                ElseIf (DT.Columns(j).ColumnName = "bs_session") Then
+                ElseIf (DT.Columns(j).ColumnName = "bs_department_name") Then
+                ElseIf (DT.Columns(j).ColumnName = "bs_faculty_name") Then
+                ElseIf (DT.Columns(j).ColumnName = "bs_level") Then
+                Else
+                    dt.Columns(j).ColumnName = dtHeaders.Tables(0).Rows(0).Item(j)   'get name from first row where it as saved
+                End If
+                dt.AcceptChanges()
+                objBroadsheet.progress = j / clCount * 100
+                objBroadsheet.progressStr = "Processing : " & dt.Columns(j).ColumnName
+            Next
             dt.AcceptChanges()
-            objBroadsheet.progress = j / clCount * 100
-            objBroadsheet.progressStr = "Processing : " & col.Columnname
-        Next
-        dt.AcceptChanges()
-
-
+        Catch ex As Exception
+            MsgBox("The broadsheet was not properly saved or the data has been corrupted")
+        End Try
     End Sub
 
 
@@ -210,11 +144,11 @@ Public Class FormViewBroadsheets
         If DataGridView1.SelectedRows Is Nothing Or DataGridView1.Columns.Contains("Col150") Then
             Exit Sub
         End If 'todo: change col171 to session, col172 to dept etc in db table & across code for easy maintainance
-        Dim strSQL As String = "DELETE * FROM broadsheets_all WHERE Col171='{0}' AND Col172='{1}' AND Col174='{2}' AND  ColNames='{3}'"
-        Dim dSession As String = DataGridView1.SelectedRows(0).Cells("Col171").Value.ToString
-        Dim dDept As String = DataGridView1.SelectedRows(0).Cells("Col172").Value.ToString
-        Dim dLevel As String = DataGridView1.SelectedRows(0).Cells("Col174").Value.ToString
-        Dim strTimeStamp As String = DataGridView1.SelectedRows(0).Cells("ColNames").Value.ToString
+        Dim strSQL As String = STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP
+        Dim dSession As String = DataGridView1.SelectedRows(0).Cells("bs_session").Value.ToString       'todo put fieldnames in constants in general module
+        Dim dDept As String = DataGridView1.SelectedRows(0).Cells("bs_department_name").Value.ToString
+        Dim dLevel As String = DataGridView1.SelectedRows(0).Cells("bs_level").Value.ToString
+        Dim strTimeStamp As String = DataGridView1.SelectedRows(0).Cells("bs_timestamp").Value.ToString
         'todo: ColNames is now used as timestamp may make soft difficult to maintain, change to timestamp across db, queries and code
         If MessageBox.Show("Are you sure you want to delete the selected broadsheet?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
             LoginForm1.Close()
@@ -237,7 +171,7 @@ Public Class FormViewBroadsheets
 
     Private Sub BgWProcess_DoWork(sender As Object, e As DoWorkEventArgs) Handles BgWProcess.DoWork
 
-        showBroadsheet(String.Format(STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL, txtSession, txtDept, txtlevel, e.Argument), e.Argument)
+        showBroadsheet(e.Argument.ToString) 'txtSession, txtDept, txtlevel,
 
     End Sub
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
@@ -273,17 +207,17 @@ Public Class FormViewBroadsheets
     Private Sub ButtonShowDetails_Click(sender As Object, e As EventArgs) Handles ButtonShowDetails.Click
         If Not DataGridView1.Tag = "detail" Then 'And
             'DataGridView1.Columns.Contains("Col172") Then
-            If IsDBNull(DataGridView1.SelectedRows(0).Cells("Col171").Value) Or
-                    IsDBNull(DataGridView1.SelectedRows(0).Cells("Col171").Value) Or
-                    IsDBNull(DataGridView1.SelectedRows(0).Cells("Col171").Value) Then
-                MsgBox("Session, leve or deparment is missing")
+            If IsDBNull(DataGridView1.SelectedRows(0).Cells("bs_session").Value) Or
+                    IsDBNull(DataGridView1.SelectedRows(0).Cells("bs_session").Value) Or
+                    IsDBNull(DataGridView1.SelectedRows(0).Cells("bs_session").Value) Then
+                MsgBox("Session, level or deparment is missing")
                 Exit Sub
             End If
-            txtlevel = DataGridView1.SelectedRows(0).Cells("Col174").Value
-            txtSession = DataGridView1.SelectedRows(0).Cells("Col171").Value
-            txtDept = DataGridView1.SelectedRows(0).Cells("Col172").Value
+            txtlevel = DataGridView1.SelectedRows(0).Cells("bs_level").Value
+            txtSession = DataGridView1.SelectedRows(0).Cells("bs_session").Value
+            txtDept = DataGridView1.SelectedRows(0).Cells("bs_department_name").Value
             TimerBS.Start()
-            BgWProcess.RunWorkerAsync(DataGridView1.SelectedRows(0).Cells("ColNames").Value)
+            BgWProcess.RunWorkerAsync(DataGridView1.SelectedRows(0).Cells("bs_timestamp").Value)
             DataGridView1.Tag = "detail"
         Else
             DataGridView1.Tag = "summary"

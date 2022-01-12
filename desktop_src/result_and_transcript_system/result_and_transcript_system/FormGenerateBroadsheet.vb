@@ -427,6 +427,9 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
+        Dim tmpFileName As String
+        tmpFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx"
+        tmpFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx"
 
         'TODO: create UI to configure order
 
@@ -447,15 +450,14 @@ Public Class FormGenerateBroadsheet
                 'Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
             Case Else  ' NPOI
                 If CInt(e.Argument) > BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then 'grades    'will not need this anymore
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, True, dvGrades)
+                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, True, dvGrades)
                 ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then    'scores 'todo eror when selected yr.1
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
                 ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_YR_MILTIPLIER Then    'scores 'todo eror when selected yr.1
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
                 Else 'default
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx", objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
                 End If
-
 
         End Select
         'objExcelFile.createExcelFile_NPOI(My.Application.Info.DirectoryPath & "\samples\generated_broadsheet.xlsx") 'worked
