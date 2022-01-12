@@ -366,43 +366,9 @@ Public Class ClassExcelFile
             doFootersLevel(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
         End If
 
-        'OR
-        Dim rowFooter, rowHashCodesInfo As IRow
-        rowFooter = sheet1.CreateRow(dt.Rows.Count + ALL_HEADERS_COUNT + 1)
-
-        For i = 0 To 9
-            rowFooter = sheet1.CreateRow(dt.Rows.Count + ALL_HEADERS_COUNT + i + 1)    'account for 9 header rows
-            rowFooter.CreateCell(FULLNAME_COL).SetCellValue(strFooter(i))
-            rowFooter.CreateCell(COURSE_START_COL + 1).SetCellValue(strFooterVal(i))  '"=COUNT()"  'total-successful
-            rowFooter.GetCell(FULLNAME_COL).CellStyle = (style)
-            rowFooter.GetCell(COURSE_START_COL + 1).CellStyle = (style)
-            cR = New CellRangeAddress(rowFooter.RowNum, rowFooter.RowNum, FULLNAME_COL, COURSE_START_COL)
-            sheet1.AddMergedRegion(cR)
-        Next
-
-        ''set formula
-        'row1 = sheet1.CreateRow(dt.Rows.Count)
-        'cell = row1.CreateCell(0)
-        'setFomula(sheet1, cell, "D2+D3+6")
-
-        setWidthHeight(sheet1)   'todo test
-        setFormatPerSemesterThenPerLevel(sheet1, objBS.broadsheetSemester, objBS.Level, dt.Columns.Count - 1)
-
-
-
-        'sheet1.setRepeatingRows(CellRangeAddress.ValueOf("1:2")) ' Set repeating rows For printing
-        '        // set print setup; fit all columns to one page width
-        'sheet.setAutobreaks(True);
-        'sheet.setFitToPage(True);
-        'PrintSetup printSetup = sheet.getPrintSetup();
-        'printSetup.setFitHeight((Short)0);
-        'printSetup.setFitWidth((Short)1);
-        sheet1.PrintSetup.FitHeight = 9999
-        'sheet1.PrintSetup.FitWidth = 1
-        sheet1.SetRowBreak(rowFooter.RowNum + footers.Count)
-        rowHashCodesInfo = sheet1.CreateRow(rowFooter.RowNum + footers.Count + 5)
-        rowHashCodesInfo.CreateCell(FULLNAME_COL).SetCellValue("Auto generated Info:" & dt.Rows.Count & "Students; " & Now.Ticks.ToString & "; " & "(special code used to verify authenticity of results only availiable in commercial version)")
         sheet1.RepeatingRows = New CellRangeAddress(rowHeaders.RowNum - 1, rowCredits.RowNum, 0, LAST_COL)
+        setWidthHeight(sheet1)   'todo test print layout
+        setFormatPerSemesterThenPerLevel(sheet1, objBS.broadsheetSemester, objBS.Level, dt.Columns.Count - 1)
 
 
 
@@ -473,45 +439,54 @@ Public Class ClassExcelFile
 
     Public Sub doFootersLevel(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String(), styleSignFooter As ICellStyle)
         Dim rowFooter As IRow
-        rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 1)
-        rowFooter.CreateCell(1) _
-                 .SetCellValue("CATEGORY")   'row1.CreateCell(jCol).SetCellValue("S/N")
-
-
-        rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 2)    'account for 9 header rows
-        rowFooter.CreateCell(2).SetCellValue(strFooter(0))
-        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=COUNTIF(EA10:EA175,'')") 'todo: dblquote
-        rowFooter.GetCell(2).CellStyle = (style)
-        rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
-
-        rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 3)    'account for 9 header rows
-        rowFooter.CreateCell(2).SetCellValue(strFooter(1))   'row1.CreateCell(jCol).SetCellValue("S/N")
-        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=BM186-BM177")  'TODO: call numtoCellAddress"  'total-successful
-        rowFooter.CreateCell(COURSE_START_COL).SetCellValue("=" & numToLetter(COURSE_START_COL) & COURSE_START_COL & "-" & numToLetter(COURSE_START_COL) & COURSE_START_COL)
-        rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
-
+        Dim strFml As String
+        Dim cRFooter As CellRangeAddress
+        rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + 5)
+        rowFooter.CreateCell(FULLNAME_COL).SetCellValue("CATEGORY")   'row1.CreateCell(jCol).SetCellValue("S/N")
 
         For i = 0 To 9
-            rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + i + 1)    'account for 9 header rows
-            rowFooter.CreateCell(2).SetCellValue(strFooter(i))
-            rowFooter.CreateCell(COURSE_START_COL).SetCellValue(strFooterVal(i))
-            rowFooter.CreateCell(8).SetCellValue(strFooterVal(i))
-            If Len(strFooter(i)) > 0 Then rowFooter.GetCell(2).CellStyle = (style)  'conditional formatting
-            If Len(strFooterVal(i)) > 0 Then rowFooter.GetCell(COURSE_START_COL).CellStyle = (style)
-        Next
-        'firstclass=COUNTIFS(DY10:DY175,"1")    seconclass =COUNTIFS(DY10:DY175,"2.1") 
+            rowFooter = sheet1.CreateRow(rowCount + ALL_HEADERS_COUNT + i + 5)    'account for 9 header rows
+            rowFooter.CreateCell(FULLNAME_COL).SetCellValue(strFooter(i))
+            If strFooter(i).Contains("SUCCESSFUL") Then
+                strFml = String.Format("COUNTIF({0}{1}:{2}{3},{4})", numToLetterZeroBased(STATUS_COL), ALL_HEADERS_COUNT + 1, numToLetterZeroBased(STATUS_COL), rowCount + ALL_HEADERS_COUNT, dblQuoted(CATEGORY_SUCCESSFUL))
+                rowFooter.CreateCell(TCF_1_COL).SetCellFormula(strFml) 'todo: dblquote
+            ElseIf strFooter(i).Contains("CARRY") Then
+                strFml = String.Format("COUNTIF({0}{1}:{2}{3},{4})", numToLetterZeroBased(STATUS_COL), ALL_HEADERS_COUNT + 1, numToLetterZeroBased(STATUS_COL), rowCount + ALL_HEADERS_COUNT, dblQuoted(CATEGORY_STUDENTS_WITH_CARRY_OVER))
+                rowFooter.CreateCell(TCF_1_COL).SetCellFormula(strFml) 'todo: dblquote
+            ElseIf strFooter(i).Contains("PROBAT") Then
+                strFml = String.Format("COUNTIF({0}{1}:{2}{3},{4})", numToLetterZeroBased(STATUS_COL), ALL_HEADERS_COUNT + 1, numToLetterZeroBased(STATUS_COL), rowCount + ALL_HEADERS_COUNT, dblQuoted(CATEGORY_PROBATION)) 'strFml = String.Format("COUNTIF(FN10:FN12,{0})", dblQuoted("C"))
+                rowFooter.CreateCell(TCF_1_COL).SetCellFormula(strFml) 'todo: dblquote
+            ElseIf strFooter(i).Contains("FAIL") Then
+                'test dynamic fml
+                'strFml = numToLetter(COURSE_START_COL) & COURSE_START_COL & "-" & numToLetter(COURSE_START_COL) & COURSE_START_COL)
+                strFml = String.Format("COUNTIF({0}{1}:{2}{3},{4})", numToLetterZeroBased(STATUS_COL), ALL_HEADERS_COUNT + 1, numToLetterZeroBased(STATUS_COL), rowCount + ALL_HEADERS_COUNT, dblQuoted(CATEGORY_FAIL_WITHDRAW))
 
-        'final footers HOD, dean etc
-        Dim footerRowount As Integer = rowCount + ALL_HEADERS_COUNT + 11 + 3
-        Dim cRFooter As CellRangeAddress = New CellRangeAddress(footerRowount, footerRowount, 2, 6)
+                rowFooter.CreateCell(TCF_1_COL).SetCellValue(strFml)
+            Else
+                rowFooter.CreateCell(TCF_1_COL).SetCellValue(strFooterVal(i))
+                'firstclass=COUNTIFS(DY10:DY175,"1")    seconclass =COUNTIFS(DY10:DY175,"2.1") 
+            End If
+
+            If Len(strFooter(i)) > 0 Then rowFooter.GetCell(FULLNAME_COL).CellStyle = (style)  'conditional formatting
+            If Len(strFooterVal(i)) > 0 Then rowFooter.GetCell(TCF_1_COL).CellStyle = (style)
+
+            cRFooter = New CellRangeAddress(rowFooter.RowNum, rowFooter.RowNum, FULLNAME_COL, TCF_1_COL - 1)
+            sheet1.AddMergedRegion(cRFooter)
+            rowFooter.GetCell(FULLNAME_COL).CellStyle = (style) 'now meged
+        Next
+
+
+        '--------final footers HOD, dean etc
+        Dim footerRowount As Integer = rowCount + ALL_HEADERS_COUNT + 5 + 11 + 3
+        cRFooter = New CellRangeAddress(footerRowount, footerRowount, FULLNAME_COL, 6)
 
         rowFooter = sheet1.CreateRow(footerRowount)    'account for 9 header rows
-        rowFooter.CreateCell(2).SetCellValue(footers(0))
+        rowFooter.CreateCell(FULLNAME_COL).SetCellValue(footers(0))
         rowFooter.CreateCell(TCP_1_COL).SetCellValue(footers(1))
         rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue(footers(2))
         'titles/position
         rowFooter = sheet1.CreateRow(footerRowount + 1)    'account for 9 header rows
-        rowFooter.CreateCell(2).SetCellValue("Course Adviser")
+        rowFooter.CreateCell(FULLNAME_COL).SetCellValue("Course Adviser")
         rowFooter.CreateCell(TCP_1_COL).SetCellValue("Dean")
         rowFooter.CreateCell(COURSE_FAIL_COL).SetCellValue("Head of Department")
 
@@ -527,12 +502,27 @@ Public Class ClassExcelFile
         sheet1.AddMergedRegion(cRFooter)
         RegionUtil.SetBorderTop(BorderStyle.Medium, cRFooter, sheet1)
 
+        'sheet1.setRepeatingRows(CellRangeAddress.ValueOf("1:2")) ' Set repeating rows For printing
+        '        // set print setup; fit all columns to one page width
+        'sheet.setAutobreaks(True);
+        'sheet.setFitToPage(True);
+        'PrintSetup printSetup = sheet.getPrintSetup();
+        'printSetup.setFitHeight((Short)0);
+        'printSetup.setFitWidth((Short)1);
+        sheet1.PrintSetup.FitHeight = 9999
+        'sheet1.PrintSetup.FitWidth = 1
+        sheet1.SetRowBreak(rowFooter.RowNum + footers.Count)
+
+
+        Dim rowHashCodesInfo As IRow
+        rowHashCodesInfo = sheet1.CreateRow(rowFooter.RowNum + footers.Count + 5)
+        rowHashCodesInfo.CreateCell(FULLNAME_COL).SetCellValue("Auto generated Info:" & rowCount & "Students; " & Now.Ticks.ToString & "; " & "(special code used to verify authenticity of results only availiable in commercial version)")
 
     End Sub
     Public Sub doFootersYr(sheet1 As ISheet, strFooter As String(), strFooterVal As Integer(), rowCount As Integer, style As ICellStyle, footers As String(), styleSignFooter As ICellStyle)
         Dim rowFooter As IRow
         'final footers HOD, dean etc
-        Dim footerRowount As Integer = rowCount + ALL_HEADERS_COUNT + 11 + 3
+        Dim footerRowount As Integer = rowCount + ALL_HEADERS_COUNT + 11 + 5
         Dim cRFooter As CellRangeAddress = New CellRangeAddress(footerRowount, footerRowount, 2, 6)
 
         rowFooter = sheet1.CreateRow(footerRowount)    'account for 9 header rows

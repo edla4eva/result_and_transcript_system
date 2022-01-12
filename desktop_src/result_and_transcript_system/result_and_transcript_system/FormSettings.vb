@@ -314,4 +314,10 @@ Public Class FormSettings
         dt.Rows.Add("added2")
         DataGridViewCoursesOrder.DataSource = mappDB.bulkInsertDBUsingDataAdapter(dt, "sample")
     End Sub
+
+    Private Sub ButtonDevLogin_Click(sender As Object, e As EventArgs) Handles ButtonDevLogin.Click
+        If TextBoxDevPass.Text = "devRTPS" Then
+            GroupBoxDev.Visible = True
+        End If
+    End Sub
 End Class

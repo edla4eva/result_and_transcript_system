@@ -378,6 +378,7 @@ Public Class FormGenerateBroadsheet
                 dept = DataGridViewBroadSheet.Rows(0).Cells("dept_idr").Value.ToString
                 ss = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value.ToString
                 createBroadsheetTables(ss, dept, lv)
+                ButtonSaveBroadsheet.PerformClick()   'save datasheet
             End If
             'HIDE UNECESSARY COLS
             For Each col In DataGridViewBroadSheet.Columns
@@ -653,11 +654,12 @@ Public Class FormGenerateBroadsheet
 
 
     Private Sub ButtonExportPDF_Click(sender As Object, e As EventArgs) Handles ButtonExportPDF.Click
-        Dim obj As New ClassPDF
-        If My.Computer.FileSystem.FileExists(objBroadsheet.processedBroadsheetFileName) Then
-            obj.ExcelPDFLateBinding()
-            MsgBox("Saved as PDF in: " & objBroadsheet.processedBroadsheetFileName)
-        End If
+        MsgBox("You can save excel file as PDF. Direct covertion to PDF is availiable in enterprise version")
+        'Dim obj As New ClassPDF
+        'If My.Computer.FileSystem.FileExists(objBroadsheet.processedBroadsheetFileName) Then
+        '    obj.ExcelPDFLateBinding()
+        '    MsgBox("Saved as PDF in: " & objBroadsheet.processedBroadsheetFileName)
+        'End If
     End Sub
 
 
@@ -721,7 +723,7 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonTest_Click(sender As Object, e As EventArgs) Handles ButtonTest.Click
-        objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
+        'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
     End Sub
 
     Private Sub RadioButtonScores_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonScores.CheckedChanged
