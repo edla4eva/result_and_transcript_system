@@ -62,7 +62,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonImportRegRTPS = New System.Windows.Forms.Button()
         Me.ButtonSaveReg = New System.Windows.Forms.Button()
         Me.ButtonRegToExcel = New System.Windows.Forms.Button()
-        Me.ButtonImportRegFERMA = New System.Windows.Forms.Button()
+        Me.ButtonImportRegFERMAExcel = New System.Windows.Forms.Button()
         Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
@@ -141,7 +141,8 @@ Partial Class FormStudentsRegistration
         Me.ButtonNext = New System.Windows.Forms.Button()
         Me.BindingSourceStudents = New System.Windows.Forms.BindingSource(Me.components)
         Me.ButtonFormView = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ButtonSaveGrid = New System.Windows.Forms.Button()
+        Me.ButtonImportRegFERMAAccess = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -195,7 +196,7 @@ Partial Class FormStudentsRegistration
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(731, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(956, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -388,7 +389,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonAccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAccess.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonAccess.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonAccess.Location = New System.Drawing.Point(1006, 534)
+        Me.ButtonAccess.Location = New System.Drawing.Point(1000, 576)
         Me.ButtonAccess.Name = "ButtonAccess"
         Me.ButtonAccess.Size = New System.Drawing.Size(123, 51)
         Me.ButtonAccess.TabIndex = 33
@@ -402,9 +403,9 @@ Partial Class FormStudentsRegistration
         Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClose.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.btnClose.Location = New System.Drawing.Point(1006, 603)
+        Me.btnClose.Location = New System.Drawing.Point(1000, 645)
         Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(119, 28)
+        Me.btnClose.Size = New System.Drawing.Size(124, 28)
         Me.btnClose.TabIndex = 4
         Me.btnClose.Text = "Close"
         Me.btnClose.UseVisualStyleBackColor = True
@@ -441,6 +442,7 @@ Partial Class FormStudentsRegistration
         Me.TextBoxFancyDisplayCourse2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBoxFancyDisplayCourse2.Size = New System.Drawing.Size(311, 235)
         Me.TextBoxFancyDisplayCourse2.TabIndex = 82
+        Me.TextBoxFancyDisplayCourse2.Visible = False
         '
         'TextBoxFancyDisplayCourse1
         '
@@ -450,6 +452,7 @@ Partial Class FormStudentsRegistration
         Me.TextBoxFancyDisplayCourse1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBoxFancyDisplayCourse1.Size = New System.Drawing.Size(341, 235)
         Me.TextBoxFancyDisplayCourse1.TabIndex = 81
+        Me.TextBoxFancyDisplayCourse1.Visible = False
         '
         'dgvImportCourses
         '
@@ -469,9 +472,9 @@ Partial Class FormStudentsRegistration
         DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgvImportCourses.DefaultCellStyle = DataGridViewCellStyle4
         Me.dgvImportCourses.GridColor = System.Drawing.Color.Gray
-        Me.dgvImportCourses.Location = New System.Drawing.Point(5, 28)
+        Me.dgvImportCourses.Location = New System.Drawing.Point(5, 97)
         Me.dgvImportCourses.Name = "dgvImportCourses"
-        Me.dgvImportCourses.Size = New System.Drawing.Size(647, 222)
+        Me.dgvImportCourses.Size = New System.Drawing.Size(647, 153)
         Me.dgvImportCourses.TabIndex = 80
         '
         'Panel6
@@ -515,9 +518,9 @@ Partial Class FormStudentsRegistration
         Me.ButtonImportRegRTPS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonImportRegRTPS.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonImportRegRTPS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonImportRegRTPS.Location = New System.Drawing.Point(1004, 329)
+        Me.ButtonImportRegRTPS.Location = New System.Drawing.Point(1001, 306)
         Me.ButtonImportRegRTPS.Name = "ButtonImportRegRTPS"
-        Me.ButtonImportRegRTPS.Size = New System.Drawing.Size(117, 42)
+        Me.ButtonImportRegRTPS.Size = New System.Drawing.Size(120, 42)
         Me.ButtonImportRegRTPS.TabIndex = 9
         Me.ButtonImportRegRTPS.Text = "Import From Excel (RTPS)"
         Me.ButtonImportRegRTPS.UseVisualStyleBackColor = True
@@ -529,9 +532,9 @@ Partial Class FormStudentsRegistration
         Me.ButtonSaveReg.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonSaveReg.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonSaveReg.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonSaveReg.Location = New System.Drawing.Point(1004, 377)
+        Me.ButtonSaveReg.Location = New System.Drawing.Point(1001, 354)
         Me.ButtonSaveReg.Name = "ButtonSaveReg"
-        Me.ButtonSaveReg.Size = New System.Drawing.Size(119, 28)
+        Me.ButtonSaveReg.Size = New System.Drawing.Size(122, 28)
         Me.ButtonSaveReg.TabIndex = 8
         Me.ButtonSaveReg.Text = "Save Imported Reg"
         Me.ButtonSaveReg.UseVisualStyleBackColor = True
@@ -543,26 +546,26 @@ Partial Class FormStudentsRegistration
         Me.ButtonRegToExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRegToExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonRegToExcel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonRegToExcel.Location = New System.Drawing.Point(1004, 411)
+        Me.ButtonRegToExcel.Location = New System.Drawing.Point(1001, 388)
         Me.ButtonRegToExcel.Name = "ButtonRegToExcel"
-        Me.ButtonRegToExcel.Size = New System.Drawing.Size(119, 43)
+        Me.ButtonRegToExcel.Size = New System.Drawing.Size(122, 43)
         Me.ButtonRegToExcel.TabIndex = 9
-        Me.ButtonRegToExcel.Text = "Export Reg to Excel"
+        Me.ButtonRegToExcel.Text = "Export to Excel"
         Me.ButtonRegToExcel.UseVisualStyleBackColor = True
         '
-        'ButtonImportRegFERMA
+        'ButtonImportRegFERMAExcel
         '
-        Me.ButtonImportRegFERMA.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ButtonImportRegFERMA.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ButtonImportRegFERMA.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonImportRegFERMA.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonImportRegFERMA.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonImportRegFERMA.Location = New System.Drawing.Point(1006, 460)
-        Me.ButtonImportRegFERMA.Name = "ButtonImportRegFERMA"
-        Me.ButtonImportRegFERMA.Size = New System.Drawing.Size(119, 68)
-        Me.ButtonImportRegFERMA.TabIndex = 7
-        Me.ButtonImportRegFERMA.Text = "Import From FERMA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Excel)"
-        Me.ButtonImportRegFERMA.UseVisualStyleBackColor = True
+        Me.ButtonImportRegFERMAExcel.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ButtonImportRegFERMAExcel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonImportRegFERMAExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonImportRegFERMAExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportRegFERMAExcel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ButtonImportRegFERMAExcel.Location = New System.Drawing.Point(1000, 507)
+        Me.ButtonImportRegFERMAExcel.Name = "ButtonImportRegFERMAExcel"
+        Me.ButtonImportRegFERMAExcel.Size = New System.Drawing.Size(123, 63)
+        Me.ButtonImportRegFERMAExcel.TabIndex = 7
+        Me.ButtonImportRegFERMAExcel.Text = "Import From FERMA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Excel)"
+        Me.ButtonImportRegFERMAExcel.UseVisualStyleBackColor = True
         '
         'TimerBS
         '
@@ -750,9 +753,9 @@ Partial Class FormStudentsRegistration
         Me.ButtonDownloadTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonDownloadTemplate.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonDownloadTemplate.ForeColor = System.Drawing.Color.White
-        Me.ButtonDownloadTemplate.Location = New System.Drawing.Point(1004, 262)
+        Me.ButtonDownloadTemplate.Location = New System.Drawing.Point(1001, 239)
         Me.ButtonDownloadTemplate.Name = "ButtonDownloadTemplate"
-        Me.ButtonDownloadTemplate.Size = New System.Drawing.Size(119, 55)
+        Me.ButtonDownloadTemplate.Size = New System.Drawing.Size(122, 55)
         Me.ButtonDownloadTemplate.TabIndex = 84
         Me.ButtonDownloadTemplate.Text = "Download Template"
         Me.ButtonDownloadTemplate.UseVisualStyleBackColor = True
@@ -1354,25 +1357,39 @@ Partial Class FormStudentsRegistration
         Me.ButtonFormView.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonFormView.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonFormView.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonFormView.Location = New System.Drawing.Point(1004, 165)
+        Me.ButtonFormView.Location = New System.Drawing.Point(1004, 142)
         Me.ButtonFormView.Name = "ButtonFormView"
         Me.ButtonFormView.Size = New System.Drawing.Size(119, 42)
         Me.ButtonFormView.TabIndex = 88
-        Me.ButtonFormView.Text = "Form View"
+        Me.ButtonFormView.Text = "Grid View"
         Me.ButtonFormView.UseVisualStyleBackColor = True
         '
-        'Button1
+        'ButtonSaveGrid
         '
-        Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.Button1.Location = New System.Drawing.Point(1004, 213)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(119, 42)
-        Me.Button1.TabIndex = 89
-        Me.Button1.Text = "Save Grid"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.ButtonSaveGrid.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ButtonSaveGrid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSaveGrid.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonSaveGrid.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ButtonSaveGrid.Location = New System.Drawing.Point(1004, 190)
+        Me.ButtonSaveGrid.Name = "ButtonSaveGrid"
+        Me.ButtonSaveGrid.Size = New System.Drawing.Size(119, 42)
+        Me.ButtonSaveGrid.TabIndex = 89
+        Me.ButtonSaveGrid.Text = "Save Grid"
+        Me.ButtonSaveGrid.UseVisualStyleBackColor = True
+        '
+        'ButtonImportRegFERMAAccess
+        '
+        Me.ButtonImportRegFERMAAccess.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ButtonImportRegFERMAAccess.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ButtonImportRegFERMAAccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonImportRegFERMAAccess.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonImportRegFERMAAccess.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ButtonImportRegFERMAAccess.Location = New System.Drawing.Point(998, 436)
+        Me.ButtonImportRegFERMAAccess.Name = "ButtonImportRegFERMAAccess"
+        Me.ButtonImportRegFERMAAccess.Size = New System.Drawing.Size(123, 68)
+        Me.ButtonImportRegFERMAAccess.TabIndex = 90
+        Me.ButtonImportRegFERMAAccess.Text = "Import From FERMA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Access)"
+        Me.ButtonImportRegFERMAAccess.UseVisualStyleBackColor = True
         '
         'FormStudentsRegistration
         '
@@ -1381,7 +1398,8 @@ Partial Class FormStudentsRegistration
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1131, 733)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.ButtonImportRegFERMAAccess)
+        Me.Controls.Add(Me.ButtonSaveGrid)
         Me.Controls.Add(Me.ButtonFormView)
         Me.Controls.Add(Me.PanelForm)
         Me.Controls.Add(Me.ButtonDownloadTemplate)
@@ -1393,7 +1411,7 @@ Partial Class FormStudentsRegistration
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel5)
         Me.Controls.Add(Me.ButtonAccess)
-        Me.Controls.Add(Me.ButtonImportRegFERMA)
+        Me.Controls.Add(Me.ButtonImportRegFERMAExcel)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.PictureBox1)
@@ -1455,7 +1473,7 @@ Partial Class FormStudentsRegistration
     Friend WithEvents ProgressBarBS As ProgressBar
     Friend WithEvents ButtonImportStudentsFromExcel As Button
     Friend WithEvents dgvStudents As DataGridView
-    Friend WithEvents ButtonImportRegFERMA As Button
+    Friend WithEvents ButtonImportRegFERMAExcel As Button
     Friend WithEvents Label8 As Label
     Friend WithEvents TextBoxstudent_dept_idr As TextBox
     Friend WithEvents ComboBoxDepartments As ComboBox
@@ -1543,9 +1561,10 @@ Partial Class FormStudentsRegistration
     Friend WithEvents Label22 As Label
     Friend WithEvents TextBoxgender As TextBox
     Friend WithEvents TextBoxdept_idr As TextBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents ButtonSaveGrid As Button
     Friend WithEvents TextBoxFancyDisplayCourse2 As TextBox
     Friend WithEvents TextBoxFancyDisplayCourse1 As TextBox
     Friend WithEvents ComboBoxStatus As ComboBox
     Friend WithEvents ComboBoxGender As ComboBox
+    Friend WithEvents ButtonImportRegFERMAAccess As Button
 End Class

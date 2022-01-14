@@ -273,6 +273,9 @@
         'get courses fom course order
         Dim txtCourses_1, txtCourses_2 As String
         Dim dLevel, dSession, dDeptID As String
+
+        txtCourses_1 = ""
+        txtCourses_2 = ""
         dLevel = dgvStudents.Rows(0).Cells("level").Value
         dSession = dgvStudents.Rows(0).Cells("session_idr").Value
         dDeptID = dgvStudents.Rows(0).Cells("student_dept_idr").Value

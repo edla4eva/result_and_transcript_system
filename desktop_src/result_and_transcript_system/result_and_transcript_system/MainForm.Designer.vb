@@ -226,9 +226,9 @@ Partial Class MainForm
         Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(21, 1)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(528, 24)
+        Me.Label1.Size = New System.Drawing.Size(585, 24)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = "RTPS - Result and Transcript Processing Sysem Version 1.0.1"
+        Me.Label1.Text = "RTPS - Result and Transcript Processing Sysem Version 1.0.1 Beta 5"
         '
         'LinkLabel3
         '

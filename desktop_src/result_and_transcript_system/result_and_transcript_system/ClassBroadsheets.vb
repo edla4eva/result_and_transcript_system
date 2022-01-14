@@ -460,7 +460,7 @@ Public Class ClassBroadsheets
         '##For each ColName(CourseCode), query database to get result scores for that course
         'NB: in broadsheet template scores starts From col H (i.e 7 counting From 0)
 
-        '''----------------------MTHD2---------------------------------------
+        ''''----------------------MTHD2---------------------------------------
         ''Dim inxC As Integer = 0
         ''Dim levelPos = 0
         ''Dim dtGrades As New DataTable
@@ -469,7 +469,7 @@ Public Class ClassBroadsheets
         ''Dim tmpStrSQLs(MAX_COURSES_1 + MAX_COURSES_2) As String
         ''Dim tblNames(MAX_COURSES_1 + MAX_COURSES_2) As String
         ''Dim dsResults As New DataSet
-        '''## iteratively query database and get all results into array of DataTables
+        ''''## iteratively query database and get all results into array of DataTables
         ''For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
         ''    If dt.Columns(inxC).ColumnName.ToUpper.Contains("REPEAT") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
         ''    If dt.Columns(inxC).ColumnName.Contains("TCP_") Or dt.Columns(inxC).ColumnName.Contains("TCR_") Then Continue For
@@ -489,15 +489,15 @@ Public Class ClassBroadsheets
         ''        'tblNames(resultCount) = tmpStrCourseCode 'dtLocalResults(resultCount) = mappDB.GetDataWhere(tmpStr, tmpStrCourseCode).Tables(0)
         ''    End If
         ''Next
-        '''dsResults = mappDB.BatchGetDataWhere(tmpStrSQLs, tblNames)    'OPTIONAL MeTHOD
-        '''dsResults.Tables.CopyTo(dtLocalResults, 0)
+        ''''dsResults = mappDB.BatchGetDataWhere(tmpStrSQLs, tblNames)    'OPTIONAL MeTHOD
+        ''''dsResults.Tables.CopyTo(dtLocalResults, 0)
 
-        '''---#Update dataset with result values and general values
+        ''''---#Update dataset with result values and general values
         ''Dim tmpdR As DataRow() = Nothing
         ''Dim tmpResult As Integer = NR_CODE
         ''Dim tmpMATNO As String = ""
 
-        '''dt.row.col=lookupResult(matno)
+        ''''dt.row.col=lookupResult(matno)
 
         ''For iMainDS = 0 To dt.Rows.Count - 1
         ''    countResultsBS = dtLocalResults.Count
@@ -532,7 +532,7 @@ Public Class ClassBroadsheets
         ''    objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
         ''Next
         ''dtLocalResults = Nothing
-        '''-----------------------------------------------------------------------------
+        ''''-----------------------------------------------------------------------------
 
 
 
@@ -1003,6 +1003,18 @@ Public Class ClassBroadsheets
 
 
             dt.Rows(i).Item("GPA") = (Math.Floor(gpa * 1000) / 1000).ToString
+            If course_level = 100 Then
+                dt.Rows(i).Item("gpa100") = (Math.Floor(gpa * 1000) / 1000).ToString
+            ElseIf course_level = 200 Then
+                dt.Rows(i).Item("gpa200") = (Math.Floor(gpa * 1000) / 1000).ToString
+            ElseIf course_level = 300 Then
+                dt.Rows(i).Item("gpa300") = (Math.Floor(gpa * 1000) / 1000).ToString
+            ElseIf course_level = 400 Then
+                dt.Rows(i).Item("gpa400") = (Math.Floor(gpa * 1000) / 1000).ToString
+            ElseIf course_level = 500 Then
+                dt.Rows(i).Item("gpa500") = (Math.Floor(gpa * 1000) / 1000).ToString
+
+            End If
             objBroadsheet.progressStr = "Computing Failed Courses" & " ..."
             dt.Rows(i).Item("Failed") = getAllFailed(scores, courses, objBroadsheet.Level)
             objBroadsheet.progressStr = "Computing Credits registered" & " ..."
@@ -1070,6 +1082,10 @@ Public Class ClassBroadsheets
         Next
         'Now overwrite matno name etc
         Dim tmpRepeated As String() = {}
+        Dim tmpscore As String = ""
+        Dim tmpGrade As String = ""
+        Dim tmpPos As Integer = 0
+        Dim tmpCourse As String = ""
         For i = 0 To countRows - 1
             For j = 0 To dt.Columns.Count - 1
                 If j < COURSE_START_COL Then
@@ -1079,10 +1095,16 @@ Public Class ClassBroadsheets
                 ElseIf j > COURSE_END_COL_2 And j <= dt.Columns.Count - 1 Then
                     dtNew.Rows(i).Item(j) = dt.Rows(i).Item(j)
                 ElseIf j = REPEATED_1_COL Then
-                    'tmpRepeated = Split(dt.Rows(i).Item(j), ", ")
-                    'For Each strT In tmpRepeated
-                    '    strT.Substring(strT.IndexOf("/", 0, 2)
-                    'Next
+                    'CPE222/3/4, CPE344/3/45
+                    tmpRepeated = Split(dt.Rows(i).Item(j), ", ")
+                    For Each strT In tmpRepeated
+                        tmpPos = (strT.IndexOf("/", 0, 2))
+                        tmpCourse = strT.Substring(0, 3)
+                        tmpscore = strT.Substring(tmpPos)
+                        tmpGrade = objBroadsheet.getGRADE(toNum(tmpscore), Nothing, Nothing)
+                        dt.Rows(i).Item(j) = dt.Rows(i).Item(j).ToString.Replace(strT, tmpCourse & "/" & tmpGrade & ",")
+
+                    Next
                 ElseIf j = REPEATED_2_COL Then
 
                 ElseIf j = REPEATED_ALL_COL Then
@@ -1389,7 +1411,10 @@ Public Class ClassBroadsheets
         Try
             excelApp = New ExcelInterop.Application
 
-            If _broadsheetFileName = Nothing Or Not System.IO.File.Exists(_broadsheetFileName) Then Exit Function 'todo
+            If _broadsheetFileName = Nothing Or Not System.IO.File.Exists(_broadsheetFileName) Then
+                Return False
+                Exit Function 'todo
+            End If
             excelWB = excelApp.Workbooks.Open(Me.broadsheetFileName)
             excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
             'show it
@@ -1556,7 +1581,10 @@ Public Class ClassBroadsheets
 
         Try
             excelApp = New ExcelInterop.Application
-            If resultfileNameValue = Nothing Or Not System.IO.File.Exists(resultfileNameValue) Then Exit Function 'todo
+            If resultfileNameValue = Nothing Or Not System.IO.File.Exists(resultfileNameValue) Then
+                Return False
+                Exit Function 'todo
+            End If
             excelWB = excelApp.Workbooks.Open(resultfileNameValue)
             excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
 
@@ -1707,7 +1735,10 @@ Public Class ClassBroadsheets
         Try
             excelApp = New ExcelInterop.Application
 
-            If resultfileNameValue = Nothing Or Not System.IO.File.Exists(resultfileNameValue) Then Exit Function 'todo
+            If resultfileNameValue = Nothing Or Not System.IO.File.Exists(resultfileNameValue) Then
+                Return Nothing
+                Exit Function 'todo
+            End If
             excelWB = excelApp.Workbooks.Open(resultfileNameValue)
             excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
 
@@ -1916,7 +1947,7 @@ Public Class ClassBroadsheets
 
 
         Catch ex As Exception
-
+            Return DEFAULT_DISP
         End Try
 
     End Function

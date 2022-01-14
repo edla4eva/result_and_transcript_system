@@ -292,10 +292,16 @@ Public Class FormResultsTranscripts
     Private Sub ButtonFullScreen_Click(sender As Object, e As EventArgs) Handles ButtonFullScreen.Click
         If ReportViewerTranscript.Dock = DockStyle.Fill Then
             ReportViewerTranscript.Dock = DockStyle.None
+            ReportViewerGPCard.Dock = DockStyle.None
             ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+            ReportViewerGPCard.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+
         Else
             ReportViewerTranscript.Dock = DockStyle.Fill
             ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+            ReportViewerGPCard.Dock = DockStyle.Fill
+            ReportViewerGPCard.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+
         End If
 
     End Sub

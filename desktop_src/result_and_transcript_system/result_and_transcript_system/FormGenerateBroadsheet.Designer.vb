@@ -37,6 +37,8 @@ Partial Class FormGenerateBroadsheet
         Me.UpgradeTo40ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UpgradeWith1MarkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UpgradeWith2MarksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.All39To40ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChangeToToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripTextBox1 = New System.Windows.Forms.ToolStripTextBox()
         Me.ApplyChangeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -51,7 +53,7 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonExportToExcel = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.ButtonSaveBroadsheet = New System.Windows.Forms.Button()
-        Me.ButtonCloud = New System.Windows.Forms.Button()
+        Me.ButtonReProces = New System.Windows.Forms.Button()
         Me.ButtonGrades = New System.Windows.Forms.Button()
         Me.ButtonProcessBroadsheet = New System.Windows.Forms.Button()
         Me.LabelProgress = New System.Windows.Forms.Label()
@@ -81,9 +83,10 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonOpen = New System.Windows.Forms.Button()
         Me.ComboBoxRegisteredStudents = New System.Windows.Forms.ComboBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.ButtonLoadSavedBS = New System.Windows.Forms.Button()
         Me.RadioButtonDIP = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.ButtonLoadSavedBS = New System.Windows.Forms.Button()
+        Me.ButtonSyncCloud = New System.Windows.Forms.Button()
         CType(Me.DataGridViewBroadSheet, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -124,14 +127,14 @@ Partial Class FormGenerateBroadsheet
         Me.DataGridViewBroadSheet.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewBroadSheet.Location = New System.Drawing.Point(29, 158)
         Me.DataGridViewBroadSheet.Name = "DataGridViewBroadSheet"
-        Me.DataGridViewBroadSheet.Size = New System.Drawing.Size(778, 255)
+        Me.DataGridViewBroadSheet.Size = New System.Drawing.Size(796, 255)
         Me.DataGridViewBroadSheet.TabIndex = 9
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.UpgradeTo40ToolStripMenuItem, Me.UpgradeWith1MarkToolStripMenuItem, Me.UpgradeWith2MarksToolStripMenuItem, Me.ChangeToToolStripMenuItem, Me.ToolStripTextBox1, Me.ApplyChangeToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.UpgradeTo40ToolStripMenuItem, Me.UpgradeWith1MarkToolStripMenuItem, Me.UpgradeWith2MarksToolStripMenuItem, Me.ToolStripMenuItem1, Me.ChangeToToolStripMenuItem, Me.ToolStripTextBox1, Me.ApplyChangeToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(190, 139)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(190, 161)
         Me.ContextMenuStrip1.Text = "Action"
         '
         'UpgradeTo40ToolStripMenuItem
@@ -151,6 +154,19 @@ Partial Class FormGenerateBroadsheet
         Me.UpgradeWith2MarksToolStripMenuItem.Name = "UpgradeWith2MarksToolStripMenuItem"
         Me.UpgradeWith2MarksToolStripMenuItem.Size = New System.Drawing.Size(189, 22)
         Me.UpgradeWith2MarksToolStripMenuItem.Text = "Upgrade with 2 marks"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.All39To40ToolStripMenuItem})
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(189, 22)
+        Me.ToolStripMenuItem1.Text = "Apply Dept Rule"
+        '
+        'All39To40ToolStripMenuItem
+        '
+        Me.All39To40ToolStripMenuItem.Name = "All39To40ToolStripMenuItem"
+        Me.All39To40ToolStripMenuItem.Size = New System.Drawing.Size(198, 22)
+        Me.All39To40ToolStripMenuItem.Text = "All 39 to 40, 44 to 45 etc"
         '
         'ChangeToToolStripMenuItem
         '
@@ -191,6 +207,7 @@ Partial Class FormGenerateBroadsheet
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonSyncCloud)
         Me.SidePanel.Controls.Add(Me.ButtonTest)
         Me.SidePanel.Controls.Add(Me.Panel2)
         Me.SidePanel.Controls.Add(Me.ButtonClose)
@@ -198,11 +215,11 @@ Partial Class FormGenerateBroadsheet
         Me.SidePanel.Controls.Add(Me.ButtonExportToExcel)
         Me.SidePanel.Controls.Add(Me.Button3)
         Me.SidePanel.Controls.Add(Me.ButtonSaveBroadsheet)
-        Me.SidePanel.Controls.Add(Me.ButtonCloud)
+        Me.SidePanel.Controls.Add(Me.ButtonReProces)
         Me.SidePanel.Controls.Add(Me.ButtonGrades)
         Me.SidePanel.Controls.Add(Me.ButtonProcessBroadsheet)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Right
-        Me.SidePanel.Location = New System.Drawing.Point(816, 0)
+        Me.SidePanel.Location = New System.Drawing.Point(834, 0)
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 660)
         Me.SidePanel.TabIndex = 27
@@ -251,7 +268,7 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(6, 495)
+        Me.ButtonClose.Location = New System.Drawing.Point(6, 566)
         Me.ButtonClose.Name = "ButtonClose"
         Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
         Me.ButtonClose.TabIndex = 36
@@ -290,7 +307,7 @@ Partial Class FormGenerateBroadsheet
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.Button3.ForeColor = System.Drawing.Color.White
-        Me.Button3.Location = New System.Drawing.Point(6, 439)
+        Me.Button3.Location = New System.Drawing.Point(6, 510)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(128, 55)
         Me.Button3.TabIndex = 6
@@ -310,18 +327,18 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonSaveBroadsheet.Text = "Save"
         Me.ButtonSaveBroadsheet.UseVisualStyleBackColor = True
         '
-        'ButtonCloud
+        'ButtonReProces
         '
-        Me.ButtonCloud.FlatAppearance.BorderSize = 0
-        Me.ButtonCloud.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonCloud.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonCloud.ForeColor = System.Drawing.Color.White
-        Me.ButtonCloud.Location = New System.Drawing.Point(3, 378)
-        Me.ButtonCloud.Name = "ButtonCloud"
-        Me.ButtonCloud.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonCloud.TabIndex = 3
-        Me.ButtonCloud.Text = "Sync Cloud"
-        Me.ButtonCloud.UseVisualStyleBackColor = True
+        Me.ButtonReProces.FlatAppearance.BorderSize = 0
+        Me.ButtonReProces.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonReProces.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonReProces.ForeColor = System.Drawing.Color.White
+        Me.ButtonReProces.Location = New System.Drawing.Point(3, 363)
+        Me.ButtonReProces.Name = "ButtonReProces"
+        Me.ButtonReProces.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonReProces.TabIndex = 3
+        Me.ButtonReProces.Text = "Re-Process"
+        Me.ButtonReProces.UseVisualStyleBackColor = True
         '
         'ButtonGrades
         '
@@ -375,7 +392,7 @@ Partial Class FormGenerateBroadsheet
         Me.PanelModify.Controls.Add(Me.RadioButtonUseExcel)
         Me.PanelModify.Location = New System.Drawing.Point(407, 31)
         Me.PanelModify.Name = "PanelModify"
-        Me.PanelModify.Size = New System.Drawing.Size(400, 124)
+        Me.PanelModify.Size = New System.Drawing.Size(418, 124)
         Me.PanelModify.TabIndex = 30
         '
         'GroupBox1
@@ -526,7 +543,7 @@ Partial Class FormGenerateBroadsheet
         Me.ProgressBarBS.ForeColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.ProgressBarBS.Location = New System.Drawing.Point(32, 434)
         Me.ProgressBarBS.Name = "ProgressBarBS"
-        Me.ProgressBarBS.Size = New System.Drawing.Size(774, 23)
+        Me.ProgressBarBS.Size = New System.Drawing.Size(792, 23)
         Me.ProgressBarBS.TabIndex = 31
         Me.ProgressBarBS.Value = 1
         '
@@ -567,7 +584,7 @@ Partial Class FormGenerateBroadsheet
         Me.DataGridViewBroadsheetAudit.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewBroadsheetAudit.Location = New System.Drawing.Point(29, 158)
         Me.DataGridViewBroadsheetAudit.Name = "DataGridViewBroadsheetAudit"
-        Me.DataGridViewBroadsheetAudit.Size = New System.Drawing.Size(778, 187)
+        Me.DataGridViewBroadsheetAudit.Size = New System.Drawing.Size(796, 187)
         Me.DataGridViewBroadsheetAudit.TabIndex = 32
         '
         'ButtonDownload
@@ -622,7 +639,7 @@ Partial Class FormGenerateBroadsheet
         Me.DataGridViewTemp.GridColor = System.Drawing.Color.Gray
         Me.DataGridViewTemp.Location = New System.Drawing.Point(32, 463)
         Me.DataGridViewTemp.Name = "DataGridViewTemp"
-        Me.DataGridViewTemp.Size = New System.Drawing.Size(771, 130)
+        Me.DataGridViewTemp.Size = New System.Drawing.Size(789, 130)
         Me.DataGridViewTemp.TabIndex = 35
         '
         'ButtonOpen
@@ -660,6 +677,18 @@ Partial Class FormGenerateBroadsheet
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Select Registered Students"
         '
+        'ButtonLoadSavedBS
+        '
+        Me.ButtonLoadSavedBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonLoadSavedBS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonLoadSavedBS.ForeColor = System.Drawing.Color.White
+        Me.ButtonLoadSavedBS.Location = New System.Drawing.Point(192, 47)
+        Me.ButtonLoadSavedBS.Name = "ButtonLoadSavedBS"
+        Me.ButtonLoadSavedBS.Size = New System.Drawing.Size(172, 23)
+        Me.ButtonLoadSavedBS.TabIndex = 38
+        Me.ButtonLoadSavedBS.Text = "Load Saved Broadsheet"
+        Me.ButtonLoadSavedBS.UseVisualStyleBackColor = False
+        '
         'RadioButtonDIP
         '
         Me.RadioButtonDIP.AutoSize = True
@@ -682,23 +711,24 @@ Partial Class FormGenerateBroadsheet
         Me.RadioButton2.Text = "UME"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
-        'ButtonLoadSavedBS
+        'ButtonSyncCloud
         '
-        Me.ButtonLoadSavedBS.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.ButtonLoadSavedBS.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonLoadSavedBS.ForeColor = System.Drawing.Color.White
-        Me.ButtonLoadSavedBS.Location = New System.Drawing.Point(192, 47)
-        Me.ButtonLoadSavedBS.Name = "ButtonLoadSavedBS"
-        Me.ButtonLoadSavedBS.Size = New System.Drawing.Size(172, 23)
-        Me.ButtonLoadSavedBS.TabIndex = 38
-        Me.ButtonLoadSavedBS.Text = "Load Saved Broadsheet"
-        Me.ButtonLoadSavedBS.UseVisualStyleBackColor = False
+        Me.ButtonSyncCloud.FlatAppearance.BorderSize = 0
+        Me.ButtonSyncCloud.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSyncCloud.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonSyncCloud.ForeColor = System.Drawing.Color.White
+        Me.ButtonSyncCloud.Location = New System.Drawing.Point(3, 434)
+        Me.ButtonSyncCloud.Name = "ButtonSyncCloud"
+        Me.ButtonSyncCloud.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonSyncCloud.TabIndex = 76
+        Me.ButtonSyncCloud.Text = "Sync Cloud"
+        Me.ButtonSyncCloud.UseVisualStyleBackColor = True
         '
         'FormGenerateBroadsheet
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(950, 660)
+        Me.ClientSize = New System.Drawing.Size(968, 660)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.ButtonOpen)
         Me.Controls.Add(Me.DataGridViewTemp)
@@ -737,7 +767,7 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents TextBoxTemplateFileName As TextBox
     Friend WithEvents SidePanel As Panel
     Friend WithEvents ButtonSaveBroadsheet As Button
-    Friend WithEvents ButtonCloud As Button
+    Friend WithEvents ButtonReProces As Button
     Friend WithEvents ButtonGrades As Button
     Friend WithEvents ButtonProcessBroadsheet As Button
     Friend WithEvents Button3 As Button
@@ -784,4 +814,7 @@ Partial Class FormGenerateBroadsheet
     Friend WithEvents RadioButtonDIP As RadioButton
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents ButtonLoadSavedBS As Button
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents All39To40ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ButtonSyncCloud As Button
 End Class

@@ -27,8 +27,10 @@ Module ModuleGeneral
     Public objExcelFile As New ClassExcelFile() 'ExcelDataReader object
 
     'App settings
-    Public USER_DIRECTORY As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\ResultAndTranscriptSystem"
+    Public USER_DIRECTORY As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\RTPS Result Soft"
     Public PROG_DIRECTORY As String = My.Application.Info.DirectoryPath
+    Public MY_DIR As String = "RTPS Result Soft"
+    Public DATA_DIRECTORY As String = My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData
 
     'DB defalults
     ' '32 bit Access
@@ -40,9 +42,12 @@ Module ModuleGeneral
     'passworded
     'Public STR_connectionString As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "Persist Security Info=True;JET OLEDB: Database Password={0};", (My.Settings.dbpass))
 
+    'from user selected access file
+    Public STR_AccessFileConnectionString32 = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};"   'this is the one my win10, access2019 64bit attemted to se but returne error unrecognized db format
+    Public STR_AccessFileConnectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};"
+
 
     Public STR_connectionStringAccessNet As String = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & My.Application.Info.DirectoryPath & "\db\db.mdb;" & "JET OLEDB: Database Password={0};", (My.Settings.dbpass))
-
     Public STR_connectionStringCloud As String = "server=localhost;User Id=root;Persist Security Info=True;database=result_and_transript_db"
 
 
@@ -403,20 +408,7 @@ Module ModuleGeneral
     'Public STR_SQL_EDIT_ROOMS As String = "UPDATE `crimpsof_ehotel`.`rooms` SET `room_status` = '{0}' WHERE `rooms`.`room_id` = {1};"
     'Public SQL_UPDATE_ROOMS As String = "UPDATE rooms set room_status='{0}' where room_id='{1}'"
 #End Region
-    Public Function buildConnectionStringFromAccessFile(dfileName As String, Is32bit As Boolean) As String
-        ' '32 bit Access
-        Dim connectionString32 As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};" '& "User ID=admin;" & "Password=" & m_password
-        '64 bits
-        Dim connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};" ' "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\db.mdb"
-        connectionString = "Provider = Microsoft.ACE.OLEDB.16.0;Data Source={0};"
-        connectionString32 = "Provider = Microsoft.ACE.OLEDB.16.0;Data Source={0};"
 
-        If Is32bit Then
-            Return String.Format(connectionString32, dfileName)
-        Else
-            Return String.Format(connectionString, dfileName)
-        End If
-    End Function
     Public Function dblQuoted(dStr As String) As String
         Return dblQuote & dStr & dblQuote
     End Function
@@ -612,7 +604,7 @@ Module ModuleGeneral
 
             For i = 0 To ds.Tables(0).Rows.Count - 1
                 For j = 0 To 14
-                    strColNameFS = "FS" & (j + 1).ToString("D3")
+                    strColNameFS = "FS" & (j + 1).ToString("D3")    'FS001, FS002 ... are cols in course_order_new tbl
                     strColNameSS = "SS" & (j + 1).ToString("D3")
                     If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameFS)) Then
                         ds.Tables(0).Rows(i).Item(strColNameFS) = ""
@@ -1040,7 +1032,9 @@ Module ModuleGeneral
     End Function
     Public Function getParamsFromDatatable(dt As DataTable) As List(Of OleDb.OleDbParameter)
         Dim lstupdateParams As New List(Of OleDb.OleDbParameter)
-        For i = 0 To dt.Rows.Count - 1
+        lstupdateParams.Clear()
+
+        For i = 0 To 0
             For j = 0 To dt.Columns.Count - 1
                 If IsDBNull(dt.Rows(i).Item(j)) Or dt.Rows(i).Item(j).ToString = "" Then
                     dt.Rows(i).Item(j) = "1"

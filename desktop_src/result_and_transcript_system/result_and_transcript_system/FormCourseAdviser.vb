@@ -51,6 +51,10 @@ Public Class FormCourseAdviser
         MainForm.ChangeMenu("viewSenate")
     End Sub
 
+    Private Sub ButtonCourseMarkSheet_Click(sender As Object, e As EventArgs) Handles ButtonCourseMarkSheet.Click
+        MsgBox("This feature is exclusive to users of Commercial version")
+    End Sub
+
     Private Sub ButtonCoursereg_Click(sender As Object, e As EventArgs) Handles ButtonCoursereg.Click
         MainForm.ChangeMenu("StudentsRegistration")
     End Sub

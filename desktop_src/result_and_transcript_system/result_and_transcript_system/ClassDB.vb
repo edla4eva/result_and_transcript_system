@@ -152,12 +152,40 @@ Public Class ClassDB
         Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
             Try
                 xConn.Open()
+                xConn.Close()
+                xConn.Dispose()
                 retStr = ModuleGeneral.STR_connectionString
             Catch ex1 As Exception
                 xConn.ConnectionString = ModuleGeneral.STR_connectionString32
                 Try
                     xConn.Open()
+                    xConn.Close()
+                    xConn.Dispose()
                     retStr = ModuleGeneral.STR_connectionString32
+                Catch ex As Exception
+                    retStr = Nothing
+                End Try
+
+            End Try
+        End Using
+        Return retStr
+    End Function
+    Function getCorrectConnectionstringFromAccessFile(dFileName As String, Optional cloud As Boolean = False) As String
+        Dim retStr As String = ""
+        'Source={0}
+        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_AccessFileConnectionString)
+            Try
+                xConn.Open()
+                xConn.Close()
+                xConn.Dispose()
+                retStr = String.Format(ModuleGeneral.STR_AccessFileConnectionString, dFileName)
+            Catch ex1 As Exception
+                xConn.ConnectionString = String.Format(ModuleGeneral.STR_AccessFileConnectionString32, dFileName)
+                Try
+                    xConn.Open()
+                    xConn.Close()
+                    xConn.Dispose()
+                    retStr = String.Format(ModuleGeneral.STR_AccessFileConnectionString32, dFileName)
                 Catch ex As Exception
                     retStr = Nothing
                 End Try
@@ -405,6 +433,35 @@ Public Class ClassDB
             'todo return datatable wit error info
         End Try
     End Function
+    Public Function bulkInsertFERMAUsingDataAdapter(dtRecordsToInsert As DataTable, destTableNameInDB As String, AccessFileName As String) As DataTable
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_AccessFileConnectionString)
+                xConn.ConnectionString = mappDB.getCorrectConnectionstringFromAccessFile(AccessFileName)
+                xConn.Open()
+                'Pull the table records and insert new
+                Using adapter = New OleDbDataAdapter("SELECT * FROM " & destTableNameInDB, xConn)
+                    Using builder = New OleDbCommandBuilder(adapter)
+                        builder.QuotePrefix = "["
+                        builder.QuoteSuffix = "]"
+                        'adapter.InsertCommand = builder.GetInsertCommand()
+                        If dtRecordsToInsert.HasErrors Then
+                            MsgBox("Some errors are contained in records: " & dtRecordsToInsert.GetErrors(0).ToString)
+                            dtRecordsToInsert = Nothing
+                        Else
+                            adapter.Update(dtRecordsToInsert)
+                        End If
+
+                    End Using
+                End Using
+                closeConn(xConn)
+            End Using
+            Return dtRecordsToInsert
+
+        Catch ex As Exception
+            Return Nothing
+            'todo return datatable wit error info
+        End Try
+    End Function
     Public Function changeUserPassword(usr As String, pass As String) As Boolean
         Dim retVal As Boolean
 
@@ -472,8 +529,8 @@ Public Class ClassDB
     End Function
 
     Public Function manualRegExportToExternalAccess(dt As DataTable, AccessFileName As String) As Boolean
-        Using xConn As New OleDb.OleDbConnection(buildConnectionStringFromAccessFile(AccessFileName, False))
-            xConn.ConnectionString = getCorrectConnectionstring()
+        Using xConn As New OleDb.OleDbConnection(mappDB.getCorrectConnectionstringFromAccessFile(AccessFileName))
+            xConn.ConnectionString = mappDB.getCorrectConnectionstringFromAccessFile(AccessFileName)
             xConn.Open()
 
             '1. check for duplicates and delete
@@ -834,27 +891,6 @@ Public Class ClassDB
     End Function
 
 
-    Public Function ImportFromAccess(dfileName As String, dstrSQL As String, Optional dTableName As String = "Table") As DataSet
-        Debug.Print(dstrSQL)
-        Try
-            Using xConn As New OleDb.OleDbConnection(buildConnectionStringFromAccessFile(dfileName, False))
-                xConn.ConnectionString = getCorrectConnectionstring()
-                xConn.Open()
-                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
-                Dim myDA As OleDb.OleDbDataAdapter = New OleDb.OleDbDataAdapter(cmdLocal)
-                Dim myDataSet As DataSet = New DataSet()
-                myDA.Fill(myDataSet, dTableName)
-                'dgw.DataSource = myDataSet.Tables("Result").DefaultView
-                Return myDataSet
-                xConn.Close()
-            End Using
-        Catch ex As Exception
-
-            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
-            'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return Nothing
-        End Try
-    End Function
 
     Public Sub logDBError(str As String)
         On Error Resume Next

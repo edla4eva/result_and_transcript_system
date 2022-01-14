@@ -1,6 +1,8 @@
 Installation Guide
 -------------------
 Install as administrator
+Uninstall any previous version of the software before installing
+Tip: Always run as administrator
 
 
 Requirements

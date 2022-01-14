@@ -123,18 +123,23 @@ Public Class FormUploadResult
             '#method 2:            'mappDB.InsertRecord(strSQL)
             '#method 3:            ' mappDB.getDataReader("TableResults") 'then             ' mappDB.CompareDataTables(DataGridView1.DataSource.tables(0), dt)
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show("Could not upload to database. Please Exit the RTPS Result Software and re-launch as administrator" & vbCrLf & ex.Message)
         End Try
 
     End Sub
 
     Private Sub PreviewResult()
-        ' objResult.resultFilename = My.Application.Info.DirectoryPath & "\samples\result.xlsx"
-        objResult.excelVersion = "2013"
-        Dim tmpDS As DataSet = objExcelFile.readResultFile()
-        'TODO: reset datagrid
-        DataGridView1.DataSource = tmpDS.Tables(0).DefaultView  'todo: error if cancel file diag
-        showButtons("ButtonCheck", True)
+        Try
+            objResult.excelVersion = "2013"
+            Dim tmpDS As DataSet = objExcelFile.readResultFile()
+            'TODO: reset datagrid
+            If tmpDS Is Nothing Then Exit Sub
+            DataGridView1.DataSource = tmpDS.Tables(0).DefaultView  'todo: error if cancel file diag
+            showButtons("ButtonCheck", True)
+
+        Catch ex As Exception
+            MsgBox("Please select an Excel file, Result should be in the correct format")
+        End Try
 
     End Sub
     Sub showButtons(ButtonName As String, enableOnly As Boolean)
@@ -862,7 +867,7 @@ Public Class FormUploadResult
                 If sfd.ShowDialog = DialogResult.OK Then
                     My.Computer.FileSystem.CopyFile(tmpileName, sfd.FileName & ".xltx")
                 End If
-                If MsgBox("Do you want to open the template file in Excel?", "Result Template", vbYesNo) = DialogResult.Yes Then
+                If MsgBox("Do you want to open the template file in Excel?", MsgBoxStyle.YesNo, "Result Template") = DialogResult.Yes Then
                     System.Diagnostics.Process.Start(tmpileName)
                 End If
             End Using

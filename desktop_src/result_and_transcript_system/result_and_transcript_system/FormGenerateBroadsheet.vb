@@ -13,6 +13,7 @@ Public Class FormGenerateBroadsheet
 
     Dim dtScores, dtGrades As DataTable
     Dim dvScores, dvGrades As DataView
+    Dim tmpFileName As String
 
     'Dim dictDepts As New Dictionary(Of String, String)
     'Dim dictCourses As New Dictionary(Of String, String)
@@ -172,7 +173,7 @@ Public Class FormGenerateBroadsheet
                 End If
             Next
             If mappDB.doQuery(strSQL) Then
-                MsgBox("Broadsheet data has been created and auto-saved")
+                MsgBox("Broadsheet data has been created and will now be saved automatically. It willonly take a few seconds")
 
             Else
                 MsgBox("Could create table to save generated broadsheet data")
@@ -273,18 +274,29 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonGrades_Click(sender As Object, e As EventArgs) Handles ButtonGrades.Click
-        If RadioButtonScores.Checked = True Then RadioButtonScores.Checked = False Else RadioButtonScores.Checked = True
+        If RadioButtonScores.Checked = True Then
+            RadioButtonScores.Checked = False
+            RadioButtonGrades.Checked = True
+        Else
+            RadioButtonScores.Checked = True
+            RadioButtonGrades.Checked = False
+        End If
     End Sub
 
     Sub showGrades()
         Try
-
-            'dvScores = DataGridViewBroadSheet.DataSource
-            'dtScores = dvScores.ToTable
-            'dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)   'TODO: Fix
-            'dvGrades = dtGrades.DefaultView    'TODO: Fix
             dtGrades = objBroadsheet.dataTablesScoresAndGrades(1)
-            If dtGrades Is Nothing Then Exit Sub
+            If dtGrades Is Nothing Then
+                MsgBox("Broadsheet scores have to be generated first before grades")
+                'todo: generate the grades in case it is a rework
+                If dtScores Is Nothing Then dtScores = DataGridViewBroadSheet.DataSource.totable
+                objBroadsheet.Level = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value
+                objBroadsheet.DeptId = mappDB.getDeptID(DataGridViewBroadSheet.Rows(0).Cells("bs_department_name").Value)
+                objBroadsheet.Session = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value
+                dtGrades = objBroadsheet.createBroadsheetGrades(dtScores)
+
+                Exit Sub
+            End If
             dvGrades = dtGrades.DefaultView
             DataGridViewBroadSheet.DataSource = dtGrades.DefaultView    'TODO: Fix
             'DataGridViewBroadSheet.AllowUserToAddRows = True
@@ -427,12 +439,10 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
-        Dim tmpFileName As String
-        tmpFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx"
-        tmpFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx"
 
+        ' tmpFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsx"
         'TODO: create UI to configure order
-
+        'If retFileName = "" Then MsgBox("File name is empty")
         'TODO: get all the data (such as level, dept, fac, hod etc) from the datagrivView only
 
         footers(0) = TextBoxCourseAdviser.Text
@@ -440,27 +450,33 @@ Public Class FormGenerateBroadsheet
         footers(2) = TextBoxHOD.Text
         '1-interrp  2. built in     -2 grades
         '4-diploma
-        Select Case System.Math.Abs(CInt(e.Argument))
-            Case Is > 1000  'interop Template based
-                objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
-                ' Case Is < 1000 'interop grades  'todo
-                'objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
-                'Public BGW_EXPORT_EXCEL_1ST_SEM_SCORES As Integer = 1
-                'Public BGW_EXPORT_EXCEL_2ND_SEM_SCORES As Integer = 2
-                'Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
-            Case Else  ' NPOI
-                If CInt(e.Argument) > BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then 'grades    'will not need this anymore
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, True, dvGrades)
-                ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then    'scores 'todo eror when selected yr.1
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
-                ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_YR_MILTIPLIER Then    'scores 'todo eror when selected yr.1
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
-                Else 'default
-                    retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
-                End If
+        Try
 
-        End Select
-        'objExcelFile.createExcelFile_NPOI(My.Application.Info.DirectoryPath & "\samples\generated_broadsheet.xlsx") 'worked
+
+            Select Case System.Math.Abs(CInt(e.Argument))
+                Case Is > 1000  'interop Template based
+                    objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
+                    ' Case Is < 1000 'interop grades  'todo
+                    'objBroadsheet.updateExcelBroadSheetInterop(DataGridViewBroadSheet.DataSource, My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm")
+                    'Public BGW_EXPORT_EXCEL_1ST_SEM_SCORES As Integer = 1
+                    'Public BGW_EXPORT_EXCEL_2ND_SEM_SCORES As Integer = 2
+                    'Public BGW_EXPORT_EXCEL_ALL_SEM_SCORES As Integer = 3
+                Case Else  ' NPOI
+                    If CInt(e.Argument) > BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then 'grades    'will not need this anymore
+                        retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, True, dvGrades)
+                    ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT Then    'scores 'todo eror when selected yr.1
+                        retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                    ElseIf CInt(e.Argument) < BGW_EXPORT_EXCEL_YR_MILTIPLIER Then    'scores 'todo eror when selected yr.1
+                        retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                    Else 'default
+                        retFileName = objExcelFile.exportBroadsheettoExcelFile_NPOI(dvScores, tmpFileName, objBroadsheet, dictAllCourseCodeKeyAndCourseUnitVal, footers, e.Argument, False)
+                    End If
+
+            End Select
+            'objExcelFile.createExcelFile_NPOI(My.Application.Info.DirectoryPath & "\samples\generated_broadsheet.xlsx") 'worked
+        Catch ex As Exception
+            MsgBox("Could not export" & vbCrLf & ex.ToString)
+        End Try
     End Sub
     Private Sub bgwExportToExcel_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwExportToExcel.RunWorkerCompleted
         If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
@@ -481,9 +497,17 @@ Public Class FormGenerateBroadsheet
         ButtonProcessBroadsheet.Enabled = True
         Me.ProgressBarBS.Value = 100
     End Sub
-    Private Sub ButtonCloud_Click(sender As Object, e As EventArgs) Handles ButtonCloud.Click
+    Private Sub ButtonReProcesClick(sender As Object, e As EventArgs) Handles ButtonReProces.Click
+        If dtScores Is Nothing Then dtScores = DataGridViewBroadSheet.DataSource.totable
+        objBroadsheet.Level = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value
+        objBroadsheet.DeptId = mappDB.getDeptID(DataGridViewBroadSheet.Rows(0).Cells("bs_department_name").Value)
+        objBroadsheet.Session = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value
 
-        'testDB()
+        'Dim courses As Object()
+        'courses = dtScores.Rows(0).ItemArray
+        'objBroadsheet.updateDatasetWithComputedValues(dtScores, dtGrades, dictAllCourseCodeKeyAndCourseLevelVal.courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1)
+        ' dts = updateDatasetWithComputedValues(dt, dtGrades, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1) 'Update dt Datatable with scores
+
     End Sub
     Sub testDB()
         Try
@@ -512,59 +536,72 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonExportToExcel_Click(sender As Object, e As EventArgs) Handles ButtonExportToExcel.Click
-        If MessageBox.Show("Are you sure you want to export to excel?", "Export", MessageBoxButtons.YesNoCancel) = MsgBoxResult.Yes Then
-        Else
-            Exit Sub
-        End If
-        If DataGridViewBroadSheet.DataSource Is Nothing Then
-            Exit Sub
-        Else
-            If dvScores Is Nothing Then dvScores = DataGridViewBroadSheet.DataSource
-        End If
-
-        ButtonExportToExcel.Enabled = False
-        ButtonProcessBroadsheet.Enabled = False
-
-        TimerBS.Enabled = True
-        TimerBS.Start()
-
-
-        'get broadsheetDatta from result and students table
         Dim tmpPARAM As Integer = 0
-        objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & course_level & ".xlsx"
-
-        If RadioButtonScores.Checked = True Then
-                If CheckBoxSecondSemester.Checked = True And CheckBoxFirsrSemester.Checked = False Then
-                tmpPARAM = BGW_EXPORT_EXCEL_1ST_SEM_SCORES
-                objBroadsheet.broadsheetSemester = 1
-            ElseIf CheckBoxSecondSemester.Checked = False And CheckBoxSecondSemester.Checked = True Then
-                tmpPARAM = (BGW_EXPORT_EXCEL_1ST_SEM_SCORES)
-                objBroadsheet.broadsheetSemester = 2
+        SaveFileDialog1.Title = "Select a name for the exported Excel File"
+        If SaveFileDialog1.ShowDialog = DialogResult.OK Then
+            tmpFileName = SaveFileDialog1.FileName ' ".xlsx"
+            If DataGridViewBroadSheet.DataSource Is Nothing Then
+                MsgBox("No broadsheet data to export, click on Process button to generate data")
+                Exit Sub
             Else
-                tmpPARAM = (BGW_EXPORT_EXCEL_ALL_SEM_SCORES)
-                objBroadsheet.broadsheetSemester = 2
-            End If
-            If RadioButtonDIP.Checked Then
-                tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
+                If dvScores Is Nothing Then
+                    dvScores = DataGridViewBroadSheet.DataSource
+                    dtGrades = objBroadsheet.createBroadsheetGrades(dvScores.ToTable)
+                End If
             End If
         Else
+            Exit Sub
+        End If
+
+        Try
+
+            ButtonExportToExcel.Enabled = False
+            ButtonProcessBroadsheet.Enabled = False
+
+            TimerBS.Enabled = True
+            TimerBS.Start()
+
+
+            'get broadsheetDatta from result and students table
+
+            objBroadsheet.processedBroadsheetFileName = tmpFileName ' My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & course_level & ".xlsx"
+
+            If RadioButtonScores.Checked = True Then
+                If CheckBoxSecondSemester.Checked = True And CheckBoxFirsrSemester.Checked = False Then
+                    tmpPARAM = BGW_EXPORT_EXCEL_1ST_SEM_SCORES
+                    objBroadsheet.broadsheetSemester = 1
+                ElseIf CheckBoxSecondSemester.Checked = False And CheckBoxSecondSemester.Checked = True Then
+                    tmpPARAM = (BGW_EXPORT_EXCEL_1ST_SEM_SCORES)
+                    objBroadsheet.broadsheetSemester = 2
+                Else
+                    tmpPARAM = (BGW_EXPORT_EXCEL_ALL_SEM_SCORES)
+                    objBroadsheet.broadsheetSemester = 2
+                End If
+                If RadioButtonDIP.Checked Then
+                    tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
+                End If
+            Else
                 If dvGrades Is Nothing Then ButtonGrades.PerformClick() 'todo: call function computeGrades
                 tmpPARAM = BGW_EXPORT_EXCEL_GRADES_BASE_CONSTANT + tmpPARAM
-            If RadioButtonDIP.Checked Then
-                tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
+                If RadioButtonDIP.Checked Then
+                    tmpPARAM = BGW_EXPORT_EXCEL_YR_MILTIPLIER * tmpPARAM
+                End If
             End If
-        End If
 
-        If Me.RadioButtonUseExcel.Checked = True Or Me.RadioButtonUseExcelWithFormula.Checked = True Then
-            objBroadsheet.processedBroadsheetFileName = My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm"
-            tmpPARAM = BGW_EXPORT_EXCEL_TEMPLATE_BASE_CONSTANT + tmpPARAM
-        End If
+            If Me.RadioButtonUseExcel.Checked = True Or Me.RadioButtonUseExcelWithFormula.Checked = True Then
+                objBroadsheet.processedBroadsheetFileName = tmpFileName ' My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultBroadsheet" & objBroadsheet.Level & ".xlsm"
+                tmpPARAM = BGW_EXPORT_EXCEL_TEMPLATE_BASE_CONSTANT + tmpPARAM
+            End If
 
-        If CheckBoxSecondSemester.Checked Then
-            objBroadsheet.broadsheetSemester = 2
-        Else
-            objBroadsheet.broadsheetSemester = 1
-        End If
+            If CheckBoxSecondSemester.Checked Then
+                objBroadsheet.broadsheetSemester = 2
+            Else
+                objBroadsheet.broadsheetSemester = 1
+            End If
+        Catch ex As Exception
+            MsgBox("Please recheck the broadsheet" & vbCrLf & ex.ToString)
+            Exit Sub
+        End Try
         bgwExportToExcel.RunWorkerAsync(tmpPARAM)
 
     End Sub
@@ -767,6 +804,53 @@ Public Class FormGenerateBroadsheet
         If tmpDT.Rows.Count > 0 Then
             DataGridViewBroadSheet.DataSource = tmpDT.DefaultView
         End If
+    End Sub
+
+    Private Sub All39To40ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles All39To40ToolStripMenuItem.Click
+
+        Dim xUpgrades As Integer = 0
+        For i = 0 To DataGridViewBroadSheet.Rows.Count - 1
+            For j = COURSE_START_COL To COURSE_END_COL
+                If DataGridViewBroadSheet.Rows(i).Cells(j).Value = "39" Then
+                    'todo check if it is a departmental course ... dictDeptCourses
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "40"
+                    xUpgrades = xUpgrades + 1
+                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "44" Then
+                    xUpgrades = xUpgrades + 1
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "45"
+                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "59" Then
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "60"
+                    xUpgrades = xUpgrades + 1
+                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "69" Then
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "70"
+                    xUpgrades = xUpgrades + 1
+                End If
+            Next
+        Next
+        For i = 0 To DataGridViewBroadSheet.Rows.Count - 1
+            For j = COURSE_START_COL_2 To COURSE_END_COL_2
+                If DataGridViewBroadSheet.Rows(i).Cells(j).Value = "39" Then
+                    'todo check if it is a departmental course ... dictDeptCourses
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "40"
+                    xUpgrades = xUpgrades + 1
+                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "44" Then
+                    xUpgrades = xUpgrades + 1
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "45"
+                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "59" Then
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "60"
+                    xUpgrades = xUpgrades + 1
+                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "69" Then
+                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "70"
+                    xUpgrades = xUpgrades + 1
+                End If
+            Next
+        Next
+
+        MsgBox(xUpgrades & " Upgrades applied")
+    End Sub
+
+    Private Sub RadioButtonGrades_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonGrades.CheckedChanged
+
     End Sub
 
     Private Sub UpgradeWith2MarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith2MarksToolStripMenuItem.Click

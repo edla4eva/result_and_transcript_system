@@ -3,16 +3,16 @@
 ;my custom perl code/directive
 [Code]
 #define MyAppName "RTPS Result Software"
-#define MyAppVersion "1.0.1"
+#define MyAppVersion "1.0.1B5"
 #define MyAppPublisher "Edoghogho Olaye"
-#define MyAppURL "https://www.software.keminkreative.site.com/"
-#define MyAppExeName "RTPS Result Soft Setup.exe"
+#define MyAppURL "https://www.edla4eva.github.io/guide.html"
+#define MyAppExeName "RTPS_Result_Setup_1_0_1_Beta_6"
 #define MyDir "RTPS Result Soft"
 
 [Setup]
 PrivilegesRequired=admin
 AppName={#MyAppName}
-
+OutputBaseFilename={#MyAppExeName}
 AppVersion={#MyAppVersion}
 DefaultDirName={commonpf}\{#MyDir}
 DefaultGroupName={#MyDir}
@@ -41,6 +41,8 @@ Source: "..\bin\debug\result_and_transcript_system.exe"; DestDir: "{app}"
 Source: "..\bin\debug\result_and_transcript_system.exe.config"; DestDir: "{app}"
 ;Database
 Source: "..\bin\debug\db\db.mdb"; DestDir: "{app}\db"
+;Source: "..\bin\debug\db\db.mdb"; DestDir: " {commonappdata}\{#MyAppPublisher}\{#Mydir}"
+;Source: "..\bin\debug\NPOI.OpenXml4Net.dll"; DestDir: " {commonappdata}\{#MyAppPublisher}\{#Mydir}"  
 
 ;dlls
 Source: "..\bin\debug\ExcelDataReader.DataSet.dll"; DestDir: "{app}"
@@ -55,6 +57,8 @@ Source: "..\bin\debug\NPOI.OpenXml4Net.dll"; DestDir: "{app}"
 Source: "..\bin\debug\NPOI.OpenXmlFormats.dll"; DestDir: "{app}"
 Source: "..\bin\debug\MySql.Data.dll"; DestDir: "{app}"
 
+
+Source: "..\bin\debug\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"
 Source: "..\bin\debug\stdole.dll"; DestDir: "{app}"
   Source: "..\bin\debug\Microsoft.VisualStudio.TextManager.Interop.dll"; DestDir: "{app}"
 Source: "..\bin\debug\Microsoft.VisualStudio.TextManager.Interop.8.0.dll"; DestDir: "{app}"
@@ -72,9 +76,13 @@ Source: "..\bin\debug\Microsoft.ReportViewer.WinForms.dll"; DestDir: "{app}"
 Source: "..\bin\debug\Microsoft.SqlServer.Types.dll"; DestDir: "{app}"
 
 ;pdb and xml todo
+    
+
+Source: "..\bin\debug\ICSharpCode.SharpZipLib.pdb"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.DataSet.pdb"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.pdb"; DestDir: "{app}"
 
+Source: "..\bin\debug\ICSharpCode.SharpZipLib.xml"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.DataSet.xml"; DestDir: "{app}"
 Source: "..\bin\debug\Excel.Helper.xml"; DestDir: "{app}"
 Source: "..\bin\debug\ExcelDataReader.xml"; DestDir: "{app}"
@@ -124,7 +132,7 @@ Source: "..\bin\debug\photos\photo_female.jpg"; DestDir: "{userdocs}\{#Mydir}\ph
 
 
 ;templates
-;Source: "..\bin\debug\templates\result.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
+Source: "..\bin\debug\templates\result.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 ;Source: "..\bin\debug\templates\broadsheet_plain.xlsx"; DestDir: "{userdocs}\{#Mydir}\templates"
 ;Source: "..\bin\debug\templates\gpa.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"
 ;Source: "..\bin\debug\templates\senate.xltx"; DestDir: "{userdocs}\{#Mydir}\templates"

@@ -85,7 +85,7 @@ Public Class ClassExcelFile
         Dim dtGrades As DataTable = Nothing
         Dim workbook As IWorkbook = New XSSFWorkbook()
         Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
-        Dim row1, rowCourseCodes, rowCredits, rowHeaders, rowResults, rowFooters, rowTitles As IRow
+        Dim row1, rowCourseCodes, rowCredits, rowHeaders, rowResults, rowTitles As IRow
         'Dim cell As ICell
         Dim cR As CellRangeAddress = New CellRangeAddress(1, 3, 1, 120)
 
@@ -97,230 +97,240 @@ Public Class ClassExcelFile
         Dim styleMediumBorder As ICellStyle '= changeStyle(workbook)
         Dim styleMediumBorderVertical As ICellStyle '= changeStyle(workbook)
         Dim styleMediumBorderCenter As ICellStyle '= changeStyle(workbook)
-        If fileName = "" Then fileName = My.Application.Info.DirectoryPath & "\broadsheets\GeneratedBroadsheet.xlsx"
+        Dim dtCateGory As DataTable
+        Try
 
-        'headers
-        Dim dFont As New XSSFFont()
-        dFont = workbook.CreateFont()
-        dFont.IsBold = True 'formerly dFont.Boldweight = CShort(NPOI.SS.UserModel.FontBoldWeight.Bold)
-        dFont.FontName = "Times New Roman"
-        dFont.FontHeightInPoints = 14
+            If fileName = "" Then fileName = My.Application.Info.DirectoryPath & "\broadsheets\GeneratedBroadsheet.xlsx"
+
+            'headers
+            Dim dFont As New XSSFFont()
+            dFont = workbook.CreateFont()
+            dFont.IsBold = True 'formerly dFont.Boldweight = CShort(NPOI.SS.UserModel.FontBoldWeight.Bold)
+            dFont.FontName = "Times New Roman"
+            dFont.FontHeightInPoints = 14
 
 
-        styleMediumBorderCenter = workbook.CreateCellStyle()
-        styleMediumBorderCenter.Alignment = HorizontalAlignment.Center
-        styleMediumBorderCenter.WrapText = True
-        styleMediumBorderCenter.VerticalAlignment = VerticalAlignment.Center
-        styleMediumBorderCenter.SetFont(dFont)
+            styleMediumBorderCenter = workbook.CreateCellStyle()
+            styleMediumBorderCenter.Alignment = HorizontalAlignment.Center
+            styleMediumBorderCenter.WrapText = True
+            styleMediumBorderCenter.VerticalAlignment = VerticalAlignment.Center
+            styleMediumBorderCenter.SetFont(dFont)
 
-        '# Insert values for header
-        rowTitles = sheet1.CreateRow(0)  'row1
-        rowTitles.CreateCell(0).SetCellValue(objBS.DepartmentName.ToUpper)   'row1.CreateCell(jCol).SetCellValue("S/N")
-        rowTitles.GetCell(0).CellStyle = (styleMediumBorderCenter)
-        rowTitles = sheet1.CreateRow(1)  'row2
-        rowTitles.CreateCell(0).SetCellValue(objBS.FacultyName.ToUpper)
-        rowTitles.GetCell(0).CellStyle = (styleMediumBorderCenter)
+            '# Insert values for header
+            rowTitles = sheet1.CreateRow(0)  'row1
+            rowTitles.CreateCell(0).SetCellValue(objBS.DepartmentName.ToUpper)   'row1.CreateCell(jCol).SetCellValue("S/N")
+            rowTitles.GetCell(0).CellStyle = (styleMediumBorderCenter)
+            rowTitles = sheet1.CreateRow(1)  'row2
+            rowTitles.CreateCell(0).SetCellValue(objBS.FacultyName.ToUpper)
+            rowTitles.GetCell(0).CellStyle = (styleMediumBorderCenter)
 
-        rowTitles = sheet1.CreateRow(2)  'row3
-        rowTitles.CreateCell(0).SetCellValue(objBS.SchoolName.ToUpper)  ''cell.SetCellValue(New XSSFRichTextString("This is a styled Faculty Name"))
-        rowTitles.Cells(0).CellStyle = (styleMediumBorderCenter)
-        rowTitles = sheet1.CreateRow(3)  'row4
-        rowTitles.CreateCell(0).SetCellValue("EXAMINATION RECORD SHEET (" & objBS.Session & " Academic Session)")
-        rowTitles.Cells(0).CellStyle = (styleMediumBorderCenter)
-        rowTitles = sheet1.CreateRow(4)  'row5
-        If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
-            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
-            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
-            rowTitles.CreateCell(0).SetCellValue("YEAR " & (objBS.Level / 100).ToString)
-        Else
-            rowTitles.CreateCell(0).SetCellValue("LEVEL: " & objBS.Level.ToString)
-        End If
-        rowTitles.Cells(0).CellStyle = (styleMediumBorderCenter)
-
-        '#STYLE: Special case of merged cells border for headings dept, fac, uni etc
-        cR = New CellRangeAddress(0, 0, 0, LAST_COL)
-        sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(1, 1, 0, LAST_COL)
-        sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(2, 2, 0, LAST_COL)
-        sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(3, 3, 0, LAST_COL)
-        sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(4, 4, 0, LAST_COL)
-        sheet1.AddMergedRegion(cR)
-
-        'sets the border of the merged cells
-        RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
-        RegionUtil.SetBorderBottom(BorderStyle.Medium, cR, sheet1)
-        RegionUtil.SetBorderLeft(BorderStyle.Medium, cR, sheet1)
-        RegionUtil.SetBorderRight(BorderStyle.Medium, cR, sheet1)
-
-        '# Headers especialy coure codes
-        rowHeaders = sheet1.CreateRow(ROW_HEADER)
-        rowCourseCodes = sheet1.CreateRow(ROW_HEADER + 1)
-        rowCredits = sheet1.CreateRow(ROW_CREDIT)  '8=row 9
-        For jCol = 0 To dt.Columns.Count - 1
-            If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then Exit Function 'no need '
-            If jCol >= COURSE_START_COL And dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dt.Columns(jCol).ColumnName.ToString) Then rowCredits.CreateCell(jCol).SetCellValue(dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(jCol).ColumnName.ToString))
-            'Style  (course code headers)
-            If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
-                'data
-                rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
-                'merge
-                cR = New CellRangeAddress(ROW_HEADER + 1, ROW_HEADER + 2, jCol, jCol)
-            ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
-                'data
-                rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
-                'merge
-                cR = New CellRangeAddress(ROW_HEADER + 1, ROW_HEADER + 2, jCol, jCol)
-            Else    'others like TCP, TCF, TCR etc
-                'data
-                rowHeaders.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
-
-                'Proper headers
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("SN") Then rowHeaders.GetCell(jCol).SetCellValue("S/N")
-                If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
-                        dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
-                        dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
-                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then rowHeaders.GetCell(jCol).SetCellValue("MAT. NO. DMI")
-                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("Status") Then rowHeaders.GetCell(jCol).SetCellValue("CATEGORY")
-
-                Else
-                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then rowHeaders.GetCell(jCol).SetCellValue("MAT. NO. ENG..")
-                End If
-
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_1") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (FIRST SEMESTER)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATALL") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS")
-
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FULLNAME") Then rowHeaders.GetCell(jCol).SetCellValue("NAME OF CANDIDATE (SURNAME LAST AND IN BLOCK LETTERS)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then rowHeaders.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
-                'TCP_1_COL
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCP_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCP (1st Sem)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCF_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCF (1st Sem)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCR_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCR (1st Sem)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCP_2") Then rowHeaders.GetCell(jCol).SetCellValue("TCP (2nd Sem)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCF_2") Then rowHeaders.GetCell(jCol).SetCellValue("TCF (2nd Sem)")
-                If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCR_2") Then rowHeaders.GetCell(jCol).SetCellValue("TCR (2nd Sem)")
-
-                cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + (ROW_CREDIT - ROW_HEADER), jCol, jCol) '.merge all the way To credit col
+            rowTitles = sheet1.CreateRow(2)  'row3
+            rowTitles.CreateCell(0).SetCellValue(objBS.SchoolName.ToUpper)  ''cell.SetCellValue(New XSSFRichTextString("This is a styled Faculty Name"))
+            rowTitles.Cells(0).CellStyle = (styleMediumBorderCenter)
+            rowTitles = sheet1.CreateRow(3)  'row4
+            rowTitles.CreateCell(0).SetCellValue("EXAMINATION RECORD SHEET (" & objBS.Session & " Academic Session)")
+            rowTitles.Cells(0).CellStyle = (styleMediumBorderCenter)
+            rowTitles = sheet1.CreateRow(4)  'row5
+            If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+                dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+                dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
+                rowTitles.CreateCell(0).SetCellValue("YEAR " & (objBS.Level / 100).ToString)
+            Else
+                rowTitles.CreateCell(0).SetCellValue("LEVEL: " & objBS.Level.ToString)
             End If
+            rowTitles.Cells(0).CellStyle = (styleMediumBorderCenter)
+
+            '#STYLE: Special case of merged cells border for headings dept, fac, uni etc
+            cR = New CellRangeAddress(0, 0, 0, LAST_COL)
             sheet1.AddMergedRegion(cR)
+            cR = New CellRangeAddress(1, 1, 0, LAST_COL)
+            sheet1.AddMergedRegion(cR)
+            cR = New CellRangeAddress(2, 2, 0, LAST_COL)
+            sheet1.AddMergedRegion(cR)
+            cR = New CellRangeAddress(3, 3, 0, LAST_COL)
+            sheet1.AddMergedRegion(cR)
+            cR = New CellRangeAddress(4, 4, 0, LAST_COL)
+            sheet1.AddMergedRegion(cR)
+
+            'sets the border of the merged cells
             RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
             RegionUtil.SetBorderBottom(BorderStyle.Medium, cR, sheet1)
             RegionUtil.SetBorderLeft(BorderStyle.Medium, cR, sheet1)
             RegionUtil.SetBorderRight(BorderStyle.Medium, cR, sheet1)
-        Next
-        'Headers For Special cases 
-        rowHeaders.CreateCell(COURSE_START_COL).SetCellValue("FIRST SEMESTER COURSES")
-        rowHeaders.CreateCell(COURSE_START_COL_2).SetCellValue("SECOND SEMESTER COURSES")
-        cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER, COURSE_START_COL, COURSE_END_COL - 1)
-        sheet1.AddMergedRegion(cR)
-        cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER, COURSE_START_COL_2, COURSE_END_COL_2 - 1)
-        sheet1.AddMergedRegion(cR)
 
-
-        '###The results
-        For iRow = 0 To dt.Rows.Count - 1
-            rowResults = sheet1.CreateRow(iRow + ALL_HEADERS_COUNT)
+            '# Headers especialy coure codes
+            rowHeaders = sheet1.CreateRow(ROW_HEADER)
+            rowCourseCodes = sheet1.CreateRow(ROW_HEADER + 1)
+            rowCredits = sheet1.CreateRow(ROW_CREDIT)  '8=row 9
             For jCol = 0 To dt.Columns.Count - 1
-                rowResults.CreateCell(jCol).SetCellValue(dt.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
-                If dt.Rows(iRow).Item(jCol).ToString = DEFAULT_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(DEFAULT_DISP)
-                If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(NA_DISP)
-                If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(NR_DISP)
-                If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(ABS_DISP)
-                'todo: handle probating: *87, *56 etc
-                If dt.Rows(iRow).Item("Status").ToString = "PROBATION" And
-                    jCol > COURSE_START_COL And
-                    jCol < COURSE_END_COL Then rowResults.GetCell(jCol).SetCellValue("*" & dt.Rows(iRow).Item(jCol).ToString)
-                'If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
-                'ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
-                'end if
-                'todo: get previosly passed course
-                'lookUpPreviousResult()
+                If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then Exit Function 'no need '
+                If jCol >= COURSE_START_COL And dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dt.Columns(jCol).ColumnName.ToString) Then rowCredits.CreateCell(jCol).SetCellValue(dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(jCol).ColumnName.ToString))
+                'Style  (course code headers)
+                If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
+                    'data
+                    rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
+                    'merge
+                    cR = New CellRangeAddress(ROW_HEADER + 1, ROW_HEADER + 2, jCol, jCol)
+                ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
+                    'data
+                    rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
+                    'merge
+                    cR = New CellRangeAddress(ROW_HEADER + 1, ROW_HEADER + 2, jCol, jCol)
+                Else    'others like TCP, TCF, TCR etc
+                    'data
+                    rowHeaders.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
+
+                    'Proper headers
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("SN") Then rowHeaders.GetCell(jCol).SetCellValue("S/N")
+                    If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+                            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+                            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
+                        If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then rowHeaders.GetCell(jCol).SetCellValue("MAT. NO. DMI")
+                        If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("Status") Then rowHeaders.GetCell(jCol).SetCellValue("CATEGORY")
+
+                    Else
+                        If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("MATNO") Then rowHeaders.GetCell(jCol).SetCellValue("MAT. NO. ENG..")
+                    End If
+
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_1") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (FIRST SEMESTER)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATALL") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS")
+
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FULLNAME") Then rowHeaders.GetCell(jCol).SetCellValue("NAME OF CANDIDATE (SURNAME LAST AND IN BLOCK LETTERS)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("FAILED") Then rowHeaders.GetCell(jCol).SetCellValue("COURSES FAILED/TRAILED")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("REPEATCOURSES_2") Then rowHeaders.GetCell(jCol).SetCellValue("REPEAT COURSES IN CODES AND MARKS (SECOND SEMESTER)")
+                    'TCP_1_COL
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCP_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCP (1st Sem)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCF_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCF (1st Sem)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCR_1") Then rowHeaders.GetCell(jCol).SetCellValue("TCR (1st Sem)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCP_2") Then rowHeaders.GetCell(jCol).SetCellValue("TCP (2nd Sem)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCF_2") Then rowHeaders.GetCell(jCol).SetCellValue("TCF (2nd Sem)")
+                    If dt.Columns(jCol).ColumnName.ToString.ToUpper.Contains("TCR_2") Then rowHeaders.GetCell(jCol).SetCellValue("TCR (2nd Sem)")
+
+                    cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER + (ROW_CREDIT - ROW_HEADER), jCol, jCol) '.merge all the way To credit col
+                End If
+                sheet1.AddMergedRegion(cR)
+                RegionUtil.SetBorderTop(BorderStyle.Medium, cR, sheet1)
+                RegionUtil.SetBorderBottom(BorderStyle.Medium, cR, sheet1)
+                RegionUtil.SetBorderLeft(BorderStyle.Medium, cR, sheet1)
+                RegionUtil.SetBorderRight(BorderStyle.Medium, cR, sheet1)
             Next
-        Next
+            'Headers For Special cases 
+            rowHeaders.CreateCell(COURSE_START_COL).SetCellValue("FIRST SEMESTER COURSES")
+            rowHeaders.CreateCell(COURSE_START_COL_2).SetCellValue("SECOND SEMESTER COURSES")
+            cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER, COURSE_START_COL, COURSE_END_COL - 1)
+            sheet1.AddMergedRegion(cR)
+            cR = New CellRangeAddress(ROW_HEADER, ROW_HEADER, COURSE_START_COL_2, COURSE_END_COL_2 - 1)
+            sheet1.AddMergedRegion(cR)
 
-        '###Test: DO AL STYLING HERE
-        'Define styles
-        '###headers 'all especialy Course Codes
-        styleMediumBorder = workbook.CreateCellStyle()
-        styleMediumBorder.BorderRight = BorderStyle.Medium
-        styleMediumBorder.BorderLeft = BorderStyle.Medium
-        styleMediumBorder.BorderTop = BorderStyle.Medium
-        styleMediumBorder.BorderBottom = BorderStyle.Medium
-        styleMediumBorder.VerticalAlignment = VerticalAlignment.Center
-        styleMediumBorder.Alignment = HorizontalAlignment.Center
-        styleMediumBorder.WrapText = True
 
-        styleMediumBorderVertical = workbook.CreateCellStyle()
-        styleMediumBorderVertical.Alignment = HorizontalAlignment.Center
-        styleMediumBorderVertical.BorderRight = BorderStyle.Medium
-        styleMediumBorderVertical.BorderLeft = BorderStyle.Medium
-        styleMediumBorderVertical.BorderTop = BorderStyle.Medium
-        styleMediumBorderVertical.BorderBottom = BorderStyle.Medium
-        styleMediumBorderVertical.Rotation = 90
-
-        rowHeaders = sheet1.GetRow(ROW_HEADER)
-        rowCourseCodes = sheet1.GetRow(ROW_HEADER + 1)
-        rowCredits = sheet1.GetRow(ROW_CREDIT)  '8=row 9
-
-        rowHeaders.GetCell(SN_COL).CellStyle = styleMediumBorder 'horzontal
-        rowHeaders.GetCell(MATNO_COL).CellStyle = styleMediumBorder 'horzontal
-        rowHeaders.GetCell(FULLNAME_COL).CellStyle = styleMediumBorder 'horzontal
-        rowHeaders.GetCell(REPEATED_ALL_COL).CellStyle = styleMediumBorder 'horzontal
-        rowHeaders.GetCell(REPEATED_1_COL).CellStyle = styleMediumBorder 'horzontal
-        rowHeaders.GetCell(REPEATED_2_COL).CellStyle = styleMediumBorder 'horzontal
-        rowHeaders.GetCell(COURSE_FAIL_COL).CellStyle = styleMediumBorder 'horzontal
-
-        rowHeaders.GetCell(TCP_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCP_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCF_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCF_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCR_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCR_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCP_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCF_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(TCR_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(STATUS_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-        rowHeaders.GetCell(CLASS_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
-
-        style = changeStyle(workbook)
-        style.VerticalAlignment = VerticalAlignment.Center
-
-        styleCenter = changeStyle(workbook)
-        styleCenter.Alignment = HorizontalAlignment.Center
-        styleCenter.VerticalAlignment = VerticalAlignment.Center
-
-        styleWrap = changeStyle(workbook)
-        styleWrap.WrapText = True
-        styleWrap.VerticalAlignment = VerticalAlignment.Center
-
-        For iRow = 0 To dt.Rows.Count - 1
-            rowResults = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
-            For jCol = 0 To dt.Columns.Count - 1
-                rowResults.Cells(jCol).CellStyle = (style)
-                rowCourseCodes.Cells(jCol).CellStyle = (styleMediumBorderVertical)
-                If jCol >= COURSE_START_COL Then rowResults.Cells(jCol).CellStyle = styleCenter
-                'If jCol = GPA_COL Then row1.Cells(jCol).CellStyle = style
-                'If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
-                'ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
-                'End If
-                If iRow = rowCredits.RowNum Then rowCredits.GetCell(jCol).CellStyle = styleMediumBorder 'horzontal
+            '###The results
+            For iRow = 0 To dt.Rows.Count - 1
+                rowResults = sheet1.CreateRow(iRow + ALL_HEADERS_COUNT)
+                For jCol = 0 To dt.Columns.Count - 1
+                    rowResults.CreateCell(jCol).SetCellValue(dt.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
+                    If dt.Rows(iRow).Item(jCol).ToString = DEFAULT_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(DEFAULT_DISP)
+                    If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(NA_DISP)
+                    If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(NR_DISP)
+                    If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then rowResults.CreateCell(jCol).SetCellValue(ABS_DISP)
+                    'todo: handle probating: *87, *56 etc
+                    If dt.Rows(iRow).Item("Status").ToString = "PROBATION" And
+                        jCol > COURSE_START_COL And
+                        jCol < COURSE_END_COL Then rowResults.GetCell(jCol).SetCellValue("*" & dt.Rows(iRow).Item(jCol).ToString)
+                    'If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
+                    'ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
+                    'end if
+                    'todo: get previosly passed course
+                    'lookUpPreviousResult()
+                Next
             Next
-            'style
-            rowResults.GetCell(FULLNAME_COL).CellStyle = styleWrap   'ColC name
-            rowResults.GetCell(4).CellStyle = styleWrap
-            rowResults.GetCell(REPEATED_ALL_COL).CellStyle = styleWrap   'repeated
-            rowResults.GetCell(7).CellStyle = styleWrap
 
-        Next
-        'TODO: Get footer fro db category table NO dont do any database call here
-        Dim dtCateGory As DataTable = objBroadsheet.dtCategory
-        If dtCateGory Is Nothing Then
-            dtCateGory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
-        End If
-        Dim strFooter As String() = {
+            '###Test: DO AL STYLING HERE
+            'Define styles
+            '###headers 'all especialy Course Codes
+            styleMediumBorder = workbook.CreateCellStyle()
+            styleMediumBorder.BorderRight = BorderStyle.Medium
+            styleMediumBorder.BorderLeft = BorderStyle.Medium
+            styleMediumBorder.BorderTop = BorderStyle.Medium
+            styleMediumBorder.BorderBottom = BorderStyle.Medium
+            styleMediumBorder.VerticalAlignment = VerticalAlignment.Center
+            styleMediumBorder.Alignment = HorizontalAlignment.Center
+            styleMediumBorder.WrapText = True
+
+            styleMediumBorderVertical = workbook.CreateCellStyle()
+            styleMediumBorderVertical.Alignment = HorizontalAlignment.Center
+            styleMediumBorderVertical.BorderRight = BorderStyle.Medium
+            styleMediumBorderVertical.BorderLeft = BorderStyle.Medium
+            styleMediumBorderVertical.BorderTop = BorderStyle.Medium
+            styleMediumBorderVertical.BorderBottom = BorderStyle.Medium
+            styleMediumBorderVertical.Rotation = 90
+
+            rowHeaders = sheet1.GetRow(ROW_HEADER)
+            rowCourseCodes = sheet1.GetRow(ROW_HEADER + 1)
+            rowCredits = sheet1.GetRow(ROW_CREDIT)  '8=row 9
+
+            rowHeaders.GetCell(SN_COL).CellStyle = styleMediumBorder 'horzontal
+            rowHeaders.GetCell(MATNO_COL).CellStyle = styleMediumBorder 'horzontal
+            rowHeaders.GetCell(FULLNAME_COL).CellStyle = styleMediumBorder 'horzontal
+            rowHeaders.GetCell(REPEATED_ALL_COL).CellStyle = styleMediumBorder 'horzontal
+            rowHeaders.GetCell(REPEATED_1_COL).CellStyle = styleMediumBorder 'horzontal
+            rowHeaders.GetCell(REPEATED_2_COL).CellStyle = styleMediumBorder 'horzontal
+            rowHeaders.GetCell(COURSE_FAIL_COL).CellStyle = styleMediumBorder 'horzontal
+
+            rowHeaders.GetCell(TCP_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCP_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCF_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCF_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCR_1_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCR_2_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCP_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCF_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(TCR_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(STATUS_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+            rowHeaders.GetCell(CLASS_COL).CellStyle = styleMediumBorderVertical 'VERTIAL
+
+            style = changeStyle(workbook)
+            style.VerticalAlignment = VerticalAlignment.Center
+
+            styleCenter = changeStyle(workbook)
+            styleCenter.Alignment = HorizontalAlignment.Center
+            styleCenter.VerticalAlignment = VerticalAlignment.Center
+
+            styleWrap = changeStyle(workbook)
+            styleWrap.WrapText = True
+            styleWrap.VerticalAlignment = VerticalAlignment.Center
+
+            For iRow = 0 To dt.Rows.Count - 1
+                rowResults = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
+                For jCol = 0 To dt.Columns.Count - 1
+                    rowResults.Cells(jCol).CellStyle = (style)
+                    rowCourseCodes.Cells(jCol).CellStyle = (styleMediumBorderVertical)
+                    If jCol >= COURSE_START_COL Then rowResults.Cells(jCol).CellStyle = styleCenter
+                    'If jCol = GPA_COL Then row1.Cells(jCol).CellStyle = style
+                    'If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
+                    'ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
+                    'End If
+                    If iRow = rowCredits.RowNum Then rowCredits.GetCell(jCol).CellStyle = styleMediumBorder 'horzontal
+                Next
+                'style
+                rowResults.GetCell(FULLNAME_COL).CellStyle = styleWrap   'ColC name
+                rowResults.GetCell(4).CellStyle = styleWrap
+                rowResults.GetCell(REPEATED_ALL_COL).CellStyle = styleWrap   'repeated
+                rowResults.GetCell(7).CellStyle = styleWrap
+
+            Next
+            'TODO: Get footer fro db category table NO dont do any database call here
+            dtCateGory = objBroadsheet.dtCategory
+            If dtCateGory Is Nothing Then
+                dtCateGory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
+            End If
+        Catch ex As Exception
+            MsgBox("There were some issues with the excel file creation" & vbCrLf & ex.ToString)
+
+        End Try
+
+        Try
+
+            Dim strFooter As String() = {
         "(A)              SUCCESSFUL STUDENTS:",
         "(B)              STUDENTS WITH CARRY-OVER COURSES",
         "(C)              STUDENTS TO PROBATE/TRANSFER",
@@ -331,109 +341,124 @@ Public Class ClassExcelFile
         "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
         "(I)              UNREGISTERED STUDENTS:", "", ""}
 
-        ReDim strFooter(dtCategory.Rows.Count)
-        For i = 0 To dtCategory.Rows.Count - 1
-            strFooter(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description")
-        Next
+            ReDim strFooter(dtCategory.Rows.Count)
+            For i = 0 To dtCategory.Rows.Count - 1
+                strFooter(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description")
+            Next
 
-        Dim strFooter500 As String() = {
-        "(A)              SUCCESSFUL STUDENTS:",
-        "(B)              STUDENTS WITH CARRY-OVER COURSES",
-        "(C)              STUDENTS WITH FIRSTCLASS",
-        "(D)              STUDENTS WITH SECOND CLASS (UPPER DIVISION)",
-        "(E)              ABSENCE FROM EXAMINATIONS",
-        "(F)              WITHHELD RESULTS Nil",
-        "(G)              EXPELLED/RUSTICATED/SUSPENDED STUDENTS:",
-        "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
-        "(I)              UNREGISTERED STUDENTS:", "", ""}
-        ReDim strFooter500(dtCateGory.Rows.Count)
-        For i = 0 To dtCategory.Rows.Count - 1
-            strFooter500(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description_final_year")
-        Next
-        'merge category cols
-
-
-        Dim strFooterVal As Integer() = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+            Dim strFooter500 As String() = {
+            "(A)              SUCCESSFUL STUDENTS:",
+            "(B)              STUDENTS WITH CARRY-OVER COURSES",
+            "(C)              STUDENTS WITH FIRSTCLASS",
+            "(D)              STUDENTS WITH SECOND CLASS (UPPER DIVISION)",
+            "(E)              ABSENCE FROM EXAMINATIONS",
+            "(F)              WITHHELD RESULTS Nil",
+            "(G)              EXPELLED/RUSTICATED/SUSPENDED STUDENTS:",
+            "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
+            "(I)              UNREGISTERED STUDENTS:", "", ""}
+            ReDim strFooter500(dtCateGory.Rows.Count)
+            For i = 0 To dtCategory.Rows.Count - 1
+                strFooter500(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description_final_year")
+            Next
+            'merge category cols
 
 
-
-        If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
-            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
-            dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
-            doFootersYr(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
-            'todo: get count of category in doFooters fxn
-        Else
-            doFootersLevel(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
-        End If
-
-        sheet1.RepeatingRows = New CellRangeAddress(rowHeaders.RowNum - 1, rowCredits.RowNum, 0, LAST_COL)
-        setWidthHeight(sheet1)   'todo test print layout
-        setFormatPerSemesterThenPerLevel(sheet1, objBS.broadsheetSemester, objBS.Level, dt.Columns.Count - 1)
+            Dim strFooterVal As Integer() = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 
 
-        If showGrades = True Then
-            dtGrades = dvGrades.ToTable
-            'TODO: convert all scores to grades
-            '###The results
+            If dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_1ST_SEM_SCORES Or
+                dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_2ND_SEM_SCORES Or
+                dOption = BGW_EXPORT_EXCEL_YR_MILTIPLIER * BGW_EXPORT_EXCEL_ALL_SEM_SCORES Then
+                doFootersYr(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
+                'todo: get count of category in doFooters fxn
+            Else
+                doFootersLevel(sheet1, strFooter, strFooterVal, dt.Rows.Count, style, footers, styleSignfooter)
+            End If
+
+            sheet1.RepeatingRows = New CellRangeAddress(rowHeaders.RowNum - 1, rowCredits.RowNum, 0, LAST_COL)
+            setWidthHeight(sheet1)   'todo test print layout
+            setFormatPerSemesterThenPerLevel(sheet1, objBS.broadsheetSemester, objBS.Level, dt.Columns.Count - 1)
+
+
+
+            If showGrades = True Then
+                dtGrades = dvGrades.ToTable
+                'TODO: convert all scores to grades
+                '###The results
+                For iRow = 0 To dt.Rows.Count - 1
+                    row1 = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
+                    For jCol = 0 To dt.Columns.Count - 1
+                        If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL_2 Then
+                            row1.GetCell(jCol).SetCellValue(dtGrades.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
+                            If dt.Rows(iRow).Item(jCol).ToString = DEFAULT_CODE.ToString Then row1.GetCell(jCol).SetCellValue(DEFAULT_DISP)
+                            If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then row1.GetCell(jCol).SetCellValue(NA_DISP)
+                            If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then row1.GetCell(jCol).SetCellValue(NR_DISP)
+                            If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then row1.GetCell(jCol).SetCellValue(ABS_DISP)
+                            'todo handle probating: *87, *56 etc
+                        End If
+                        'handle repeated
+                        If jCol = REPEATED_ALL_COL Then
+                            row1.GetCell(jCol).SetCellValue(dtGrades.Rows(iRow).Item(jCol).ToString)
+                        End If
+
+                    Next
+
+                Next
+            End If
+
+            'todo: finally delete are unused columns here
             For iRow = 0 To dt.Rows.Count - 1
                 row1 = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
                 For jCol = 0 To dt.Columns.Count - 1
                     If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL_2 Then
-                        row1.GetCell(jCol).SetCellValue(dtGrades.Rows(iRow).Item(jCol).ToString)   'row1.CreateCell(jCol).SetCellValue("S/N")
-                        If dt.Rows(iRow).Item(jCol).ToString = DEFAULT_CODE.ToString Then row1.GetCell(jCol).SetCellValue(DEFAULT_DISP)
-                        If dt.Rows(iRow).Item(jCol).ToString = NA_CODE.ToString Then row1.GetCell(jCol).SetCellValue(NA_DISP)
-                        If dt.Rows(iRow).Item(jCol).ToString = NR_CODE.ToString Then row1.GetCell(jCol).SetCellValue(NR_DISP)
-                        If dt.Rows(iRow).Item(jCol).ToString = ABS_CODE.ToString Then row1.GetCell(jCol).SetCellValue(ABS_DISP)
-                        'todo handle probating: *87, *56 etc
-                    End If
-                    'handle repeated
-                    If jCol = REPEATED_ALL_COL Then
-                        row1.GetCell(jCol).SetCellValue(dtGrades.Rows(iRow).Item(jCol).ToString)
-                    End If
+                        'sheet1.deletecol 'row1.CreateCell(jCol).SetCellValue("S/N")
 
+                    End If
                 Next
-
             Next
-        End If
+        Catch ex As Exception
+            MsgBox("There were some issues with the footers" & vbCrLf & ex.ToString)
 
-        'todo: finally delete are unused columns here
-        For iRow = 0 To dt.Rows.Count - 1
-            row1 = sheet1.GetRow(iRow + ALL_HEADERS_COUNT)
-            For jCol = 0 To dt.Columns.Count - 1
-                If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL_2 Then
-                    'sheet1.deletecol 'row1.CreateCell(jCol).SetCellValue("S/N")
-
-                End If
-            Next
-        Next
-
+        End Try
         'save work
-        'todo: if file exists(fileName) create new filename
-        If System.IO.File.Exists(fileName) Then
-            fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
-            'System.IO.File.Delete(fileName)
-            If System.IO.File.Exists(fileName) Then fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Day.ToString & Path.GetExtension(fileName)
-            Try
-                writeToFile(workbook, fileName)
-            Catch ex As Exception
+        Try
 
-                'hanle
-                MsgBox("The Excel file is Open , close it and click ok")
 
+            'todo: if file exists(fileName) create new filename
+            If System.IO.File.Exists(fileName) Then
+                fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Minute.ToString & Path.GetExtension(fileName)
+                'System.IO.File.Delete(fileName)
+                If System.IO.File.Exists(fileName) Then fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Minute.ToString & Path.GetExtension(fileName)
+                Try
+                    writeToFile(workbook, fileName)
+                Catch ex As Exception
+
+                    'hanle
+                    MsgBox("The Excel file is Open , close it and click ok")
+
+                    Try
+                        writeToFile(workbook, fileName)
+                    Catch ex2 As Exception
+                        MsgBox("There seems to be an excel related problem" & vbCrLf & ex2.ToString)
+                        fileName = ""
+                    End Try
+
+                End Try
+
+                'Throw New Exception("RTPS Error: Excel File Already Exists!")
+            Else
                 Try
                     writeToFile(workbook, fileName)
                 Catch ex2 As Exception
+                    MsgBox("There seems to be an excel related problem" & vbCrLf & ex2.ToString)
                     fileName = ""
                 End Try
+            End If
+        Catch ex As Exception
+            MsgBox("There is a file Access issue relate to permissions" & vbCrLf & ex.ToString)
 
-            End Try
-
-            'Throw New Exception("RTPS Error: Excel File Already Exists!")
-        Else
-            writeToFile(workbook, fileName)
-        End If
-
+        End Try
         Return fileName
     End Function
 
@@ -461,15 +486,18 @@ Public Class ClassExcelFile
                 'strFml = numToLetter(COURSE_START_COL) & COURSE_START_COL & "-" & numToLetter(COURSE_START_COL) & COURSE_START_COL)
                 strFml = String.Format("COUNTIF({0}{1}:{2}{3},{4})", numToLetterZeroBased(STATUS_COL), ALL_HEADERS_COUNT + 1, numToLetterZeroBased(STATUS_COL), rowCount + ALL_HEADERS_COUNT, dblQuoted(CATEGORY_FAIL_WITHDRAW))
 
-                rowFooter.CreateCell(TCF_1_COL).SetCellValue(strFml)
+                rowFooter.CreateCell(TCF_1_COL).SetCellFormula(strFml)
             Else
                 rowFooter.CreateCell(TCF_1_COL).SetCellValue(strFooterVal(i))
                 'firstclass=COUNTIFS(DY10:DY175,"1")    seconclass =COUNTIFS(DY10:DY175,"2.1") 
             End If
 
-            If Len(strFooter(i)) > 0 Then rowFooter.GetCell(FULLNAME_COL).CellStyle = (style)  'conditional formatting
-            If Len(strFooterVal(i)) > 0 Then rowFooter.GetCell(TCF_1_COL).CellStyle = (style)
-
+            rowFooter.GetCell(FULLNAME_COL).CellStyle = (style)  'conditional formatting
+            rowFooter.GetCell(TCF_1_COL).CellStyle = (style)
+            For k = FULLNAME_COL + 1 To TCF_1_COL - 1
+                rowFooter.CreateCell(k).SetCellValue("")
+                rowFooter.GetCell(k).CellStyle = (style)
+            Next
             cRFooter = New CellRangeAddress(rowFooter.RowNum, rowFooter.RowNum, FULLNAME_COL, TCF_1_COL - 1)
             sheet1.AddMergedRegion(cRFooter)
             rowFooter.GetCell(FULLNAME_COL).CellStyle = (style) 'now meged
@@ -690,7 +718,7 @@ Public Class ClassExcelFile
             File.Close()
             Return True
         Catch ex As Exception
-            Throw ex
+            MsgBox(ex.ToString)
             Return False
         End Try
 
