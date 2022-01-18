@@ -11,6 +11,7 @@ Public Class FormSenateResult
 
     End Sub
 
+
     Private Sub ButtonView_Click(sender As Object, e As EventArgs) Handles ButtonView.Click
         'Visualization
         objBroadsheet.Col1 = "ENG0000001"   'matno col

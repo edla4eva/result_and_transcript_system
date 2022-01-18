@@ -178,14 +178,17 @@ Module ModuleGeneral
     Public LEVEL_COL As Integer = LAST_COL + 3
 
     Public ABS_CODE As Integer = -1
-    Public NR_CODE As Integer = -2
-    Public NA_CODE As Integer = -3
-    Public DEFAULT_CODE As Integer = -4
-    Public RESULT_NOT_IN_R_CODE As Integer = -5
+    Public R_CODE As Integer = -2
+    Public NR_CODE As Integer = -3
+    Public NA_CODE As Integer = -4
+    Public DEFAULT_CODE As Integer = -5
+    'Public RESULT_NOT_IN_R_CODE As Integer = -5
+
 
     Public ABS_DISP As String = "ABS"
     Public NR_DISP As String = "NR"
     Public NA_DISP As String = "NA"
+    Public R_DISP As String = ""
     Public DEFAULT_DISP As String = ""
     Public RESULT_NOT_IN_R_DISP As String = ""
 
@@ -208,6 +211,10 @@ Module ModuleGeneral
     'mutiplier
     Public BGW_PROCESS_INTERROP_YR_SCORES As Integer = -1
     Public BGW_PROCESS_BUILTIN_NPOI_LEVEL As Integer = 1
+
+
+
+    Public BGW_PROCESS_REPROCESS As Integer = 99999
 #End Region
 
     'Queries
@@ -602,7 +609,7 @@ Module ModuleGeneral
 
 
 
-            For i = 0 To ds.Tables(0).Rows.Count - 1
+            For i = 0 To 0  'ds.Tables(0).Rows.Count - 1
                 For j = 0 To 14
                     strColNameFS = "FS" & (j + 1).ToString("D3")    'FS001, FS002 ... are cols in course_order_new tbl
                     strColNameSS = "SS" & (j + 1).ToString("D3")
@@ -780,17 +787,22 @@ Module ModuleGeneral
     'Ported from C# to VB.NET
     Public Function getMD5HashCode(strPass As String) As String
         Dim dMD5Hsh As String = ""
+        Try
 
-        Using md5Hash As MD5 = MD5.Create
 
-            Dim data As Byte() = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(strPass))
-            Dim sBuilder As StringBuilder = New StringBuilder
-            For i = 0 To data.Length - 1
-                sBuilder.Append(data(i).ToString("x2"))
-            Next
-            dMD5Hsh = sBuilder.ToString
-        End Using
-        Return dMD5Hsh
+            Using md5Hash As MD5 = MD5.Create
+
+                Dim data As Byte() = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(strPass))
+                Dim sBuilder As StringBuilder = New StringBuilder
+                For i = 0 To data.Length - 1
+                    sBuilder.Append(data(i).ToString("x2"))
+                Next
+                dMD5Hsh = sBuilder.ToString
+            End Using
+            Return dMD5Hsh
+        Catch ex As Exception
+            Return "error"
+        End Try
     End Function
     Function Array2sTR(s As String(), Optional strSeperator As String = ",") As String
         Dim tmpStr As String = ""
@@ -812,6 +824,58 @@ Module ModuleGeneral
         tmpStr = s.Split(",")
         'tmpStr = s.Substring(0, 0)
         Return tmpStr
+    End Function
+    Function nextSession(session_idr As String) As String
+        Dim yr1, yr2 As String
+        Try
+
+            yr1 = session_idr.Split("/")(0)
+            yr2 = session_idr.Split("/")(1)
+
+            Return yr2 & "/" & (CInt(yr2) + 1).ToString
+
+        Catch ex As Exception
+            Return session_idr
+        End Try
+    End Function
+    Function prevSession(session_idr As String) As String
+        Dim yr1, yr2 As String
+        Try
+
+            yr1 = session_idr.Split("/")(0)
+            yr2 = session_idr.Split("/")(1)
+
+            Return (CInt(yr1) - 1).ToString & "/" & yr1
+
+        Catch ex As Exception
+            Return session_idr
+        End Try
+    End Function
+    Function prevLevel(dlevel As Integer) As Integer
+        Dim retLevel As Integer
+        Try
+            If dlevel - 100 < 100 Then
+                retLevel = dlevel
+            Else
+                retLevel = dlevel - 100
+            End If
+            Return retLevel
+        Catch ex As Exception
+            Return dlevel
+        End Try
+    End Function
+    Function nextLevel(dlevel As Integer) As Integer
+        Dim retLevel As Integer
+        Try
+            If dlevel + 100 > 500 Then
+                retLevel = dlevel
+            Else
+                retLevel = dlevel + 100
+            End If
+            Return retLevel
+        Catch ex As Exception
+            Return dlevel
+        End Try
     End Function
     Public Sub showError(ByVal _msg As String)
         MessageBox.Show("WARNING : " & _msg & Chr(13) & " Click OK to continue.", strApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -1096,7 +1160,34 @@ Module ModuleGeneral
 
         Return True
     End Function
+    Public Function generateCodeGetSetForDT(strSQL As String) As Boolean
+        Dim ds As DataSet = mappDB.GetDataWhere(strSQL)
+        Dim dt As DataTable = ds.Tables(0)
+        Dim strDeclaration As String = ""
+        Dim strGetandSet As String = ""
+        Dim pptyName As String = ""
+        Dim pptyPrivateName As String = ""
+        For j = 0 To dt.Columns.Count - 1
+            pptyName = dt.Columns(j).ColumnName
+            pptyPrivateName = "_" & pptyName.ToLower
+            strDeclaration = "Public " & pptyPrivateName & " as String"
+            strGetandSet = ""
+            strGetandSet = strGetandSet & vbCrLf & "Public Property " & pptyName & "() As String"
+            strGetandSet = strGetandSet & vbCrLf & "Get"
+            strGetandSet = strGetandSet & vbCrLf & "Return " & pptyPrivateName
+            strGetandSet = strGetandSet & vbCrLf & "End Get"
+            strGetandSet = strGetandSet & vbCrLf & "Set(ByVal value As String)"
 
+            strGetandSet = strGetandSet & vbCrLf & pptyPrivateName & " = value"
+            strGetandSet = strGetandSet & vbCrLf & "End Set"
+            strGetandSet = strGetandSet & vbCrLf & "End Property" & vbCrLf
+            Debug.Print(strDeclaration)
+            Debug.Print(strGetandSet)
+        Next
+        'output it
+
+        Return True
+    End Function
     Function generateCodeBindings(dt As DataTable) As String
         Dim strRet As String = ""
         Dim cntName As String = ""

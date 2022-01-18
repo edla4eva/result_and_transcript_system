@@ -38,7 +38,7 @@ Public Class FormViewResults
     Sub showButtons(ButtonName As String, enableOnly As Boolean)
         Select Case ButtonName
             Case "Check Result"
-                If enableOnly Then Me.ButtonReferesh.Enabled = True Else Me.ButtonReferesh.Visible = True
+                If enableOnly Then Me.ButtonShowDetails.Enabled = True Else Me.ButtonShowDetails.Visible = True
             Case "upload"
                 If enableOnly Then Me.ButtonShowAll.Enabled = True Else Me.ButtonShowAll.Visible = True
             Case "Preview"
@@ -168,6 +168,9 @@ Public Class FormViewResults
     End Sub
 
     Private Sub DataGridView2_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentDoubleClick
+        shoWDetails()
+    End Sub
+    Sub shoWDetails()
         Dim txtCourseCode, txtSession As String
         Dim myDataSet As DataSet
         If DataGridView2.SelectedRows.Count > 0 And
@@ -179,7 +182,6 @@ Public Class FormViewResults
             DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
         End If
     End Sub
-
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         TimerBS.Start()
         bgwLoad.ReportProgress(20)
@@ -214,5 +216,106 @@ Public Class FormViewResults
 
     Private Sub FormViewResults_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         bgwLoad.RunWorkerAsync()
+    End Sub
+
+    Private Sub TextBoxCheckCourseCode_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCheckCourseCode.TextChanged
+        On Error Resume Next
+        If DataGridView2.Rows.Count > 0 Then
+            DataGridView2.DataSource.RowFilter = String.Format(STR_FILTER_RESULTS_BYCOURSECODE, TextBoxCourseCode.Text)
+        End If
+    End Sub
+
+    Private Sub ButtonCheckHash_Click(sender As Object, e As EventArgs) Handles ButtonCheckHash.Click
+        If TextBoxCheckHash.Text = "" Then
+            MsgBox("Enter the computer generated hash code at the bottom of the printed result")
+        ElseIf DataGridView2.Columns.Contains("course_code_idr") And
+            DataGridView2.Columns.Contains("session_idr") Then
+            'summary mode
+        ElseIf DataGridView2.SelectedRows.Count > 0 Then
+            If checkHash(DataGridView2.SelectedRows(0).Cells("course_code").Value).Contains(TextBoxCheckHash.Text) And TextBoxCheckHash.Text.Length > 5 Then
+                TextBoxCheckHash.BackColor = Color.Green
+            Else
+                TextBoxCheckHash.BackColor = Color.Pink
+            End If
+
+        End If
+    End Sub
+    Function checkHash(courseCode As String) As String
+        '---Hash parameters
+        Dim numStu As Integer
+        Dim avrScore As Integer
+        Dim sumScore As Integer = 0
+        Dim codedScores As Long
+        Dim tmpCode As String = ""
+        Dim finalHash As String
+        Dim timeStamp As Long
+        'data
+        Dim dt As DataTable
+        Dim dv As DataView
+        dv = DataGridView2.DataSource
+        dt = dv.ToTable
+
+        Dim dStr As String = ""
+        Dim dL As Integer = 0
+
+        numStu = dt.Rows.Count
+        For i = 0 To dt.Rows.Count - 1
+
+            If IsDBNull(dt.Rows(i).Item("matno")) Then dt.Rows(i).Item("matno") = ""
+            If IsDBNull(dt.Rows(i).Item("total")) Then dt.Rows(i).Item("total") = ""
+            dStr = dt.Rows(i).Item("matno")
+            dL = dStr.Length
+            tmpCode = tmpCode & dStr.ToString.Substring(dL - 3, 2) & dt.Rows(i).Item("total").ToString
+            sumScore = sumScore + CInt(dt.Rows(i).Item("total"))
+
+        Next
+        avrScore = sumScore / numStu
+        finalHash = getMD5HashCode(tmpCode & avrScore.ToString)
+
+        Return finalHash
+    End Function
+
+    Private Sub TextBoxCheckHash_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCheckHash.TextChanged
+        TextBoxCheckHash.BackColor = Color.White
+    End Sub
+
+    Private Sub ButtonShowDetails_Click(sender As Object, e As EventArgs) Handles ButtonShowDetails.Click
+        shoWDetails()
+    End Sub
+
+    Private Sub ButtonPrint_Click(sender As Object, e As EventArgs) Handles ButtonPrint.Click
+        Dim dt As DataTable
+        Dim dv As DataView
+        Dim tmpCol As New DataColumn
+        dv = DataGridView2.DataSource
+        dt = dv.ToTable
+        showResult(dt)
+        'tmpCol = New DataColumn("cgc", System.Strin)
+
+        'dt.Columns.Add(tmpCol)
+    End Sub
+    Public Sub showResult(dt As DataTable)
+        Try
+            With Me.ReportViewer1.LocalReport
+
+                .DataSources.Clear()
+                '.ReportPath = My.Application.Info.DirectoryPath
+                .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
+            End With
+            Me.ReportViewer1.RefreshReport()
+            'Works perfectly
+            PanelReport.Dock = DockStyle.Fill
+            PanelReport.Show()
+
+        Catch ex As Exception
+            MsgBox("Cannot get Senate data" & vbCrLf & ex.Message)
+        End Try
+
+        ' Me.ShowDialog()
+
+    End Sub
+
+    Private Sub LabelClose_Click(sender As Object, e As EventArgs) Handles LabelClose.Click
+        PanelReport.Hide()
     End Sub
 End Class

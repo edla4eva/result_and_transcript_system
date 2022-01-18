@@ -355,12 +355,17 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub BgWProcess_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BgWProcess.DoWork
+        objBroadsheet.broadsheetDataDS = Nothing
+
         Select Case CInt(e.Argument)
             Case BGW_PROCESS_INTERROP_YR_SCORES 'interop
                 objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, True)
 
             Case BGW_PROCESS_BUILTIN_NPOI_LEVEL  'use formula
                 objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
+
+            Case BGW_PROCESS_REPROCESS
+                objBroadsheet.broadsheetDataDS = objBroadsheet.reprocessBroadsheetData()
             Case Else
                 objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
         End Select
@@ -430,6 +435,9 @@ Public Class FormGenerateBroadsheet
             TimerBS.Stop()
             ButtonProcessBroadsheet.Enabled = True
             Me.ProgressBarBS.Value = 100
+            Me.LabelProgress.Text = "Done!"
+            objBroadsheet.progress = 0
+            objBroadsheet.progressStr = ""
         Catch ex As Exception
             ButtonProcessBroadsheet.Enabled = True
             MsgBox("An error occured during the creation of the broadsheet" & vbCrLf & vbCrLf & ex.Message)
@@ -499,15 +507,51 @@ Public Class FormGenerateBroadsheet
     End Sub
     Private Sub ButtonReProcesClick(sender As Object, e As EventArgs) Handles ButtonReProces.Click
         If dtScores Is Nothing Then dtScores = DataGridViewBroadSheet.DataSource.totable
+        objBroadsheet.dataTablesScoresAndGrades(0) = dtScores
         objBroadsheet.Level = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value
         objBroadsheet.DeptId = mappDB.getDeptID(DataGridViewBroadSheet.Rows(0).Cells("bs_department_name").Value)
         objBroadsheet.Session = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value
 
+
+        footers(0) = TextBoxCourseAdviser.Text
+        footers(1) = TextBoxDean.Text
+        footers(2) = TextBoxHOD.Text
+
+        ButtonProcessBroadsheet.Enabled = False
+        TimerBS.Enabled = True
+        TimerBS.Start()
+
+        If CheckBoxSecondSemester.Checked Then
+            objBroadsheet.broadsheetSemester = 2
+        Else
+            objBroadsheet.broadsheetSemester = 1
+        End If
+        objBroadsheet.DepartmentName = mappDB.getDeptName(course_dept_idr)
+        objBroadsheet.FacultyName = "Faculty of Engineering"    'TODO: remove hard code
+        objBroadsheet.SchoolName = "University of Benin"
+
+        objBroadsheet.HOD = TextBoxHOD.Text
+        objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
+        objBroadsheet.Dean = TextBoxDean.Text
+        'objBroadsheet.levelCGPaPercentages = ""   'todo get from settings
+        '_levelCGPAPercentages(0) = 0.05
+        '_levelCGPAPercentages(1) = 0.1
+        '_levelCGPAPercentages(2) = 0.15
+        '_levelCGPAPercentages(3) = 0.2
+        '_levelCGPAPercentages(4) = 0.5
+        '_levelCGPAPercentages(5) = 0
+        '_levelCGPAPercentages(6) = 0
+        '_levelCGPAPercentages(7) = 0
+        '_levelCGPAPercentages(8) = 0
+        'objBroadsheet.levelCGPaPercentagesUME
+        'objBroadsheet.levelCGPaPercentagesDE2
+        'objBroadsheet.levelCGPaPercentagesDE3
+        'objBroadsheet.levelCGPaPercentagesDIP
+
         'Dim courses As Object()
         'courses = dtScores.Rows(0).ItemArray
         'objBroadsheet.updateDatasetWithComputedValues(dtScores, dtGrades, dictAllCourseCodeKeyAndCourseLevelVal.courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1)
-        ' dts = updateDatasetWithComputedValues(dt, dtGrades, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1) 'Update dt Datatable with scores
-
+        BgWProcess.RunWorkerAsync(BGW_PROCESS_REPROCESS)
     End Sub
     Sub testDB()
         Try
@@ -531,12 +575,22 @@ Public Class FormGenerateBroadsheet
         Catch ex As Exception
             MsgBox("Database access problem, connect and try again" & vbCrLf & ex.Message)
             'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-
         End Try
     End Sub
 
+    Public Function checkProcessState() As Boolean
+        If objBroadsheet.dataTablesScoresAndGrades Is Nothing Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
     Private Sub ButtonExportToExcel_Click(sender As Object, e As EventArgs) Handles ButtonExportToExcel.Click
         Dim tmpPARAM As Integer = 0
+        'dont export unless we are ready
+        If checkProcessState() = False Then
+            Exit Sub
+        End If
         SaveFileDialog1.Title = "Select a name for the exported Excel File"
         If SaveFileDialog1.ShowDialog = DialogResult.OK Then
             tmpFileName = SaveFileDialog1.FileName ' ".xlsx"
@@ -620,11 +674,6 @@ Public Class FormGenerateBroadsheet
         End Try
     End Sub
 
-
-
-
-
-
     Public Function getRegisteredStudents() As String()
         Dim retList As New List(Of String)
         Dim tmpDT As DataTable
@@ -669,15 +718,7 @@ Public Class FormGenerateBroadsheet
             course_dept_idr = 1
             session_idr = "2018/2019"
         End If
-
-
-
-
-
     End Sub
-
-
-
     Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
     End Sub
@@ -689,6 +730,7 @@ Public Class FormGenerateBroadsheet
     Public Sub importBroadsheetData(dv As DataView)
         Me.DataGridViewBroadSheet.DataSource = dv
         'TODO: department etc
+        'load everything loadable
     End Sub
 
 

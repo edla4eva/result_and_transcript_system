@@ -320,4 +320,8 @@ Public Class FormSettings
             GroupBoxDev.Visible = True
         End If
     End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        TextBoxDev.Text = generateCodeGetSetForDT("SELECT * FROM Results WHERE course_code_idr=''")
+    End Sub
 End Class

@@ -73,7 +73,7 @@ Public Class FormCourseAdviser
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         ButtonResultsSubmitted.Text = dCountResult1.ToString & "/" & dCountResult2.ToString
-        ButtonNoOfStudents.Text = dCountReg.ToString & "/" & dCountStudents.ToString
+        ButtonNoOfStudents.Text = dCountReg.ToString
         ButtonNoOfBroadsheets.Text = dCountBS1.ToString
 
     End Sub

@@ -153,6 +153,7 @@
     <Compile Include="ClassExcelResult.vb" />
     <Compile Include="ClassPDF.vb" />
     <Compile Include="ClassReports.vb" />
+    <Compile Include="ClassResultReport.vb" />
     <Compile Include="FormAbout.Designer.vb">
       <DependentUpon>FormAbout.vb</DependentUpon>
     </Compile>
@@ -363,6 +364,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ReportResult.rdlc" />
     <EmbeddedResource Include="ReportGPCard.rdlc" />
     <EmbeddedResource Include="ReportSenateCover.rdlc" />
     <EmbeddedResource Include="ReportTranscript.rdlc" />

@@ -266,10 +266,7 @@ Partial Class FormSenateResult
         'BgWProcess
         '
         Me.BgWProcess.WorkerSupportsCancellation = True
-        '
-        'ClassDBBindingSource
-        '
-        Me.ClassDBBindingSource.DataSource = GetType(result_and_transcript_system.ClassDB)
+
         '
         'FormSenateResult
         '

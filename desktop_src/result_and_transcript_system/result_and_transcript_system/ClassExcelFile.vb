@@ -80,7 +80,7 @@ Public Class ClassExcelFile
         End Try
 
     End Function
-    Public Function exportBroadsheettoExcelFile_NPOI(dv As DataView, fileName As String, objBS As ClassBroadsheets, dictCr As Dictionary(Of String, Integer), footers As String(), dOption As Integer, Optional showGrades As Boolean = False, Optional dvGrades As DataView = Nothing) As String
+    Public Function exportBroadsheetToExcelFile_NPOI(dv As DataView, fileName As String, objBS As ClassBroadsheets, dictCr As Dictionary(Of String, Integer), footers As String(), dOption As Integer, Optional showGrades As Boolean = False, Optional dvGrades As DataView = Nothing) As String
         Dim dt As DataTable = dv.ToTable
         Dim dtGrades As DataTable = Nothing
         Dim workbook As IWorkbook = New XSSFWorkbook()
@@ -115,6 +115,15 @@ Public Class ClassExcelFile
             styleMediumBorderCenter.WrapText = True
             styleMediumBorderCenter.VerticalAlignment = VerticalAlignment.Center
             styleMediumBorderCenter.SetFont(dFont)
+
+            'INITIALIE ALL THE USEFULL CELLS
+            row1 = sheet1.CreateRow(0)
+            For i = 0 To dt.Rows.Count - 1
+                For jCol = 0 To dt.Columns.Count - 1
+                    row1.CreateCell(jCol).SetCellValue("") 'todo
+                Next
+            Next
+
 
             '# Insert values for header
             rowTitles = sheet1.CreateRow(0)  'row1
@@ -163,9 +172,10 @@ Public Class ClassExcelFile
             rowCourseCodes = sheet1.CreateRow(ROW_HEADER + 1)
             rowCredits = sheet1.CreateRow(ROW_CREDIT)  '8=row 9
             For jCol = 0 To dt.Columns.Count - 1
+
                 If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then Exit Function 'no need '
                 If jCol >= COURSE_START_COL And dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(dt.Columns(jCol).ColumnName.ToString) Then rowCredits.CreateCell(jCol).SetCellValue(dictAllCourseCodeKeyAndCourseUnitVal(dt.Columns(jCol).ColumnName.ToString))
-                'Style  (course code headers)
+
                 If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
                     'data
                     rowCourseCodes.CreateCell(jCol).SetCellValue(dt.Columns(jCol).ColumnName.ToString)
@@ -309,7 +319,8 @@ Public Class ClassExcelFile
                     'If jCol >= COURSE_START_COL And jCol <= COURSE_END_COL Then
                     'ElseIf jCol >= COURSE_START_COL_2 And jCol <= COURSE_END_COL_2 Then
                     'End If
-                    If iRow = rowCredits.RowNum Then rowCredits.GetCell(jCol).CellStyle = styleMediumBorder 'horzontal
+                    'If iRow = rowCredits.RowNum Then rowCredits.GetCell(jCol).CellStyle = styleMediumBorder 'horzontal
+                    'err prone
                 Next
                 'style
                 rowResults.GetCell(FULLNAME_COL).CellStyle = styleWrap   'ColC name
@@ -341,9 +352,9 @@ Public Class ClassExcelFile
         "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
         "(I)              UNREGISTERED STUDENTS:", "", ""}
 
-            ReDim strFooter(dtCategory.Rows.Count)
-            For i = 0 To dtCategory.Rows.Count - 1
-                strFooter(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description")
+            ReDim strFooter(dtCateGory.Rows.Count)
+            For i = 0 To dtCateGory.Rows.Count - 1
+                strFooter(i) = dtCateGory.Rows(i).Item("category") & "     " & dtCateGory.Rows(i).Item("description")
             Next
 
             Dim strFooter500 As String() = {
@@ -357,8 +368,8 @@ Public Class ClassExcelFile
             "(H)              TEMPORARY WITHDRAWAL FROM THE UNIVERSITY:",
             "(I)              UNREGISTERED STUDENTS:", "", ""}
             ReDim strFooter500(dtCateGory.Rows.Count)
-            For i = 0 To dtCategory.Rows.Count - 1
-                strFooter500(i) = dtCategory.Rows(i).Item("category") & "     " & dtCategory.Rows(i).Item("description_final_year")
+            For i = 0 To dtCateGory.Rows.Count - 1
+                strFooter500(i) = dtCateGory.Rows(i).Item("category") & "     " & dtCateGory.Rows(i).Item("description_final_year")
             Next
             'merge category cols
 

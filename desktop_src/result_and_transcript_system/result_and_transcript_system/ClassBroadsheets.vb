@@ -261,6 +261,74 @@ Public Class ClassBroadsheets
     End Property
 
 #End Region
+
+    Function reprocessBroadsheetData() As DataSet
+        Dim countC, countReg, countResultsBS As Integer
+        Dim AllCoursesDS, coursesOrderDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim dictCourseCodeKeyCourseOrderSNVal_1 As New Dictionary(Of Integer, String)
+        Dim dictCourseCodeKeyCourseOrderSNVal_2 As New Dictionary(Of Integer, String)
+        Dim dictCoursesOrder As New Dictionary(Of Integer, String)
+
+        Dim dictRegistered_1 As New Dictionary(Of String, String)
+        Dim dictRegistered_2 As New Dictionary(Of String, String)
+        Dim strSQLRegStudents, strSQLAllCourses, strSQLCoursesOrder, strSQLJoin As String
+        Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
+        Dim tmpInt As Integer = -4
+
+        Dim courses(LAST_COL) As String
+        Dim credits(LAST_COL) As Integer
+
+        Dim ds As New DataSet
+        Dim dt As New DataTable
+        Dim dr As DataRow
+        Dim dictCol, dictMATNO As New Dictionary(Of String, Integer)
+        Dim approvedCredits As Integer = 501
+        strSQLJoin = STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_INSERT_IN_BROADSHEET
+        strSQLAllCourses = STR_ALL_COURSES_ORDERED
+        strSQLCoursesOrder = STR_COURSES_ORDER_GENERAL
+        strSQLRegStudents = STR_SQL_REGISTERED_STUDENTS
+        RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, objBroadsheet.Session, objBroadsheet.DeptId, objBroadsheet.Level), "Reg")
+        coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, objBroadsheet.Session, objBroadsheet.DeptId), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+        AllCoursesDS = mappDB.getAllCourses()   'Get All Courses in Array
+        _dtCategory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
+
+        dt = objBroadsheet.dataTablesScoresAndGrades(0)
+        If coursesOrderDS.Tables(0).Rows.Count < 1 Then
+            'maybe session does not exist, use default
+            coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, "2018/2019", 1), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+            If coursesOrderDS.Tables(0).Rows.Count < 1 Then
+                'give up
+                dt.Columns.Add("Error")
+                dt.Rows.Add("There are no record of approved Courses for this session and Department")
+                ds.Tables.Add(dt)
+                Return ds
+                'Dim exInn As New Exception("There is no record for the how the Courses should be ordered in the Broadsheet for this session and Department")
+                'Throw exInn
+            End If
+        End If
+        'If RegStudentsDS.Tables(0).Rows.Count < 1 Then
+        '    dt.Columns.Add("Error")
+        '    dt.Rows.Add("No Registered Students for the selected Session and Department")
+        '    ds.Tables.Add(dt)
+        '    Return ds
+        '    'Throw New Exception("There is no record of Registered Students")
+        'End If
+
+        countC = AllCoursesDS.Tables(0).Rows.Count
+        countReg = RegStudentsDS.Tables(0).Rows.Count
+
+        Dim dtGrades As DataTable = dt.Copy
+
+        'Now Update calculated fields in dataSet
+
+        Dim dts(0 To 1) As DataTable
+
+        dts = objBroadsheet.updateDatasetWithComputedValues(dt, dtGrades, dictAllCourseCodeKeyAndCourseUnitVal, courses, credits, objBroadsheet.Level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1) 'Update dt Datatable with scores
+        ds.Tables.Add(dts(0))   'error: DataTable already belongs to another DataSet.'
+
+        Return ds
+    End Function
+
     '
     ' Summary:
     '     Creates a Dataset containing the broadsheet processed from results
@@ -284,13 +352,14 @@ Public Class ClassBroadsheets
         '#1 count courseCodes in result table = j
         Dim countC, countReg, countResultsBS As Integer
         Dim AllCoursesDS, coursesOrderDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim PrevBroasheetDT As DataTable
         Dim dictCourseCodeKeyCourseOrderSNVal_1 As New Dictionary(Of Integer, String)
         Dim dictCourseCodeKeyCourseOrderSNVal_2 As New Dictionary(Of Integer, String)
         Dim dictCoursesOrder As New Dictionary(Of Integer, String)
 
         Dim dictRegistered_1 As New Dictionary(Of String, String)
         Dim dictRegistered_2 As New Dictionary(Of String, String)
-        Dim strSQLRegStudents, strSQLAllCourses, strSQLCoursesOrder, strSQLJoin As String
+        Dim strSQLRegStudents, strSQLAllCourses, strSQLCoursesOrder, strSQLJoin, strSQLPrevBS As String
         Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
         Dim tmpInt As Integer = -4
 
@@ -319,9 +388,11 @@ Public Class ClassBroadsheets
         strSQLAllCourses = STR_ALL_COURSES_ORDERED
         strSQLCoursesOrder = STR_COURSES_ORDER_GENERAL
         strSQLRegStudents = STR_SQL_REGISTERED_STUDENTS
+        strSQLPrevBS = STR_SQL_ALL_BROADSHEETS_COLNAMES_WHERE_SESSION_DEPT_LEVEL
         RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, session_idr, course_dept_idr, course_level), "Reg")
         coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
         AllCoursesDS = mappDB.getAllCourses()   'Get All Courses in Array
+        PrevBroasheetDT = mappDB.showBroadsheet(prevSession(session_idr), mappDB.getDeptName(course_dept_idr), prevLevel(course_level))
         _dtCategory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
 
         If coursesOrderDS.Tables(0).Rows.Count < 1 Then
@@ -589,6 +660,30 @@ Public Class ClassBroadsheets
             objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
         Next
         '-------------------------------------------------------
+
+        'Load previous results into broadsheet
+        Dim foundRow As Integer = 0
+        Dim tmpPrevDR As DataRow() '= PrevBroasheetDT.DefaultView
+        Dim countFSCourses, countSSCourses As Integer
+        Dim tmpStrFilter As String = ""
+        If PrevBroasheetDT Is Nothing Then
+
+        Else
+            countFSCourses = LastColInSem_1_ForLevel(prevLevel(course_level))
+            countSSCourses = LastColInSem_2_ForLevel(prevLevel(course_level))
+            For i = 0 To dt.Rows.Count - 1
+                tmpStrFilter = "matno = '" & dt.Rows(0).Item("matno").ToString & "'"
+                tmpPrevDR = PrevBroasheetDT.Select(tmpStrFilter)
+                For j = COURSE_START_COL To countFSCourses ' COURSE_END_COL
+                    dt.Rows(0).Item(j) = tmpPrevDR(0).Item(dt.Columns(j).ColumnName)
+                Next
+                For j = COURSE_START_COL_2 To countSSCourses ' COURSE_END_COL
+                    dt.Rows(0).Item(j) = tmpPrevDR(0).Item(dt.Columns(j).ColumnName)
+                Next
+            Next
+        End If
+
+
 
         dtGrades = dt.Copy
 
@@ -867,6 +962,7 @@ Public Class ClassBroadsheets
         Dim TCPs(3) As Integer
         objBroadsheet.progressStr = "Computing scores " & " ..."
         For i = 0 To countRows - 1
+            'first semester
             For j = COURSE_START_COL To COURSE_START_COL + MAX_COURSES_1 - 1 'First Semester
                 tmpStrColName = dt.Columns(j).ColumnName
                 scores(j) = DEFAULT_CODE.ToString 'initialize on the fly  'TODO
@@ -908,11 +1004,9 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("RepeatCourses_1") = tmpStrR
             dtGrades.Rows(i).Item("RepeatCourses_1") = tmpStrRGrades
 
-
-
-
             tmpStrR = ""
             tmpStrRGrades = ""
+            'second semester
             For j = COURSE_START_COL_2 To COURSE_END_COL_2 - 1  'Second semester
                 tmpStrColName = dt.Columns(j).ColumnName
                 scores(j) = DEFAULT_CODE 'initialize on the fly  'TODO

@@ -92,7 +92,7 @@ Public Class FormViewBroadsheets
             txtSession = ComboBoxSessions.SelectedItem
             txtDept = ComboBoxDepartments.SelectedItem
 
-            showBroadsheet(String.Format(STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL, txtSession, txtDept, txtlevel))
+            dt = mappDB.showBroadsheet(txtSession, txtDept, txtlevel)
 
         Catch ex As Exception
             MsgBox("Cannot get broadsheets data" & vbCrLf & ex.Message)
@@ -100,44 +100,7 @@ Public Class FormViewBroadsheets
 
 
     End Sub
-    Sub showBroadsheet(Optional strTimestamp As String = Nothing)
-        Dim dictColHeaders As New Dictionary(Of String, String)
-        Dim dtHeaders As DataSet
 
-        'Dim dSession As String = DataGridView1.SelectedRows(0).Cells("bs_session").Value.ToString       'todo put fieldnames in constants in general module
-        'Dim dDept As String = DataGridView1.SelectedRows(0).Cells("bs_department_name").Value.ToString
-        'Dim dLevel As String = DataGridView1.SelectedRows(0).Cells("bs_level").Value.ToString
-        'GET BS DATA
-        Dim strSQL As String = STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP
-        dt = mappDB.GetDataWhere(String.Format(strSQL, txtSession, txtDept, txtlevel)).Tables(0)
-        If strTimestamp Is Nothing Then strTimestamp = ""   'dt.Rows(0).Item("bs_timestamp").ToString
-
-        'NOW TO HEADERS
-        strSQL = STR_SQL_ALL_BROADSHEETS_COLNAMES_WHERE_SESSION_DEPT_LEVEL
-        dtHeaders = mappDB.GetDataWhere(String.Format(strSQL, txtSession, txtDept, txtlevel))
-        Dim clCount As Integer = dt.Columns.Count - 1        'todo: cross thread
-        Dim j As Integer = 0
-        Try
-
-            For j = COURSE_START_COL To LEVEL_COL
-                If (dtHeaders.Tables(0).Rows(0).Item(j) = "") Then
-                    'avoid nasty errors, leave name intact
-                ElseIf (DT.Columns(j).ColumnName = "bs_session") Then
-                ElseIf (DT.Columns(j).ColumnName = "bs_department_name") Then
-                ElseIf (DT.Columns(j).ColumnName = "bs_faculty_name") Then
-                ElseIf (DT.Columns(j).ColumnName = "bs_level") Then
-                Else
-                    dt.Columns(j).ColumnName = dtHeaders.Tables(0).Rows(0).Item(j)   'get name from first row where it as saved
-                End If
-                dt.AcceptChanges()
-                objBroadsheet.progress = j / clCount * 100
-                objBroadsheet.progressStr = "Processing : " & dt.Columns(j).ColumnName
-            Next
-            dt.AcceptChanges()
-        Catch ex As Exception
-            MsgBox("The broadsheet was not properly saved or the data has been corrupted")
-        End Try
-    End Sub
 
 
     Private Sub ButtonDelete_Click(sender As Object, e As EventArgs) Handles ButtonDelete.Click
@@ -171,7 +134,7 @@ Public Class FormViewBroadsheets
 
     Private Sub BgWProcess_DoWork(sender As Object, e As DoWorkEventArgs) Handles BgWProcess.DoWork
 
-        showBroadsheet(e.Argument.ToString) 'txtSession, txtDept, txtlevel,
+        dt = mappDB.showBroadsheet(txtSession, txtDept, txtlevel, e.Argument.ToString) 'txtSession, txtDept, txtlevel,
 
     End Sub
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
@@ -200,6 +163,8 @@ Public Class FormViewBroadsheets
                 End If
             End If
         Next
+        objBroadsheet.progressStr = ""
+        objBroadsheet.progress = 0
         Me.ProgressBarBS.Value = 100
         Me.LabelProgress.Text = "Done"
     End Sub
