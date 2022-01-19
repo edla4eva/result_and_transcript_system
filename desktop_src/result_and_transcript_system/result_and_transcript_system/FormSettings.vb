@@ -322,6 +322,44 @@ Public Class FormSettings
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        TextBoxDev.Text = generateCodeGetSetForDT("SELECT * FROM Results WHERE course_code_idr=''")
+        TextBoxDev.Text = generateCodeGetSetForDT("SELECT * FROM broadsheets_all WHERE matno=''")
+    End Sub
+
+    Private Sub ButtonCourseTitles_Click(sender As Object, e As EventArgs) Handles ButtonCourseTitles.Click
+        Dim dt As DataTable
+        Dim tmpCourse As String
+        Dim strSQLCoursesOrder As String = STR_COURSES_ORDER_GENERAL
+        Dim coursesOrderDS As DataSet
+        coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, Session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+
+        'For i = 0 To NUM_LEVELS - 1
+        'colStartPos = COURSE_START_COL + (i * NUM_COURSES_PER_LEVEL_1)
+        'getCoursesOrderIntoDictionaries(Session_idr, course_dept_idr, (i + 1).ToString & "00")  'get course order for 100, 200...levels
+
+        'getCoursesOrderIntoDictionaries(Session_idr, course_dept_idr, (i + 1).ToString & "00")  'get course order for 100, 200...levels
+        'Next
+        Dim strColNameFS, strColNameSS As String
+        For i = 0 To 0  'ds.Tables(0).Rows.Count - 1
+            For j = 0 To 14
+                strColNameFS = "FS" & (j + 1).ToString("D3")    'FS001, FS002 ... are cols in course_order_new tbl
+                strColNameSS = "SS" & (j + 1).ToString("D3")
+                If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameFS)) Then
+                    ds.Tables(0).Rows(i).Item(strColNameFS) = ""
+                Else
+                    dictCoursesOrderFS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameFS))
+                End If
+                If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameSS)) Then
+                    ds.Tables(0).Rows(i).Item(strColNameSS) = ""    'dnt add em
+                Else
+                    dictCoursesOrderSS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameSS))
+                End If
+
+            Next
+        Next
+
+        dt = mappDB.GetDataWhere("SELECT * from course_order_new").Tables(0)
+        For i = 0 To dt.Rows.Count - 1
+
+        Next
     End Sub
 End Class

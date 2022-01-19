@@ -392,7 +392,12 @@ Public Class ClassBroadsheets
         RegStudentsDS = mappDB.GetDataWhere(String.Format(strSQLRegStudents, session_idr, course_dept_idr, course_level), "Reg")
         coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
         AllCoursesDS = mappDB.getAllCourses()   'Get All Courses in Array
-        PrevBroasheetDT = mappDB.showBroadsheet(prevSession(session_idr), mappDB.getDeptName(course_dept_idr), prevLevel(course_level))
+        If prevLevel(course_level) = course_level Or course_level = "100" Then
+            'no previous esult
+            PrevBroasheetDT = Nothing
+        Else
+            PrevBroasheetDT = mappDB.showBroadsheet(prevSession(session_idr), mappDB.getDeptName(course_dept_idr), prevLevel(course_level), Nothing, True)
+        End If
         _dtCategory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
 
         If coursesOrderDS.Tables(0).Rows.Count < 1 Then
@@ -615,6 +620,7 @@ Public Class ClassBroadsheets
         Dim levelPos = 0
 
         Dim dtGrades As New DataTable
+        Dim approvedCourses(160) As Boolean
 
         For inxC = COURSE_START_COL To COURSE_START_COL_2 + MAX_COURSES_2 - 1
             If dt.Columns(inxC).ColumnName.Contains("REPEATED") Or dt.Columns(inxC).ColumnName.Contains("TCF_") Then Continue For
@@ -625,6 +631,7 @@ Public Class ClassBroadsheets
                 If dictAllCourseCodeKeyAndCourseLevelVal.ContainsKey(tmpStrCourseCode) Then
                     If dictAllCourseCodeKeyAndCourseLevelVal(tmpStrCourseCode) > course_level Then Continue For  'ignore higher levels
                 End If
+                approvedCourses(inxC) = True
                 objBroadsheet.progressStr = "Generating results for " & tmpStrCourseCode & " ..."
                 tmpStr = String.Format(strSQLJoin, tmpStrCourseCode, session_idr)   'SELECT ... LEFT JOIN
                 FSBroadsheetDS = mappDB.GetDataWhere(tmpStr, "FSBroadsheetDS")
@@ -654,7 +661,8 @@ Public Class ClassBroadsheets
 
                     Next
                 End If
-
+            Else
+                approvedCourses(inxC) = False
             End If
 
             objBroadsheet.progress = (inxC / (COURSE_START_COL_2 + MAX_COURSES_1 - 1)) * 85
@@ -667,18 +675,19 @@ Public Class ClassBroadsheets
         Dim countFSCourses, countSSCourses As Integer
         Dim tmpStrFilter As String = ""
         If PrevBroasheetDT Is Nothing Then
-
+            'dont bother to load previous results
         Else
             countFSCourses = LastColInSem_1_ForLevel(prevLevel(course_level))
             countSSCourses = LastColInSem_2_ForLevel(prevLevel(course_level))
             For i = 0 To dt.Rows.Count - 1
-                tmpStrFilter = "matno = '" & dt.Rows(0).Item("matno").ToString & "'"
+                tmpStrFilter = "matno = '" & dt.Rows(i).Item("matno").ToString & "'"
                 tmpPrevDR = PrevBroasheetDT.Select(tmpStrFilter)
+                If tmpPrevDR Is Nothing Or tmpPrevDR.Length = 0 Then Continue For
                 For j = COURSE_START_COL To countFSCourses ' COURSE_END_COL
-                    dt.Rows(0).Item(j) = tmpPrevDR(0).Item(dt.Columns(j).ColumnName)
+                    dt.Rows(i).Item(j) = tmpPrevDR(0).Item(dt.Columns(j).ColumnName)
                 Next
                 For j = COURSE_START_COL_2 To countSSCourses ' COURSE_END_COL
-                    dt.Rows(0).Item(j) = tmpPrevDR(0).Item(dt.Columns(j).ColumnName)
+                    dt.Rows(i).Item(j) = tmpPrevDR(0).Item(dt.Columns(j).ColumnName)
                 Next
             Next
         End If
@@ -955,11 +964,25 @@ Public Class ClassBroadsheets
         Dim credits_2(NUM_COURSES_PER_LEVEL_2 * NUM_LEVELS) As Integer
         Dim strTimeStamp As String = Now.Ticks.ToString
 
+        Dim approvedCourses(160) As Boolean
         Dim gradePoints(160) As Integer
         Dim passedCourses(160) As Boolean
         Dim gpa As Double
         Dim TCRs(3) As Integer
         Dim TCPs(3) As Integer
+
+        'note approvd curses
+        For j = 0 To dt.Columns.Count - 1
+            If j > approvedCourses.Count - 1 Then Exit For
+            If dt.Columns(j).ColumnName.Contains("ColUNIQUE") Then
+                approvedCourses(j) = False
+            ElseIf j < COURSE_START_COL Or j > COURSE_END_COL_2 Then
+                approvedCourses(j) = False
+            Else
+                approvedCourses(j) = True       'ignored tcp etc
+            End If
+        Next
+
         objBroadsheet.progressStr = "Computing scores " & " ..."
         For i = 0 To countRows - 1
             'first semester
@@ -1075,7 +1098,7 @@ Public Class ClassBroadsheets
             'levelPercentages(7) = 0
             'levelPercentages(8) = 0
             'objBroadsheet.levelcgpaPercentages = levelPercentages
-
+            'todo: getGPAPercentages()
             dt.Rows(i).Item("failed_screening") = "N0" 'todo determine from status RegStudentsDS.Tables(0).Rows(i).Item("failed_screening")
             dt.Rows(i).Item("cummulative_credits") = 0 'todo determine when creating senate 
             dt.Rows(i).Item("outstanding_credits") = 0   'RegStudentsDS.Tables(0).Rows(i).Item("outstanding_credits")
@@ -1090,7 +1113,7 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("gpa800") = "0.000"
             dt.Rows(i).Item("gpa900") = "0.000"
             dt.Rows(i).Item("wgpa100") = "0.000"
-            gpa = CalcGPA(gradePoints, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
+            gpa = CalcGPA(gradePoints, approvedCourses, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             'MsgBox("Original" & gpa.ToString)
             'MsgBox("To zero " & Math.Round(gpa, 3, MidpointRounding.AwayFromZero).ToString) 3Dp roundng up
             'MsgBox("floor " & (Math.Floor(gpa * 1000) / 1000).ToString) '3dp chopping
@@ -1142,7 +1165,7 @@ Public Class ClassBroadsheets
             End If
 
 
-            objBroadsheet.progress = (i / countRows * 95)  'max 80+16 = 96%
+            objBroadsheet.progress = (80 + (i / countRows * 16))  'max 80+16 = 96%
         Next
         dts(0) = dt
         dts(1) = dtGrades
@@ -1970,29 +1993,29 @@ Public Class ClassBroadsheets
         Try
             If rulesMax Is Nothing Then rulesMax = {100, 69, 59, 49, 44, 39}    'todo: use params
             If rulesMin Is Nothing Then rulesMin = {70, 60, 50, 45, 40, 0}
-            dGrade = "**"
+            dGrade = DEFAULT_DISP
             'error chechs
-            If strScore = "" Then
-                Return ""
+            If IsDBNull(strScore) Then
+                Return DEFAULT_DISP
                 Exit Function
-            ElseIf IsDBNull(strScore) Then
-                Return ""
+            ElseIf strScore = "" Then
+                Return DEFAULT_DISP
                 Exit Function
-            ElseIf (strScore = "ABS") Then
-                Return "ABS"
+            ElseIf (strScore = ABS_DISP Or strScore = ABS_CODE) Then
+                Return ABS_DISP
                 Exit Function
-            ElseIf (strScore = "NR") Then
-                Return "NR"
+            ElseIf (strScore = NR_DISP Or strScore = NR_CODE) Then
+                Return NR_DISP
                 Exit Function
             ElseIf (strScore = "NA") Or (strScore = "N/A") Then
-                Return "NA"
+                Return NA_DISP
                 Exit Function
             End If
 
             score = toNum(strScore)
 
-            If score = -4 Then
-                Return ""
+            If score = DEFAULT_CODE Then
+                Return DEFAULT_DISP
                 Exit Function
             End If
 
@@ -2025,7 +2048,7 @@ Public Class ClassBroadsheets
                 dGrade = "E"
             ElseIf score >= fmin And score <= fmax Then
                 dGrade = "F"
-            ElseIf score = abs_code Then
+            ElseIf score = ABS_CODE Then
                 dGrade = ABS_DISP
             ElseIf score = NR_CODE Then
                 dGrade = NR_DISP
@@ -2049,7 +2072,12 @@ Public Class ClassBroadsheets
         Dim tmpGradePoints As Integer()
         ReDim tmpGradePoints(strGrades.Count - 1)
         For i = 0 To strGrades.Count - 1
-            tmpGradePoints(i) = getGradePointFromGrade(strGrades(i))
+            If IsRegisteredGrade(strGrades(i)) Then
+                tmpGradePoints(i) = getGradePointFromGrade(strGrades(i))
+            Else
+                tmpGradePoints(i) = 0
+            End If
+
         Next
         Return tmpGradePoints
 
@@ -2126,9 +2154,9 @@ Public Class ClassBroadsheets
 
     Function IsRegisteredGrade(dGrade As String) As Boolean
         Try
-            If dGrade = "R" Then
+            If dGrade = R_DISP Then
                 Return True        'error
-            ElseIf dGrade = "NR" Or dGrade = "NA" Or dGrade = "" Then
+            ElseIf dGrade = NR_DISP Or dGrade = NA_DISP Or dGrade = DEFAULT_DISP Then
                 Return False
             Else
                 Return True
@@ -2284,7 +2312,7 @@ Public Class ClassBroadsheets
     '    End Try
     'End Function
 
-    Function CalcGPA(gradePoints As Integer(), credits As Integer(), dlevel As Integer, levelPercentages As Double()) As Double
+    Function CalcGPA(gradePoints As Integer(), approvedCourses As Boolean(), credits As Integer(), dlevel As Integer, levelPercentages As Double()) As Double
         Dim tmpGP As Double = 0
         Dim tmpGPA As Double = 0
 
@@ -2298,15 +2326,23 @@ Public Class ClassBroadsheets
         'levelPercentages(3) = 0.2
         'levelPercentages(4) = 0.5
 
-        LastColInSem_1_ForLevel(dlevel)
+        Dim lstColLvl As Integer = LastColInSem_1_ForLevel(dlevel)
 
-        For i = COURSE_START_COL To LastColInSem_1_ForLevel(dlevel)
-            tmpGP = tmpGP + gradePoints(i)
-            tmpCr = tmpCr + credits(i)
+        For j = lstColLvl - MAX_COURSES_1 To lstColLvl
+            'only registered courses
+            If approvedCourses(j) Then
+                tmpGP = tmpGP + gradePoints(j)
+                tmpCr = tmpCr + credits(j)
+            End If
+
         Next
-        For i = COURSE_START_COL_2 To LastColInSem_2_ForLevel(dlevel)
-            tmpGP = tmpGP + gradePoints(i)
-            tmpCr = tmpCr + credits(i)
+        lstColLvl = LastColInSem_2_ForLevel(dlevel)
+
+        For j = lstColLvl - MAX_COURSES_2 To lstColLvl
+            If approvedCourses(j) Then
+                tmpGP = tmpGP + gradePoints(j)
+                tmpCr = tmpCr + credits(j)
+            End If
         Next
         If tmpCr > 0 Then tmpGPA = tmpGP / tmpCr Else tmpGPA = -1
         Return tmpGPA

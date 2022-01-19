@@ -16,7 +16,7 @@ Module ModuleGeneral
     Public objBroadsheet As New ClassBroadsheets()
     Public objReports As New ClassReports()
     Public objRTPS As New ClassApp
-
+    Public objTranscript As New ClassTranscripts
 
     Public conn As New MySql.Data.MySqlClient.MySqlConnection
     Dim oadDataGrid As MySqlDataAdapter
@@ -305,8 +305,12 @@ Module ModuleGeneral
                       Results.Session_idr HAVING (((Reg.matno)='{0}'));"
 
     'Transcripts from Broadsheets
-    Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO As String = "SELECT Col171,Col172,Col174,count(Col1) FROM broadsheets_all 
-                      WHERE (((matno)='{0}') ) GROUP BY bs_session,bs_department_name,bs_level;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+    Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO As String = "SELECT * FROM broadsheets_all 
+                      WHERE (((matno)='{0}') ) ORDER BY bs_session,bs_department_name,bs_level;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+    Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO_LEVEL As String = "SELECT * FROM broadsheets_all 
+                      WHERE (((matno)='{0}') And ((bs_level)='{1}')  ) ORDER BY bs_session,bs_department_name,bs_level;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
+
+
     'TODO: note broadsheets_all_Colnames_tablenames", TCF_2_COL - 1
     Public STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_TO_TRANSCRIPT_WITH_COLNAMES_BY_MATNO As String = "SELECT * FROM broadsheets_all 
                       WHERE ((matno='{0}')) ORDER BY bs_session,bs_department_name,bs_level;"    '"SELECT * FROM broadsheets_all  WHERE( (Col171='{0}') And (Col172='{1}') And (Col174='{2}')  And Not(Col1='matno')) ORDER BY Col0,Col1;"
@@ -399,10 +403,9 @@ Module ModuleGeneral
 
     'UNIONS
     'Transcripts
-    Public STR_SQL_UNION_Transcript = "SELECT matno,FullName,ColUNIQUE7 FROM broadsheets_all
-                                        UNION SELECT matno,FullName,ColUNIQUE8 FROM broadsheets_all
-                                        UNION SELECT matno,FullName,ColUNIQUE9 FROM broadsheets_all
-                                        WHERE Col1='ENG1503589';"
+    Public STR_SQL_UNION_Transcript = "SELECT matno,FullName,ColUNIQUE7 FROM broadsheets_all WHERE matno='ENG1503589'
+                                        UNION All SELECT matno,FullName,ColUNIQUE8 FROM broadsheets_all WHERE matno='ENG1503589' 
+                                        UNION All SELECT matno,FullName,ColUNIQUE9 FROM broadsheets_all  WHERE matno='ENG1503589';"
 
     'Public STR_SQL_ALL_USERS As String = "SELECT user_id, username, status as STATUS from tblusers order by status"
     'Public STR_SQL_ALL_GUESTS_BILLS_WHERE As String = "SELECT `guest_account_id`, `guest_id_ref`, `date`, `details`, `debit`, `credit`, `balance`, `ref`, `bill_status` FROM `guest_account` WHERE guest_id_ref='{0}' order by date"
@@ -505,8 +508,14 @@ Module ModuleGeneral
     Public Function LastColInSem_1_ForLevel(dLevel As Integer) As Integer
         Return (COURSE_START_COL + (dLevel / 100) * NUM_COURSES_PER_LEVEL_1) - 1
     End Function
+    Public Function FirstColInSem_1_ForLevel(dLevel As Integer) As Integer
+        Return (COURSE_START_COL + ((dLevel / 100) - 1) * NUM_COURSES_PER_LEVEL_1) - 1
+    End Function
     Public Function LastColInSem_2_ForLevel(dLevel As Integer) As Integer
         Return (COURSE_START_COL_2 + (dLevel / 100) * NUM_COURSES_PER_LEVEL_2) - 1
+    End Function
+    Public Function FirstColInSem_2_ForLevel(dLevel As Integer) As Integer
+        Return (COURSE_START_COL_2 + ((dLevel / 100) - 1) * NUM_COURSES_PER_LEVEL_2) - 1
     End Function
     Sub refreshcolors(frm As Form, cntls As ControlCollection, Optional darkTheme As Boolean = True)
 
@@ -1033,6 +1042,23 @@ Module ModuleGeneral
         StrDate = StrDate & ":" & dtp.Minute.ToString("00")
         StrDate = StrDate & ":" & dtp.Second.ToString("00")
         Return StrDate
+    End Function
+    Function getUnionQueryForTranscript(dt As DataTable, dmatno As String) As String
+        Dim strSQLUnion As String = "SELECT matno,FullName,ColUNIQUE7 FROM broadsheets_all WHERE matno='ENG1503589'
+                                        UNION All SELECT matno,FullName,ColUNIQUE8 FROM broadsheets_all WHERE matno='ENG1503589' 
+                                           UNION All SELECT matno,FullName,ColUNIQUE9 FROM broadsheets_all  WHERE matno='ENG1503589';"
+
+        For j = COURSE_START_COL To COURSE_END_COL
+            If j = 0 Then
+                strSQLUnion = strSQLUnion & String.Format("SELECT matno,FullName,{0} FROM broadsheets_all WHERE matno='{1}'", dt.Columns(j).ColumnName, dmatno)
+            ElseIf j = dt.Columns.Count - 1 Then
+                strSQLUnion = strSQLUnion & String.Format(" UNION All SELECT matno,FullName,{0} FROM broadsheets_all WHERE matno='{1}';", dt.Columns(j).ColumnName, dmatno)
+            Else
+                strSQLUnion = strSQLUnion & String.Format(" UNION All SELECT matno,FullName,{0} FROM broadsheets_all WHERE matno='{1}'", dt.Columns(j).ColumnName, dmatno)
+
+            End If
+        Next
+        Return strSQLUnion
     End Function
     Public Function getInsertParamsRegForm() As List(Of OleDb.OleDbParameter)
         Dim lstInsertParams As New List(Of OleDb.OleDbParameter)

@@ -14,7 +14,7 @@ Public Class FormSenateResult
 
     Private Sub ButtonView_Click(sender As Object, e As EventArgs) Handles ButtonView.Click
         'Visualization
-        objBroadsheet.Col1 = "ENG0000001"   'matno col
+        objBroadsheet.matno = "ENG0000001"   'matno col
         Try
             Dim txtlevel, txtSession, txtDept As String
             txtlevel = "100"

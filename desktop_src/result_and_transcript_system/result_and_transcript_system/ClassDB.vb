@@ -889,15 +889,11 @@ Public Class ClassDB
 
         Return AllCoursesDS
     End Function
-    Function showBroadsheet(txtSession As String, txtDept As String, txtlevel As String, Optional strTimestamp As String = Nothing) As DataTable
+    Function showBroadsheet(txtSession As String, txtDept As String, txtlevel As String, Optional strTimestamp As String = Nothing, Optional silent As Boolean = True) As DataTable
         Dim dictColHeaders As New Dictionary(Of String, String)
         Dim dtHeaders As DataSet
         Dim tmpDT As DataTable
 
-        'Dim dSession As String = DataGridView1.SelectedRows(0).Cells("bs_session").Value.ToString       'todo put fieldnames in constants in general module
-        'Dim dDept As String = DataGridView1.SelectedRows(0).Cells("bs_department_name").Value.ToString
-        'Dim dLevel As String = DataGridView1.SelectedRows(0).Cells("bs_level").Value.ToString
-        'GET BS DATA
         Dim strSQL As String = STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP
         tmpDT = mappDB.GetDataWhere(String.Format(strSQL, txtSession, txtDept, txtlevel)).Tables(0)
         If strTimestamp Is Nothing Then strTimestamp = ""   'dt.Rows(0).Item("bs_timestamp").ToString
@@ -931,10 +927,53 @@ Public Class ClassDB
         Catch ex As Exception
             objBroadsheet.progress = 0
             objBroadsheet.progressStr = ""
-            MsgBox("The broadsheet was not properly saved or the data has been corrupted")
+            If Not silent Then MsgBox("The broadsheet was not properly saved or the data has been corrupted")
+            Return Nothing
         End Try
     End Function
 
+    Function getBroadsheetForTranscript(dmatno As String, Optional txtlevel As String = "500", Optional strTimestamp As String = Nothing, Optional silent As Boolean = True) As DataTable
+        Dim dictColHeaders As New Dictionary(Of String, String)
+        Dim dtHeaders As DataSet
+        Dim tmpDT As DataTable
+        Dim dSession, dDept As String
+
+        Dim strSQL As String = STR_SQL_EXTRACT_FROM_BROADSHEET_ALL_SUMMARY_TO_TRANSCRIPT_BY_MATNO_LEVEL
+        tmpDT = mappDB.GetDataWhere(String.Format(strSQL, dmatno, txtlevel)).Tables(0)
+        If strTimestamp Is Nothing Then strTimestamp = ""   'dt.Rows(0).Item("bs_timestamp").ToString
+        dSession = tmpDT.Rows(0).Item("bs_session")
+        dDept = tmpDT.Rows(0).Item("bs_department_name")
+        'NOW TO HEADERS
+        strSQL = STR_SQL_ALL_BROADSHEETS_COLNAMES_WHERE_SESSION_DEPT_LEVEL
+        dtHeaders = mappDB.GetDataWhere(String.Format(strSQL, dSession, dDept, txtlevel))
+        Dim clCount As Integer = tmpDT.Columns.Count - 1        'todo: cross thread
+        Try
+            For j = COURSE_START_COL To LEVEL_COL
+                If (dtHeaders.Tables(0).Rows(0).Item(j) = "") Then
+                    'avoid nasty errors, leave name intact
+                ElseIf (tmpDT.Columns(j).ColumnName = "bs_session") Then
+                ElseIf (tmpDT.Columns(j).ColumnName = "bs_department_name") Then
+                ElseIf (tmpDT.Columns(j).ColumnName = "bs_faculty_name") Then
+                ElseIf (tmpDT.Columns(j).ColumnName = "bs_level") Then
+                Else
+                    tmpDT.Columns(j).ColumnName = dtHeaders.Tables(0).Rows(0).Item(j)   'get name from first row where it as saved
+                End If
+                tmpDT.AcceptChanges()
+                'objBroadsheet.progress = j / clCount * 100
+                'objBroadsheet.progressStr = "Processing : " & tmpDT.Columns(j).ColumnName
+            Next
+            'objBroadsheet.progress = 100
+            'objBroadsheet.progressStr = "Done! "
+
+            tmpDT.AcceptChanges()
+            Return tmpDT
+        Catch ex As Exception
+            objBroadsheet.progress = 0
+            objBroadsheet.progressStr = ""
+            If Not silent Then MsgBox("The transcript data was not properly saved or the data has been corrupted")
+            Return Nothing
+        End Try
+    End Function
 
     Public Sub logDBError(str As String)
         On Error Resume Next

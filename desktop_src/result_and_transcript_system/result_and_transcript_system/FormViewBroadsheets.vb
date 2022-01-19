@@ -92,7 +92,7 @@ Public Class FormViewBroadsheets
             txtSession = ComboBoxSessions.SelectedItem
             txtDept = ComboBoxDepartments.SelectedItem
 
-            dt = mappDB.showBroadsheet(txtSession, txtDept, txtlevel)
+            dt = mappDB.showBroadsheet(txtSession, txtDept, txtlevel, Nothing, False)
 
         Catch ex As Exception
             MsgBox("Cannot get broadsheets data" & vbCrLf & ex.Message)
@@ -134,7 +134,7 @@ Public Class FormViewBroadsheets
 
     Private Sub BgWProcess_DoWork(sender As Object, e As DoWorkEventArgs) Handles BgWProcess.DoWork
 
-        dt = mappDB.showBroadsheet(txtSession, txtDept, txtlevel, e.Argument.ToString) 'txtSession, txtDept, txtlevel,
+        dt = mappDB.showBroadsheet(txtSession, txtDept, txtlevel, e.Argument.ToString, False) 'txtSession, txtDept, txtlevel,
 
     End Sub
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted

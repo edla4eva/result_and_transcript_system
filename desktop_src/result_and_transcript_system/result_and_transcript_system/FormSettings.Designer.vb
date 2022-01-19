@@ -98,6 +98,7 @@ Partial Class FormSettings
         Me.Button17 = New System.Windows.Forms.Button()
         Me.TextBox5 = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
+        Me.ButtonCourseTitles = New System.Windows.Forms.Button()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -747,6 +748,7 @@ Partial Class FormSettings
         'GroupBoxDev
         '
         Me.GroupBoxDev.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GroupBoxDev.Controls.Add(Me.ButtonCourseTitles)
         Me.GroupBoxDev.Controls.Add(Me.Button10)
         Me.GroupBoxDev.Controls.Add(Me.Button9)
         Me.GroupBoxDev.Controls.Add(Me.Button8)
@@ -771,7 +773,7 @@ Partial Class FormSettings
         Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button10.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button10.Location = New System.Drawing.Point(6, 247)
+        Me.Button10.Location = New System.Drawing.Point(6, 229)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(138, 30)
         Me.Button10.TabIndex = 41
@@ -784,7 +786,7 @@ Partial Class FormSettings
         Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button9.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button9.Location = New System.Drawing.Point(6, 152)
+        Me.Button9.Location = New System.Drawing.Point(6, 134)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(138, 30)
         Me.Button9.TabIndex = 40
@@ -797,7 +799,7 @@ Partial Class FormSettings
         Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button8.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button8.Location = New System.Drawing.Point(6, 211)
+        Me.Button8.Location = New System.Drawing.Point(6, 193)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(138, 30)
         Me.Button8.TabIndex = 39
@@ -818,7 +820,7 @@ Partial Class FormSettings
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button7.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button7.Location = New System.Drawing.Point(6, 179)
+        Me.Button7.Location = New System.Drawing.Point(6, 161)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(138, 30)
         Me.Button7.TabIndex = 36
@@ -831,7 +833,7 @@ Partial Class FormSettings
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button6.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button6.Location = New System.Drawing.Point(6, 118)
+        Me.Button6.Location = New System.Drawing.Point(6, 100)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(138, 30)
         Me.Button6.TabIndex = 35
@@ -844,7 +846,7 @@ Partial Class FormSettings
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Button2.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Button2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button2.Location = New System.Drawing.Point(7, 82)
+        Me.Button2.Location = New System.Drawing.Point(7, 64)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(138, 30)
         Me.Button2.TabIndex = 34
@@ -949,6 +951,19 @@ Partial Class FormSettings
         Me.Label13.TabIndex = 12
         Me.Label13.Text = "Developer"
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'ButtonCourseTitles
+        '
+        Me.ButtonCourseTitles.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonCourseTitles.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonCourseTitles.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.ButtonCourseTitles.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonCourseTitles.Location = New System.Drawing.Point(6, 265)
+        Me.ButtonCourseTitles.Name = "ButtonCourseTitles"
+        Me.ButtonCourseTitles.Size = New System.Drawing.Size(138, 30)
+        Me.ButtonCourseTitles.TabIndex = 42
+        Me.ButtonCourseTitles.Text = "Fix Titles"
+        Me.ButtonCourseTitles.UseVisualStyleBackColor = False
         '
         'FormSettings
         '
@@ -1063,4 +1078,5 @@ Partial Class FormSettings
     Friend WithEvents Button17 As Button
     Friend WithEvents TextBox5 As TextBox
     Friend WithEvents Label13 As Label
+    Friend WithEvents ButtonCourseTitles As Button
 End Class

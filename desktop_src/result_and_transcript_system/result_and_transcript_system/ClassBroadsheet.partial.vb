@@ -1,1972 +1,1948 @@
-﻿
-Partial Class ClassBroadsheets
+﻿Partial Class ClassBroadsheets
+    Public _sn As String
 
-    Public _col0 As String
-
-    Public Property Col0() As String
-        Get
-            Return _col0
-        End Get
-        Set(ByVal value As String)
-            _col0 = value
-        End Set
-    End Property
-
-    Public _col1 As String
-
-    Public Property Col1() As String
-        Get
-            Return _col1
-        End Get
-        Set(ByVal value As String)
-            _col1 = value
-        End Set
-    End Property
-
-    Public _col2 As String
-
-    Public Property Col2() As String
+    Public Property sn() As String
         Get
-            Return _col2
+            Return _sn
         End Get
         Set(ByVal value As String)
-            _col2 = value
+            _sn = value
         End Set
     End Property
 
-    Public _col3 As String
+    Public _matno As String
 
-    Public Property Col3() As String
+    Public Property matno() As String
         Get
-            Return _col3
+            Return _matno
         End Get
         Set(ByVal value As String)
-            _col3 = value
+            _matno = value
         End Set
     End Property
 
-    Public _col4 As String
+    Public _fullname As String
 
-    Public Property Col4() As String
+    Public Property FullName() As String
         Get
-            Return _col4
+            Return _fullname
         End Get
         Set(ByVal value As String)
-            _col4 = value
+            _fullname = value
         End Set
     End Property
 
-    Public _col5 As String
+    Public _othernames As String
 
-    Public Property Col5() As String
+    Public Property OtherNames() As String
         Get
-            Return _col5
+            Return _othernames
         End Get
         Set(ByVal value As String)
-            _col5 = value
+            _othernames = value
         End Set
     End Property
 
-    Public _col6 As String
+    Public _surname As String
 
-    Public Property Col6() As String
+    Public Property Surname() As String
         Get
-            Return _col6
+            Return _surname
         End Get
         Set(ByVal value As String)
-            _col6 = value
+            _surname = value
         End Set
     End Property
 
-    Public _col7 As String
+    Public _repeatall As String
 
-    Public Property Col7() As String
+    Public Property RepeatAll() As String
         Get
-            Return _col7
+            Return _repeatall
         End Get
         Set(ByVal value As String)
-            _col7 = value
+            _repeatall = value
         End Set
     End Property
 
-    Public _col8 As String
+    Public _repeatcourses_1 As String
 
-    Public Property Col8() As String
+    Public Property RepeatCourses_1() As String
         Get
-            Return _col8
+            Return _repeatcourses_1
         End Get
         Set(ByVal value As String)
-            _col8 = value
+            _repeatcourses_1 = value
         End Set
     End Property
 
-    Public _col9 As String
+    Public _colunique7 As String
 
-    Public Property Col9() As String
+    Public Property ColUNIQUE7() As String
         Get
-            Return _col9
+            Return _colunique7
         End Get
         Set(ByVal value As String)
-            _col9 = value
+            _colunique7 = value
         End Set
     End Property
 
-    Public _col10 As String
+    Public _colunique8 As String
 
-    Public Property Col10() As String
+    Public Property ColUNIQUE8() As String
         Get
-            Return _col10
+            Return _colunique8
         End Get
         Set(ByVal value As String)
-            _col10 = value
+            _colunique8 = value
         End Set
     End Property
 
-    Public _col11 As String
+    Public _colunique9 As String
 
-    Public Property Col11() As String
+    Public Property ColUNIQUE9() As String
         Get
-            Return _col11
+            Return _colunique9
         End Get
         Set(ByVal value As String)
-            _col11 = value
+            _colunique9 = value
         End Set
     End Property
 
-    Public _col12 As String
+    Public _colunique10 As String
 
-    Public Property Col12() As String
+    Public Property ColUNIQUE10() As String
         Get
-            Return _col12
+            Return _colunique10
         End Get
         Set(ByVal value As String)
-            _col12 = value
+            _colunique10 = value
         End Set
     End Property
 
-    Public _col13 As String
+    Public _colunique11 As String
 
-    Public Property Col13() As String
+    Public Property ColUNIQUE11() As String
         Get
-            Return _col13
+            Return _colunique11
         End Get
         Set(ByVal value As String)
-            _col13 = value
+            _colunique11 = value
         End Set
     End Property
 
-    Public _col14 As String
+    Public _colunique12 As String
 
-    Public Property Col14() As String
+    Public Property ColUNIQUE12() As String
         Get
-            Return _col14
+            Return _colunique12
         End Get
         Set(ByVal value As String)
-            _col14 = value
+            _colunique12 = value
         End Set
     End Property
 
-    Public _col15 As String
+    Public _colunique13 As String
 
-    Public Property Col15() As String
+    Public Property ColUNIQUE13() As String
         Get
-            Return _col15
+            Return _colunique13
         End Get
         Set(ByVal value As String)
-            _col15 = value
+            _colunique13 = value
         End Set
     End Property
 
-    Public _col16 As String
+    Public _colunique14 As String
 
-    Public Property Col16() As String
+    Public Property ColUNIQUE14() As String
         Get
-            Return _col16
+            Return _colunique14
         End Get
         Set(ByVal value As String)
-            _col16 = value
+            _colunique14 = value
         End Set
     End Property
 
-    Public _col17 As String
+    Public _colunique15 As String
 
-    Public Property Col17() As String
+    Public Property ColUNIQUE15() As String
         Get
-            Return _col17
+            Return _colunique15
         End Get
         Set(ByVal value As String)
-            _col17 = value
+            _colunique15 = value
         End Set
     End Property
 
-    Public _col18 As String
+    Public _colunique16 As String
 
-    Public Property Col18() As String
+    Public Property ColUNIQUE16() As String
         Get
-            Return _col18
+            Return _colunique16
         End Get
         Set(ByVal value As String)
-            _col18 = value
+            _colunique16 = value
         End Set
     End Property
 
-    Public _col19 As String
+    Public _colunique17 As String
 
-    Public Property Col19() As String
+    Public Property ColUNIQUE17() As String
         Get
-            Return _col19
+            Return _colunique17
         End Get
         Set(ByVal value As String)
-            _col19 = value
+            _colunique17 = value
         End Set
     End Property
 
-    Public _col20 As String
+    Public _colunique18 As String
 
-    Public Property Col20() As String
+    Public Property ColUNIQUE18() As String
         Get
-            Return _col20
+            Return _colunique18
         End Get
         Set(ByVal value As String)
-            _col20 = value
+            _colunique18 = value
         End Set
     End Property
 
-    Public _col21 As String
+    Public _colunique19 As String
 
-    Public Property Col21() As String
+    Public Property ColUNIQUE19() As String
         Get
-            Return _col21
+            Return _colunique19
         End Get
         Set(ByVal value As String)
-            _col21 = value
+            _colunique19 = value
         End Set
     End Property
 
-    Public _col22 As String
+    Public _colunique20 As String
 
-    Public Property Col22() As String
+    Public Property ColUNIQUE20() As String
         Get
-            Return _col22
+            Return _colunique20
         End Get
         Set(ByVal value As String)
-            _col22 = value
+            _colunique20 = value
         End Set
     End Property
 
-    Public _col23 As String
+    Public _colunique21 As String
 
-    Public Property Col23() As String
+    Public Property ColUNIQUE21() As String
         Get
-            Return _col23
+            Return _colunique21
         End Get
         Set(ByVal value As String)
-            _col23 = value
+            _colunique21 = value
         End Set
     End Property
 
-    Public _col24 As String
+    Public _colunique22 As String
 
-    Public Property Col24() As String
+    Public Property ColUNIQUE22() As String
         Get
-            Return _col24
+            Return _colunique22
         End Get
         Set(ByVal value As String)
-            _col24 = value
+            _colunique22 = value
         End Set
     End Property
 
-    Public _col25 As String
+    Public _colunique23 As String
 
-    Public Property Col25() As String
+    Public Property ColUNIQUE23() As String
         Get
-            Return _col25
+            Return _colunique23
         End Get
         Set(ByVal value As String)
-            _col25 = value
+            _colunique23 = value
         End Set
     End Property
 
-    Public _col26 As String
+    Public _colunique24 As String
 
-    Public Property Col26() As String
+    Public Property ColUNIQUE24() As String
         Get
-            Return _col26
+            Return _colunique24
         End Get
         Set(ByVal value As String)
-            _col26 = value
+            _colunique24 = value
         End Set
     End Property
 
-    Public _col27 As String
+    Public _colunique25 As String
 
-    Public Property Col27() As String
+    Public Property ColUNIQUE25() As String
         Get
-            Return _col27
+            Return _colunique25
         End Get
         Set(ByVal value As String)
-            _col27 = value
+            _colunique25 = value
         End Set
     End Property
 
-    Public _col28 As String
+    Public _colunique26 As String
 
-    Public Property Col28() As String
+    Public Property ColUNIQUE26() As String
         Get
-            Return _col28
+            Return _colunique26
         End Get
         Set(ByVal value As String)
-            _col28 = value
+            _colunique26 = value
         End Set
     End Property
 
-    Public _col29 As String
+    Public _colunique27 As String
 
-    Public Property Col29() As String
+    Public Property ColUNIQUE27() As String
         Get
-            Return _col29
+            Return _colunique27
         End Get
         Set(ByVal value As String)
-            _col29 = value
+            _colunique27 = value
         End Set
     End Property
 
-    Public _col30 As String
+    Public _colunique28 As String
 
-    Public Property Col30() As String
+    Public Property ColUNIQUE28() As String
         Get
-            Return _col30
+            Return _colunique28
         End Get
         Set(ByVal value As String)
-            _col30 = value
+            _colunique28 = value
         End Set
     End Property
 
-    Public _col31 As String
+    Public _colunique29 As String
 
-    Public Property Col31() As String
+    Public Property ColUNIQUE29() As String
         Get
-            Return _col31
+            Return _colunique29
         End Get
         Set(ByVal value As String)
-            _col31 = value
+            _colunique29 = value
         End Set
     End Property
 
-    Public _col32 As String
+    Public _colunique30 As String
 
-    Public Property Col32() As String
+    Public Property ColUNIQUE30() As String
         Get
-            Return _col32
+            Return _colunique30
         End Get
         Set(ByVal value As String)
-            _col32 = value
+            _colunique30 = value
         End Set
     End Property
 
-    Public _col33 As String
+    Public _colunique31 As String
 
-    Public Property Col33() As String
+    Public Property ColUNIQUE31() As String
         Get
-            Return _col33
+            Return _colunique31
         End Get
         Set(ByVal value As String)
-            _col33 = value
+            _colunique31 = value
         End Set
     End Property
 
-    Public _col34 As String
+    Public _colunique32 As String
 
-    Public Property Col34() As String
+    Public Property ColUNIQUE32() As String
         Get
-            Return _col34
+            Return _colunique32
         End Get
         Set(ByVal value As String)
-            _col34 = value
+            _colunique32 = value
         End Set
     End Property
 
-    Public _col35 As String
+    Public _colunique33 As String
 
-    Public Property Col35() As String
+    Public Property ColUNIQUE33() As String
         Get
-            Return _col35
+            Return _colunique33
         End Get
         Set(ByVal value As String)
-            _col35 = value
+            _colunique33 = value
         End Set
     End Property
 
-    Public _col36 As String
+    Public _colunique34 As String
 
-    Public Property Col36() As String
+    Public Property ColUNIQUE34() As String
         Get
-            Return _col36
+            Return _colunique34
         End Get
         Set(ByVal value As String)
-            _col36 = value
+            _colunique34 = value
         End Set
     End Property
 
-    Public _col37 As String
+    Public _colunique35 As String
 
-    Public Property Col37() As String
+    Public Property ColUNIQUE35() As String
         Get
-            Return _col37
+            Return _colunique35
         End Get
         Set(ByVal value As String)
-            _col37 = value
+            _colunique35 = value
         End Set
     End Property
 
-    Public _col38 As String
+    Public _colunique36 As String
 
-    Public Property Col38() As String
+    Public Property ColUNIQUE36() As String
         Get
-            Return _col38
+            Return _colunique36
         End Get
         Set(ByVal value As String)
-            _col38 = value
+            _colunique36 = value
         End Set
     End Property
 
-    Public _col39 As String
+    Public _colunique37 As String
 
-    Public Property Col39() As String
+    Public Property ColUNIQUE37() As String
         Get
-            Return _col39
+            Return _colunique37
         End Get
         Set(ByVal value As String)
-            _col39 = value
+            _colunique37 = value
         End Set
     End Property
 
-    Public _col40 As String
+    Public _colunique38 As String
 
-    Public Property Col40() As String
+    Public Property ColUNIQUE38() As String
         Get
-            Return _col40
+            Return _colunique38
         End Get
         Set(ByVal value As String)
-            _col40 = value
+            _colunique38 = value
         End Set
     End Property
 
-    Public _col41 As String
+    Public _colunique39 As String
 
-    Public Property Col41() As String
+    Public Property ColUNIQUE39() As String
         Get
-            Return _col41
+            Return _colunique39
         End Get
         Set(ByVal value As String)
-            _col41 = value
+            _colunique39 = value
         End Set
     End Property
 
-    Public _col42 As String
+    Public _colunique40 As String
 
-    Public Property Col42() As String
+    Public Property ColUNIQUE40() As String
         Get
-            Return _col42
+            Return _colunique40
         End Get
         Set(ByVal value As String)
-            _col42 = value
+            _colunique40 = value
         End Set
     End Property
 
-    Public _col43 As String
+    Public _colunique41 As String
 
-    Public Property Col43() As String
+    Public Property ColUNIQUE41() As String
         Get
-            Return _col43
+            Return _colunique41
         End Get
         Set(ByVal value As String)
-            _col43 = value
+            _colunique41 = value
         End Set
     End Property
 
-    Public _col44 As String
+    Public _colunique42 As String
 
-    Public Property Col44() As String
+    Public Property ColUNIQUE42() As String
         Get
-            Return _col44
+            Return _colunique42
         End Get
         Set(ByVal value As String)
-            _col44 = value
+            _colunique42 = value
         End Set
     End Property
 
-    Public _col45 As String
+    Public _colunique43 As String
 
-    Public Property Col45() As String
+    Public Property ColUNIQUE43() As String
         Get
-            Return _col45
+            Return _colunique43
         End Get
         Set(ByVal value As String)
-            _col45 = value
+            _colunique43 = value
         End Set
     End Property
 
-    Public _col46 As String
+    Public _colunique44 As String
 
-    Public Property Col46() As String
+    Public Property ColUNIQUE44() As String
         Get
-            Return _col46
+            Return _colunique44
         End Get
         Set(ByVal value As String)
-            _col46 = value
+            _colunique44 = value
         End Set
     End Property
 
-    Public _col47 As String
+    Public _colunique45 As String
 
-    Public Property Col47() As String
+    Public Property ColUNIQUE45() As String
         Get
-            Return _col47
+            Return _colunique45
         End Get
         Set(ByVal value As String)
-            _col47 = value
+            _colunique45 = value
         End Set
     End Property
 
-    Public _col48 As String
+    Public _colunique46 As String
 
-    Public Property Col48() As String
+    Public Property ColUNIQUE46() As String
         Get
-            Return _col48
+            Return _colunique46
         End Get
         Set(ByVal value As String)
-            _col48 = value
+            _colunique46 = value
         End Set
     End Property
 
-    Public _col49 As String
+    Public _colunique47 As String
 
-    Public Property Col49() As String
+    Public Property ColUNIQUE47() As String
         Get
-            Return _col49
+            Return _colunique47
         End Get
         Set(ByVal value As String)
-            _col49 = value
+            _colunique47 = value
         End Set
     End Property
 
-    Public _col50 As String
+    Public _colunique48 As String
 
-    Public Property Col50() As String
+    Public Property ColUNIQUE48() As String
         Get
-            Return _col50
+            Return _colunique48
         End Get
         Set(ByVal value As String)
-            _col50 = value
+            _colunique48 = value
         End Set
     End Property
 
-    Public _col51 As String
+    Public _colunique49 As String
 
-    Public Property Col51() As String
+    Public Property ColUNIQUE49() As String
         Get
-            Return _col51
+            Return _colunique49
         End Get
         Set(ByVal value As String)
-            _col51 = value
+            _colunique49 = value
         End Set
     End Property
 
-    Public _col52 As String
+    Public _colunique50 As String
 
-    Public Property Col52() As String
+    Public Property ColUNIQUE50() As String
         Get
-            Return _col52
+            Return _colunique50
         End Get
         Set(ByVal value As String)
-            _col52 = value
+            _colunique50 = value
         End Set
     End Property
 
-    Public _col53 As String
+    Public _colunique51 As String
 
-    Public Property Col53() As String
+    Public Property ColUNIQUE51() As String
         Get
-            Return _col53
+            Return _colunique51
         End Get
         Set(ByVal value As String)
-            _col53 = value
+            _colunique51 = value
         End Set
     End Property
 
-    Public _col54 As String
+    Public _colunique52 As String
 
-    Public Property Col54() As String
+    Public Property ColUNIQUE52() As String
         Get
-            Return _col54
+            Return _colunique52
         End Get
         Set(ByVal value As String)
-            _col54 = value
+            _colunique52 = value
         End Set
     End Property
 
-    Public _col55 As String
+    Public _colunique53 As String
 
-    Public Property Col55() As String
+    Public Property ColUNIQUE53() As String
         Get
-            Return _col55
+            Return _colunique53
         End Get
         Set(ByVal value As String)
-            _col55 = value
+            _colunique53 = value
         End Set
     End Property
 
-    Public _col56 As String
+    Public _colunique54 As String
 
-    Public Property Col56() As String
+    Public Property ColUNIQUE54() As String
         Get
-            Return _col56
+            Return _colunique54
         End Get
         Set(ByVal value As String)
-            _col56 = value
+            _colunique54 = value
         End Set
     End Property
 
-    Public _col57 As String
+    Public _colunique55 As String
 
-    Public Property Col57() As String
+    Public Property ColUNIQUE55() As String
         Get
-            Return _col57
+            Return _colunique55
         End Get
         Set(ByVal value As String)
-            _col57 = value
+            _colunique55 = value
         End Set
     End Property
 
-    Public _col58 As String
+    Public _colunique56 As String
 
-    Public Property Col58() As String
+    Public Property ColUNIQUE56() As String
         Get
-            Return _col58
+            Return _colunique56
         End Get
         Set(ByVal value As String)
-            _col58 = value
+            _colunique56 = value
         End Set
     End Property
 
-    Public _col59 As String
+    Public _colunique57 As String
 
-    Public Property Col59() As String
+    Public Property ColUNIQUE57() As String
         Get
-            Return _col59
+            Return _colunique57
         End Get
         Set(ByVal value As String)
-            _col59 = value
+            _colunique57 = value
         End Set
     End Property
 
-    Public _col60 As String
+    Public _colunique58 As String
 
-    Public Property Col60() As String
+    Public Property ColUNIQUE58() As String
         Get
-            Return _col60
+            Return _colunique58
         End Get
         Set(ByVal value As String)
-            _col60 = value
+            _colunique58 = value
         End Set
     End Property
 
-    Public _col61 As String
+    Public _colunique59 As String
 
-    Public Property Col61() As String
+    Public Property ColUNIQUE59() As String
         Get
-            Return _col61
+            Return _colunique59
         End Get
         Set(ByVal value As String)
-            _col61 = value
+            _colunique59 = value
         End Set
     End Property
 
-    Public _col62 As String
+    Public _colunique60 As String
 
-    Public Property Col62() As String
+    Public Property ColUNIQUE60() As String
         Get
-            Return _col62
+            Return _colunique60
         End Get
         Set(ByVal value As String)
-            _col62 = value
+            _colunique60 = value
         End Set
     End Property
 
-    Public _col63 As String
+    Public _colunique61 As String
 
-    Public Property Col63() As String
+    Public Property ColUNIQUE61() As String
         Get
-            Return _col63
+            Return _colunique61
         End Get
         Set(ByVal value As String)
-            _col63 = value
+            _colunique61 = value
         End Set
     End Property
 
-    Public _col64 As String
+    Public _colunique62 As String
 
-    Public Property Col64() As String
+    Public Property ColUNIQUE62() As String
         Get
-            Return _col64
+            Return _colunique62
         End Get
         Set(ByVal value As String)
-            _col64 = value
+            _colunique62 = value
         End Set
     End Property
 
-    Public _col65 As String
+    Public _colunique63 As String
 
-    Public Property Col65() As String
+    Public Property ColUNIQUE63() As String
         Get
-            Return _col65
+            Return _colunique63
         End Get
         Set(ByVal value As String)
-            _col65 = value
+            _colunique63 = value
         End Set
     End Property
 
-    Public _col66 As String
+    Public _colunique64 As String
 
-    Public Property Col66() As String
+    Public Property ColUNIQUE64() As String
         Get
-            Return _col66
+            Return _colunique64
         End Get
         Set(ByVal value As String)
-            _col66 = value
+            _colunique64 = value
         End Set
     End Property
 
-    Public _col67 As String
+    Public _colunique65 As String
 
-    Public Property Col67() As String
+    Public Property ColUNIQUE65() As String
         Get
-            Return _col67
+            Return _colunique65
         End Get
         Set(ByVal value As String)
-            _col67 = value
+            _colunique65 = value
         End Set
     End Property
 
-    Public _col68 As String
+    Public _colunique66 As String
 
-    Public Property Col68() As String
+    Public Property ColUNIQUE66() As String
         Get
-            Return _col68
+            Return _colunique66
         End Get
         Set(ByVal value As String)
-            _col68 = value
+            _colunique66 = value
         End Set
     End Property
 
-    Public _col69 As String
+    Public _colunique67 As String
 
-    Public Property Col69() As String
+    Public Property ColUNIQUE67() As String
         Get
-            Return _col69
+            Return _colunique67
         End Get
         Set(ByVal value As String)
-            _col69 = value
+            _colunique67 = value
         End Set
     End Property
 
-    Public _col70 As String
+    Public _colunique68 As String
 
-    Public Property Col70() As String
+    Public Property ColUNIQUE68() As String
         Get
-            Return _col70
+            Return _colunique68
         End Get
         Set(ByVal value As String)
-            _col70 = value
+            _colunique68 = value
         End Set
     End Property
 
-    Public _col71 As String
+    Public _colunique69 As String
 
-    Public Property Col71() As String
+    Public Property ColUNIQUE69() As String
         Get
-            Return _col71
+            Return _colunique69
         End Get
         Set(ByVal value As String)
-            _col71 = value
+            _colunique69 = value
         End Set
     End Property
 
-    Public _col72 As String
+    Public _colunique70 As String
 
-    Public Property Col72() As String
+    Public Property ColUNIQUE70() As String
         Get
-            Return _col72
+            Return _colunique70
         End Get
         Set(ByVal value As String)
-            _col72 = value
+            _colunique70 = value
         End Set
     End Property
 
-    Public _col73 As String
+    Public _colunique71 As String
 
-    Public Property Col73() As String
+    Public Property ColUNIQUE71() As String
         Get
-            Return _col73
+            Return _colunique71
         End Get
         Set(ByVal value As String)
-            _col73 = value
+            _colunique71 = value
         End Set
     End Property
 
-    Public _col74 As String
+    Public _colunique72 As String
 
-    Public Property Col74() As String
+    Public Property ColUNIQUE72() As String
         Get
-            Return _col74
+            Return _colunique72
         End Get
         Set(ByVal value As String)
-            _col74 = value
+            _colunique72 = value
         End Set
     End Property
 
-    Public _col75 As String
+    Public _colunique73 As String
 
-    Public Property Col75() As String
+    Public Property ColUNIQUE73() As String
         Get
-            Return _col75
+            Return _colunique73
         End Get
         Set(ByVal value As String)
-            _col75 = value
+            _colunique73 = value
         End Set
     End Property
 
-    Public _col76 As String
+    Public _colunique74 As String
 
-    Public Property Col76() As String
+    Public Property ColUNIQUE74() As String
         Get
-            Return _col76
+            Return _colunique74
         End Get
         Set(ByVal value As String)
-            _col76 = value
+            _colunique74 = value
         End Set
     End Property
 
-    Public _col77 As String
+    Public _colunique75 As String
 
-    Public Property Col77() As String
+    Public Property ColUNIQUE75() As String
         Get
-            Return _col77
+            Return _colunique75
         End Get
         Set(ByVal value As String)
-            _col77 = value
+            _colunique75 = value
         End Set
     End Property
 
-    Public _col78 As String
+    Public _colunique76 As String
 
-    Public Property Col78() As String
+    Public Property ColUNIQUE76() As String
         Get
-            Return _col78
+            Return _colunique76
         End Get
         Set(ByVal value As String)
-            _col78 = value
+            _colunique76 = value
         End Set
     End Property
 
-    Public _col79 As String
+    Public _colunique77 As String
 
-    Public Property Col79() As String
+    Public Property ColUNIQUE77() As String
         Get
-            Return _col79
+            Return _colunique77
         End Get
         Set(ByVal value As String)
-            _col79 = value
+            _colunique77 = value
         End Set
     End Property
 
-    Public _col80 As String
+    Public _colunique78 As String
 
-    Public Property Col80() As String
+    Public Property ColUNIQUE78() As String
         Get
-            Return _col80
+            Return _colunique78
         End Get
         Set(ByVal value As String)
-            _col80 = value
+            _colunique78 = value
         End Set
     End Property
 
-    Public _col81 As String
+    Public _colunique79 As String
 
-    Public Property Col81() As String
+    Public Property ColUNIQUE79() As String
         Get
-            Return _col81
+            Return _colunique79
         End Get
         Set(ByVal value As String)
-            _col81 = value
+            _colunique79 = value
         End Set
     End Property
 
-    Public _col82 As String
+    Public _colunique80 As String
 
-    Public Property Col82() As String
+    Public Property ColUNIQUE80() As String
         Get
-            Return _col82
+            Return _colunique80
         End Get
         Set(ByVal value As String)
-            _col82 = value
+            _colunique80 = value
         End Set
     End Property
 
-    Public _col83 As String
+    Public _colunique81 As String
 
-    Public Property Col83() As String
+    Public Property ColUNIQUE81() As String
         Get
-            Return _col83
+            Return _colunique81
         End Get
         Set(ByVal value As String)
-            _col83 = value
+            _colunique81 = value
         End Set
     End Property
 
-    Public _col84 As String
+    Public _tcf_1 As String
 
-    Public Property Col84() As String
+    Public Property TCF_1() As String
         Get
-            Return _col84
+            Return _tcf_1
         End Get
         Set(ByVal value As String)
-            _col84 = value
+            _tcf_1 = value
         End Set
     End Property
 
-    Public _col85 As String
+    Public _tcp_1 As String
 
-    Public Property Col85() As String
+    Public Property TCP_1() As String
         Get
-            Return _col85
+            Return _tcp_1
         End Get
         Set(ByVal value As String)
-            _col85 = value
+            _tcp_1 = value
         End Set
     End Property
 
-    Public _col86 As String
+    Public _tcr_1 As String
 
-    Public Property Col86() As String
+    Public Property TCR_1() As String
         Get
-            Return _col86
+            Return _tcr_1
         End Get
         Set(ByVal value As String)
-            _col86 = value
+            _tcr_1 = value
         End Set
     End Property
 
-    Public _col87 As String
+    Public _repeatcourses_2 As String
 
-    Public Property Col87() As String
+    Public Property RepeatCourses_2() As String
         Get
-            Return _col87
+            Return _repeatcourses_2
         End Get
         Set(ByVal value As String)
-            _col87 = value
+            _repeatcourses_2 = value
         End Set
     End Property
 
-    Public _col88 As String
+    Public _colunique86 As String
 
-    Public Property Col88() As String
+    Public Property ColUNIQUE86() As String
         Get
-            Return _col88
+            Return _colunique86
         End Get
         Set(ByVal value As String)
-            _col88 = value
+            _colunique86 = value
         End Set
     End Property
 
-    Public _col89 As String
+    Public _colunique87 As String
 
-    Public Property Col89() As String
+    Public Property ColUNIQUE87() As String
         Get
-            Return _col89
+            Return _colunique87
         End Get
         Set(ByVal value As String)
-            _col89 = value
+            _colunique87 = value
         End Set
     End Property
 
-    Public _col90 As String
+    Public _colunique88 As String
 
-    Public Property Col90() As String
+    Public Property ColUNIQUE88() As String
         Get
-            Return _col90
+            Return _colunique88
         End Get
         Set(ByVal value As String)
-            _col90 = value
+            _colunique88 = value
         End Set
     End Property
 
-    Public _col91 As String
+    Public _colunique89 As String
 
-    Public Property Col91() As String
+    Public Property ColUNIQUE89() As String
         Get
-            Return _col91
+            Return _colunique89
         End Get
         Set(ByVal value As String)
-            _col91 = value
+            _colunique89 = value
         End Set
     End Property
 
-    Public _col92 As String
+    Public _colunique90 As String
 
-    Public Property Col92() As String
+    Public Property ColUNIQUE90() As String
         Get
-            Return _col92
+            Return _colunique90
         End Get
         Set(ByVal value As String)
-            _col92 = value
+            _colunique90 = value
         End Set
     End Property
 
-    Public _col93 As String
+    Public _colunique91 As String
 
-    Public Property Col93() As String
+    Public Property ColUNIQUE91() As String
         Get
-            Return _col93
+            Return _colunique91
         End Get
         Set(ByVal value As String)
-            _col93 = value
+            _colunique91 = value
         End Set
     End Property
 
-    Public _col94 As String
+    Public _colunique92 As String
 
-    Public Property Col94() As String
+    Public Property ColUNIQUE92() As String
         Get
-            Return _col94
+            Return _colunique92
         End Get
         Set(ByVal value As String)
-            _col94 = value
+            _colunique92 = value
         End Set
     End Property
 
-    Public _col95 As String
+    Public _colunique93 As String
 
-    Public Property Col95() As String
+    Public Property ColUNIQUE93() As String
         Get
-            Return _col95
+            Return _colunique93
         End Get
         Set(ByVal value As String)
-            _col95 = value
+            _colunique93 = value
         End Set
     End Property
 
-    Public _col96 As String
+    Public _colunique94 As String
 
-    Public Property Col96() As String
+    Public Property ColUNIQUE94() As String
         Get
-            Return _col96
+            Return _colunique94
         End Get
         Set(ByVal value As String)
-            _col96 = value
+            _colunique94 = value
         End Set
     End Property
 
-    Public _col97 As String
+    Public _colunique95 As String
 
-    Public Property Col97() As String
+    Public Property ColUNIQUE95() As String
         Get
-            Return _col97
+            Return _colunique95
         End Get
         Set(ByVal value As String)
-            _col97 = value
+            _colunique95 = value
         End Set
     End Property
 
-    Public _col98 As String
+    Public _colunique96 As String
 
-    Public Property Col98() As String
+    Public Property ColUNIQUE96() As String
         Get
-            Return _col98
+            Return _colunique96
         End Get
         Set(ByVal value As String)
-            _col98 = value
+            _colunique96 = value
         End Set
     End Property
 
-    Public _col99 As String
+    Public _colunique97 As String
 
-    Public Property Col99() As String
+    Public Property ColUNIQUE97() As String
         Get
-            Return _col99
+            Return _colunique97
         End Get
         Set(ByVal value As String)
-            _col99 = value
+            _colunique97 = value
         End Set
     End Property
 
-    Public _col100 As String
+    Public _colunique98 As String
 
-    Public Property Col100() As String
+    Public Property ColUNIQUE98() As String
         Get
-            Return _col100
+            Return _colunique98
         End Get
         Set(ByVal value As String)
-            _col100 = value
+            _colunique98 = value
         End Set
     End Property
 
-    Public _col101 As String
+    Public _colunique99 As String
 
-    Public Property Col101() As String
+    Public Property ColUNIQUE99() As String
         Get
-            Return _col101
+            Return _colunique99
         End Get
         Set(ByVal value As String)
-            _col101 = value
+            _colunique99 = value
         End Set
     End Property
 
-    Public _col102 As String
+    Public _colunique100 As String
 
-    Public Property Col102() As String
+    Public Property ColUNIQUE100() As String
         Get
-            Return _col102
+            Return _colunique100
         End Get
         Set(ByVal value As String)
-            _col102 = value
+            _colunique100 = value
         End Set
     End Property
 
-    Public _col103 As String
+    Public _colunique101 As String
 
-    Public Property Col103() As String
+    Public Property ColUNIQUE101() As String
         Get
-            Return _col103
+            Return _colunique101
         End Get
         Set(ByVal value As String)
-            _col103 = value
+            _colunique101 = value
         End Set
     End Property
 
-    Public _col104 As String
+    Public _colunique102 As String
 
-    Public Property Col104() As String
+    Public Property ColUNIQUE102() As String
         Get
-            Return _col104
+            Return _colunique102
         End Get
         Set(ByVal value As String)
-            _col104 = value
+            _colunique102 = value
         End Set
     End Property
 
-    Public _col105 As String
+    Public _colunique103 As String
 
-    Public Property Col105() As String
+    Public Property ColUNIQUE103() As String
         Get
-            Return _col105
+            Return _colunique103
         End Get
         Set(ByVal value As String)
-            _col105 = value
+            _colunique103 = value
         End Set
     End Property
 
-    Public _col106 As String
+    Public _colunique104 As String
 
-    Public Property Col106() As String
+    Public Property ColUNIQUE104() As String
         Get
-            Return _col106
+            Return _colunique104
         End Get
         Set(ByVal value As String)
-            _col106 = value
+            _colunique104 = value
         End Set
     End Property
 
-    Public _col107 As String
+    Public _colunique105 As String
 
-    Public Property Col107() As String
+    Public Property ColUNIQUE105() As String
         Get
-            Return _col107
+            Return _colunique105
         End Get
         Set(ByVal value As String)
-            _col107 = value
+            _colunique105 = value
         End Set
     End Property
 
-    Public _col108 As String
+    Public _colunique106 As String
 
-    Public Property Col108() As String
+    Public Property ColUNIQUE106() As String
         Get
-            Return _col108
+            Return _colunique106
         End Get
         Set(ByVal value As String)
-            _col108 = value
+            _colunique106 = value
         End Set
     End Property
 
-    Public _col109 As String
+    Public _colunique107 As String
 
-    Public Property Col109() As String
+    Public Property ColUNIQUE107() As String
         Get
-            Return _col109
+            Return _colunique107
         End Get
         Set(ByVal value As String)
-            _col109 = value
+            _colunique107 = value
         End Set
     End Property
 
-    Public _col110 As String
+    Public _colunique108 As String
 
-    Public Property Col110() As String
+    Public Property ColUNIQUE108() As String
         Get
-            Return _col110
+            Return _colunique108
         End Get
         Set(ByVal value As String)
-            _col110 = value
+            _colunique108 = value
         End Set
     End Property
 
-    Public _col111 As String
+    Public _colunique109 As String
 
-    Public Property Col111() As String
+    Public Property ColUNIQUE109() As String
         Get
-            Return _col111
+            Return _colunique109
         End Get
         Set(ByVal value As String)
-            _col111 = value
+            _colunique109 = value
         End Set
     End Property
 
-    Public _col112 As String
+    Public _colunique110 As String
 
-    Public Property Col112() As String
+    Public Property ColUNIQUE110() As String
         Get
-            Return _col112
+            Return _colunique110
         End Get
         Set(ByVal value As String)
-            _col112 = value
+            _colunique110 = value
         End Set
     End Property
 
-    Public _col113 As String
+    Public _colunique111 As String
 
-    Public Property Col113() As String
+    Public Property ColUNIQUE111() As String
         Get
-            Return _col113
+            Return _colunique111
         End Get
         Set(ByVal value As String)
-            _col113 = value
+            _colunique111 = value
         End Set
     End Property
 
-    Public _col114 As String
+    Public _colunique112 As String
 
-    Public Property Col114() As String
+    Public Property ColUNIQUE112() As String
         Get
-            Return _col114
+            Return _colunique112
         End Get
         Set(ByVal value As String)
-            _col114 = value
+            _colunique112 = value
         End Set
     End Property
 
-    Public _col115 As String
+    Public _colunique113 As String
 
-    Public Property Col115() As String
+    Public Property ColUNIQUE113() As String
         Get
-            Return _col115
+            Return _colunique113
         End Get
         Set(ByVal value As String)
-            _col115 = value
+            _colunique113 = value
         End Set
     End Property
 
-    Public _col116 As String
+    Public _colunique114 As String
 
-    Public Property Col116() As String
+    Public Property ColUNIQUE114() As String
         Get
-            Return _col116
+            Return _colunique114
         End Get
         Set(ByVal value As String)
-            _col116 = value
+            _colunique114 = value
         End Set
     End Property
 
-    Public _col117 As String
+    Public _colunique115 As String
 
-    Public Property Col117() As String
+    Public Property ColUNIQUE115() As String
         Get
-            Return _col117
+            Return _colunique115
         End Get
         Set(ByVal value As String)
-            _col117 = value
+            _colunique115 = value
         End Set
     End Property
 
-    Public _col118 As String
+    Public _colunique116 As String
 
-    Public Property Col118() As String
+    Public Property ColUNIQUE116() As String
         Get
-            Return _col118
+            Return _colunique116
         End Get
         Set(ByVal value As String)
-            _col118 = value
+            _colunique116 = value
         End Set
     End Property
 
-    Public _col119 As String
+    Public _colunique117 As String
 
-    Public Property Col119() As String
+    Public Property ColUNIQUE117() As String
         Get
-            Return _col119
+            Return _colunique117
         End Get
         Set(ByVal value As String)
-            _col119 = value
+            _colunique117 = value
         End Set
     End Property
 
-    Public _col120 As String
+    Public _colunique118 As String
 
-    Public Property Col120() As String
+    Public Property ColUNIQUE118() As String
         Get
-            Return _col120
+            Return _colunique118
         End Get
         Set(ByVal value As String)
-            _col120 = value
+            _colunique118 = value
         End Set
     End Property
 
-    Public _col121 As String
+    Public _colunique119 As String
 
-    Public Property Col121() As String
+    Public Property ColUNIQUE119() As String
         Get
-            Return _col121
+            Return _colunique119
         End Get
         Set(ByVal value As String)
-            _col121 = value
+            _colunique119 = value
         End Set
     End Property
 
-    Public _col122 As String
+    Public _colunique120 As String
 
-    Public Property Col122() As String
+    Public Property ColUNIQUE120() As String
         Get
-            Return _col122
+            Return _colunique120
         End Get
         Set(ByVal value As String)
-            _col122 = value
+            _colunique120 = value
         End Set
     End Property
 
-    Public _col123 As String
+    Public _colunique121 As String
 
-    Public Property Col123() As String
+    Public Property ColUNIQUE121() As String
         Get
-            Return _col123
+            Return _colunique121
         End Get
         Set(ByVal value As String)
-            _col123 = value
+            _colunique121 = value
         End Set
     End Property
 
-    Public _col124 As String
+    Public _colunique122 As String
 
-    Public Property Col124() As String
+    Public Property ColUNIQUE122() As String
         Get
-            Return _col124
+            Return _colunique122
         End Get
         Set(ByVal value As String)
-            _col124 = value
+            _colunique122 = value
         End Set
     End Property
 
-    Public _col125 As String
+    Public _colunique123 As String
 
-    Public Property Col125() As String
+    Public Property ColUNIQUE123() As String
         Get
-            Return _col125
+            Return _colunique123
         End Get
         Set(ByVal value As String)
-            _col125 = value
+            _colunique123 = value
         End Set
     End Property
 
-    Public _col126 As String
+    Public _colunique124 As String
 
-    Public Property Col126() As String
+    Public Property ColUNIQUE124() As String
         Get
-            Return _col126
+            Return _colunique124
         End Get
         Set(ByVal value As String)
-            _col126 = value
+            _colunique124 = value
         End Set
     End Property
 
-    Public _col127 As String
+    Public _colunique125 As String
 
-    Public Property Col127() As String
+    Public Property ColUNIQUE125() As String
         Get
-            Return _col127
+            Return _colunique125
         End Get
         Set(ByVal value As String)
-            _col127 = value
+            _colunique125 = value
         End Set
     End Property
 
-    Public _col128 As String
+    Public _colunique126 As String
 
-    Public Property Col128() As String
+    Public Property ColUNIQUE126() As String
         Get
-            Return _col128
+            Return _colunique126
         End Get
         Set(ByVal value As String)
-            _col128 = value
+            _colunique126 = value
         End Set
     End Property
 
-    Public _col129 As String
+    Public _colunique127 As String
 
-    Public Property Col129() As String
+    Public Property ColUNIQUE127() As String
         Get
-            Return _col129
+            Return _colunique127
         End Get
         Set(ByVal value As String)
-            _col129 = value
+            _colunique127 = value
         End Set
     End Property
 
-    Public _col130 As String
+    Public _colunique128 As String
 
-    Public Property Col130() As String
+    Public Property ColUNIQUE128() As String
         Get
-            Return _col130
+            Return _colunique128
         End Get
         Set(ByVal value As String)
-            _col130 = value
+            _colunique128 = value
         End Set
     End Property
 
-    Public _col131 As String
+    Public _colunique129 As String
 
-    Public Property Col131() As String
+    Public Property ColUNIQUE129() As String
         Get
-            Return _col131
+            Return _colunique129
         End Get
         Set(ByVal value As String)
-            _col131 = value
+            _colunique129 = value
         End Set
     End Property
 
-    Public _col132 As String
+    Public _colunique130 As String
 
-    Public Property Col132() As String
+    Public Property ColUNIQUE130() As String
         Get
-            Return _col132
+            Return _colunique130
         End Get
         Set(ByVal value As String)
-            _col132 = value
+            _colunique130 = value
         End Set
     End Property
 
-    Public _col133 As String
+    Public _colunique131 As String
 
-    Public Property Col133() As String
+    Public Property ColUNIQUE131() As String
         Get
-            Return _col133
+            Return _colunique131
         End Get
         Set(ByVal value As String)
-            _col133 = value
+            _colunique131 = value
         End Set
     End Property
 
-    Public _col134 As String
+    Public _colunique132 As String
 
-    Public Property Col134() As String
+    Public Property ColUNIQUE132() As String
         Get
-            Return _col134
+            Return _colunique132
         End Get
         Set(ByVal value As String)
-            _col134 = value
+            _colunique132 = value
         End Set
     End Property
 
-    Public _col135 As String
+    Public _colunique133 As String
 
-    Public Property Col135() As String
+    Public Property ColUNIQUE133() As String
         Get
-            Return _col135
+            Return _colunique133
         End Get
         Set(ByVal value As String)
-            _col135 = value
+            _colunique133 = value
         End Set
     End Property
 
-    Public _col136 As String
+    Public _colunique134 As String
 
-    Public Property Col136() As String
+    Public Property ColUNIQUE134() As String
         Get
-            Return _col136
+            Return _colunique134
         End Get
         Set(ByVal value As String)
-            _col136 = value
+            _colunique134 = value
         End Set
     End Property
 
-    Public _col137 As String
+    Public _colunique135 As String
 
-    Public Property Col137() As String
+    Public Property ColUNIQUE135() As String
         Get
-            Return _col137
+            Return _colunique135
         End Get
         Set(ByVal value As String)
-            _col137 = value
+            _colunique135 = value
         End Set
     End Property
 
-    Public _col138 As String
+    Public _colunique136 As String
 
-    Public Property Col138() As String
+    Public Property ColUNIQUE136() As String
         Get
-            Return _col138
+            Return _colunique136
         End Get
         Set(ByVal value As String)
-            _col138 = value
+            _colunique136 = value
         End Set
     End Property
 
-    Public _col139 As String
+    Public _colunique137 As String
 
-    Public Property Col139() As String
+    Public Property ColUNIQUE137() As String
         Get
-            Return _col139
+            Return _colunique137
         End Get
         Set(ByVal value As String)
-            _col139 = value
+            _colunique137 = value
         End Set
     End Property
 
-    Public _col140 As String
+    Public _colunique138 As String
 
-    Public Property Col140() As String
+    Public Property ColUNIQUE138() As String
         Get
-            Return _col140
+            Return _colunique138
         End Get
         Set(ByVal value As String)
-            _col140 = value
+            _colunique138 = value
         End Set
     End Property
 
-    Public _col141 As String
+    Public _colunique139 As String
 
-    Public Property Col141() As String
+    Public Property ColUNIQUE139() As String
         Get
-            Return _col141
+            Return _colunique139
         End Get
         Set(ByVal value As String)
-            _col141 = value
+            _colunique139 = value
         End Set
     End Property
 
-    Public _col142 As String
+    Public _colunique140 As String
 
-    Public Property Col142() As String
+    Public Property ColUNIQUE140() As String
         Get
-            Return _col142
+            Return _colunique140
         End Get
         Set(ByVal value As String)
-            _col142 = value
+            _colunique140 = value
         End Set
     End Property
 
-    Public _col143 As String
+    Public _colunique141 As String
 
-    Public Property Col143() As String
+    Public Property ColUNIQUE141() As String
         Get
-            Return _col143
+            Return _colunique141
         End Get
         Set(ByVal value As String)
-            _col143 = value
+            _colunique141 = value
         End Set
     End Property
 
-    Public _col144 As String
+    Public _colunique142 As String
 
-    Public Property Col144() As String
+    Public Property ColUNIQUE142() As String
         Get
-            Return _col144
+            Return _colunique142
         End Get
         Set(ByVal value As String)
-            _col144 = value
+            _colunique142 = value
         End Set
     End Property
 
-    Public _col145 As String
+    Public _colunique143 As String
 
-    Public Property Col145() As String
+    Public Property ColUNIQUE143() As String
         Get
-            Return _col145
+            Return _colunique143
         End Get
         Set(ByVal value As String)
-            _col145 = value
+            _colunique143 = value
         End Set
     End Property
 
-    Public _col146 As String
+    Public _colunique144 As String
 
-    Public Property Col146() As String
+    Public Property ColUNIQUE144() As String
         Get
-            Return _col146
+            Return _colunique144
         End Get
         Set(ByVal value As String)
-            _col146 = value
+            _colunique144 = value
         End Set
     End Property
 
-    Public _col147 As String
+    Public _colunique145 As String
 
-    Public Property Col147() As String
+    Public Property ColUNIQUE145() As String
         Get
-            Return _col147
+            Return _colunique145
         End Get
         Set(ByVal value As String)
-            _col147 = value
+            _colunique145 = value
         End Set
     End Property
 
-    Public _col148 As String
+    Public _colunique146 As String
 
-    Public Property Col148() As String
+    Public Property ColUNIQUE146() As String
         Get
-            Return _col148
+            Return _colunique146
         End Get
         Set(ByVal value As String)
-            _col148 = value
+            _colunique146 = value
         End Set
     End Property
 
-    Public _col149 As String
+    Public _colunique147 As String
 
-    Public Property Col149() As String
+    Public Property ColUNIQUE147() As String
         Get
-            Return _col149
+            Return _colunique147
         End Get
         Set(ByVal value As String)
-            _col149 = value
+            _colunique147 = value
         End Set
     End Property
 
-    Public _col150 As String
+    Public _colunique148 As String
 
-    Public Property Col150() As String
+    Public Property ColUNIQUE148() As String
         Get
-            Return _col150
+            Return _colunique148
         End Get
         Set(ByVal value As String)
-            _col150 = value
+            _colunique148 = value
         End Set
     End Property
 
-    Public _col151 As String
+    Public _colunique149 As String
 
-    Public Property Col151() As String
+    Public Property ColUNIQUE149() As String
         Get
-            Return _col151
+            Return _colunique149
         End Get
         Set(ByVal value As String)
-            _col151 = value
+            _colunique149 = value
         End Set
     End Property
 
-    Public _col152 As String
+    Public _colunique150 As String
 
-    Public Property Col152() As String
+    Public Property ColUNIQUE150() As String
         Get
-            Return _col152
+            Return _colunique150
         End Get
         Set(ByVal value As String)
-            _col152 = value
+            _colunique150 = value
         End Set
     End Property
 
-    Public _col153 As String
+    Public _colunique151 As String
 
-    Public Property Col153() As String
+    Public Property ColUNIQUE151() As String
         Get
-            Return _col153
+            Return _colunique151
         End Get
         Set(ByVal value As String)
-            _col153 = value
+            _colunique151 = value
         End Set
     End Property
 
-    Public _col154 As String
+    Public _colunique152 As String
 
-    Public Property Col154() As String
+    Public Property ColUNIQUE152() As String
         Get
-            Return _col154
+            Return _colunique152
         End Get
         Set(ByVal value As String)
-            _col154 = value
+            _colunique152 = value
         End Set
     End Property
 
-    Public _col155 As String
+    Public _colunique153 As String
 
-    Public Property Col155() As String
+    Public Property ColUNIQUE153() As String
         Get
-            Return _col155
+            Return _colunique153
         End Get
         Set(ByVal value As String)
-            _col155 = value
+            _colunique153 = value
         End Set
     End Property
 
-    Public _col156 As String
+    Public _colunique154 As String
 
-    Public Property Col156() As String
+    Public Property ColUNIQUE154() As String
         Get
-            Return _col156
+            Return _colunique154
         End Get
         Set(ByVal value As String)
-            _col156 = value
+            _colunique154 = value
         End Set
     End Property
 
-    Public _col157 As String
+    Public _colunique155 As String
 
-    Public Property Col157() As String
+    Public Property ColUNIQUE155() As String
         Get
-            Return _col157
+            Return _colunique155
         End Get
         Set(ByVal value As String)
-            _col157 = value
+            _colunique155 = value
         End Set
     End Property
 
-    Public _col158 As String
+    Public _colunique156 As String
 
-    Public Property Col158() As String
+    Public Property ColUNIQUE156() As String
         Get
-            Return _col158
+            Return _colunique156
         End Get
         Set(ByVal value As String)
-            _col158 = value
+            _colunique156 = value
         End Set
     End Property
 
-    Public _col159 As String
+    Public _colunique157 As String
 
-    Public Property Col159() As String
+    Public Property ColUNIQUE157() As String
         Get
-            Return _col159
+            Return _colunique157
         End Get
         Set(ByVal value As String)
-            _col159 = value
+            _colunique157 = value
         End Set
     End Property
 
-    Public _col160 As String
+    Public _colunique158 As String
 
-    Public Property Col160() As String
+    Public Property ColUNIQUE158() As String
         Get
-            Return _col160
+            Return _colunique158
         End Get
         Set(ByVal value As String)
-            _col160 = value
+            _colunique158 = value
         End Set
     End Property
 
-    Public _col161 As String
+    Public _colunique159 As String
 
-    Public Property Col161() As String
+    Public Property ColUNIQUE159() As String
         Get
-            Return _col161
+            Return _colunique159
         End Get
         Set(ByVal value As String)
-            _col161 = value
+            _colunique159 = value
         End Set
     End Property
 
-    Public _col162 As String
+    Public _colunique160 As String
 
-    Public Property Col162() As String
+    Public Property ColUNIQUE160() As String
         Get
-            Return _col162
+            Return _colunique160
         End Get
         Set(ByVal value As String)
-            _col162 = value
+            _colunique160 = value
         End Set
     End Property
 
-    Public _col163 As String
+    Public _tcf_2 As String
 
-    Public Property Col163() As String
+    Public Property TCF_2() As String
         Get
-            Return _col163
+            Return _tcf_2
         End Get
         Set(ByVal value As String)
-            _col163 = value
+            _tcf_2 = value
         End Set
     End Property
 
-    Public _col164 As String
+    Public _tcp_2 As String
 
-    Public Property Col164() As String
+    Public Property TCP_2() As String
         Get
-            Return _col164
+            Return _tcp_2
         End Get
         Set(ByVal value As String)
-            _col164 = value
+            _tcp_2 = value
         End Set
     End Property
 
-    Public _col165 As String
+    Public _tcr_2 As String
 
-    Public Property Col165() As String
+    Public Property TCR_2() As String
         Get
-            Return _col165
+            Return _tcr_2
         End Get
         Set(ByVal value As String)
-            _col165 = value
+            _tcr_2 = value
         End Set
     End Property
 
-    Public _col166 As String
+    Public _tcf As String
 
-    Public Property Col166() As String
+    Public Property TCF() As String
         Get
-            Return _col166
+            Return _tcf
         End Get
         Set(ByVal value As String)
-            _col166 = value
+            _tcf = value
         End Set
     End Property
 
-    Public _col167 As String
+    Public _tcp As String
 
-    Public Property Col167() As String
+    Public Property TCP() As String
         Get
-            Return _col167
+            Return _tcp
         End Get
         Set(ByVal value As String)
-            _col167 = value
+            _tcp = value
         End Set
     End Property
 
-    Public _col168 As String
+    Public _tcr As String
 
-    Public Property Col168() As String
+    Public Property TCR() As String
         Get
-            Return _col168
+            Return _tcr
         End Get
         Set(ByVal value As String)
-            _col168 = value
+            _tcr = value
         End Set
     End Property
 
-    Public _col169 As String
+    Public _gpa As String
 
-    Public Property Col169() As String
+    Public Property GPA() As String
         Get
-            Return _col169
+            Return _gpa
         End Get
         Set(ByVal value As String)
-            _col169 = value
+            _gpa = value
         End Set
     End Property
 
-    Public _col170 As String
+    Public _class As String
 
-    Public Property Col170() As String
+    Public Property ClassOfDegree() As String
         Get
-            Return _col170
+            Return _class
         End Get
         Set(ByVal value As String)
-            _col170 = value
+            _class = value
         End Set
     End Property
 
-    Public _col171 As String
+    Public _category As String
 
-    Public Property Col171() As String
+    Public Property Category() As String
         Get
-            Return _col171
+            Return _category
         End Get
         Set(ByVal value As String)
-            _col171 = value
+            _category = value
         End Set
     End Property
 
-    Public _col172 As String
+    Public _failed As String
 
-    Public Property Col172() As String
+    Public Property Failed() As String
         Get
-            Return _col172
+            Return _failed
         End Get
         Set(ByVal value As String)
-            _col172 = value
+            _failed = value
         End Set
     End Property
 
-    Public _col173 As String
+    Public _bs_session As String
 
-    Public Property Col173() As String
+    Public Property bs_session() As String
         Get
-            Return _col173
+            Return _bs_session
         End Get
         Set(ByVal value As String)
-            _col173 = value
+            _bs_session = value
         End Set
     End Property
 
-    Public _col174 As String
+    Public _bs_department_name As String
 
-    Public Property Col174() As String
+    Public Property bs_department_name() As String
         Get
-            Return _col174
+            Return _bs_department_name
         End Get
         Set(ByVal value As String)
-            _col174 = value
+            _bs_department_name = value
         End Set
     End Property
 
-    Public _col175 As String
+    Public _bs_faculty_name As String
 
-    Public Property Col175() As String
+    Public Property bs_faculty_name() As String
         Get
-            Return _col175
+            Return _bs_faculty_name
         End Get
         Set(ByVal value As String)
-            _col175 = value
+            _bs_faculty_name = value
         End Set
     End Property
 
-    Public _colnames As String
+    Public _bs_level As String
 
-    Public Property ColNames() As String
+    Public Property bs_level() As String
         Get
-            Return _colnames
+            Return _bs_level
         End Get
         Set(ByVal value As String)
-            _colnames = value
+            _bs_level = value
         End Set
     End Property
 
-    Public _credits As String
+    Public _bs_footers As String
 
-    Public Property credits() As String
+    Public Property bs_footers() As String
         Get
-            Return _credits
+            Return _bs_footers
         End Get
         Set(ByVal value As String)
-            _credits = value
+            _bs_footers = value
         End Set
     End Property
 
-    Public _course_titles As String
+    Public _bs_timestamp As String
 
-    Public Property course_titles() As String
+    Public Property bs_timestamp() As String
         Get
-            Return _course_titles
+            Return _bs_timestamp
         End Get
         Set(ByVal value As String)
-            _course_titles = value
+            _bs_timestamp = value
         End Set
     End Property
 
@@ -2168,14 +2144,102 @@ Partial Class ClassBroadsheets
         End Set
     End Property
 
-    Public _fgpa As String
+    Public _fpga As String
 
-    Public Property fgpa() As String
+    Public Property fpga() As String
         Get
-            Return _fgpa
+            Return _fpga
         End Get
         Set(ByVal value As String)
-            _fgpa = value
+            _fpga = value
+        End Set
+    End Property
+
+    Public _student_firstname As String
+
+    Public Property student_firstname() As String
+        Get
+            Return _student_firstname
+        End Get
+        Set(ByVal value As String)
+            _student_firstname = value
+        End Set
+    End Property
+
+    Public _student_surname As String
+
+    Public Property student_surname() As String
+        Get
+            Return _student_surname
+        End Get
+        Set(ByVal value As String)
+            _student_surname = value
+        End Set
+    End Property
+
+    Public _student_othernames As String
+
+    Public Property student_othernames() As String
+        Get
+            Return _student_othernames
+        End Get
+        Set(ByVal value As String)
+            _student_othernames = value
+        End Set
+    End Property
+
+    Public _student_dept_idr As String
+
+    Public Property student_dept_idr() As String
+        Get
+            Return _student_dept_idr
+        End Get
+        Set(ByVal value As String)
+            _student_dept_idr = value
+        End Set
+    End Property
+
+    Public _status As String
+
+    Public Property status() As String
+        Get
+            Return _status
+        End Get
+        Set(ByVal value As String)
+            _status = value
+        End Set
+    End Property
+
+    Public _year_of_entry As String
+
+    Public Property year_of_entry() As String
+        Get
+            Return _year_of_entry
+        End Get
+        Set(ByVal value As String)
+            _year_of_entry = value
+        End Set
+    End Property
+
+    Public _session_idr_of_entry As String
+
+    Public Property session_idr_of_entry() As String
+        Get
+            Return _session_idr_of_entry
+        End Get
+        Set(ByVal value As String)
+            _session_idr_of_entry = value
+        End Set
+    End Property
+
+    Public _mode_of_entry As String
+
+    Public Property mode_of_entry() As String
+        Get
+            Return _mode_of_entry
+        End Get
+        Set(ByVal value As String)
+            _mode_of_entry = value
         End Set
     End Property
 
@@ -2190,25 +2254,47 @@ Partial Class ClassBroadsheets
         End Set
     End Property
 
-    Public _session_of_entry As String
+    Public _phone As String
 
-    Public Property session_of_entry() As String
+    Public Property phone() As String
         Get
-            Return _session_of_entry
+            Return _phone
         End Get
         Set(ByVal value As String)
-            _session_of_entry = value
+            _phone = value
         End Set
     End Property
 
-    Public _mode_of_entry As String
+    Public _email As String
 
-    Public Property mode_of_entry() As String
+    Public Property email() As String
         Get
-            Return _mode_of_entry
+            Return _email
         End Get
         Set(ByVal value As String)
-            _mode_of_entry = value
+            _email = value
+        End Set
+    End Property
+
+    Public _gender As String
+
+    Public Property gender() As String
+        Get
+            Return _gender
+        End Get
+        Set(ByVal value As String)
+            _gender = value
+        End Set
+    End Property
+
+    Public _session_idr As String
+
+    Public Property session_idr() As String
+        Get
+            Return _session_idr
+        End Get
+        Set(ByVal value As String)
+            _session_idr = value
         End Set
     End Property
 
@@ -2231,6 +2317,41 @@ Partial Class ClassBroadsheets
         End Get
         Set(ByVal value As String)
             _coursecode_2 = value
+        End Set
+    End Property
+
+    Public _fees_status As String
+
+    Public Property Fees_Status() As String
+        Get
+            Return _fees_status
+        End Get
+        Set(ByVal value As String)
+            _fees_status = value
+        End Set
+    End Property
+
+
+
+    Public _dept_idr As String
+
+    Public Property dept_idr() As String
+        Get
+            Return _dept_idr
+        End Get
+        Set(ByVal value As String)
+            _dept_idr = value
+        End Set
+    End Property
+
+    Public _course_titles As String
+
+    Public Property course_titles() As String
+        Get
+            Return _course_titles
+        End Get
+        Set(ByVal value As String)
+            _course_titles = value
         End Set
     End Property
 
@@ -2277,17 +2398,5 @@ Partial Class ClassBroadsheets
             _failed_screening = value
         End Set
     End Property
-
-    Public _school_fees As String
-
-    Public Property school_fees() As String
-        Get
-            Return _school_fees
-        End Get
-        Set(ByVal value As String)
-            _school_fees = value
-        End Set
-    End Property
-
 
 End Class

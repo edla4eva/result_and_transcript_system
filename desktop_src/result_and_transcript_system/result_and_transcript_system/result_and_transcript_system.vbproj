@@ -154,6 +154,7 @@
     <Compile Include="ClassPDF.vb" />
     <Compile Include="ClassReports.vb" />
     <Compile Include="ClassResultReport.vb" />
+    <Compile Include="ClassTranscripts.vb" />
     <Compile Include="FormAbout.Designer.vb">
       <DependentUpon>FormAbout.vb</DependentUpon>
     </Compile>
@@ -380,6 +381,8 @@
     </None>
     <None Include="My Project\DataSources\ClassBroadsheets.datasource" />
     <None Include="My Project\DataSources\ClassReports.datasource" />
+    <None Include="My Project\DataSources\result_and_transcript_system.My.MyApplication.datasource" />
+    <None Include="My Project\DataSources\result_and_transcript_system.My.MySettings.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
