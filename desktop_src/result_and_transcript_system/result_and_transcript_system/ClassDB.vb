@@ -715,6 +715,7 @@ Public Class ClassDB
                 retmatno = mappDB.GetRecordWhere(String.Format("select matno from Reg WHERE matno='{0}'", matno))
                 If retmatno = matno Then
                     ' record already exits
+                    retFailed = retFailed & vbCrLf & matno & " alredy exists, "
                     'option 1. update (ovewrite)
                     'option 2 donothing and add it to a datatable to tell the user
                 Else
@@ -807,8 +808,8 @@ Public Class ClassDB
     Function getDeptName(strDept As String, Optional forceStrict As Boolean = False) As String
         Dim retVal As String = "COMPUTER ENGINEERING"
         Try
-            If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
-                retVal = dictDepts(strDept)
+            If dictDepts.Count > 0 Then
+                If dictDepts.ContainsKey(strDept) Then retVal = dictDepts(strDept)
             Else
                 getDeptSessionsIntoDictionaries()
                 retVal = dictDepts(strDept)
@@ -821,8 +822,8 @@ Public Class ClassDB
     'TODO:: use dictonaries
     Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
         Dim retVal As Integer = 1
-        If dictDepts.Count > 0 And dictDepts.ContainsKey(strDept) Then
-            retVal = CInt(dictDepts.Keys(strDept))
+        If dictDepts.Count > 0 Then
+            If dictDepts.ContainsKey(strDept) Then retVal = CInt(dictDepts.Keys(strDept))
         Else
             getDeptSessionsIntoDictionaries()  'so we dont have to do db call again
             If forceStrict = True Then
@@ -870,6 +871,22 @@ Public Class ClassDB
         Return Strings.FormatNumber(returnVal, 0, TriState.True, TriState.False, TriState.False)
 
     End Function
+    Function getDeptSessionsIntoDictionaries() As Boolean
+        'Todo create an event to auto refresh these when data is added or deleted
+        'if recorsHaveChanged
+        Try
+            dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
+            dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
+            dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
+            dictCourses = dictAllCourses
+            'dictDeptsID = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_name", "dept_ID")
+            Return True
+        Catch ex As Exception
+            logError(ex.ToString)
+            Return False
+        End Try
+
+    End Function
     Public Function getAllCourses() As DataSet
         Dim AllCoursesDS As New DataSet
         Dim countC As Integer
@@ -888,6 +905,49 @@ Public Class ClassDB
         Next
 
         Return AllCoursesDS
+    End Function
+    Public Function getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) As Boolean
+        Try
+            'old
+            'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
+            'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
+            'new (traspose of old)
+            Dim ds As New DataSet
+            Dim strColNameFS As String = ""
+            Dim strColNameSS As String = ""
+            ds = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr, dLevel))
+
+            dictCoursesOrderFS.Clear()
+            dictCoursesOrderSS.Clear()
+
+            dictcourseTitesFS.Clear()
+            dictcourseTitesSS.Clear()
+
+            dictLevelGPAPercentages.Clear()
+
+            If ds.Tables(0).Rows.Count = 0 Then Return False
+
+            For i = 0 To 0  'ds.Tables(0).Rows.Count - 1
+                For j = 0 To 14
+                    strColNameFS = "FS" & (j + 1).ToString("D3")    'FS001, FS002 ... are cols in course_order_new tbl
+                    strColNameSS = "SS" & (j + 1).ToString("D3")
+                    If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameFS)) Then
+                        ds.Tables(0).Rows(i).Item(strColNameFS) = ""
+                    Else
+                        dictCoursesOrderFS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameFS))
+                    End If
+                    If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameSS)) Then
+                        ds.Tables(0).Rows(i).Item(strColNameSS) = ""    'dnt add em
+                    Else
+                        dictCoursesOrderSS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameSS))
+                    End If
+
+                Next
+            Next
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
     End Function
     Function showBroadsheet(txtSession As String, txtDept As String, txtlevel As String, Optional strTimestamp As String = Nothing, Optional silent As Boolean = True) As DataTable
         Dim dictColHeaders As New Dictionary(Of String, String)

@@ -265,8 +265,6 @@ Public Class ClassBroadsheets
     Function reprocessBroadsheetData() As DataSet
         Dim countC, countReg, countResultsBS As Integer
         Dim AllCoursesDS, coursesOrderDS, RegStudentsDS, FSBroadsheetDS As DataSet
-        Dim dictCourseCodeKeyCourseOrderSNVal_1 As New Dictionary(Of Integer, String)
-        Dim dictCourseCodeKeyCourseOrderSNVal_2 As New Dictionary(Of Integer, String)
         Dim dictCoursesOrder As New Dictionary(Of Integer, String)
 
         Dim dictRegistered_1 As New Dictionary(Of String, String)
@@ -353,9 +351,6 @@ Public Class ClassBroadsheets
         Dim countC, countReg, countResultsBS As Integer
         Dim AllCoursesDS, coursesOrderDS, RegStudentsDS, FSBroadsheetDS As DataSet
         Dim PrevBroasheetDT As DataTable
-        Dim dictCourseCodeKeyCourseOrderSNVal_1 As New Dictionary(Of Integer, String)
-        Dim dictCourseCodeKeyCourseOrderSNVal_2 As New Dictionary(Of Integer, String)
-        Dim dictCoursesOrder As New Dictionary(Of Integer, String)
 
         Dim dictRegistered_1 As New Dictionary(Of String, String)
         Dim dictRegistered_2 As New Dictionary(Of String, String)
@@ -503,15 +498,15 @@ Public Class ClassBroadsheets
         Next
 
 
-        dictCourseCodeKeyCourseOrderSNVal_1.Clear()
-        dictCourseCodeKeyCourseOrderSNVal_2.Clear()
+        'dictCourseCodeKeyCourseOrderSNVal_1.Clear()
+        'dictCourseCodeKeyCourseOrderSNVal_2.Clear()
 
         objBroadsheet.progressStr = "Creating DataSets " & " ..."
         '# Rename Cols with Course Code 'Use the Courses_order take one by one and check if it exists.  'If it exists in coursesAllList, add it to courses for each level
         Dim colStartPos As Integer = 0
         For i = 0 To NUM_LEVELS - 1
             colStartPos = COURSE_START_COL + (i * NUM_COURSES_PER_LEVEL_1)
-            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, (i + 1).ToString & "00")  'get course order for 100, 200...levels
+            mappDB.getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, (i + 1).ToString & "00")  'get course order for 100, 200...levels
             approvedCredits = approvedCredits + getApprovedCredits()
             For j = 0 To 15 - 1 'create columns for courses 'TODO: 1st and second
                 tmpStr = ""
@@ -531,7 +526,7 @@ Public Class ClassBroadsheets
         Next
 
 
-        getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)     'get order for the curren level
+        mappDB.getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)     'get order for the curren level
 
         '##For each ColName(CourseCode), query database to get result scores for that course
         'NB: in broadsheet template scores starts From col H (i.e 7 counting From 0)
@@ -966,6 +961,7 @@ Public Class ClassBroadsheets
 
         Dim approvedCourses(160) As Boolean
         Dim gradePoints(160) As Integer
+        Dim weightedGradePoints(160) As Integer
         Dim passedCourses(160) As Boolean
         Dim gpa As Double
         Dim TCRs(3) As Integer
@@ -1085,6 +1081,7 @@ Public Class ClassBroadsheets
             grades = getGRADES(scores, Nothing, Nothing)
             objBroadsheet.progressStr = "Computing grade points " & " ..."
             gradePoints = getGRADESPoints(grades)
+            weightedGradePoints = getWeightedGRADESPoints(gradePoints, credits)
             objBroadsheet.progressStr = "Computing grade GPA " & " ..."
 
             'Dim levelPercentages(9) As Double ' todo
@@ -1113,7 +1110,7 @@ Public Class ClassBroadsheets
             dt.Rows(i).Item("gpa800") = "0.000"
             dt.Rows(i).Item("gpa900") = "0.000"
             dt.Rows(i).Item("wgpa100") = "0.000"
-            gpa = CalcGPA(gradePoints, approvedCourses, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
+            gpa = CalcGPA(weightedGradePoints, approvedCourses, credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             'MsgBox("Original" & gpa.ToString)
             'MsgBox("To zero " & Math.Round(gpa, 3, MidpointRounding.AwayFromZero).ToString) 3Dp roundng up
             'MsgBox("floor " & (Math.Floor(gpa * 1000) / 1000).ToString) '3dp chopping
@@ -2082,6 +2079,18 @@ Public Class ClassBroadsheets
         Return tmpGradePoints
 
     End Function
+
+    Function getWeightedGRADESPoints(strGradePoints As Integer(), credits As Integer()) As Integer()
+        Dim tmpWGradePoints As Integer()
+        ReDim tmpWGradePoints(strGradePoints.Count - 1)
+        For i = 0 To strGradePoints.Count - 1
+
+            tmpWGradePoints(i) = strGradePoints(i) * credits(i)
+
+
+        Next
+        Return tmpWGradePoints
+    End Function
     Function getGradePointFromGrade(strGrade As String) As Integer
 
         Dim dPoint As String
@@ -2328,8 +2337,9 @@ Public Class ClassBroadsheets
 
         Dim lstColLvl As Integer = LastColInSem_1_ForLevel(dlevel)
 
-        For j = lstColLvl - MAX_COURSES_1 To lstColLvl
+        For j = lstColLvl - NUM_COURSES_PER_LEVEL_1 To lstColLvl
             'only registered courses
+            If j > approvedCourses.Length - 1 Then Exit For
             If approvedCourses(j) Then
                 tmpGP = tmpGP + gradePoints(j)
                 tmpCr = tmpCr + credits(j)
@@ -2338,7 +2348,8 @@ Public Class ClassBroadsheets
         Next
         lstColLvl = LastColInSem_2_ForLevel(dlevel)
 
-        For j = lstColLvl - MAX_COURSES_2 To lstColLvl
+        For j = lstColLvl - NUM_COURSES_PER_LEVEL_1 To lstColLvl
+            If j > approvedCourses.Length - 1 Then Exit For
             If approvedCourses(j) Then
                 tmpGP = tmpGP + gradePoints(j)
                 tmpCr = tmpCr + credits(j)

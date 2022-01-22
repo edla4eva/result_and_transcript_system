@@ -9,7 +9,7 @@ Public Class FormResultsTranscripts
     Dim strConnectionString As String
 
     Dim retFileName As String
-    Dim DVTranscripts As DataView
+    Dim DTTranscripts As DataTable
     Dim tmpDSStudentName As DataSet
 
     Private Sub FormResultsTranscript_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -164,9 +164,14 @@ Public Class FormResultsTranscripts
         Dim dScore As String = ""
         Dim dGPA As Double
         Dim strGPA As String
-        Dim GradePoints As Integer()
-        Dim Credits As Integer()
-        Dim approvedCourses As Boolean()
+        Dim lstCredits As New List(Of Integer)
+        Dim lstGradePoints As New List(Of Integer)
+        Dim Credits(0 To COURSE_END_COL_2) As Integer
+        Dim GradePoints(0 To COURSE_END_COL_2) As Integer
+        Dim approvedCourses(0 To COURSE_END_COL_2) As Boolean
+        Dim dWeightedGradePoints As Integer()
+
+
         tmpDTTranscript.Columns.Add("Session", GetType(System.String))
         tmpDTTranscript.Columns.Add("matno", GetType(System.String))
         tmpDTTranscript.Columns.Add("fullname", GetType(System.String))
@@ -181,43 +186,95 @@ Public Class FormResultsTranscripts
         tmpDTTranscript.Columns.Add("OtherNames", GetType(System.String))
         tmpDTTranscript.Columns.Add("department", GetType(System.String))
 
+        tmpDTTranscript.Columns.Add("bs_level", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa100", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa200", GetType(System.String))
+
+        tmpDTTranscript.Columns.Add("GPA", Type.GetType("System.String"))
+        tmpDTTranscript.Columns.Add("Class", Type.GetType("System.String"))
+        tmpDTTranscript.Columns.Add("Category", Type.GetType("System.String"))
+        tmpDTTranscript.Columns.Add("Failed", Type.GetType("System.String"))
+
+
+        'getDeptSessionsIntoDictionaries()
+        mappDB.getAllCourses()
+        'getCoursesOrderIntoDictionaries()
+        'dictCoursesOrderFS
+        'dictCoursesOrderSS
         Try
             mappDB.MATNO = dMATNO
             'tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
             tmpDTResults = mappDB.getBroadsheetForTranscript(dMATNO, "100", False)
+            Dim j As Integer = COURSE_START_COL
             For i = 0 To tmpDTResults.Rows.Count - 1
-
-                For j = COURSE_START_COL To COURSE_END_COL
+                For jIter = 0 To COURSE_START_COL       'initialize
+                    approvedCourses(jIter) = False
+                    Credits(jIter) = 0
+                Next
+                For jIter = COURSE_START_COL To COURSE_END_COL_2
+                    If jIter = COURSE_END_COL + 1 Then
+                        j = COURSE_START_COL_2
+                    Else
+                        j = jIter
+                    End If
                     tmpCourseCode = tmpDTResults.Columns(j).ColumnName
-                    If tmpCourseCode.Contains("ColUNIQUE") Then Continue For
+                    dScore = tmpDTResults.Rows(i).Item(tmpCourseCode).ToString
+                    'check for cousees and scores to be skipped
+                    If tmpCourseCode.Contains("ColUNIQUE") Then
+                        Continue For
+                        approvedCourses(j) = False
+                        Credits(j) = 0
+                    Else
+                        approvedCourses(j) = True
+                    End If
+
+                    'If objBroadsheet.IsRegisteredScore(dScore) = False Then Continue For 'use ths or transcript only
+
+                    'its okay to add the scores
                     tmpRow = tmpDTTranscript.Rows.Add
                     tmpRow("Session") = tmpDTResults.Rows(i).Item("bs_session")
+                    'tmpRow("bs_level") = tmpDTResults.Rows(i).Item("bs_level")
+                    tmpRow("bs_level") = ((((j - COURSE_START_COL) \ NUM_COURSES_PER_LEVEL_1) + 1) * 100).ToString
                     tmpRow("matno") = tmpDTResults.Rows(i).Item("matno")
                     tmpRow("fullname") = tmpDTResults.Rows(i).Item("FullName")
                     tmpCourseCode = tmpDTResults.Columns(j).ColumnName
 
                     tmpRow("CourseCode") = tmpCourseCode
                     tmpRow("score") = tmpDTResults.Rows(i).Item(tmpCourseCode).ToString
-                    dScore = tmpRow("score")
+
                     dGrade = objBroadsheet.getGRADE(dScore, Nothing, Nothing)
-
-
                     dGradePoint = objBroadsheet.getGradePointFromGrade(dGrade)
-                    'dGPA = objBroadsheet.CalcGPA(GradePoints, approvedCourses, Credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
+                    GradePoints(i) = dGradePoint
 
-                    'strGPA = (Math.Floor(dGPA * 1000) / 1000).ToString
+                    'todo IMPORTANT get this info from table bcos it may change over time
+                    If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpCourseCode) Then
+
+                        Credits(i) = dictAllCourseCodeKeyAndCourseUnitVal(tmpCourseCode)
+                        lstCredits.Add(Credits(i))
+                    End If
                     tmpRow("course_code_idr") = tmpCourseCode
-                    tmpRow("Credits") = tmpDTResults.Rows(i).Item("bs_level")
+                    tmpRow("Credits") = Credits(i)
                     tmpRow("course_title") = tmpDTResults.Rows(i).Item("bs_faculty_name")
                     'todo getRules(session,level)
-                    tmpRow("remarks") = dGrade & ": " & dGradePoint
+                    tmpRow("remarks") = dGrade
+                    tmpRow("gpa100") = dGradePoint
                     tmpRow("SURNAME") = tmpDTResults.Rows(i).Item("SURNAME")
                     tmpRow("OtherNames") = tmpDTResults.Rows(i).Item("FullName") & tmpDTResults.Rows(i).Item("OtherNames")
                     tmpRow("department") = tmpDTResults.Rows(i).Item("bs_department_name")
 
-
+                    tmpRow("gpa200") = "*3.555*"    'tmpDTResults.Rows(i).Item("gpa200")
+                    tmpRow("department") = tmpDTResults.Rows(i).Item("bs_department_name")
                 Next
                 tmpDTTranscript.AcceptChanges()
+            Next
+
+            'reiterate through and find GPA
+            dWeightedGradePoints = objBroadsheet.getWeightedGRADESPoints(GradePoints, Credits)
+            dGPA = objBroadsheet.CalcGPA(dWeightedGradePoints, approvedCourses, Credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
+            strGPA = (Math.Floor(dGPA * 1000) / 1000).ToString
+            For i = 0 To 9
+                tmpDTTranscript.Rows(i).Item("gpa200") = strGPA
+                tmpDTTranscript.Rows(i).Item("GPA") = strGPA
             Next
 
             'tmpDTResults=mappDB.showBroadsheet()
@@ -242,6 +299,7 @@ Public Class FormResultsTranscripts
 
 
     Private Function getTranscripts(dMATNO As String) As DataSet
+
         Dim tmpDSRegCourses As DataSet
         Dim tmpDSTranscript As New DataSet
         Dim tmpDTResults As New DataTable
@@ -249,6 +307,19 @@ Public Class FormResultsTranscripts
         Dim tmpDTTranscript As New DataTable
         Dim tmpRow As DataRow
         Dim tmpCourseCode As String = ""
+        Dim dGrade As String = ""
+        Dim dGradePoint As String = ""
+        Dim dScore As String = ""
+        Dim dGPA As Double
+        Dim strGPA As String
+        Dim lstCredits As New List(Of Integer)
+        Dim lstGradePoints As New List(Of Integer)
+        Dim Credits(0 To COURSE_END_COL_2) As Integer
+        Dim GradePoints(0 To COURSE_END_COL_2) As Integer
+        Dim approvedCourses(0 To COURSE_END_COL_2) As Boolean
+        Dim dWeightedGradePoints As Integer()
+
+
         tmpDTTranscript.Columns.Add("Session", GetType(System.String))
         tmpDTTranscript.Columns.Add("matno", GetType(System.String))
         tmpDTTranscript.Columns.Add("fullname", GetType(System.String))
@@ -263,35 +334,102 @@ Public Class FormResultsTranscripts
         tmpDTTranscript.Columns.Add("OtherNames", GetType(System.String))
         tmpDTTranscript.Columns.Add("department", GetType(System.String))
 
+        tmpDTTranscript.Columns.Add("bs_level", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa100", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa200", GetType(System.String))
+
+        tmpDTTranscript.Columns.Add("GPA", Type.GetType("System.String"))
+        tmpDTTranscript.Columns.Add("Class", Type.GetType("System.String"))
+        tmpDTTranscript.Columns.Add("Category", Type.GetType("System.String"))
+        tmpDTTranscript.Columns.Add("Failed", Type.GetType("System.String"))
+
+
+        'getDeptSessionsIntoDictionaries()
+        mappDB.getAllCourses()
+        'getCoursesOrderIntoDictionaries()
+        'dictCoursesOrderFS
+        'dictCoursesOrderSS
         Try
             mappDB.MATNO = dMATNO
             'tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
-            tmpDTResults = mappDB.getBroadsheetForTranscript(dMATNO, "100", False)
-            For i = 0 To tmpDTResults.Rows.Count - 1
-
-                For j = COURSE_START_COL To COURSE_END_COL
-                    tmpRow = tmpDTTranscript.Rows.Add
-                    tmpRow("Session") = tmpDTResults.Rows(i).Item("bs_session")
-                    tmpRow("matno") = tmpDTResults.Rows(i).Item("matno")
-                    tmpRow("fullname") = tmpDTResults.Rows(i).Item("FullName")
-                    tmpCourseCode = tmpDTResults.Columns(j).ColumnName
-
-                    tmpRow("CourseCode") = tmpCourseCode
-                    tmpRow("score") = tmpDTResults.Rows(i).Item(tmpCourseCode).ToString
-
-                    tmpRow("course_code_idr") = tmpCourseCode
-                    tmpRow("Credits") = tmpDTResults.Rows(i).Item("bs_level")
-                    tmpRow("course_title") = tmpDTResults.Rows(i).Item("bs_faculty_name")
-                    tmpRow("remarks") = "Sample remark"
-                    tmpRow("SURNAME") = tmpDTResults.Rows(i).Item("SURNAME")
-                    tmpRow("OtherNames") = tmpDTResults.Rows(i).Item("FullName") & tmpDTResults.Rows(i).Item("OtherNames")
-                    tmpRow("department") = tmpDTResults.Rows(i).Item("bs_department_name")
+            'we need ti iterattively querythedb
+            For x = 100 To 800 Step 100
+                tmpDTResults = mappDB.getBroadsheetForTranscript(dMATNO, x.ToString, False)
+                If tmpDTResults Is Nothing Then Continue For
 
 
+                Dim j As Integer = COURSE_START_COL
+                For i = 0 To tmpDTResults.Rows.Count - 1
+                    For jIter = 0 To COURSE_START_COL       'initialize
+                        approvedCourses(jIter) = False
+                        Credits(jIter) = 0
+                    Next
+                    For jIter = COURSE_START_COL To COURSE_END_COL_2
+                        If jIter = COURSE_END_COL + 1 Then
+                            j = COURSE_START_COL_2
+                        Else
+                            j = jIter
+                        End If
+                        tmpCourseCode = tmpDTResults.Columns(j).ColumnName
+                        dScore = tmpDTResults.Rows(i).Item(tmpCourseCode).ToString
+                        'check for cousees and scores to be skipped
+                        If tmpCourseCode.Contains("ColUNIQUE") Then
+                            Continue For
+                            approvedCourses(j) = False
+                            Credits(j) = 0
+                        Else
+                            approvedCourses(j) = True
+                        End If
+
+                        'If objBroadsheet.IsRegisteredScore(dScore) = False Then Continue For 'use ths or transcript only
+
+                        'its okay to add the scores
+                        tmpRow = tmpDTTranscript.Rows.Add
+                        tmpRow("Session") = tmpDTResults.Rows(i).Item("bs_session")
+                        'tmpRow("bs_level") = tmpDTResults.Rows(i).Item("bs_level")
+                        tmpRow("bs_level") = ((((j - COURSE_START_COL) \ NUM_COURSES_PER_LEVEL_1) + 1) * 100).ToString
+                        tmpRow("matno") = tmpDTResults.Rows(i).Item("matno")
+                        tmpRow("fullname") = tmpDTResults.Rows(i).Item("FullName")
+                        tmpCourseCode = tmpDTResults.Columns(j).ColumnName
+
+                        tmpRow("CourseCode") = tmpCourseCode
+                        tmpRow("score") = tmpDTResults.Rows(i).Item(tmpCourseCode).ToString
+
+                        dGrade = objBroadsheet.getGRADE(dScore, Nothing, Nothing)
+                        dGradePoint = objBroadsheet.getGradePointFromGrade(dGrade)
+                        GradePoints(i) = dGradePoint
+
+                        'todo IMPORTANT get this info from table bcos it may change over time
+                        If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(tmpCourseCode) Then
+
+                            Credits(i) = dictAllCourseCodeKeyAndCourseUnitVal(tmpCourseCode)
+                            lstCredits.Add(Credits(i))
+                        End If
+                        tmpRow("course_code_idr") = tmpCourseCode
+                        tmpRow("Credits") = Credits(i)
+                        tmpRow("course_title") = tmpDTResults.Rows(i).Item("bs_faculty_name")
+                        'todo getRules(session,level)
+                        tmpRow("remarks") = dGrade
+                        tmpRow("gpa100") = dGradePoint
+                        tmpRow("SURNAME") = tmpDTResults.Rows(i).Item("SURNAME")
+                        tmpRow("OtherNames") = tmpDTResults.Rows(i).Item("FullName") & tmpDTResults.Rows(i).Item("OtherNames")
+                        tmpRow("department") = tmpDTResults.Rows(i).Item("bs_department_name")
+
+                        tmpRow("gpa200") = "*3.555*"    'tmpDTResults.Rows(i).Item("gpa200")
+                        tmpRow("department") = tmpDTResults.Rows(i).Item("bs_department_name")
+                    Next
+                    tmpDTTranscript.AcceptChanges()
                 Next
-                tmpDTTranscript.AcceptChanges()
-            Next
 
+                'reiterate through and find GPA
+                dWeightedGradePoints = objBroadsheet.getWeightedGRADESPoints(GradePoints, Credits)
+                dGPA = objBroadsheet.CalcGPA(dWeightedGradePoints, approvedCourses, Credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
+                strGPA = (Math.Floor(dGPA * 1000) / 1000).ToString
+                For i = 0 To 9
+                    tmpDTTranscript.Rows(i).Item("gpa200") = strGPA
+                    tmpDTTranscript.Rows(i).Item("GPA") = strGPA
+                Next
+            Next
             'tmpDTResults=mappDB.showBroadsheet()
             'dgvCourses.DataSource = tmpDSRegCourses.Tables(0)
             dgvTranscripts.DataSource = tmpDTTranscript
@@ -311,7 +449,6 @@ Public Class FormResultsTranscripts
         End Try
 
     End Function
-
     Private Sub bgwExportToExcel_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwExportToExcel.DoWork
         'footers(0) = TextBoxCourseAdviser.Text
         'footers(1) = TextBoxDean.Text
@@ -320,7 +457,7 @@ Public Class FormResultsTranscripts
             Case 1
             Case 2
                 'objExcelFile.modifyExcelFile_NPOI(My.Application.Info.DirectoryPath & "\templates\broadsheet_plain.xlsx", DataGridViewBroadSheet.DataSource) 'worked but NPOI corrupted excel fileobjExcelFile.
-                retFileName = objExcelFile.exportTranscriptToExcelFile_NPOI(DVTranscripts, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultTranscript" & "MATNO" & ".xlsx")
+                retFileName = objExcelFile.exportTranscriptToExcelFile_NPOI(DTTranscripts, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\GeneratedResultTranscript" & "MATNO" & ".xlsx")
             Case Else
 
         End Select
@@ -340,7 +477,7 @@ Public Class FormResultsTranscripts
             Exit Sub
         End If
         If dgvTranscripts.DataSource Is Nothing Then Exit Sub
-        DVTranscripts = dgvTranscripts.DataSource
+        DTTranscripts = dgvTranscripts.DataSource
         Me.ButtonEport.Enabled = False
         TimerBS.Enabled = True
         TimerBS.Start()

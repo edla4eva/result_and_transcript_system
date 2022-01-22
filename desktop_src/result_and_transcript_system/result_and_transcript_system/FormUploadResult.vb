@@ -132,6 +132,9 @@ Public Class FormUploadResult
         Try
             objResult.excelVersion = "2013"
             Dim tmpDS As DataSet = objExcelFile.readResultFile()
+            DataGridView1.DataSource = Nothing
+            DataGridView1.Columns.Clear()
+
             'TODO: reset datagrid
             If tmpDS Is Nothing Then Exit Sub
             DataGridView1.DataSource = tmpDS.Tables(0).DefaultView  'todo: error if cancel file diag
@@ -185,7 +188,9 @@ Public Class FormUploadResult
         '# Detect header row
         rowCount = tmpDT.Rows.Count
         For i = 0 To rowCount - 1
-            If tmpDT.Rows(i).ItemArray().Contains("S/N") Or tmpDT.Rows(i).ItemArray().Contains("MAT") Then
+            If tmpDT.Rows(i).ItemArray().Contains("S/N") Or tmpDT.Rows(i).ItemArray().Contains("MAT") Or
+                 tmpDT.Rows(i).ItemArray().Contains("TOTAL") Then
+                'tip: can tet for null then test this Or tmpDT.Rows(i).Item(2).Contains("MAT")
                 Debug.Print("ColumnHeader at row: " & i)
                 snRow = i
                 Exit For
@@ -195,7 +200,7 @@ Public Class FormUploadResult
         '# display header rows
         colCount = DataGridView1.Columns.Count
         For i = 0 To colCount - 1
-            DataGridView1.Columns(i).HeaderText = DataGridView1.Item(i, snRow).Value.ToString
+            DataGridView1.Columns(i).HeaderText = DataGridView1.Item(i, snRow).Value.ToString.Trim
         Next
 
         '#change column names to match header text
@@ -419,7 +424,7 @@ Public Class FormUploadResult
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         'may not be a good idea to do ui stuff here
 
-        getDeptSessionsIntoDictionaries()
+        mappDB.getDeptSessionsIntoDictionaries()
         'Not working in BGWorker
         'dsDepts = combolistDS(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
         'dsCourses = combolistDS(STR_SQL_ALL_COURSES, "course_code", "course_code")
@@ -434,7 +439,7 @@ Public Class FormUploadResult
         'ComboBoxDepartments.Items.Addarray(dictDepts.ToArray)
 
         If dictCourses.Count = 0 Then
-            If getDeptSessionsIntoDictionaries() = False Then
+            If mappDB.getDeptSessionsIntoDictionaries() = False Then
                 MsgBox("Cannot retrieve Department and Course info from database")
                 Exit Sub
             End If
@@ -878,7 +883,30 @@ Public Class FormUploadResult
         End Try
 
     End Sub
+    Private Sub CheckBoxPrefix_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPrefix.CheckedChanged
+        On Error Resume Next
+        Dim dmatno As String
+        If CheckBoxPrefix.Checked = True Then
+            For i = 0 To DataGridView1.Rows.Count - 1
+                dmatno = DataGridView1.Rows(i).Cells("matno").Value
+                If dmatno.Contains(TextBoxPrefix.Text) Then
+                Else
+                    dmatno = TextBoxPrefix.Text & dmatno
+                    DataGridView1.Rows(i).Cells("matno").Value = dmatno
+                End If
+            Next
+        Else
+            For i = 0 To DataGridView1.Rows.Count - 1
+                dmatno = DataGridView1.Rows(i).Cells("matno").Value
+                If dmatno.Contains(TextBoxPrefix.Text) Then
+                    dmatno = dmatno.Replace(TextBoxPrefix.Text, "")
+                    DataGridView1.Rows(i).Cells("matno").Value = dmatno
+                Else
 
+                End If
+            Next
+        End If
+    End Sub
 
     Private Sub ButtonCloud_Click(sender As Object, e As EventArgs) Handles ButtonCloud.Click
         Dim FileOpenDialogBroadsheet As New OpenFileDialog()

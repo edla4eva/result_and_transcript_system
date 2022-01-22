@@ -771,8 +771,8 @@ Public Class ClassExcelFile
         Return fileName
     End Function
 
-    Public Function exportTranscriptToExcelFile_NPOI(dv As DataView, fileName As String) As String
-        Dim dt As DataTable = dv.ToTable
+    Public Function exportTranscriptToExcelFile_NPOI(dt As DataTable, fileName As String) As String
+        'Dim dt As DataTable = dv.ToTable
         Dim workbook As IWorkbook = New XSSFWorkbook()
         Dim sheet1 As ISheet = workbook.CreateSheet("Sheet1")
         Dim row1 As IRow

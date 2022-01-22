@@ -68,10 +68,16 @@ Module ModuleGeneral
     Public dictSessions As New Dictionary(Of String, String)
     Public dictAllCourses As New Dictionary(Of String, String)
 
+    Public dictcourseTitesFS As New Dictionary(Of String, String)
+    Public dictcourseTitesSS As New Dictionary(Of String, String)
+        Public dictLevelGPAPercentages As New Dictionary(Of String, String)
+    'Public dictCourseCodeKeyCourseOrderSNVal_1 As New Dictionary(Of Integer, String)
+    'Public dictCourseCodeKeyCourseOrderSNVal_2 As New Dictionary(Of Integer, String)
+    'Public dictCoursesOrder As New Dictionary(Of Integer, String)
+
     ' data broadsheet
     Public dictAllCourseCodeKeyAndCourseUnitVal As New Dictionary(Of String, Integer)
     Public dictAllCourseCodeKeyAndCourseLevelVal As New Dictionary(Of String, Integer)
-    Public dictAllCoursesCredtsLevel As New Dictionary(Of String, Integer)
 
     Public dictAllCourseCodeKeyAndCourseSemesterVal As New Dictionary(Of String, Integer)
     'General constants
@@ -344,6 +350,7 @@ Module ModuleGeneral
     Public STR_FILTER_REG_BY_LEVEL = "level like '%{0}%'"
     Public STR_FILTER_REG_BYSESSION = "session_idr like '%{0}%'"
     Public STR_FILTER_REG_BY_MATNO = "matno = '{0}'"
+    Public STR_FILTER_REG_BY_MATNO_LIKE = "matno like '%{0}%'"
     Public STR_FILTER_GEENERIC = "{0} like '%{1}%'"
 
     'some
@@ -359,26 +366,26 @@ Module ModuleGeneral
     Public STR_SQL_COURSES_REGS_WHERE As String = "SELECT * FROM regs WHERE matno='{0}'"
     'inserts
     Public STR_SQL_INSERT_RESULTS As String = "INSERT INTO `db`.`results` (`result_id`, `matno`, `score``) VALUES ('', '{0}', '{1}');"
-    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, year_of_entry,session_idr_of_entry, mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1, CourseCode_2, Fees_Status, level, dept_idr) " &
-                                                "VALUES ('{0}','{1}','{2}','{3}',{4},'{5}',{6},'{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}',{17},{18});"
+    Public STR_SQL_INSERT_STUDENTS As String = "INSERT INTO Reg (matno, student_firstname, student_surname, student_othernames, student_dept_idr, status, year_of_entry,session_idr_of_entry, mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1, CourseCode_2, NA_CourseCode, Fees_Status, [level], dept_idr) " &
+                                                "VALUES ('{0}','{1}','{2}','{3}',{4},'{5}',{6},'{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}',{18},{19});"
 
-    Public STR_SQL_INSERT_STUDENTS_WITH_PARAMS = "INSERT INTO Reg matno,student_firstname,student_surname,student_othernames,student_dept_idr,status,year_of_entry,session_idr_of_entry,mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1,CourseCode_2,Fees_Status,level,dept_idr
-                                                VALUES(@matno,@student_firstname,@student_surname,@student_othernames,@student_dept_idr,@status,@year_of_entry,@session_idr_of_entry,@mode_of_entry,@dob,@phone,@email,@gender,@session_idr,@CourseCode_1,@CourseCode_2,@Fees_Status,@level,@dept_idr);"
+    Public STR_SQL_INSERT_STUDENTS_WITH_PARAMS = "INSERT INTO Reg matno,student_firstname,student_surname,student_othernames,student_dept_idr,status,year_of_entry,session_idr_of_entry,mode_of_entry,dob,phone,email,gender,session_idr,CourseCode_1,CourseCode_2,Fees_Status,[level],dept_idr
+                                                VALUES(@matno,@student_firstname,@student_surname,@student_othernames,@student_dept_idr,@status,@year_of_entry,@session_idr_of_entry,@mode_of_entry,@dob,@phone,@email,@gender,@session_idr,@CourseCode_1,@CourseCode_2,NA_CourseCode,@Fees_Status,@level,@dept_idr);"
 
 
     'UPDATES
-    Public STR_SQL_UPDATESTUDENTS_WITH_PARAMS = "UPDATE Reg SET matno=@matno,student_firstname=@student_firstname,student_surname=@student_surname,student_othernames=@student_othernames,student_dept_idr=@student_dept_idr,status=@status,year_of_entry=@year_of_entry,session_idr_of_entry=@session_idr_of_entry,mode_of_entry=@mode_of_entry,dob=@dob,phone=@phone,email=@email,gender=@gender,session_idr=@session_idr,CourseCode_1=@CourseCode_1,CourseCode_2=@CourseCode_2,Fees_Status=@Fees_Status,level=@level,dept_idr=@dept_idr
+    Public STR_SQL_UPDATESTUDENTS_WITH_PARAMS = "UPDATE Reg SET matno=@matno,student_firstname=@student_firstname,student_surname=@student_surname,student_othernames=@student_othernames,student_dept_idr=@student_dept_idr,status=@status,year_of_entry=@year_of_entry,session_idr_of_entry=@session_idr_of_entry,mode_of_entry=@mode_of_entry,dob=@dob,phone=@phone,email=@email,gender=@gender,session_idr=@session_idr,CourseCode_1=@CourseCode_1,CourseCode_2=@CourseCode_2,NA_CourseCode=@NA_CourseCode,Fees_Status=@Fees_Status,[level]=@level,dept_idr=@dept_idr
                                                 WHERE matno=@matno"
 
     'DELETES
     Public STR_SQL_DELETE_STUDENTS_WITH_PARAMS As String = "DELETE FROM Reg WHERE matno=@matno"
     Public DELETE_FROM_RESULTS_WHERE_SESSION_COURSECODE_TIMESAMP As String = "DELETE * FROM results WHERE session_idr='{0}' AND course_code_idr='{1}' AND result_timestamp='{2}'"
-    Public DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Reg WHERE session_idr='{0}' AND dept_idr={1} AND level={2}"
-    Public DELETE_FROM_REGS_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Regs WHERE session_idr='{0}' AND dept_idr={1} AND level={2}"
+    Public DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Reg WHERE session_idr='{0}' AND dept_idr={1} AND [level]={2}"
+    Public DELETE_FROM_REGS_WHERE_SESSION_DEPTID_LEVEL As String = "DELETE * FROM Regs WHERE session_idr='{0}' AND dept_idr={1} AND [level]={2}"
 
 
-    Public STR_SQL_COURSE_REG_FIRST_SEMESTER = "SELECT FC.CourseCode, FC.CourseTitle, FC.CourseCredit FROM FC WHERE (((FC.CourseSemester)=1)) ORDER BY FC.CourseCode;"
-    Public STR_SQL_COURSE_REG_SECOND_SEMESTER = "SELECT CourseCode,CourseTitle,CourseCredit FROM FC WHERE (((CourseSemester)=2)) ORDER BY CourseCode;"
+    Public STR_SQL_FERMA_COURSE_REG_FIRST_SEMESTER = "SELECT FC.CourseCode, FC.CourseTitle, FC.CourseCredit FROM FC WHERE (((FC.CourseSemester)=1)) ORDER BY FC.CourseCode;"
+    Public STR_SQL_FERMA_COURSE_REG_SECOND_SEMESTER = "SELECT CourseCode,CourseTitle,CourseCredit FROM FC WHERE (((CourseSemester)=2)) ORDER BY CourseCode;"
     'EX SCR Expanded 1 - lookup
     'SELECT reg.MatNo, reg.CourseCode_1.Value AS CourseCode, reg.Dept, DLookUp("CourseTitle","FC_1","CourseCode='" & [CourseCode] & "'") AS Course_Title, DLookUp("CourseCredit","FC_1","CourseCode='" & [CourseCode] & "'") AS Course_Credit, IIf(IsNull([Course_Credit]),0,[Course_Credit]*1) AS CourseCredit, reg.Pix, DLookUp("CourseSemester","FC_1","CourseCode='" & [CourseCode] & "'") AS CourseSemester, reg.Surname, reg.OtherNames, reg.Level, reg.Fees_Status
     'FROM reg
@@ -584,62 +591,8 @@ Module ModuleGeneral
     '    End Try
     'End Sub
 
-    Function getDeptSessionsIntoDictionaries() As Boolean
-        'Todo create an event to auto refresh these when data is added or deleted
-        'if recorsHaveChanged
-        Try
-            dictDepts = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_id", "dept_name")
-            dictSessions = combolistDict(STR_SQL_ALL_SESSIONS_COMBO, "session_id", "session_id")
-            dictAllCourses = combolistDict(STR_SQL_ALL_COURSES, "course_code", "course_code")
-            dictCourses = dictAllCourses
-            'dictDeptsID = combolistDict(STR_SQL_ALL_DEPARTMENTS_COMBO, "dept_name", "dept_ID")
-            Return True
-        Catch ex As Exception
-            logError(ex.ToString)
-            Return False
-        End Try
-
-    End Function
-    Public Function getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) As Boolean
-        Try
-            'old
-            'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "FS" & dLevel & "L", "FS" & dLevel & "L")
-            'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr), "SS" & dLevel & "L", "SS" & dLevel & "L")
-            'new (traspose of old)
-            Dim ds As New DataSet
-            Dim strColNameFS As String = ""
-            Dim strColNameSS As String = ""
-            ds = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_COURSES_ORDER, session_idr, course_dept_idr, dLevel))
-
-            dictCoursesOrderFS.Clear()
-            dictCoursesOrderSS.Clear()
-
-            If ds.Tables(0).Rows.Count = 0 Then Return False
 
 
-
-            For i = 0 To 0  'ds.Tables(0).Rows.Count - 1
-                For j = 0 To 14
-                    strColNameFS = "FS" & (j + 1).ToString("D3")    'FS001, FS002 ... are cols in course_order_new tbl
-                    strColNameSS = "SS" & (j + 1).ToString("D3")
-                    If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameFS)) Then
-                        ds.Tables(0).Rows(i).Item(strColNameFS) = ""
-                    Else
-                        dictCoursesOrderFS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameFS))
-                    End If
-                    If IsDBNull(ds.Tables(0).Rows(i).Item(strColNameSS)) Then
-                        ds.Tables(0).Rows(i).Item(strColNameSS) = ""    'dnt add em
-                    Else
-                        dictCoursesOrderSS.Add(j + 1, ds.Tables(0).Rows(i).Item(strColNameSS))
-                    End If
-
-                Next
-            Next
-            Return True
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
     Public Function combolistDict(ByVal this_sql As String, ByVal this_value As String, ByVal this_member As String, Optional dConnMode As String = "local") As Dictionary(Of String, String)
         Try
             Dim oad As Object
@@ -812,6 +765,26 @@ Module ModuleGeneral
         Catch ex As Exception
             Return "error"
         End Try
+    End Function
+    Function getSessionOfEntry(currSession As String, currLevel As Integer, dMode As String) As String
+        Dim iLoop As Integer = 0
+        Dim tmpLevel As Integer
+        Dim tmpsession As String
+        tmpLevel = currLevel
+        tmpsession = currSession
+        If dMode = MODE_OF_ENTRY_UME Then
+            While (tmpLevel >= 200 Or iLoop > 15)       'beware of the infiite!
+                iLoop = iLoop + 1
+                tmpsession = prevSession(currSession)
+                tmpLevel = tmpLevel - 100
+            End While
+        Else
+            While (tmpLevel > 0 Or iLoop > 15)       'beware of the infiite!
+                iLoop = iLoop + 1
+                tmpsession = prevSession(currSession)
+                tmpLevel = tmpLevel - 100
+            End While
+        End If
     End Function
     Function Array2sTR(s As String(), Optional strSeperator As String = ",") As String
         Dim tmpStr As String = ""
@@ -1089,6 +1062,8 @@ Module ModuleGeneral
         lstInsertParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "session_idr"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
+        lstInsertParams.Add(New OleDb.OleDbParameter("@NA_CourseCode", OleDb.OleDbType.VarChar, 100, "NA_CourseCode"))
+
         lstInsertParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.Integer, 4, "level"))
         lstInsertParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.Integer, 4, "dept_idr"))
@@ -1115,6 +1090,8 @@ Module ModuleGeneral
         lstupdateParams.Add(New OleDb.OleDbParameter("@session_idr", OleDb.OleDbType.VarChar, 100, "session_idr"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_1", OleDb.OleDbType.VarChar, 100, "CourseCode_1"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@CourseCode_2", OleDb.OleDbType.VarChar, 100, "CourseCode_2"))
+        lstupdateParams.Add(New OleDb.OleDbParameter("@NA_CourseCode", OleDb.OleDbType.VarChar, 100, "NA_CourseCode"))
+
         lstupdateParams.Add(New OleDb.OleDbParameter("@Fees_Status", OleDb.OleDbType.VarChar, 100, "Fees_Status"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@level", OleDb.OleDbType.Integer, 4, "level"))
         lstupdateParams.Add(New OleDb.OleDbParameter("@dept_idr", OleDb.OleDbType.Integer, 4, "dept_idr"))

@@ -282,7 +282,7 @@
 
         'todo: use course order ds or dict to auto register
         If Not dictCoursesOrderFS.Count > 0 Then
-            getCoursesOrderIntoDictionaries(dSession, dDeptID, dLevel)
+            mappDB.getCoursesOrderIntoDictionaries(dSession, dDeptID, dLevel)
         End If
 
         If dictCoursesOrderFS.Count > 0 Then

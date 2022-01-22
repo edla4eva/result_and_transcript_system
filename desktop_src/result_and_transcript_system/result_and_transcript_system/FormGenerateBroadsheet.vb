@@ -506,7 +506,8 @@ Public Class FormGenerateBroadsheet
         Me.ProgressBarBS.Value = 100
     End Sub
     Private Sub ButtonReProcesClick(sender As Object, e As EventArgs) Handles ButtonReProces.Click
-        If dtScores Is Nothing Then dtScores = DataGridViewBroadSheet.DataSource.totable
+        'DataGridViewBroadSheet.UpdateCellValue 
+        dtScores = DataGridViewBroadSheet.DataSource.totable
         objBroadsheet.dataTablesScoresAndGrades(0) = dtScores
         objBroadsheet.Level = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value
         objBroadsheet.DeptId = mappDB.getDeptID(DataGridViewBroadSheet.Rows(0).Cells("bs_department_name").Value)
@@ -691,7 +692,7 @@ Public Class FormGenerateBroadsheet
         Return retList.ToArray
     End Function
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
-        getDeptSessionsIntoDictionaries()
+        mappDB.getDeptSessionsIntoDictionaries()
         strRegisteredStudents = getRegisteredStudents()
     End Sub
 
@@ -825,7 +826,7 @@ Public Class FormGenerateBroadsheet
             session_idr = strParamsSessionDeptLevel(0)
 
             ' bgwCourses.RunWorkerAsync()
-            getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)
+            mappDB.getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, course_level)
 
             'load previously generated broadsheet if availiable
             'TODO: show spinner

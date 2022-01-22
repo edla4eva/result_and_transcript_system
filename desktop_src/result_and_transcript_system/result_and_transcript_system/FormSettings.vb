@@ -30,11 +30,11 @@ Public Class FormSettings
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
         ds = mappDB.GetDataWhere(String.Format(STR_SQL_ALL_COURSES_ORDER_NO_CRITERIA))
 
-        getCoursesOrderIntoDictionaries(Session_idr, course_dept_idr, course_level)
+        mappDB.getCoursesOrderIntoDictionaries(Session_idr, course_dept_idr, course_level)
         'dictCoursesOrderFS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "FS" & course_level & "L", "FS" & course_level & "L")
         'dictCoursesOrderSS = combolistDict(String.Format(STR_SQL_ALL_COURSES_ORDER, Session_idr, course_dept_idr), "SS" & course_level & "L", "SS" & course_level & "L")
 
-        getDeptSessionsIntoDictionaries()
+        mappDB.getDeptSessionsIntoDictionaries()
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted

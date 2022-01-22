@@ -99,14 +99,6 @@
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
-              <TextRun>
-                <Value> 01/01/2001</Value>
-                <Style>
-                  <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>14pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
@@ -175,14 +167,6 @@
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
-              <TextRun>
-                <Value> Computer Engineering</Value>
-                <Style>
-                  <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>14pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
@@ -244,7 +228,15 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>2018/2019 Academic Session</Value>
+                <Value>=Fields!Session.Value</Value>
+                <Style>
+                  <FontFamily>Times New Roman</FontFamily>
+                  <FontSize>14pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value> Academic Session</Value>
                 <Style>
                   <FontFamily>Times New Roman</FontFamily>
                   <FontSize>14pt</FontSize>
@@ -312,7 +304,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>UTME</Value>
+                <Value>=Fields!mode.Value</Value>
                 <Style>
                   <FontFamily>Times New Roman</FontFamily>
                   <FontSize>14pt</FontSize>
@@ -1290,7 +1282,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>4.405in</Height>
+    <Height>4.40501in</Height>
     <Style />
   </Body>
   <Width>10.3425in</Width>
@@ -1540,12 +1532,44 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="bs_department_name">
+          <DataField>bs_department_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="bs_faculty_name">
+          <DataField>bs_faculty_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="bs_footers">
+          <DataField>bs_footers</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="bs_level">
+          <DataField>bs_level</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="bs_session">
+          <DataField>bs_session</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="bs_timestamp">
+          <DataField>bs_timestamp</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Category">
+          <DataField>Category</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="course_code_idr">
           <DataField>course_code_idr</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="course_title">
           <DataField>course_title</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CourseCode">
+          <DataField>CourseCode</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Credits">
@@ -1560,9 +1584,65 @@
           <DataField>dob</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="email">
+          <DataField>email</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Failed">
+          <DataField>Failed</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="fpga">
+          <DataField>fpga</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Fullname">
+          <DataField>Fullname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gender">
+          <DataField>gender</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="getemployee">
           <DataField>getemployee</DataField>
           <rd:TypeName>System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="gpa100">
+          <DataField>gpa100</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa200">
+          <DataField>gpa200</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa300">
+          <DataField>gpa300</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa400">
+          <DataField>gpa400</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa500">
+          <DataField>gpa500</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa600">
+          <DataField>gpa600</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa700">
+          <DataField>gpa700</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa800">
+          <DataField>gpa800</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="gpa900">
+          <DataField>gpa900</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="MATNO">
           <DataField>MATNO</DataField>
@@ -1572,8 +1652,16 @@
           <DataField>mode</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="mode_of_entry">
+          <DataField>mode_of_entry</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="OtherNames">
           <DataField>OtherNames</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="phone">
+          <DataField>phone</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="remarks">
@@ -1592,12 +1680,76 @@
           <DataField>session_idr</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="session_idr_of_entry">
+          <DataField>session_idr_of_entry</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="sn">
+          <DataField>sn</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Status">
           <DataField>Status</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="student_dept_idr">
+          <DataField>student_dept_idr</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="student_firstname">
+          <DataField>student_firstname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="student_othernames">
+          <DataField>student_othernames</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="student_surname">
+          <DataField>student_surname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="SURNAME">
           <DataField>SURNAME</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa100">
+          <DataField>wgpa100</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa200">
+          <DataField>wgpa200</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa300">
+          <DataField>wgpa300</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa400">
+          <DataField>wgpa400</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa500">
+          <DataField>wgpa500</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa600">
+          <DataField>wgpa600</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa700">
+          <DataField>wgpa700</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa800">
+          <DataField>wgpa800</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="wgpa900">
+          <DataField>wgpa900</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="year_of_entry">
+          <DataField>year_of_entry</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

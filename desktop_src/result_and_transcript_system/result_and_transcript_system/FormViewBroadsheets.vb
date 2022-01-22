@@ -55,7 +55,7 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
-        getDeptSessionsIntoDictionaries()
+        mappDB.getDeptSessionsIntoDictionaries()
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted

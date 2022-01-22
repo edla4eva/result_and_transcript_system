@@ -30,7 +30,7 @@ Public Class FormViewResults
 
     Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
         Me.ButtonShowAll.Enabled = False
-
+        DataGridView2.Tag = "summary"
         bgwLoad.RunWorkerAsync()
     End Sub
 
@@ -180,6 +180,7 @@ Public Class FormViewResults
             txtSession = DataGridView2.SelectedRows(0).Cells("session_idr").Value
             myDataSet = objResult.getFromDBResultssDataset(txtSession, txtCourseCode)
             DataGridView2.DataSource = myDataSet.Tables(0).DefaultView
+            DataGridView2.Tag = "details"
         End If
     End Sub
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
@@ -226,13 +227,19 @@ Public Class FormViewResults
     End Sub
 
     Private Sub ButtonCheckHash_Click(sender As Object, e As EventArgs) Handles ButtonCheckHash.Click
+        Dim dt As DataTable
+        Dim dv As DataView
+        dv = DataGridView2.DataSource
+        dt = dv.ToTable
         If TextBoxCheckHash.Text = "" Then
             MsgBox("Enter the computer generated hash code at the bottom of the printed result")
-        ElseIf DataGridView2.Columns.Contains("course_code_idr") And
-            DataGridView2.Columns.Contains("session_idr") Then
+        ElseIf DataGridView2.Tag = "summary" Then
             'summary mode
-        ElseIf DataGridView2.SelectedRows.Count > 0 Then
-            If checkHash(DataGridView2.SelectedRows(0).Cells("course_code").Value).Contains(TextBoxCheckHash.Text) And TextBoxCheckHash.Text.Length > 5 Then
+            shoWDetails()
+            'todo calc for each result and store
+            'warn user that it may take some time
+        ElseIf DataGridView2.SelectedRows.Count > 0 And DataGridView2.Tag = "details" Then
+            If checkHash(DataGridView2.Rows(DataGridView2.SelectedRows(0).Index).Cells("course_code").Value, dt).Contains(TextBoxCheckHash.Text) And TextBoxCheckHash.Text.Length > 5 Then
                 TextBoxCheckHash.BackColor = Color.Green
             Else
                 TextBoxCheckHash.BackColor = Color.Pink
@@ -240,7 +247,7 @@ Public Class FormViewResults
 
         End If
     End Sub
-    Function checkHash(courseCode As String) As String
+    Function checkHash(courseCode As String, dt As DataTable) As String
         '---Hash parameters
         Dim numStu As Integer
         Dim avrScore As Integer
@@ -250,10 +257,7 @@ Public Class FormViewResults
         Dim finalHash As String
         Dim timeStamp As Long
         'data
-        Dim dt As DataTable
-        Dim dv As DataView
-        dv = DataGridView2.DataSource
-        dt = dv.ToTable
+
 
         Dim dStr As String = ""
         Dim dL As Integer = 0
@@ -284,12 +288,67 @@ Public Class FormViewResults
     End Sub
 
     Private Sub ButtonPrint_Click(sender As Object, e As EventArgs) Handles ButtonPrint.Click
-        Dim dt As DataTable
+        Dim dt, dtSub As DataTable
         Dim dv As DataView
+        Dim txtCourseCode, txtSession As String
         Dim tmpCol As New DataColumn
+        Dim resulltHash As String
         dv = DataGridView2.DataSource
         dt = dv.ToTable
-        showResult(dt)
+
+        If DataGridView2.Tag = "details" Then
+            dt.Columns.Add("remarks", GetType(System.String))
+            dt.Columns.Add("score", GetType(System.String))
+            dt.Columns.Add("course_code_idr", GetType(System.String))
+            dt.Columns.Add("department", GetType(System.String))
+            dt.Columns.Add("sn", GetType(System.String))
+            dt.AcceptChanges()
+            resulltHash = checkHash(DataGridView2.SelectedRows(0).Cells("course_code").Value, dt)
+            For i = 0 To dt.Rows.Count - 1
+                dt.Rows(i).Item("remarks") = resulltHash
+                dt.Rows(i).Item("course_code_idr") = dt.Rows(i).Item("course_code")
+                dt.Rows(i).Item("score") = dt.Rows(i).Item("total")
+                dt.Rows(i).Item("department") = dt.Rows(i).Item("dept_name")
+                dt.Rows(i).Item("sn") = dt.Rows(i).Item("s_n")
+            Next
+            showResult(dt)
+        Else    'If DataGridView2.Tag = "summary" summarry by default
+            'Add extra fields for report
+            dt.Columns.Add("remarks", GetType(System.String))
+            dt.Columns.Add("score", GetType(System.String))
+            dt.Columns.Add("matno", GetType(System.String))   'todo make this code_code fiel cosistent across summar and detail
+            dt.Columns.Add("department", GetType(System.String))
+            dt.Columns.Add("sn", GetType(System.String))
+            dt.Columns.Add("SURNAME", GetType(System.String))
+            dt.AcceptChanges()
+            'get hash or each reuslt and save it in fields
+            For i = 0 To dt.Rows.Count - 1
+                txtCourseCode = dt.Rows(i).Item("course_code_idr")
+                txtSession = dt.Rows(i).Item("session_idr")
+                dtSub = objResult.getFromDBResultssDataset(txtSession, txtCourseCode).Tables(0)
+                If dtSub.Rows.Count = 0 Then
+                    dt.Rows(i).Item("SURNAME") = "Could not retrieve result"
+                Else
+                    resulltHash = checkHash(dtSub.Rows(0).Item("Course_code").ToString, dtSub)
+
+                    dt.Rows(i).Item("SURNAME") = resulltHash
+                    dt.Rows(i).Item("remarks") = dt.Rows(i).Item("course_code_idr") ' resulltHash
+                    dt.Rows(i).Item("matno") = dt.Rows(i).Item("course_code_idr")
+                    dt.Rows(i).Item("score") = dt.Rows(i).Item("NumStudents")
+                    dt.Rows(i).Item("department") = "ALL DEPARTMENTS"
+                    dt.Rows(i).Item("sn") = i
+                    dt.Rows(i).Item("course_code_idr") = "ALL COURSES"
+                    dt.Rows(i).Item("session_idr") = "ALL SESSIONS"
+                    'dt.Rows(i).Item("course_title") = "ALL"
+
+                End If
+
+
+
+            Next
+            showResult(dt)  'showthe report
+        End If
+
         'tmpCol = New DataColumn("cgc", System.Strin)
 
         'dt.Columns.Add(tmpCol)
@@ -297,7 +356,6 @@ Public Class FormViewResults
     Public Sub showResult(dt As DataTable)
         Try
             With Me.ReportViewer1.LocalReport
-
                 .DataSources.Clear()
                 '.ReportPath = My.Application.Info.DirectoryPath
                 .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))

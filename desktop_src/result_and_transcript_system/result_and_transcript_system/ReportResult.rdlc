@@ -93,16 +93,19 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.55729in</Width>
+                  <Width>0.50546in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.45312in</Width>
+                  <Width>1.40129in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.14063in</Width>
+                  <Width>3.78481in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.25521in</Width>
+                  <Width>0.67734in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.50217in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -119,7 +122,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>S/N</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -149,7 +154,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>MATNO</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -179,13 +186,47 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>FULL NAME (SURNAME LAST IN BLOCK LETTERS)</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>CA</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -208,8 +249,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>SCORE</Value>
-                                  <Style />
+                                  <Value>TOTAL</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -326,6 +369,36 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Credits">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Credits.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Credits</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="score1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -364,6 +437,7 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -377,10 +451,10 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.375in</Top>
-            <Left>0.71812in</Left>
+            <Top>0.125in</Top>
+            <Left>0.28976in</Left>
             <Height>0.5in</Height>
-            <Width>6.40625in</Width>
+            <Width>6.87107in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -404,45 +478,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox23</rd:DefaultName>
-            <Top>1.56249in</Top>
-            <Left>0.75718in</Left>
-            <Height>0.75in</Height>
-            <Width>6.40625in</Width>
+            <Top>1.35069in</Top>
+            <Left>0.2956in</Left>
+            <Height>0.23958in</Height>
+            <Width>6.86523in</Width>
             <ZIndex>1</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox110">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>REFERRED STUDENTS</Value>
-                    <Style>
-                      <FontSize>16pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox13</rd:DefaultName>
-            <Top>1.18749in</Top>
-            <Left>0.75134in</Left>
-            <Height>0.25in</Height>
-            <Width>6.40041in</Width>
-            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -460,9 +500,9 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Computer Generated Code (CGC)</Value>
+                    <Value>Computer Generated Code (CGC):</Value>
                     <Style>
-                      <FontSize>16pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -472,11 +512,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox13</rd:DefaultName>
-            <Top>2.52083in</Top>
-            <Left>0.5456in</Left>
+            <Top>0.69444in</Top>
+            <Left>0.28976in</Left>
             <Height>0.25in</Height>
-            <Width>3.52541in</Width>
-            <ZIndex>3</ZIndex>
+            <Width>2.69208in</Width>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -494,9 +534,9 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Course Lecturers sign over CGC</Value>
+                    <Value>Course Lecturer's Signatures should be over the CGC above</Value>
                     <Style>
-                      <FontSize>16pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -506,11 +546,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox13</rd:DefaultName>
-            <Top>3.03125in</Top>
-            <Left>0.55144in</Left>
-            <Height>0.3125in</Height>
-            <Width>7.30857in</Width>
-            <ZIndex>4</ZIndex>
+            <Top>1.0382in</Top>
+            <Left>0.2956in</Left>
+            <Height>0.22917in</Height>
+            <Width>6.87107in</Width>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -528,9 +568,9 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Computer Generated Code (CGC)</Value>
+                    <Value>=Fields!remarks.Value</Value>
                     <Style>
-                      <FontSize>16pt</FontSize>
+                      <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -540,11 +580,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox13</rd:DefaultName>
-            <Top>2.52083in</Top>
-            <Left>4.24415in</Left>
+            <Top>0.69444in</Top>
+            <Left>3.05128in</Left>
             <Height>0.25in</Height>
-            <Width>3.43166in</Width>
-            <ZIndex>5</ZIndex>
+            <Width>4.10955in</Width>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -556,13 +596,13 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>3.66666in</Height>
+        <Height>1.71527in</Height>
         <Style />
       </Body>
-      <Width>9.625in</Width>
+      <Width>7.41667in</Width>
       <Page>
         <PageHeader>
-          <Height>3.0625in</Height>
+          <Height>1.5in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -587,8 +627,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <Top>0.42448in</Top>
+              <Left>0in</Left>
               <Height>0.25in</Height>
-              <Width>7.85417in</Width>
+              <Width>7.41083in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -606,7 +647,14 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>DEPARTMENT OF COMPUTER ENGINEERING</Value>
+                      <Value>DEPARTMENT OF </Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!department.Value</Value>
                       <Style>
                         <FontFamily>Times New Roman</FontFamily>
                         <FontSize>16pt</FontSize>
@@ -620,8 +668,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <Top>0.65886in</Top>
+              <Left>0in</Left>
               <Height>0.25in</Height>
-              <Width>7.85417in</Width>
+              <Width>7.41083in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -640,7 +689,49 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>COMPUTER GENERATED RESULT</Value>
+                      <Value>COMPUTER GENERATED RESULT FOR </Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!course_code_idr.Value</Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value> : </Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!course_title.Value</Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>(</Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!session_idr.Value</Value>
+                      <Style>
+                        <FontFamily>Times New Roman</FontFamily>
+                        <FontSize>16pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>)</Value>
                       <Style>
                         <FontFamily>Times New Roman</FontFamily>
                         <FontSize>16pt</FontSize>
@@ -653,9 +744,9 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>1.78386in</Top>
-              <Height>0.625in</Height>
-              <Width>7.85417in</Width>
+              <Top>1.06511in</Top>
+              <Height>0.33333in</Height>
+              <Width>7.41083in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -688,8 +779,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <Top>0.16667in</Top>
+              <Left>0in</Left>
               <Height>0.25in</Height>
-              <Width>7.85417in</Width>
+              <Width>7.41083in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -720,7 +812,11 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Generated using RTPS Result Software</Value>
+                      <Value>Generated using RTPS Result Software. CGC: </Value>
+                      <Style />
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Fields!remarks.Value</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
@@ -729,9 +825,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox23</rd:DefaultName>
               <Top>0.125in</Top>
-              <Left>0.5456in</Left>
+              <Left>0.2956in</Left>
               <Height>0.27083in</Height>
-              <Width>7.30857in</Width>
+              <Width>6.87107in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
