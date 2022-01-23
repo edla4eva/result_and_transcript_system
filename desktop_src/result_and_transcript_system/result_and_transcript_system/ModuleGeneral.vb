@@ -773,18 +773,19 @@ Module ModuleGeneral
         tmpLevel = currLevel
         tmpsession = currSession
         If dMode = MODE_OF_ENTRY_UME Then
-            While (tmpLevel >= 200 Or iLoop > 15)       'beware of the infiite!
+            While (tmpLevel > 0 Or iLoop > 15)       'beware of the infiite!
                 iLoop = iLoop + 1
-                tmpsession = prevSession(currSession)
+                tmpsession = prevSession(tmpsession)
                 tmpLevel = tmpLevel - 100
             End While
         Else
-            While (tmpLevel > 0 Or iLoop > 15)       'beware of the infiite!
+            While (tmpLevel >= 200 Or iLoop > 15)       'beware of the infiite!
                 iLoop = iLoop + 1
-                tmpsession = prevSession(currSession)
+                tmpsession = prevSession(tmpsession)
                 tmpLevel = tmpLevel - 100
             End While
         End If
+        Return tmpsession
     End Function
     Function Array2sTR(s As String(), Optional strSeperator As String = ",") As String
         Dim tmpStr As String = ""

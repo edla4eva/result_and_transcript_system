@@ -24,21 +24,15 @@ Public Class FormSenateResult
             txtSession = ComboBoxSessions.SelectedItem
             txtDept = ComboBoxDepartments.SelectedItem
 
-
-
-
-
             Dim ds As DataSet = objReports.creatDataSetSenate(String.Format(STR_SQL_ALL_BROADSHEET_WHERE_SESSION_DEPT_LEVEL_WITHOUT_TIMESTAMP, txtSession, txtDept, txtlevel))
             Dim dt As New DataTable()
             dt = ds.Tables(0)
             DataGridView1.DataSource = ds.Tables(0).DefaultView
 
-
             'SqlServerTypes.Utilities.LoadNativeAssemblies(AppDomain.CurrentDomain.BaseDirectory);
             'Report stuff
 
             With Me.ReportViewer1.LocalReport
-
                 .DataSources.Clear()
                 '.ReportPath = My.Application.Info.DirectoryPath
                 .DataSources.Add(New Microsoft.Reporting.WinForms.ReportDataSource("DataSet1", dt))
@@ -61,12 +55,9 @@ Public Class FormSenateResult
         End If
 
     End Sub
-
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
     End Sub
-
-
     Private Sub FormReport_Closing(sender As Object, e As CancelEventArgs) Handles MyBase.Closing
         MainForm.doCloseForm()
     End Sub
@@ -79,7 +70,6 @@ Public Class FormSenateResult
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
-
         ComboBoxDepartments.Items.Clear()
         For Each key In dictDepts.Keys
             ComboBoxDepartments.Items.Add(dictDepts(key))

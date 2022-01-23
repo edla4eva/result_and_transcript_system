@@ -124,7 +124,6 @@ Public Class FormStudentsRegistration
             On Error Resume Next
             If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
                 filterStudents(strSearch)   'for gridiew
-
             End If
         End If
         filterStudentsFORM(strSearch)   'for FormView
@@ -1075,6 +1074,7 @@ Public Class FormStudentsRegistration
         bindcontrolsToReg()
     End Sub
     Sub bindcontrolsToReg()
+
         fillRegFORMUsingdataAdapter()
         'OR
         'dsStudents = mappDB.GetDataWhere("SELECT * FROM Reg")
@@ -1257,7 +1257,12 @@ Public Class FormStudentsRegistration
             dgvStudents.ReadOnly = True
             dgvStudents.Visible = False
             ButtonFormView.Text = "Grid View"
-            Me.ButtonRefreshFormview.PerformClick()
+
+            If glbRegConnFORM.State = ConnectionState.Open Then
+                'already bound
+            Else
+                bindcontrolsToReg()     'rebind
+            End If
             TextBoxFancyDisplayCourse1.Visible = False
             TextBoxFancyDisplayCourse2.Visible = False
         Else

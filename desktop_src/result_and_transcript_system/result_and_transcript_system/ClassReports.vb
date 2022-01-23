@@ -624,21 +624,13 @@ Public Class ClassReports
         dsBS = mappDB.GetDataWhere(strSQL)   'todo: query criteria
 
         dt = New DataTable()
-
-        'snCoulumn = New DataColumn("SN", Type.GetType("System.Int32"))
-        'matnoCoulumn = New DataColumn("MATNO", Type.GetType("System.String"))
-        'surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
-        'nameCoulumn = New DataColumn("Other Names", Type.GetType("System.String"))
-        'statusCoulumn = New DataColumn("Status", Type.GetType("System.String"))
-        'creditsCoulumn = New DataColumn("Credits", Type.GetType("System.Double"))
-        snCoulumn = New DataColumn("Col0", Type.GetType("System.String"))
-        matnoCoulumn = New DataColumn("Col1", Type.GetType("System.String"))
-        surnameCoulumn = New DataColumn("Col2", Type.GetType("System.String"))
-        nameCoulumn = New DataColumn("Col3", Type.GetType("System.String"))
-        statusCoulumn = New DataColumn("Status", Type.GetType("System.String"))
-        deptNameCoulumn = New DataColumn("Col172", Type.GetType("System.String"))
+        snCoulumn = New DataColumn("sn", Type.GetType("System.String"))
+        matnoCoulumn = New DataColumn("matno", Type.GetType("System.String"))
+        surnameCoulumn = New DataColumn("SURNAME", Type.GetType("System.String"))
+        nameCoulumn = New DataColumn("FullName", Type.GetType("System.String"))
+        statusCoulumn = New DataColumn("status", Type.GetType("System.String"))
+        deptNameCoulumn = New DataColumn("bs_department_name", Type.GetType("System.String"))
         SessionCoulumn = New DataColumn("Session", Type.GetType("System.String"))
-
 
         dt.TableName = "Senate"
         dt.Columns.Add(snCoulumn)
@@ -648,32 +640,28 @@ Public Class ClassReports
         dt.Columns.Add(statusCoulumn)
         dt.Columns.Add(deptNameCoulumn)
         dt.Columns.Add(SessionCoulumn)
-
-        dr = dt.NewRow()
-        dr("Col0") = 1
-        dr("Col1") = "ENG000222111"
-        dr("Col2") = "Amenaghawon OBINNA"
-        dr("Col172") = "Computer Engineering"
-        dr("Status") = "Successful"
-        dr("Session") = "2018/2019"
-        'dr("SURNAME") = "OBINNA"
-        'dr("Other Names") = "Amenaghawon"
+        dt.Columns.Add("bs_level", Type.GetType("System.String"))
+        dt.Columns.Add("bs_session", Type.GetType("System.String"))
+        dt.Columns.Add("category", Type.GetType("System.String"))
+        'dr = dt.NewRow()
+        'dr("sn") = 1
+        'dr("matno") = "ENG000222111"
+        'dr("Fullname") = "Amenaghawon OBINNA"
+        'dr("bs_department_name") = "Computer Engineering"
         'dr("Status") = "Successful"
-        'dr("Credits") = 22
-
-        SumDr = SumDr + 1
-        dt.Rows.Add(dr)
-
-
-
+        'dr("Session") = "2018/2019"
+        'SumDr = SumDr + 1
+        'dt.Rows.Add(dr)
         For i = 0 To dsBS.Tables(0).Rows.Count - 1
             dr = dt.NewRow()
-            dr("Col0") = dsBS.Tables(0).Rows(i).Item("Col0").ToString
-            dr("Col1") = dsBS.Tables(0).Rows(i).Item("Col1").ToString
-            dr("Col2") = dsBS.Tables(0).Rows(i).Item("Col2").ToString
-            dr("Col172") = dsBS.Tables(0).Rows(i).Item("Col172").ToString
-            dr("Status") = "Successful"     'todo add to db
-            dr("Session") = "2018/2019" 'dsBS.Tables(0).Rows(i).Item("Session").ToString
+            dr("sn") = dsBS.Tables(0).Rows(i).Item("sn").ToString
+            dr("matno") = dsBS.Tables(0).Rows(i).Item("matno").ToString
+            dr("FullName") = dsBS.Tables(0).Rows(i).Item("FullName").ToString
+            dr("bs_session") = dsBS.Tables(0).Rows(i).Item("bs_session").ToString
+            dr("Status") = dsBS.Tables(0).Rows(i).Item("Status").ToString    'todo add to db
+            dr("category") = dsBS.Tables(0).Rows(i).Item("category").ToString
+            dr("bs_level") = dsBS.Tables(0).Rows(i).Item("bs_level").ToString
+            dr("bs_department_name") = dsBS.Tables(0).Rows(i).Item("bs_department_name").ToString
             'MsgBox(ds.Tables(0).Rows(i).Item(0).ToString & "   --   " & ds.Tables(0).Rows(i).Item(1).ToString)
             dt.Rows.Add(dr)
         Next i

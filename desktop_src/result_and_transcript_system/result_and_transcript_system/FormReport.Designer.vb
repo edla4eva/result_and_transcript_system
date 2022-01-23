@@ -23,7 +23,7 @@ Partial Class FormSenateResult
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ReportDataSource1 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
+        Dim ReportDataSource3 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.ReportViewer1 = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.SidePanel = New System.Windows.Forms.Panel()
@@ -45,11 +45,9 @@ Partial Class FormSenateResult
         Me.Label4 = New System.Windows.Forms.Label()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.BgWProcess = New System.ComponentModel.BackgroundWorker()
-        Me.ClassDBBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.PanelModify.SuspendLayout()
-        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'DataGridView1
@@ -64,7 +62,7 @@ Partial Class FormSenateResult
         '
         Me.ReportViewer1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ReportViewer1.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.Report1.rdlc"
+        Me.ReportViewer1.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.ReportSenate.rdlc"
         Me.ReportViewer1.Location = New System.Drawing.Point(184, 12)
         Me.ReportViewer1.Name = "ReportViewer1"
         Me.ReportViewer1.ServerReport.BearerToken = Nothing
@@ -154,9 +152,8 @@ Partial Class FormSenateResult
         '
         Me.ReportViewerSenateCover.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        ReportDataSource1.Name = "DataSet1"
-        ReportDataSource1.Value = Me.ClassDBBindingSource
-        Me.ReportViewerSenateCover.LocalReport.DataSources.Add(ReportDataSource1)
+        ReportDataSource3.Name = "DataSet1"
+        Me.ReportViewerSenateCover.LocalReport.DataSources.Add(ReportDataSource3)
         Me.ReportViewerSenateCover.LocalReport.ReportEmbeddedResource = "result_and_transcript_system.ReportSenateCover.rdlc"
         Me.ReportViewerSenateCover.Location = New System.Drawing.Point(184, 12)
         Me.ReportViewerSenateCover.Name = "ReportViewerSenateCover"
@@ -266,7 +263,6 @@ Partial Class FormSenateResult
         'BgWProcess
         '
         Me.BgWProcess.WorkerSupportsCancellation = True
-
         '
         'FormSenateResult
         '
@@ -286,7 +282,6 @@ Partial Class FormSenateResult
         Me.SidePanel.ResumeLayout(False)
         Me.PanelModify.ResumeLayout(False)
         Me.PanelModify.PerformLayout()
-        CType(Me.ClassDBBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -299,7 +294,6 @@ Partial Class FormSenateResult
     Friend WithEvents ButtonPrint As Button
     Friend WithEvents ButtonEport As Button
     Friend WithEvents ReportViewerSenateCover As Microsoft.Reporting.WinForms.ReportViewer
-    Friend WithEvents ClassDBBindingSource As BindingSource
     Friend WithEvents PanelModify As Panel
     Friend WithEvents ComboBoxSessions As ComboBox
     Friend WithEvents ComboBoxLevel As ComboBox

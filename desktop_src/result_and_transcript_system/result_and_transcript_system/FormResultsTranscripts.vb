@@ -189,6 +189,12 @@ Public Class FormResultsTranscripts
         tmpDTTranscript.Columns.Add("bs_level", GetType(System.String))
         tmpDTTranscript.Columns.Add("gpa100", GetType(System.String))
         tmpDTTranscript.Columns.Add("gpa200", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa300", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa400", GetType(System.String))
+        tmpDTTranscript.Columns.Add("gpa500", GetType(System.String))
+        tmpDTTranscript.Columns.Add("wgpa100", GetType(System.String))
+        tmpDTTranscript.Columns.Add("wgpa200", GetType(System.String))
+        tmpDTTranscript.Columns.Add("fgpa", GetType(System.String))
 
         tmpDTTranscript.Columns.Add("GPA", Type.GetType("System.String"))
         tmpDTTranscript.Columns.Add("Class", Type.GetType("System.String"))
@@ -272,24 +278,19 @@ Public Class FormResultsTranscripts
             dWeightedGradePoints = objBroadsheet.getWeightedGRADESPoints(GradePoints, Credits)
             dGPA = objBroadsheet.CalcGPA(dWeightedGradePoints, approvedCourses, Credits, objBroadsheet.Level, objBroadsheet.levelCGPaPercentages)
             strGPA = (Math.Floor(dGPA * 1000) / 1000).ToString
-            For i = 0 To 9
+            For i = 0 To tmpDTResults.Rows.Count - 1
+                tmpDTTranscript.Rows(i).Item("gpa100") = strGPA
                 tmpDTTranscript.Rows(i).Item("gpa200") = strGPA
                 tmpDTTranscript.Rows(i).Item("GPA") = strGPA
             Next
-
-            'tmpDTResults=mappDB.showBroadsheet()
-            'dgvCourses.DataSource = tmpDSRegCourses.Tables(0)
+            tmpDTTranscript.AcceptChanges()
             dgvTranscripts.DataSource = tmpDTTranscript
-
-            'dgvCourses.Refresh()
             dgvTranscripts.Refresh()
             tmpDSTranscript.Tables.Clear()
             tmpDTTranscript.TableName = "Transcript"
             tmpDTResults.TableName = "Result"
-            'resizeDatagrids("courses")
+
             tmpDSTranscript.Tables.Add(tmpDTTranscript)
-            'tmpDSTranscript.Tables.Add(tmpDTResults)
-            'tmpDSTranscript.Tables.Add(tmpD)
             Return tmpDSTranscript
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -512,18 +513,16 @@ Public Class FormResultsTranscripts
     End Sub
 
     Private Sub ButtonFullScreen_Click(sender As Object, e As EventArgs) Handles ButtonFullScreen.Click
+        ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        ReportViewerGPCard.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         If ReportViewerTranscript.Dock = DockStyle.Fill Then
             ReportViewerTranscript.Dock = DockStyle.None
             ReportViewerGPCard.Dock = DockStyle.None
-            ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
-            ReportViewerGPCard.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
-
+            ReportViewerGPCARDDIP.Dock = DockStyle.None
         Else
             ReportViewerTranscript.Dock = DockStyle.Fill
-            ReportViewerTranscript.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
             ReportViewerGPCard.Dock = DockStyle.Fill
-            ReportViewerGPCard.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
-
+            ReportViewerGPCARDDIP.Dock = DockStyle.Fill
         End If
 
     End Sub
@@ -541,10 +540,15 @@ Public Class FormResultsTranscripts
             If Not dgvTranscripts.DataSource Is Nothing Then
                 dt = dgvTranscripts.DataSource
                 objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCard, dt)
-
+                objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCARDDIP, dt)
             End If
         End If
-        ReportViewerGPCard.BringToFront()
+        If RadioButtonDIP.Checked = True Then
+            ReportViewerGPCARDDIP.BringToFront()
+        Else
+            ReportViewerGPCard.BringToFront()
+        End If
+
     End Sub
 
     Private Sub TextBoxMATNO_TextChanged(sender As Object, e As EventArgs) Handles TextBoxMATNO.TextChanged
