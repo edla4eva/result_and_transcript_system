@@ -32,11 +32,12 @@ Partial Class FormCourseLecturer
         Me.ButtonNoOfStudents = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         Me.ButtonDownloadTemplate = New System.Windows.Forms.Button()
         Me.ButtonCloud = New System.Windows.Forms.Button()
         Me.ButtonUpload = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.ButtonClose = New System.Windows.Forms.Button()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -108,6 +109,7 @@ Partial Class FormCourseLecturer
         Me.GroupBox2.Size = New System.Drawing.Size(206, 288)
         Me.GroupBox2.TabIndex = 15
         Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Visible = False
         '
         'Label5
         '
@@ -157,7 +159,7 @@ Partial Class FormCourseLecturer
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Arial Narrow", 24.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer), CType(CType(150, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(223, 16)
+        Me.Label1.Location = New System.Drawing.Point(178, 13)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(383, 37)
         Me.Label1.TabIndex = 14
@@ -175,6 +177,19 @@ Partial Class FormCourseLecturer
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 525)
         Me.SidePanel.TabIndex = 17
+        '
+        'ButtonClose
+        '
+        Me.ButtonClose.FlatAppearance.BorderSize = 0
+        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonClose.ForeColor = System.Drawing.Color.White
+        Me.ButtonClose.Location = New System.Drawing.Point(3, 405)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonClose.TabIndex = 7
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
         '
         'ButtonDownloadTemplate
         '
@@ -220,18 +235,8 @@ Partial Class FormCourseLecturer
         Me.SaveFileDialog1.Filter = "Excel Files|*.xlsx"
         Me.SaveFileDialog1.RestoreDirectory = True
         '
-        'ButtonClose
+        'BackgroundWorker1
         '
-        Me.ButtonClose.FlatAppearance.BorderSize = 0
-        Me.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonClose.ForeColor = System.Drawing.Color.White
-        Me.ButtonClose.Location = New System.Drawing.Point(3, 405)
-        Me.ButtonClose.Name = "ButtonClose"
-        Me.ButtonClose.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonClose.TabIndex = 7
-        Me.ButtonClose.Text = "Close"
-        Me.ButtonClose.UseVisualStyleBackColor = True
         '
         'FormCourseLecturer
         '
@@ -269,4 +274,5 @@ Partial Class FormCourseLecturer
     Friend WithEvents ButtonUpload As Button
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents ButtonClose As Button
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 End Class

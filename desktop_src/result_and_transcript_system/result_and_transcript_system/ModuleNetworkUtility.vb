@@ -32,15 +32,18 @@ Module ModuleNetworkUtility
     End Sub
     Public Sub logError(str As String)
         On Error Resume Next
+        'todo use log library
         Dim fileExists As Boolean
+        Dim logFileName As String = ""  ' USER_DIRECTORY & "\db\error_log" & Now.Date.ToString & ".txt"
+        logFileName = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\RTPS_Result_Software_error_log" & Now.Date.Day & ".txt"
+        str = Now.ToString & vbTab & str & vbCrLf
 
-        fileExists = My.Computer.FileSystem.FileExists(USER_DIRECTORY & "\db\error_log" & Now.Date.ToString & ".txt")
+        fileExists = My.Computer.FileSystem.FileExists(logFileName)
         If fileExists = True Then
-            My.Computer.FileSystem.WriteAllText(USER_DIRECTORY & "\db\error_log" & Now.ToLongDateString & ".txt", str, True)
+            My.Computer.FileSystem.WriteAllText(logFileName, str, True)
         Else
-            My.Computer.FileSystem.WriteAllText(USER_DIRECTORY & "\db\error_log" & Now.ToLongDateString & ".txt", String.Empty, False)
-
-
+            My.Computer.FileSystem.WriteAllText(logFileName, String.Empty, False)
+            My.Computer.FileSystem.WriteAllText(logFileName, str, True)
         End If
     End Sub
 End Module

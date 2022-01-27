@@ -101,6 +101,18 @@ Namespace My
                 Me("trial") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("d7e3-64b6-83j3-789d")>  _
+        Public Property activation_code() As String
+            Get
+                Return CType(Me("activation_code"),String)
+            End Get
+            Set
+                Me("activation_code") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

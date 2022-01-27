@@ -82,35 +82,45 @@ Public Class FormViewRegs
     End Sub
 
     Private Sub ButtonDelete_Click(sender As Object, e As EventArgs) Handles ButtonDelete.Click
-        Dim strSQL As String = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
-        Dim dSession As String = DataGridViewRegs.SelectedRows(0).Cells("session_idr").Value.ToString
-        Dim dDeptID As String = DataGridViewRegs.SelectedRows(0).Cells("dept_idr").Value.ToString
-        Dim dlevel As String = DataGridViewRegs.SelectedRows(0).Cells("level").Value.ToString
+        Try
+            Dim strSQL As String = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
+            Dim dSession As String = ""  ' DataGridViewRegs.SelectedRows(0).Cells("session_idr").Value.ToString
+            Dim dDeptID As String = ""  'DataGridViewRegs.SelectedRows(0).Cells("dept_idr").Value.ToString
+            Dim dlevel As String = ""   'DataGridViewRegs.SelectedRows(0).Cells("level").Value.ToString
 
-        If Not DataGridViewRegs.SelectedRows Is Nothing Or DataGridViewRegs.Columns.Contains("matno") Then
-            strSQL = DELETE_FROM_REGS_WHERE_SESSION_DEPTID_LEVEL
-        ElseIf Not DataGridViewReg.SelectedRows Is Nothing Or DataGridViewRegs.Columns.Contains("matno") Then
-            strSQL = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
-        Else
-            Exit Sub
-        End If
+            If Not DataGridViewRegs.SelectedRows.Count = 0 Or DataGridViewRegs.Columns.Contains("matno") Then
+                strSQL = DELETE_FROM_REGS_WHERE_SESSION_DEPTID_LEVEL
+                dSession = DataGridViewReg.SelectedRows(0).Cells("session_idr").Value.ToString
+                dDeptID = DataGridViewReg.SelectedRows(0).Cells("dept_idr").Value.ToString
+                dlevel = DataGridViewReg.SelectedRows(0).Cells("level").Value.ToString
+            ElseIf Not DataGridViewReg.SelectedRows.count = 0 Or DataGridViewRegs.Columns.Contains("matno") Then
+                dSession = DataGridViewReg.SelectedRows(0).Cells("session_idr").Value.ToString
+                dDeptID = DataGridViewReg.SelectedRows(0).Cells("dept_idr").Value.ToString
+                dlevel = DataGridViewReg.SelectedRows(0).Cells("level").Value.ToString
+                strSQL = DELETE_FROM_REG_WHERE_SESSION_DEPTID_LEVEL
+            Else
+                Exit Sub
+            End If
 
-        If MessageBox.Show("Are you sure you want to delete all the selected registration data?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
-            LoginForm1.Close()
-            LoginForm1.Tag = "adminCheck"
+            If MessageBox.Show("Are you sure you want to delete all the selected registration data?", "Delete", MessageBoxButtons.YesNo) = MsgBoxResult.Yes Then
+                LoginForm1.Close()
+                LoginForm1.Tag = "adminCheck"
 
-            If LoginForm1.ShowDialog() = DialogResult.OK Then
-                If LoginForm1.Tag = "adminOk" Then
-                    If mappDB.doQuery(String.Format(strSQL, dSession, dDeptID, dlevel)) = True Then
-                        ButtonShowAll.PerformClick()
-                        MsgBox("Registration data deleted sucessfully")
-                    Else
-                        MsgBox("Could not delete Registratin data")
+                If LoginForm1.ShowDialog() = DialogResult.OK Then
+                    If LoginForm1.Tag = "adminOk" Then
+                        If mappDB.doQuery(String.Format(strSQL, dSession, dDeptID, dlevel)) = True Then
+                            ButtonShowAll.PerformClick()
+                            MsgBox("Registration data deleted sucessfully")
+                        Else
+                            MsgBox("Could not delete Registratin data")
+                        End If
                     End If
                 End If
             End If
-        End If
+        Catch ex As Exception
+            logError(ex.ToString)
 
+        End Try
     End Sub
 
     Private Sub TextBoxSession_TextChanged_1(sender As Object, e As EventArgs) Handles TextBoxSession.TextChanged
@@ -230,5 +240,9 @@ Public Class FormViewRegs
         End If
 
 
+    End Sub
+
+    Private Sub ButtonBack_Click(sender As Object, e As EventArgs) Handles ButtonBack.Click
+        Me.Close()
     End Sub
 End Class

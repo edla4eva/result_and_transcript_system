@@ -18,22 +18,26 @@ Public Class FormStudentsRegistration
     Dim glbDTReg As DataTable
     Dim glbBND As New BindingSource
 
-
-
-
     Private Sub FormStudentsRegistration_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.WindowState = FormWindowState.Maximized
+        Try
+            Me.WindowState = FormWindowState.Maximized
 
-        Me.BackColor = RGBColors.colorBackground
-        Me.dgvStudents.BackgroundColor = RGBColors.colorBackground
-        Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
-        Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
+            Me.BackColor = RGBColors.colorBackground
+            Me.dgvStudents.BackgroundColor = RGBColors.colorBackground
+            Me.dgvStudents.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+            Me.dgvStudents.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
 
-        Me.dgvImportCourses.BackgroundColor = RGBColors.colorBackground
-        Me.dgvImportCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
-        Me.dgvImportCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
+            Me.dgvImportCourses.BackgroundColor = RGBColors.colorBackground
+            Me.dgvImportCourses.RowsDefaultCellStyle.BackColor = RGBColors.colorForeground
+            Me.dgvImportCourses.RowsDefaultCellStyle.ForeColor = RGBColors.colorBackground
 
-        bindcontrolsToReg()
+            fillRegFORMUsingdataAdapter()
+            bindcontrolsToReg()
+        Catch ex As Exception
+            MsgBox("Something went wrong, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+
+        End Try
     End Sub
     Private Sub FormStudentsRegistration_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
@@ -66,10 +70,12 @@ Public Class FormStudentsRegistration
             Next
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            logError(ex.ToString)    ', "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Throw
         End Try
     End Sub
     Public Sub resizeDatagrids(dGrid As String)
+        On Error Resume Next
         If DataGridViewAlReg.Rows.Count > 0 And dGrid = "Courses" Then
 
             For Each col As DataGridViewColumn In DataGridViewAlReg.Columns
@@ -100,44 +106,37 @@ Public Class FormStudentsRegistration
             Next
         End If
     End Sub
-    Public Sub getRegisteredCoursesForStudent(dMATNO As String)
-        'Try
-        '    Dim tmpDSCourses As DataSet
-        '    mappDB.MATNO = dMATNO
-        '    tmpDSCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REG_WHERE, dMATNO), "Courses") 'todo
-        '    dgvCourses.DataSource = tmpDSCourses.Tables("Courses").DefaultView
-
-        '    dgvCourses.Refresh()
-        '    resizeDatagrids("courses")
-        'Catch ex As Exception
-        '    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        'End Try
-    End Sub
 
     Private Sub txtStudentMATNO_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtStudentMATNO.TextChanged
         Dim strSearch As String = txtStudentMATNO.Text
-        If txtStudentMATNO.Text.Length > 3 And dgvStudents.Rows.Count = 0 Then
-            'Dim tmpDSStudents = mappDB.GetDataWhere(String.Format(STR_SQL_SEARCH_STUDENTS_BY_MATNO_SURNAME_FIRSTNAME, strSearch, strSearch, strSearch), "Students")
-            'dgvStudents.DataSource = tmpDSStudents.Tables("Students").DefaultView
-        ElseIf dgvStudents.Rows.Count > 0 Then
-            'just filter
-            On Error Resume Next
-            If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
-                filterStudents(strSearch)   'for gridiew
+        Try
+            txtStudentMATNO.BackColor = Color.White
+            If txtStudentMATNO.Text.Length < 7 Then
+                'dont waste time
+            ElseIf dgvStudents.Rows.Count > 0 Then
+                'just filter
+                If Not dgvStudents.SelectedRows(0).Cells("matno").Value = Nothing Then
+                    filterStudents(strSearch)   'for gridiew
+                End If
+                filterStudentsFORM(strSearch)
+            Else
+                filterStudentsFORM(strSearch)
             End If
-        End If
-        filterStudentsFORM(strSearch)   'for FormView
+            'for FormView
+        Catch ex As Exception
+            txtStudentMATNO.BackColor = Color.Pink
+        End Try
     End Sub
 
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
+        On Error Resume Next
         dgvStudents.RefreshEdit()
-        'btnReset.Enabled = False
-        'Me.ProgressBarBS.Value = 5
-        'TimerBS.Enabled = True
-        'TimerBS.Start()
-
-        'bgwLoad.RunWorkerAsync(1)  'runs GetData()
+        btnReset.Enabled = False
+        ''Me.ProgressBarBS.Value = 5
+        ''TimerBS.Enabled = True
+        ''TimerBS.Start()
+        bgwLoad.RunWorkerAsync(1)  'runs GetData()
 
     End Sub
 
@@ -146,53 +145,80 @@ Public Class FormStudentsRegistration
     End Sub
 
     Public Sub CaptureCourses()
-        Dim units As Integer
-        Dim courseCodes1 As String() = TextBoxCourseCode_1.Text.Split(";")
-        Dim courseCodes2 As String() = TextBoxCourseCode_2.Text.Split(";")
-        Dim sumUnits As Integer = 0
+        Try
+            Dim units As Integer
+            Dim courseCodes1 As String() = TextBoxCourseCode_1.Text.Split(";")
+            Dim courseCodes2 As String() = TextBoxCourseCode_2.Text.Split(";")
+            Dim sumUnits As Integer = 0
 
-        'todo check if dictionary is lready loaded if not load
-        If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then
-            'todo:
-        End If
-
-        For Each c1 In courseCodes1
-            If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c1) Then
-                units = dictAllCourseCodeKeyAndCourseUnitVal(c1)
-                sumUnits = sumUnits + units
+            'todo check if dictionary is lready loaded if not load
+            If dictAllCourseCodeKeyAndCourseUnitVal.Count = 0 Then
+                'todo:
             End If
-        Next
-        For Each c2 In courseCodes2
-            If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c2) Then
-                units = dictAllCourseCodeKeyAndCourseUnitVal(c2)
-                sumUnits = sumUnits + units
+
+            For Each c1 In courseCodes1
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c1) Then
+                    units = dictAllCourseCodeKeyAndCourseUnitVal(c1)
+                    sumUnits = sumUnits + units
+                End If
+            Next
+            For Each c2 In courseCodes2
+                If dictAllCourseCodeKeyAndCourseUnitVal.ContainsKey(c2) Then
+                    units = dictAllCourseCodeKeyAndCourseUnitVal(c2)
+                    sumUnits = sumUnits + units
+                End If
+            Next
+
+            'Me.TextBoxCourseCode.Text = courseCode.ToString
+            'Me.TextBoxSemester.Text = semester.ToString
+            'Me.TextBoxUnits.Text = sumUnits.ToString
+            Me.TextBoxTotalCredits.Text = sumUnits.ToString
+            If CInt(TextBoxTotalCredits.Text) > 50 Then
+                TextBoxTotalCredits.BackColor = Color.Pink
+            Else
+                TextBoxTotalCredits.BackColor = Color.White
             End If
-        Next
+        Catch ex As Exception
+            TextBoxTotalCredits.Text = "#"
+            logError(ex.ToString)
 
-        'Me.TextBoxCourseCode.Text = courseCode.ToString
-        'Me.TextBoxSemester.Text = semester.ToString
-        'Me.TextBoxUnits.Text = sumUnits.ToString
-        Me.TextBoxTotalCredits.Text = sumUnits.ToString
-        If CInt(TextBoxTotalCredits.Text) > 50 Then
-            TextBoxTotalCredits.BackColor = Color.Pink
-        Else
-            TextBoxTotalCredits.BackColor = Color.White
-        End If
-
+        End Try
     End Sub
 
-    Sub filterReg(dMATNO As String)
-        If DataGridViewAlReg.Rows.Count > 0 Then
-            DataGridViewAlReg.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO, dMATNO)
-        End If
-    End Sub
     Sub filterStudents(dMATNO As String)
-        If dgvStudents.Rows.Count > 0 Then
-            dgvStudents.DataSource.RowFilter = String.Format(STR_FILTER_STUDENTS, dMATNO, dMATNO, dMATNO)
-        End If
+        Try
+            If dgvStudents.Rows.Count > 0 Then
+                'PROBLEM: how do we filter a datatable
+                'glbBND.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO_LIKE, dMATNO)
+                'glbBND.DataSource = glbBND.DataSource.Select(String.Format(STR_FILTER_REG_BY_MATNO_LIKE, dMATNO)).CopyToDataTable()
+                'dgvStudents.DataSource = glbBND
+
+                Dim rowIndex As Integer = -1
+                For Each row In dgvStudents.Rows
+                    If row.Cells("matno").value Is Nothing Then Continue For
+                    If (row.Cells("matno").Value.ToString() = dMATNO.ToUpper) Then
+                        rowIndex = row.Index
+                        Exit For
+                    End If
+                Next
+                dgvStudents.Rows(rowIndex).Selected = True
+                dgvStudents.CurrentCell = dgvStudents.Rows(rowIndex).Cells(0)
+                'Catch ex As NullReferenceException
+            End If
+        Catch ex As Exception
+            Throw
+            End Try
+
     End Sub
     Sub filterStudentsFORM(dMATNO As String)
-        BindingSourceStudents.DataSource.RowFilter = String.Format(STR_FILTER_REG_BY_MATNO_LIKE, dMATNO)
+        'BindingSourceStudents.Filter = "matno=" & dMATNO
+        Try
+            Dim inx As Integer = 1
+            inx = BindingSourceStudents.Find("matno", dMATNO.ToUpper)
+            If inx > -1 Then BindingSourceStudents.Position = inx
+        Catch ex As Exception
+            Throw
+        End Try
     End Sub
     Public Sub unregisterStudent()
         Dim oldLen As Integer = 0
@@ -363,10 +389,14 @@ Public Class FormStudentsRegistration
         End Try
 
     End Sub
-    Private Function fillRegGridUsingdataAdapter() As Boolean 'dSess As String, dDeptID As Integer, dLvl As Integer) As Boolean
+    Private Function fillRegGridUsingdataAdapter(Optional dSession As String = Nothing, Optional deptid As Integer = Nothing, Optional dlvl As Integer = Nothing) As Boolean 'dSess As String, dDeptID As Integer, dLvl As Integer) As Boolean
         Try
             Dim strSQL As String
-            strSQL = String.Format("SELECT * FROM Reg") ' WHERE session_idr='{1}',dept_idr={2},[level]={3}", dSess, dDeptID, dLvl)
+            If dSession Is Nothing Then
+                strSQL = String.Format("SELECT * FROM Reg") ' WHERE session_idr='{1}',dept_idr={2},[level]={3}", dSess, dDeptID, dLvl)
+            Else
+                strSQL = String.Format("SELECT * FROM Reg WHERE session_idr='{0}' And dept_idr={1} And [level]={2}", dSession, deptid.ToString, dlvl.ToString)
+            End If
 
             If glbRegConn.State = ConnectionState.Open Then glbRegConn.Close()
             glbRegConn.ConnectionString = mappDB.getCorrectConnectionstring()
@@ -381,17 +411,22 @@ Public Class FormStudentsRegistration
             glbBND.DataSource = glbDTReg
             Return True
         Catch ex As Exception
-            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            'MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
             logError(ex.ToString)
-            Return False
+            'Return False
+            Throw
         End Try
     End Function
-    Private Function fillRegFORMUsingdataAdapter() As Boolean 'dSess As String, dDeptID As Integer, dLvl As Integer) As Boolean
+    Private Function fillRegFORMUsingdataAdapter(Optional dSession As String = Nothing, Optional deptid As Integer = Nothing, Optional dlvl As Integer = Nothing) As Boolean 'dSess As String, dDeptID As Integer, dLvl As Integer) As Boolean
         Try
             Dim strSQL As String
-            strSQL = String.Format("SELECT * FROM Reg") ' WHERE session_idr='{1}',dept_idr={2},[level]={3}", dSess, dDeptID, dLvl)
+            If dSession Is Nothing Then
+                strSQL = String.Format("SELECT * FROM Reg") ' WHERE session_idr='{1}',dept_idr={2},[level]={3}", dSess, dDeptID, dLvl)
+            Else
+                strSQL = String.Format("SELECT * FROM Reg WHERE session_idr='{0}' And dept_idr={1} And [level]={2}", dSession, deptid.ToString, dlvl.ToString)
+            End If
 
-            If glbRegConnFORM.State = ConnectionState.Open Then glbRegConn.Close()
+            If glbRegConnFORM.State = ConnectionState.Open Then glbRegConnFORM.Close()
             glbRegConnFORM.ConnectionString = mappDB.getCorrectConnectionstring()
 
             glbRegConnFORM.Open()
@@ -404,9 +439,10 @@ Public Class FormStudentsRegistration
 
             Return True
         Catch ex As Exception
-            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            'MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
             logError(ex.ToString)
-            Return False
+            'Return False
+            Throw
         End Try
     End Function
     Private Function updateRegGridUsingdataAdapter() As Boolean
@@ -563,27 +599,44 @@ Public Class FormStudentsRegistration
 
             TextBoxFancyDisplayCourse2.Text = ""
             TextBoxFancyDisplayCourse2.Text = dgvStudents.Rows(dRowIndex).Cells("CourseCode_2").Value
-            TextBoxFancyDisplayCourse2.Text = TextBoxFancyDisplayCourse1.Text.Replace(";", vbCrLf)
+            TextBoxFancyDisplayCourse2.Text = TextBoxFancyDisplayCourse2.Text.Replace(";", vbCrLf)
 
         Catch ex As Exception
 
             logError(ex.ToString)
         End Try
     End Sub
-    Sub showCoursesList()
+    Sub showCoursesList(Optional NACourses As Boolean = False)
+
+        If NACourses Then
+            CheckedListBoxCourses.Tag = "NA"
+            For i = 0 To CheckedListBoxCourses.Items.Count - 1
+                If TextBoxNA_CourseCode.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+                    CheckedListBoxCourses.SetItemChecked(i, True)
+                End If
+            Next
+        Else
+            CheckedListBoxCourses.Tag = "Regular"
+            For i = 0 To CheckedListBoxCourses.Items.Count - 1
+                If TextBoxCourseCode_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+                    CheckedListBoxCourses.SetItemChecked(i, True)
+                ElseIf TextBoxCourseCode_2.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
+                    CheckedListBoxCourses.SetItemChecked(i, True)
+                End If
+            Next
+        End If
+
+
+
         PanelCourses.Visible = True
-        For i = 0 To CheckedListBoxCourses.Items.Count - 1
-            If TextBoxCourseCode_1.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
-                CheckedListBoxCourses.SetItemChecked(i, True)
-            ElseIf TextBoxCourseCode_2.Text.Contains(CheckedListBoxCourses.Items(i).ToString()) Then
-                CheckedListBoxCourses.SetItemChecked(i, True)
-            End If
-        Next
     End Sub
 
 
 
     Private Sub ButtonImportRegFERMA_Click(sender As Object, e As EventArgs) Handles ButtonImportRegFERMAExcel.Click
+        'todo; switch to grid view
+
+
         Dim FileOpenDialogBroadsheet As New OpenFileDialog()
         Dim resultFileName As String = ""
         Dim tmpDS As New DataSet
@@ -637,7 +690,7 @@ Public Class FormStudentsRegistration
 
                 dgvImportCourses.Tag = "FERMA"
                 dgvImportCourses.BringToFront()
-
+                dgvImportCourses.Visible = True
 
                 If MsgBox("Do you want To save the imported Registration data into the database (cannot be undone)." &
                           vbCrLf & "You can also do it later by clicking the Save Imported button" &
@@ -683,78 +736,91 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
-        'for dictonaries
-        ComboBoxDepartments.Items.Clear()
-        For Each key In dictDepts.Keys
-            ComboBoxDepartments.Items.Add(dictDepts(key))
-        Next
-        If ComboBoxDepartments.Items.Count > 0 Then ComboBoxDepartments.SelectedIndex = 0
-        TextBoxstudent_dept_idr.Text = dictDepts.Keys(0).ToString
-        ComboBoxSessions.Items.Clear()
-        For Each key In dictSessions.Keys
-            ComboBoxSessions.Items.Add(dictSessions(key))
-        Next
+        Try
 
-        If ComboBoxSessions.Items.Count > 0 Then ComboBoxSessions.SelectedIndex = 0
-        ComboBoxCourseCode.Items.Clear()
-        CheckedListBoxCourses.Items.Clear()
-        For Each key In dictAllCourses.Keys
-            ComboBoxCourseCode.Items.Add(dictAllCourses(key))
-            CheckedListBoxCourses.Items.Add(dictAllCourses(key))
-        Next
-        ComboBoxCourseCode.SelectedIndex = 0
+            'for dictonaries
+            ComboBoxDepartments.Items.Clear()
+            For Each key In dictDepts.Keys
+                ComboBoxDepartments.Items.Add(dictDepts(key))
+            Next
+            If ComboBoxDepartments.Items.Count > 0 Then ComboBoxDepartments.SelectedIndex = 0
+            TextBoxstudent_dept_idr.Text = dictDepts.Keys(0).ToString
+            ComboBoxSessions.Items.Clear()
+            For Each key In dictSessions.Keys
+                ComboBoxSessions.Items.Add(dictSessions(key))
+            Next
 
-        dgvStudents.DataSource = glbBND
-        If dgvStudents.Rows.Count > 0 Then
-            resizeDatagrids("students")
-        End If
+            If ComboBoxSessions.Items.Count > 0 Then ComboBoxSessions.SelectedIndex = 0
+            ComboBoxCourseCode.Items.Clear()
+            CheckedListBoxCourses.Items.Clear()
+            For Each key In dictAllCourses.Keys
+                ComboBoxCourseCode.Items.Add(dictAllCourses(key))
+                CheckedListBoxCourses.Items.Add(dictAllCourses(key))
+            Next
+            ComboBoxCourseCode.SelectedIndex = 0
+            ComboBoxLevel.SelectedIndex = 0
+            dgvStudents.DataSource = glbBND
+            If dgvStudents.Rows.Count > 0 Then
+                resizeDatagrids("students")
+            End If
 
-        TimerBS.Stop()
-        btnReset.Enabled = True
-        Me.ProgressBarBS.Value = 100
+            TimerBS.Stop()
+            btnReset.Enabled = True
+            Me.ProgressBarBS.Value = 100
+        Catch ex As Exception
+            MsgBox("Something went wrong, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+
+        End Try
     End Sub
 
     Private Sub ButtonSaveReg_Click(sender As Object, e As EventArgs) Handles ButtonSaveReg.Click
         'save to db 
-        If dgvImportCourses.Tag = "RTPS" Then
-            MsgBox("Registration data will now be inserted into database")
-            'importRegUsingdataAdapter() 'METHOD 1: issues
-            TextBoxImport.Text = mappDB.manualRegInsertDB(dgvImportCourses.DataSource.totable)         'METHOD 2
-            'status
-            If TextBoxImport.Text.Length > 5 Then
-                TextBoxImport.Visible = True
-                logError(TextBoxImport.Text.Length)
-            Else
-                TextBoxImport.Visible = False
-                dgvImportCourses.SendToBack()
-                MsgBox("Saved successfully")
+        Try
+            If dgvImportCourses.Tag = "RTPS" Then
+                MsgBox("Registration data will now be inserted into database")
+                'importRegUsingdataAdapter() 'METHOD 1: issues
+                TextBoxImport.Text = mappDB.manualRegInsertDB(dgvImportCourses.DataSource.totable)         'METHOD 2
+                'status
+                If TextBoxImport.Text.Length > 5 Then
+                    TextBoxImport.Visible = True
+                    logError(TextBoxImport.Text.Length)
+                Else
+                    TextBoxImport.Visible = False
+                    dgvImportCourses.SendToBack()
+                    MsgBox("Saved successfully")
+                End If
+
+
+
+            Else    'FERMA
+                MsgBox("A lot has to be done to convert from this format to the required format for Registration")
+                If checkRegTransformFromFERMA_To_RTPS() = False Then
+                    dgvImportCourses.SendToBack()
+                    MsgBox("Could Not convert the data to the required format")
+                    Exit Sub
+                End If
+                'importReg() 'import reg manually
+
+                If Not mappDB.bulkInsertDBUsingDataAdapter(dgvImportCourses.DataSource.totable, "Reg") Is Nothing Then  'mthd2
+                    CaptureCourses()
+                    dgvImportCourses.SendToBack()
+                    MsgBox("Saved successfully using generic insert method")
+                ElseIf importRegUsingdataAdapter() Then 'mthd1
+                    CaptureCourses()
+                    dgvImportCourses.SendToBack()
+                    MsgBox("Saved successfully")
+                Else
+
+                    MsgBox("Could Not Save")
+                End If
+
             End If
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
 
-
-
-        Else    'FERMA
-            MsgBox("A lot has to be done to convert from this format to the required format for Registration")
-            If checkRegTransformFromFERMA_To_RTPS() = False Then
-                dgvImportCourses.SendToBack()
-                MsgBox("Could Not convert format")
-                Exit Sub
-            End If
-            'importReg() 'import reg manually
-
-            If Not mappDB.bulkInsertDBUsingDataAdapter(dgvImportCourses.DataSource.totable, "Reg") Is Nothing Then  'mthd2
-                CaptureCourses()
-                dgvImportCourses.SendToBack()
-                MsgBox("Saved successfully using generic insert method")
-            ElseIf importRegUsingdataAdapter() Then 'mthd1
-                CaptureCourses()
-                dgvImportCourses.SendToBack()
-                MsgBox("Saved successfully")
-            Else
-
-                MsgBox("Could Not Save")
-            End If
-
-        End If
+        End Try
     End Sub
     Function checkRegTransformFromFERMA_To_RTPS() As Boolean     'not required
         Dim tmpDV As DataView
@@ -915,30 +981,48 @@ Public Class FormStudentsRegistration
 
 
     Private Sub ButtonRegToExcel_Click(sender As Object, e As EventArgs) Handles ButtonRegToExcel.Click
-        Dim retFileName As String
-        retFileName = objExcelFile.exportRegToExcelFile_NPOI(dgvStudents.DataSource, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\ExportedStudents" & ComboBoxLevel.Text & ".xlsx")
-        MsgBox("File exported to: " & retFileName)
+        Try
+            Dim retFileName As String
+            Dim saveDiag As New SaveFileDialog
+            Dim tmpDV As New DataView
+            If TypeOf glbBND.DataSource Is DataTable Then
+                tmpDV = glbBND.DataSource.defaultview
+            ElseIf TypeOf glbBND.DataSource Is DataView Then
+                tmpDV = glbBND.DataSource
+            End If
+            'tmpDV = glbBND.DataSource.defaultview
+            saveDiag.Filter = "Excel Files|*.xlsx|All files|*.*"
+            If saveDiag.ShowDialog = DialogResult.OK Then
+                retFileName = saveDiag.FileName
+
+                retFileName = objExcelFile.exportRegToExcelFile_NPOI(tmpDV, My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData & "\ExportedStudents" & ComboBoxLevel.Text & ".xlsx")
+                MsgBox("File exported to: " & retFileName)
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Something went wrong, see log files for details")
+        End Try
     End Sub
 
     Private Sub ButtonAccess_Click(sender As Object, e As EventArgs) Handles ButtonAccess.Click
-        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
-        Dim resultFileName As String = ""
+        'Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+        'Dim resultFileName As String = ""
 
-        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
-            resultFileName = FileOpenDialogBroadsheet.FileName()
-            If exportRegToFERMA(False, resultFileName) Then
-                MsgBox("Exported to FERMA")
-            Else
-                MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
-            End If
-        Else
-            MsgBox("The export will be done and save internally, You can export to excel afterwards")
-            If exportRegToFERMA() Then
-                MsgBox("Saved in database (FERMA Format. Yo can export to Excel later)")
-            Else
-                MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
-            End If
-        End If
+        'If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+        '    resultFileName = FileOpenDialogBroadsheet.FileName()
+        '    If exportRegToFERMA(False, resultFileName) Then
+        '        MsgBox("Exported to FERMA")
+        '    Else
+        '        MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
+        '    End If
+        'Else
+        '    MsgBox("The export will be done and save internally, You can export to excel afterwards")
+        '    If exportRegToFERMA() Then
+        '        MsgBox("Saved in database (FERMA Format. Yo can export to Excel later)")
+        '    Else
+        '        MsgBox("Something went wrong, note that FERMA is an Access-based db used in University of Benin")
+        '    End If
+        'End If
 
 
     End Sub
@@ -994,6 +1078,7 @@ Public Class FormStudentsRegistration
     Private Sub ButtonOKReg_Click(sender As Object, e As EventArgs) Handles ButtonOKReg.Click
         Dim strReg1 As String = ""
         Dim strReg2 As String = ""
+        Dim strRegNA As String = ""
         'Dim col As Collection
         'col = CheckedListBoxCourses.CheckedItems
         For Each col In CheckedListBoxCourses.CheckedItems
@@ -1013,12 +1098,23 @@ Public Class FormStudentsRegistration
                 End If
             End If
         Next
+        If strReg2 = "" Then
+            strRegNA = strReg1
+        Else
+            strRegNA = strReg1 & ";" & strReg2
+        End If
+
         'TODO Sessions
 
         If MsgBox("Are the courses corectly displayed" & vbCrLf & strReg1 & vbCrLf & vbCrLf & strReg2, MsgBoxStyle.YesNo) = vbYes Then
             PanelCourses.Visible = False
-            TextBoxCourseCode_1.Text = strReg1
-            TextBoxCourseCode_2.Text = strReg2
+            If CheckedListBoxCourses.Tag = "NA" Then
+                TextBoxNA_CourseCode.Text = strRegNA
+            Else
+                TextBoxCourseCode_1.Text = strReg1
+                TextBoxCourseCode_2.Text = strReg2
+            End If
+
         End If
     End Sub
 
@@ -1070,12 +1166,22 @@ Public Class FormStudentsRegistration
 
 
     Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefreshFormview.Click
+        Try
+            Dim dSession = ComboBoxSessions.SelectedItem
+            Dim dDeptID As Integer = mappDB.getDeptID(ComboBoxDepartments.SelectedItem)
+            Dim dlvl As Integer = ComboBoxLevel.SelectedItem
 
-        bindcontrolsToReg()
+            fillRegGridUsingdataAdapter(dSession, dDeptID, dlvl)
+            fillRegFORMUsingdataAdapter(dSession, dDeptID, dlvl)
+            bindcontrolsToReg()
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+        logError(ex.ToString)
+
+        End Try
     End Sub
     Sub bindcontrolsToReg()
 
-        fillRegFORMUsingdataAdapter()
         'OR
         'dsStudents = mappDB.GetDataWhere("SELECT * FROM Reg")
         'glbAdapterFORM.Fill(dsStudents.Tables(0))
@@ -1261,10 +1367,13 @@ Public Class FormStudentsRegistration
             If glbRegConnFORM.State = ConnectionState.Open Then
                 'already bound
             Else
+                fillRegFORMUsingdataAdapter()
                 bindcontrolsToReg()     'rebind
             End If
             TextBoxFancyDisplayCourse1.Visible = False
             TextBoxFancyDisplayCourse2.Visible = False
+            ProgressBarBS.Visible = False
+            dgvImportCourses.Visible = False      'always hidden until need arises
         Else
 
             PanelForm.Visible = False
@@ -1275,6 +1384,8 @@ Public Class FormStudentsRegistration
             ButtonFormView.Text = "Form View"
             TextBoxFancyDisplayCourse1.Visible = True
             TextBoxFancyDisplayCourse2.Visible = True
+            ProgressBarBS.Visible = True
+            dgvImportCourses.Visible = False
         End If
     End Sub
 
@@ -1403,7 +1514,9 @@ Public Class FormStudentsRegistration
     Private Sub ComboBoxShortCuts1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxShortCuts1.SelectedIndexChanged
         'Todo: improe code remove multipe exit sub
         Dim dLevel, dSession, dDeptID As String
+        dSession = "2018/2019"
         dLevel = "100"
+        dDeptID = "1"
         Select Case ComboBoxShortCuts1.SelectedItem
             Case "Add All 100L Courses"
                 dLevel = "100"
@@ -1504,16 +1617,16 @@ Public Class FormStudentsRegistration
     End Sub
 
     Private Sub ButtonImportRegFERMAAccess_Click(sender As Object, e As EventArgs) Handles ButtonImportRegFERMAAccess.Click
-        Dim dlg As New OpenFileDialog()
-        dlg.Filter = "Access Files|*.accdb|Older version Access Files|*.mdb"
-        Try
-            If dlg.ShowDialog = DialogResult.OK Then
-                dgvImportCourses.DataSource = importRegFromFERMAUsingAccess(dlg.FileName).DefaultView
-                dgvImportCourses.BringToFront()
-            End If
-        Catch ex As Exception
-            MsgBox("An error occured" & vbCrLf & ex.ToString)
-        End Try
+        'Dim dlg As New OpenFileDialog()
+        'dlg.Filter = "Access Files|*.accdb|Older version Access Files|*.mdb"
+        'Try
+        '    If dlg.ShowDialog = DialogResult.OK Then
+        '        dgvImportCourses.DataSource = importRegFromFERMAUsingAccess(dlg.FileName).DefaultView
+        '        dgvImportCourses.BringToFront()
+        '    End If
+        'Catch ex As Exception
+        '    MsgBox("An error occured" & vbCrLf & ex.ToString)
+        'End Try
     End Sub
 
     Private Sub ButtonAddNewRecordInFORM_Click(sender As Object, e As EventArgs) Handles ButtonAddNewRecordInFORM.Click
@@ -1526,6 +1639,14 @@ Public Class FormStudentsRegistration
 
     Private Sub ButtonLast_Click(sender As Object, e As EventArgs) Handles ButtonLast.Click
         BindingNavigatorMoveLastItem.PerformClick()
+    End Sub
+
+    Private Sub ButtonBack_Click(sender As Object, e As EventArgs) Handles ButtonBack.Click
+        Me.Close()
+    End Sub
+
+    Private Sub TextBoxNA_CourseCode_TextChanged(sender As Object, e As EventArgs) Handles TextBoxNA_CourseCode.TextChanged
+        showCoursesList(True)
     End Sub
 
     Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_2.Click

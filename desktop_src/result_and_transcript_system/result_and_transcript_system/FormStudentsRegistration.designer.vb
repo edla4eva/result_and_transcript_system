@@ -64,7 +64,6 @@ Partial Class FormStudentsRegistration
         Me.ButtonRegToExcel = New System.Windows.Forms.Button()
         Me.ButtonImportRegFERMAExcel = New System.Windows.Forms.Button()
         Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.bgwLoad = New System.ComponentModel.BackgroundWorker()
         Me.PanelGegSingle = New System.Windows.Forms.Panel()
         Me.ComboBoxCourseCode = New System.Windows.Forms.ComboBox()
@@ -87,6 +86,9 @@ Partial Class FormStudentsRegistration
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.PanelForm = New System.Windows.Forms.Panel()
+        Me.ButtonLast = New System.Windows.Forms.Button()
+        Me.ButtonFirst = New System.Windows.Forms.Button()
+        Me.ButtonAddNewRecordInFORM = New System.Windows.Forms.Button()
         Me.TextBoxNA_CourseCode = New System.Windows.Forms.TextBox()
         Me.ComboBoxGender = New System.Windows.Forms.ComboBox()
         Me.ComboBoxStatus = New System.Windows.Forms.ComboBox()
@@ -114,16 +116,10 @@ Partial Class FormStudentsRegistration
         Me.TextBoxCourseCode_1 = New System.Windows.Forms.TextBox()
         Me.ButtonClosePanelForm = New System.Windows.Forms.Button()
         Me.BindingNavigator1 = New System.Windows.Forms.BindingNavigator(Me.components)
-        Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorCountItem = New System.Windows.Forms.ToolStripLabel()
-        Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
-        Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
-        Me.BindingNavigatorMovePreviousItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorPositionItem = New System.Windows.Forms.ToolStripTextBox()
         Me.BindingNavigatorSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BindingNavigatorMoveNextItem = New System.Windows.Forms.ToolStripButton()
-        Me.BindingNavigatorMoveLastItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.SaveToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ButtonRefreshFormview = New System.Windows.Forms.Button()
@@ -140,13 +136,19 @@ Partial Class FormStudentsRegistration
         Me.TextBoxMATNO = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.ButtonNext = New System.Windows.Forms.Button()
-        Me.BindingSourceStudents = New System.Windows.Forms.BindingSource(Me.components)
         Me.ButtonFormView = New System.Windows.Forms.Button()
         Me.ButtonSaveGrid = New System.Windows.Forms.Button()
         Me.ButtonImportRegFERMAAccess = New System.Windows.Forms.Button()
-        Me.ButtonAddNewRecordInFORM = New System.Windows.Forms.Button()
-        Me.ButtonFirst = New System.Windows.Forms.Button()
-        Me.ButtonLast = New System.Windows.Forms.Button()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.ButtonBack = New System.Windows.Forms.Button()
+        Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorMovePreviousItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorMoveNextItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorMoveLastItem = New System.Windows.Forms.ToolStripButton()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.BindingSourceStudents = New System.Windows.Forms.BindingSource(Me.components)
         Me.Panel1.SuspendLayout()
         CType(Me.dgvStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -155,7 +157,6 @@ Partial Class FormStudentsRegistration
         Me.Panel4.SuspendLayout()
         CType(Me.dgvImportCourses, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel6.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelGegSingle.SuspendLayout()
         Me.PanelCourses.SuspendLayout()
         Me.PanelAllReg.SuspendLayout()
@@ -164,6 +165,7 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.SuspendLayout()
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -184,8 +186,6 @@ Partial Class FormStudentsRegistration
         DataGridViewCellStyle7.BackColor = System.Drawing.Color.White
         DataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black
         Me.dgvStudents.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle7
-        Me.dgvStudents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvStudents.BackgroundColor = System.Drawing.Color.Silver
         Me.dgvStudents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -200,7 +200,7 @@ Partial Class FormStudentsRegistration
         Me.dgvStudents.Location = New System.Drawing.Point(9, 63)
         Me.dgvStudents.Name = "dgvStudents"
         Me.dgvStudents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvStudents.Size = New System.Drawing.Size(646, 226)
+        Me.dgvStudents.Size = New System.Drawing.Size(630, 226)
         Me.dgvStudents.TabIndex = 77
         '
         'Panel2
@@ -255,9 +255,10 @@ Partial Class FormStudentsRegistration
         Me.Panel5.Controls.Add(Me.TextBoxdept_idr)
         Me.Panel5.Controls.Add(Me.ComboBoxSessions)
         Me.Panel5.Controls.Add(Me.ComboBoxLevel)
-        Me.Panel5.Location = New System.Drawing.Point(689, 212)
+        Me.Panel5.Controls.Add(Me.ButtonRefreshFormview)
+        Me.Panel5.Location = New System.Drawing.Point(689, 196)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(296, 105)
+        Me.Panel5.Size = New System.Drawing.Size(296, 137)
         Me.Panel5.TabIndex = 42
         '
         'ComboBoxDepartments
@@ -286,7 +287,7 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxSessions.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxSessions.FormattingEnabled = True
         Me.ComboBoxSessions.Items.AddRange(New Object() {"2018/2019", "2019/2020"})
-        Me.ComboBoxSessions.Location = New System.Drawing.Point(6, 42)
+        Me.ComboBoxSessions.Location = New System.Drawing.Point(6, 35)
         Me.ComboBoxSessions.Name = "ComboBoxSessions"
         Me.ComboBoxSessions.Size = New System.Drawing.Size(169, 24)
         Me.ComboBoxSessions.TabIndex = 31
@@ -296,7 +297,7 @@ Partial Class FormStudentsRegistration
         '
         Me.ComboBoxLevel.FormattingEnabled = True
         Me.ComboBoxLevel.Items.AddRange(New Object() {"100", "200", "300", "400", "500", "600", "700", "800", "900"})
-        Me.ComboBoxLevel.Location = New System.Drawing.Point(6, 72)
+        Me.ComboBoxLevel.Location = New System.Drawing.Point(6, 65)
         Me.ComboBoxLevel.Name = "ComboBoxLevel"
         Me.ComboBoxLevel.Size = New System.Drawing.Size(169, 24)
         Me.ComboBoxLevel.TabIndex = 30
@@ -342,7 +343,7 @@ Partial Class FormStudentsRegistration
         Me.Label9.BackColor = System.Drawing.Color.Transparent
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(16, 15)
+        Me.Label9.Location = New System.Drawing.Point(31, 15)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(76, 24)
         Me.Label9.TabIndex = 16
@@ -372,15 +373,15 @@ Partial Class FormStudentsRegistration
         '
         Me.txtStudentMATNO.BackColor = System.Drawing.Color.White
         Me.txtStudentMATNO.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtStudentMATNO.Location = New System.Drawing.Point(13, 81)
+        Me.txtStudentMATNO.Location = New System.Drawing.Point(10, 81)
         Me.txtStudentMATNO.Name = "txtStudentMATNO"
-        Me.txtStudentMATNO.Size = New System.Drawing.Size(111, 21)
+        Me.txtStudentMATNO.Size = New System.Drawing.Size(121, 21)
         Me.txtStudentMATNO.TabIndex = 13
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(10, 64)
+        Me.Label3.Location = New System.Drawing.Point(7, 64)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(131, 16)
         Me.Label3.TabIndex = 12
@@ -395,10 +396,11 @@ Partial Class FormStudentsRegistration
         Me.ButtonAccess.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ButtonAccess.Location = New System.Drawing.Point(1000, 576)
         Me.ButtonAccess.Name = "ButtonAccess"
-        Me.ButtonAccess.Size = New System.Drawing.Size(123, 51)
+        Me.ButtonAccess.Size = New System.Drawing.Size(123, 12)
         Me.ButtonAccess.TabIndex = 33
         Me.ButtonAccess.Text = "Export to FERMA (Access)"
         Me.ButtonAccess.UseVisualStyleBackColor = True
+        Me.ButtonAccess.Visible = False
         '
         'btnClose
         '
@@ -526,7 +528,7 @@ Partial Class FormStudentsRegistration
         Me.ButtonImportRegRTPS.Name = "ButtonImportRegRTPS"
         Me.ButtonImportRegRTPS.Size = New System.Drawing.Size(120, 42)
         Me.ButtonImportRegRTPS.TabIndex = 9
-        Me.ButtonImportRegRTPS.Text = "Import From Excel (RTPS)"
+        Me.ButtonImportRegRTPS.Text = "Import From RTPS Format"
         Me.ButtonImportRegRTPS.UseVisualStyleBackColor = True
         '
         'ButtonSaveReg
@@ -568,24 +570,13 @@ Partial Class FormStudentsRegistration
         Me.ButtonImportRegFERMAExcel.Name = "ButtonImportRegFERMAExcel"
         Me.ButtonImportRegFERMAExcel.Size = New System.Drawing.Size(123, 63)
         Me.ButtonImportRegFERMAExcel.TabIndex = 7
-        Me.ButtonImportRegFERMAExcel.Text = "Import From FERMA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Excel)"
+        Me.ButtonImportRegFERMAExcel.Text = "Import From FERMA Format"
         Me.ButtonImportRegFERMAExcel.UseVisualStyleBackColor = True
         '
         'TimerBS
         '
         Me.TimerBS.Enabled = True
         Me.TimerBS.Interval = 1000
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Image = Global.result_and_transcript_system.My.Resources.Resources.female_image
-        Me.PictureBox1.Location = New System.Drawing.Point(834, 43)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(148, 145)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 12
-        Me.PictureBox1.TabStop = False
         '
         'bgwLoad
         '
@@ -611,23 +602,23 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxCourseCode.AutoCompleteCustomSource.AddRange(New String() {"2019/2020"})
         Me.ComboBoxCourseCode.FormattingEnabled = True
         Me.ComboBoxCourseCode.Items.AddRange(New Object() {"CPE375"})
-        Me.ComboBoxCourseCode.Location = New System.Drawing.Point(149, 10)
+        Me.ComboBoxCourseCode.Location = New System.Drawing.Point(86, 10)
         Me.ComboBoxCourseCode.Name = "ComboBoxCourseCode"
-        Me.ComboBoxCourseCode.Size = New System.Drawing.Size(121, 24)
+        Me.ComboBoxCourseCode.Size = New System.Drawing.Size(184, 24)
         Me.ComboBoxCourseCode.TabIndex = 94
         Me.ComboBoxCourseCode.Text = "CPE375"
         '
         'TextBoxCourseCode
         '
-        Me.TextBoxCourseCode.Location = New System.Drawing.Point(96, 10)
+        Me.TextBoxCourseCode.Location = New System.Drawing.Point(150, 10)
         Me.TextBoxCourseCode.Name = "TextBoxCourseCode"
-        Me.TextBoxCourseCode.Size = New System.Drawing.Size(47, 22)
+        Me.TextBoxCourseCode.Size = New System.Drawing.Size(10, 22)
         Me.TextBoxCourseCode.TabIndex = 84
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(4, 18)
+        Me.Label5.Location = New System.Drawing.Point(3, 16)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(87, 16)
         Me.Label5.TabIndex = 83
@@ -744,6 +735,7 @@ Partial Class FormStudentsRegistration
         Me.CheckedListBoxCourses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.CheckedListBoxCourses.CheckOnClick = True
         Me.CheckedListBoxCourses.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckedListBoxCourses.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.CheckedListBoxCourses.FormattingEnabled = True
         Me.CheckedListBoxCourses.Items.AddRange(New Object() {"CPE311", "CPE313", "CPE362", "CPE375"})
         Me.CheckedListBoxCourses.Location = New System.Drawing.Point(16, 45)
@@ -797,18 +789,18 @@ Partial Class FormStudentsRegistration
         DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridViewAlReg.DefaultCellStyle = DataGridViewCellStyle12
         Me.DataGridViewAlReg.GridColor = System.Drawing.Color.Gray
-        Me.DataGridViewAlReg.Location = New System.Drawing.Point(12, 331)
+        Me.DataGridViewAlReg.Location = New System.Drawing.Point(12, 351)
         Me.DataGridViewAlReg.Name = "DataGridViewAlReg"
         Me.DataGridViewAlReg.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridViewAlReg.Size = New System.Drawing.Size(291, 292)
+        Me.DataGridViewAlReg.Size = New System.Drawing.Size(291, 272)
         Me.DataGridViewAlReg.TabIndex = 77
         '
         'TextBoxImport
         '
-        Me.TextBoxImport.Location = New System.Drawing.Point(15, 331)
+        Me.TextBoxImport.Location = New System.Drawing.Point(15, 351)
         Me.TextBoxImport.Multiline = True
         Me.TextBoxImport.Name = "TextBoxImport"
-        Me.TextBoxImport.Size = New System.Drawing.Size(277, 292)
+        Me.TextBoxImport.Size = New System.Drawing.Size(277, 272)
         Me.TextBoxImport.TabIndex = 83
         '
         'ButtonDeleteReg
@@ -830,7 +822,7 @@ Partial Class FormStudentsRegistration
         Me.Panel9.BackColor = System.Drawing.Color.Transparent
         Me.Panel9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Panel9.Controls.Add(Me.Label10)
-        Me.Panel9.Location = New System.Drawing.Point(13, 275)
+        Me.Panel9.Location = New System.Drawing.Point(13, 292)
         Me.Panel9.Name = "Panel9"
         Me.Panel9.Size = New System.Drawing.Size(294, 50)
         Me.Panel9.TabIndex = 0
@@ -841,7 +833,7 @@ Partial Class FormStudentsRegistration
         Me.Label10.BackColor = System.Drawing.Color.Transparent
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.Location = New System.Drawing.Point(78, 17)
+        Me.Label10.Location = New System.Drawing.Point(78, 15)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(150, 24)
         Me.Label10.TabIndex = 0
@@ -850,6 +842,7 @@ Partial Class FormStudentsRegistration
         'PanelForm
         '
         Me.PanelForm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PanelForm.Controls.Add(Me.Label23)
         Me.PanelForm.Controls.Add(Me.ButtonLast)
         Me.PanelForm.Controls.Add(Me.ButtonFirst)
         Me.PanelForm.Controls.Add(Me.ButtonAddNewRecordInFORM)
@@ -884,7 +877,6 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.Controls.Add(Me.ButtonClosePanelForm)
         Me.PanelForm.Controls.Add(Me.PanelGegSingle)
         Me.PanelForm.Controls.Add(Me.BindingNavigator1)
-        Me.PanelForm.Controls.Add(Me.ButtonRefreshFormview)
         Me.PanelForm.Controls.Add(Me.TextBoxmode_of_entry)
         Me.PanelForm.Controls.Add(Me.Label6)
         Me.PanelForm.Controls.Add(Me.TextBoxsession_idr_of_entry)
@@ -904,12 +896,42 @@ Partial Class FormStudentsRegistration
         Me.PanelForm.Size = New System.Drawing.Size(659, 505)
         Me.PanelForm.TabIndex = 87
         '
+        'ButtonLast
+        '
+        Me.ButtonLast.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonLast.Location = New System.Drawing.Point(288, 452)
+        Me.ButtonLast.Name = "ButtonLast"
+        Me.ButtonLast.Size = New System.Drawing.Size(33, 23)
+        Me.ButtonLast.TabIndex = 122
+        Me.ButtonLast.Text = ">|"
+        Me.ButtonLast.UseVisualStyleBackColor = True
+        '
+        'ButtonFirst
+        '
+        Me.ButtonFirst.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonFirst.Location = New System.Drawing.Point(9, 452)
+        Me.ButtonFirst.Name = "ButtonFirst"
+        Me.ButtonFirst.Size = New System.Drawing.Size(33, 23)
+        Me.ButtonFirst.TabIndex = 121
+        Me.ButtonFirst.Text = "|<"
+        Me.ButtonFirst.UseVisualStyleBackColor = True
+        '
+        'ButtonAddNewRecordInFORM
+        '
+        Me.ButtonAddNewRecordInFORM.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonAddNewRecordInFORM.Location = New System.Drawing.Point(129, 452)
+        Me.ButtonAddNewRecordInFORM.Name = "ButtonAddNewRecordInFORM"
+        Me.ButtonAddNewRecordInFORM.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonAddNewRecordInFORM.TabIndex = 120
+        Me.ButtonAddNewRecordInFORM.Text = "Add "
+        Me.ButtonAddNewRecordInFORM.UseVisualStyleBackColor = True
+        '
         'TextBoxNA_CourseCode
         '
-        Me.TextBoxNA_CourseCode.Location = New System.Drawing.Point(597, 162)
+        Me.TextBoxNA_CourseCode.Location = New System.Drawing.Point(597, 75)
         Me.TextBoxNA_CourseCode.Multiline = True
         Me.TextBoxNA_CourseCode.Name = "TextBoxNA_CourseCode"
-        Me.TextBoxNA_CourseCode.Size = New System.Drawing.Size(54, 80)
+        Me.TextBoxNA_CourseCode.Size = New System.Drawing.Size(54, 167)
         Me.TextBoxNA_CourseCode.TabIndex = 119
         '
         'ComboBoxGender
@@ -1102,7 +1124,7 @@ Partial Class FormStudentsRegistration
         Me.ComboBoxShortCuts1.Items.AddRange(New Object() {"Add All 100L Courses", "Add All 200L Courses", "Add All 300L Courses", "Add All 400L Courses", "Add All 500L Courses", "Add All Departmetal Courses", "Add All Faculty Courses", "Clear all/Unregister All"})
         Me.ComboBoxShortCuts1.Location = New System.Drawing.Point(339, 123)
         Me.ComboBoxShortCuts1.Name = "ComboBoxShortCuts1"
-        Me.ComboBoxShortCuts1.Size = New System.Drawing.Size(312, 24)
+        Me.ComboBoxShortCuts1.Size = New System.Drawing.Size(252, 24)
         Me.ComboBoxShortCuts1.TabIndex = 95
         Me.ComboBoxShortCuts1.Text = "--Shortcuts--"
         '
@@ -1119,7 +1141,7 @@ Partial Class FormStudentsRegistration
         Me.TextBoxCourseCode_1.Location = New System.Drawing.Point(339, 51)
         Me.TextBoxCourseCode_1.Multiline = True
         Me.TextBoxCourseCode_1.Name = "TextBoxCourseCode_1"
-        Me.TextBoxCourseCode_1.Size = New System.Drawing.Size(312, 72)
+        Me.TextBoxCourseCode_1.Size = New System.Drawing.Size(252, 72)
         Me.TextBoxCourseCode_1.TabIndex = 37
         '
         'ButtonClosePanelForm
@@ -1153,48 +1175,12 @@ Partial Class FormStudentsRegistration
         Me.BindingNavigator1.Text = "BindingNavigator1"
         Me.BindingNavigator1.Visible = False
         '
-        'BindingNavigatorAddNewItem
-        '
-        Me.BindingNavigatorAddNewItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorAddNewItem.Image = CType(resources.GetObject("BindingNavigatorAddNewItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorAddNewItem.Name = "BindingNavigatorAddNewItem"
-        Me.BindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 22)
-        Me.BindingNavigatorAddNewItem.Text = "Add new"
-        '
         'BindingNavigatorCountItem
         '
         Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
         Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(35, 22)
         Me.BindingNavigatorCountItem.Text = "of {0}"
         Me.BindingNavigatorCountItem.ToolTipText = "Total number of items"
-        '
-        'BindingNavigatorDeleteItem
-        '
-        Me.BindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorDeleteItem.Image = CType(resources.GetObject("BindingNavigatorDeleteItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorDeleteItem.Name = "BindingNavigatorDeleteItem"
-        Me.BindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorDeleteItem.Size = New System.Drawing.Size(23, 22)
-        Me.BindingNavigatorDeleteItem.Text = "Delete"
-        '
-        'BindingNavigatorMoveFirstItem
-        '
-        Me.BindingNavigatorMoveFirstItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMoveFirstItem.Image = CType(resources.GetObject("BindingNavigatorMoveFirstItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorMoveFirstItem.Name = "BindingNavigatorMoveFirstItem"
-        Me.BindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorMoveFirstItem.Size = New System.Drawing.Size(23, 22)
-        Me.BindingNavigatorMoveFirstItem.Text = "Move first"
-        '
-        'BindingNavigatorMovePreviousItem
-        '
-        Me.BindingNavigatorMovePreviousItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMovePreviousItem.Image = CType(resources.GetObject("BindingNavigatorMovePreviousItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorMovePreviousItem.Name = "BindingNavigatorMovePreviousItem"
-        Me.BindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorMovePreviousItem.Size = New System.Drawing.Size(23, 22)
-        Me.BindingNavigatorMovePreviousItem.Text = "Move previous"
         '
         'BindingNavigatorSeparator
         '
@@ -1216,24 +1202,6 @@ Partial Class FormStudentsRegistration
         Me.BindingNavigatorSeparator1.Name = "BindingNavigatorSeparator1"
         Me.BindingNavigatorSeparator1.Size = New System.Drawing.Size(6, 25)
         '
-        'BindingNavigatorMoveNextItem
-        '
-        Me.BindingNavigatorMoveNextItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMoveNextItem.Image = CType(resources.GetObject("BindingNavigatorMoveNextItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorMoveNextItem.Name = "BindingNavigatorMoveNextItem"
-        Me.BindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorMoveNextItem.Size = New System.Drawing.Size(23, 22)
-        Me.BindingNavigatorMoveNextItem.Text = "Move next"
-        '
-        'BindingNavigatorMoveLastItem
-        '
-        Me.BindingNavigatorMoveLastItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMoveLastItem.Image = CType(resources.GetObject("BindingNavigatorMoveLastItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorMoveLastItem.Name = "BindingNavigatorMoveLastItem"
-        Me.BindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorMoveLastItem.Size = New System.Drawing.Size(23, 22)
-        Me.BindingNavigatorMoveLastItem.Text = "Move last"
-        '
         'BindingNavigatorSeparator2
         '
         Me.BindingNavigatorSeparator2.Name = "BindingNavigatorSeparator2"
@@ -1251,11 +1219,11 @@ Partial Class FormStudentsRegistration
         'ButtonRefreshFormview
         '
         Me.ButtonRefreshFormview.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonRefreshFormview.Location = New System.Drawing.Point(496, 452)
+        Me.ButtonRefreshFormview.Location = New System.Drawing.Point(6, 95)
         Me.ButtonRefreshFormview.Name = "ButtonRefreshFormview"
-        Me.ButtonRefreshFormview.Size = New System.Drawing.Size(155, 23)
+        Me.ButtonRefreshFormview.Size = New System.Drawing.Size(286, 35)
         Me.ButtonRefreshFormview.TabIndex = 13
-        Me.ButtonRefreshFormview.Text = "Reload from Database"
+        Me.ButtonRefreshFormview.Text = "Reload Specified Students from Database"
         Me.ButtonRefreshFormview.UseVisualStyleBackColor = True
         '
         'TextBoxmode_of_entry
@@ -1364,9 +1332,6 @@ Partial Class FormStudentsRegistration
         Me.ButtonNext.Text = "Next >"
         Me.ButtonNext.UseVisualStyleBackColor = True
         '
-        'BindingSourceStudents
-        '
-        '
         'ButtonFormView
         '
         Me.ButtonFormView.Cursor = System.Windows.Forms.Cursors.Hand
@@ -1400,42 +1365,100 @@ Partial Class FormStudentsRegistration
         Me.ButtonImportRegFERMAAccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonImportRegFERMAAccess.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonImportRegFERMAAccess.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ButtonImportRegFERMAAccess.Location = New System.Drawing.Point(998, 436)
+        Me.ButtonImportRegFERMAAccess.Location = New System.Drawing.Point(998, 491)
         Me.ButtonImportRegFERMAAccess.Name = "ButtonImportRegFERMAAccess"
-        Me.ButtonImportRegFERMAAccess.Size = New System.Drawing.Size(123, 68)
+        Me.ButtonImportRegFERMAAccess.Size = New System.Drawing.Size(123, 13)
         Me.ButtonImportRegFERMAAccess.TabIndex = 90
         Me.ButtonImportRegFERMAAccess.Text = "Import From FERMA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Access)"
         Me.ButtonImportRegFERMAAccess.UseVisualStyleBackColor = True
+        Me.ButtonImportRegFERMAAccess.Visible = False
         '
-        'ButtonAddNewRecordInFORM
+        'Label23
         '
-        Me.ButtonAddNewRecordInFORM.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonAddNewRecordInFORM.Location = New System.Drawing.Point(129, 452)
-        Me.ButtonAddNewRecordInFORM.Name = "ButtonAddNewRecordInFORM"
-        Me.ButtonAddNewRecordInFORM.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonAddNewRecordInFORM.TabIndex = 120
-        Me.ButtonAddNewRecordInFORM.Text = "Add "
-        Me.ButtonAddNewRecordInFORM.UseVisualStyleBackColor = True
+        Me.Label23.AutoSize = True
+        Me.Label23.Location = New System.Drawing.Point(597, 51)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(31, 16)
+        Me.Label23.TabIndex = 123
+        Me.Label23.Text = "N/A"
         '
-        'ButtonFirst
+        'ButtonBack
         '
-        Me.ButtonFirst.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonFirst.Location = New System.Drawing.Point(9, 452)
-        Me.ButtonFirst.Name = "ButtonFirst"
-        Me.ButtonFirst.Size = New System.Drawing.Size(33, 23)
-        Me.ButtonFirst.TabIndex = 121
-        Me.ButtonFirst.Text = "|<"
-        Me.ButtonFirst.UseVisualStyleBackColor = True
+        Me.ButtonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonBack.Image = Global.result_and_transcript_system.My.Resources.Resources.arrow_back_regular_24
+        Me.ButtonBack.Location = New System.Drawing.Point(1006, 8)
+        Me.ButtonBack.Name = "ButtonBack"
+        Me.ButtonBack.Size = New System.Drawing.Size(119, 23)
+        Me.ButtonBack.TabIndex = 91
+        Me.ButtonBack.UseVisualStyleBackColor = True
         '
-        'ButtonLast
+        'BindingNavigatorAddNewItem
         '
-        Me.ButtonLast.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonLast.Location = New System.Drawing.Point(288, 452)
-        Me.ButtonLast.Name = "ButtonLast"
-        Me.ButtonLast.Size = New System.Drawing.Size(33, 23)
-        Me.ButtonLast.TabIndex = 122
-        Me.ButtonLast.Text = ">|"
-        Me.ButtonLast.UseVisualStyleBackColor = True
+        Me.BindingNavigatorAddNewItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorAddNewItem.Image = CType(resources.GetObject("BindingNavigatorAddNewItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorAddNewItem.Name = "BindingNavigatorAddNewItem"
+        Me.BindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorAddNewItem.Text = "Add new"
+        '
+        'BindingNavigatorDeleteItem
+        '
+        Me.BindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorDeleteItem.Image = CType(resources.GetObject("BindingNavigatorDeleteItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorDeleteItem.Name = "BindingNavigatorDeleteItem"
+        Me.BindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorDeleteItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorDeleteItem.Text = "Delete"
+        '
+        'BindingNavigatorMoveFirstItem
+        '
+        Me.BindingNavigatorMoveFirstItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMoveFirstItem.Image = CType(resources.GetObject("BindingNavigatorMoveFirstItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMoveFirstItem.Name = "BindingNavigatorMoveFirstItem"
+        Me.BindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMoveFirstItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMoveFirstItem.Text = "Move first"
+        '
+        'BindingNavigatorMovePreviousItem
+        '
+        Me.BindingNavigatorMovePreviousItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMovePreviousItem.Image = CType(resources.GetObject("BindingNavigatorMovePreviousItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMovePreviousItem.Name = "BindingNavigatorMovePreviousItem"
+        Me.BindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMovePreviousItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMovePreviousItem.Text = "Move previous"
+        '
+        'BindingNavigatorMoveNextItem
+        '
+        Me.BindingNavigatorMoveNextItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMoveNextItem.Image = CType(resources.GetObject("BindingNavigatorMoveNextItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMoveNextItem.Name = "BindingNavigatorMoveNextItem"
+        Me.BindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMoveNextItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMoveNextItem.Text = "Move next"
+        '
+        'BindingNavigatorMoveLastItem
+        '
+        Me.BindingNavigatorMoveLastItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMoveLastItem.Image = CType(resources.GetObject("BindingNavigatorMoveLastItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMoveLastItem.Name = "BindingNavigatorMoveLastItem"
+        Me.BindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMoveLastItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMoveLastItem.Text = "Move last"
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBox1.Image = Global.result_and_transcript_system.My.Resources.Resources.female_image
+        Me.PictureBox1.Location = New System.Drawing.Point(834, 43)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(148, 145)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 12
+        Me.PictureBox1.TabStop = False
+        '
+        'BindingSourceStudents
+        '
         '
         'FormStudentsRegistration
         '
@@ -1444,6 +1467,7 @@ Partial Class FormStudentsRegistration
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1131, 733)
+        Me.Controls.Add(Me.ButtonBack)
         Me.Controls.Add(Me.ButtonImportRegFERMAAccess)
         Me.Controls.Add(Me.ButtonSaveGrid)
         Me.Controls.Add(Me.ButtonFormView)
@@ -1482,7 +1506,6 @@ Partial Class FormStudentsRegistration
         CType(Me.dgvImportCourses, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel6.ResumeLayout(False)
         Me.Panel6.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelGegSingle.ResumeLayout(False)
         Me.PanelGegSingle.PerformLayout()
         Me.PanelCourses.ResumeLayout(False)
@@ -1496,6 +1519,7 @@ Partial Class FormStudentsRegistration
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.BindingNavigator1.ResumeLayout(False)
         Me.BindingNavigator1.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.BindingSourceStudents, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -1523,7 +1547,6 @@ Partial Class FormStudentsRegistration
     Friend WithEvents Label8 As Label
     Friend WithEvents TextBoxstudent_dept_idr As TextBox
     Friend WithEvents ComboBoxDepartments As ComboBox
-    Friend WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
     Friend WithEvents ComboBoxSessions As ComboBox
     Friend WithEvents ComboBoxLevel As ComboBox
     Friend WithEvents ButtonSaveReg As Button
@@ -1617,4 +1640,7 @@ Partial Class FormStudentsRegistration
     Friend WithEvents ButtonAddNewRecordInFORM As Button
     Friend WithEvents ButtonFirst As Button
     Friend WithEvents ButtonLast As Button
+    Friend WithEvents Label23 As Label
+    Friend WithEvents ButtonBack As Button
+    Private WithEvents bgwLoad As System.ComponentModel.BackgroundWorker
 End Class

@@ -27,6 +27,7 @@ Partial Class MainForm
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.PanelBtn_back = New System.Windows.Forms.Panel()
         Me.Buttonhelp = New System.Windows.Forms.Button()
         Me.PanelBtn = New System.Windows.Forms.Panel()
         Me.ButtonSettings = New System.Windows.Forms.Button()
@@ -53,6 +54,7 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PanelContainer.AutoScroll = True
         Me.PanelContainer.AutoSize = True
+        Me.PanelContainer.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.PanelContainer.Controls.Add(Me.Panel2)
         Me.PanelContainer.Location = New System.Drawing.Point(134, 30)
         Me.PanelContainer.Name = "PanelContainer"
@@ -91,6 +93,7 @@ Partial Class MainForm
         Me.SidePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.PanelBtn_back)
         Me.SidePanel.Controls.Add(Me.Buttonhelp)
         Me.SidePanel.Controls.Add(Me.PanelBtn)
         Me.SidePanel.Controls.Add(Me.ButtonSettings)
@@ -103,6 +106,16 @@ Partial Class MainForm
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 500)
         Me.SidePanel.TabIndex = 4
+        '
+        'PanelBtn_back
+        '
+        Me.PanelBtn_back.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelBtn_back.BackgroundImage = Global.result_and_transcript_system.My.Resources.Resources.double_arrow_left_small
+        Me.PanelBtn_back.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.PanelBtn_back.Location = New System.Drawing.Point(96, 9)
+        Me.PanelBtn_back.Name = "PanelBtn_back"
+        Me.PanelBtn_back.Size = New System.Drawing.Size(32, 25)
+        Me.PanelBtn_back.TabIndex = 7
         '
         'Buttonhelp
         '
@@ -119,11 +132,12 @@ Partial Class MainForm
         '
         'PanelBtn
         '
-        Me.PanelBtn.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.PanelBtn.BackgroundImage = Global.result_and_transcript_system.My.Resources.Resources.panel
-        Me.PanelBtn.Location = New System.Drawing.Point(90, 37)
+        Me.PanelBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelBtn.BackgroundImage = Global.result_and_transcript_system.My.Resources.Resources.double_arrow_small
+        Me.PanelBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.PanelBtn.Location = New System.Drawing.Point(96, 9)
         Me.PanelBtn.Name = "PanelBtn"
-        Me.PanelBtn.Size = New System.Drawing.Size(19, 15)
+        Me.PanelBtn.Size = New System.Drawing.Size(32, 25)
         Me.PanelBtn.TabIndex = 6
         Me.PanelBtn.Visible = False
         '
@@ -165,6 +179,7 @@ Partial Class MainForm
         Me.LinkLabelShowHide.TabIndex = 3
         Me.LinkLabelShowHide.TabStop = True
         Me.LinkLabelShowHide.Text = "<< Hide"
+        Me.LinkLabelShowHide.Visible = False
         '
         'ButtonExit
         '
@@ -228,7 +243,7 @@ Partial Class MainForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(585, 24)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = "RTPS - Result and Transcript Processing Sysem Version 1.0.1 Beta 5"
+        Me.Label1.Text = "RTPS - Result and Transcript Processing Sysem Version 1.0.1 Beta 7"
         '
         'LinkLabel3
         '
@@ -273,7 +288,7 @@ Partial Class MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.Window
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(790, 530)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
@@ -314,4 +329,5 @@ Partial Class MainForm
     Friend WithEvents PanelBtn As Panel
     Friend WithEvents Label1 As Label
     Friend WithEvents Buttonhelp As Button
+    Friend WithEvents PanelBtn_back As Panel
 End Class

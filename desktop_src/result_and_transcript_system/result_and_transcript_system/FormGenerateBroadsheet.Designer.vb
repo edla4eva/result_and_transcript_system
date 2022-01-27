@@ -45,6 +45,7 @@ Partial Class FormGenerateBroadsheet
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TextBoxTemplateFileName = New System.Windows.Forms.TextBox()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ButtonSyncCloud = New System.Windows.Forms.Button()
         Me.ButtonTest = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -86,7 +87,6 @@ Partial Class FormGenerateBroadsheet
         Me.ButtonLoadSavedBS = New System.Windows.Forms.Button()
         Me.RadioButtonDIP = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.ButtonSyncCloud = New System.Windows.Forms.Button()
         CType(Me.DataGridViewBroadSheet, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -223,6 +223,19 @@ Partial Class FormGenerateBroadsheet
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(134, 660)
         Me.SidePanel.TabIndex = 27
+        '
+        'ButtonSyncCloud
+        '
+        Me.ButtonSyncCloud.FlatAppearance.BorderSize = 0
+        Me.ButtonSyncCloud.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSyncCloud.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        Me.ButtonSyncCloud.ForeColor = System.Drawing.Color.White
+        Me.ButtonSyncCloud.Location = New System.Drawing.Point(3, 434)
+        Me.ButtonSyncCloud.Name = "ButtonSyncCloud"
+        Me.ButtonSyncCloud.Size = New System.Drawing.Size(128, 55)
+        Me.ButtonSyncCloud.TabIndex = 76
+        Me.ButtonSyncCloud.Text = "Sync Cloud"
+        Me.ButtonSyncCloud.UseVisualStyleBackColor = True
         '
         'ButtonTest
         '
@@ -710,19 +723,6 @@ Partial Class FormGenerateBroadsheet
         Me.RadioButton2.TabStop = True
         Me.RadioButton2.Text = "UME"
         Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'ButtonSyncCloud
-        '
-        Me.ButtonSyncCloud.FlatAppearance.BorderSize = 0
-        Me.ButtonSyncCloud.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonSyncCloud.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        Me.ButtonSyncCloud.ForeColor = System.Drawing.Color.White
-        Me.ButtonSyncCloud.Location = New System.Drawing.Point(3, 434)
-        Me.ButtonSyncCloud.Name = "ButtonSyncCloud"
-        Me.ButtonSyncCloud.Size = New System.Drawing.Size(128, 55)
-        Me.ButtonSyncCloud.TabIndex = 76
-        Me.ButtonSyncCloud.Text = "Sync Cloud"
-        Me.ButtonSyncCloud.UseVisualStyleBackColor = True
         '
         'FormGenerateBroadsheet
         '

@@ -204,7 +204,9 @@ Public Class ClassExcelResult
         Try
             excelApp = New ExcelInterop.Application
 
-            If Me.resultfileNameValue = Nothing Or Not System.IO.File.Exists(Me.resultfileNameValue) Then Exit Function 'todo
+            If Me.resultfileNameValue = Nothing Or Not System.IO.File.Exists(Me.resultfileNameValue) Then
+                Throw New ArgumentException("Empty or invalid filename") 'fail early
+            End If
             excelWB = excelApp.Workbooks.Open(Me.resultfileNameValue)
             excelWS = CType(excelWB.Sheets(1), ExcelInterop.Worksheet)
 
@@ -245,12 +247,9 @@ Public Class ClassExcelResult
                     Exit For
                 End If
             Next
-
-
-
             Me.progress = 30 'update progress bar
         Catch ex As Exception
-            Throw ex
+            Throw
         End Try
 
         '-----------------------------
@@ -379,8 +378,6 @@ Public Class ClassExcelResult
 
         'With excelWS.Cells.Range(_range).Borders(ExcelInterop.XlBordersIndex.xlEdgeLeft)
         'excelWS.Cells.Range("B" & startRow & ":B" & r).Select() 'select rows
-
-
 
         Return ds
     End Function

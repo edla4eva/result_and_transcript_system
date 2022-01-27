@@ -884,28 +884,38 @@ Public Class FormUploadResult
 
     End Sub
     Private Sub CheckBoxPrefix_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPrefix.CheckedChanged
-        On Error Resume Next
-        Dim dmatno As String
-        If CheckBoxPrefix.Checked = True Then
-            For i = 0 To DataGridView1.Rows.Count - 1
-                dmatno = DataGridView1.Rows(i).Cells("matno").Value
-                If dmatno.Contains(TextBoxPrefix.Text) Then
-                Else
-                    dmatno = TextBoxPrefix.Text & dmatno
-                    DataGridView1.Rows(i).Cells("matno").Value = dmatno
-                End If
-            Next
-        Else
-            For i = 0 To DataGridView1.Rows.Count - 1
-                dmatno = DataGridView1.Rows(i).Cells("matno").Value
-                If dmatno.Contains(TextBoxPrefix.Text) Then
-                    dmatno = dmatno.Replace(TextBoxPrefix.Text, "")
-                    DataGridView1.Rows(i).Cells("matno").Value = dmatno
-                Else
+        Try
+            Dim dmatno As String
+            If CheckBoxPrefix.Checked = True Then
+                For i = 0 To DataGridView1.Rows.Count - 1
+                    dmatno = DataGridView1.Rows(i).Cells("matno").Value
+                    If IsDBNull(dmatno) Or dmatno Is Nothing Then Continue For
+                    If dmatno.Contains(TextBoxPrefix.Text) Then
+                    Else
+                        dmatno = TextBoxPrefix.Text & dmatno
+                        DataGridView1.Rows(i).Cells("matno").Value = dmatno
+                    End If
+                Next
+            Else
+                For i = 0 To DataGridView1.Rows.Count - 1
+                    dmatno = DataGridView1.Rows(i).Cells("matno").Value
+                    If IsDBNull(dmatno) Or dmatno Is Nothing Then Continue For
+                    If dmatno.Contains(TextBoxPrefix.Text) Then
+                        dmatno = dmatno.Replace(TextBoxPrefix.Text, "")
+                        DataGridView1.Rows(i).Cells("matno").Value = dmatno
+                    Else
 
-                End If
-            Next
-        End If
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            MsgBox("Click on Check result before applying prefix")
+            logError(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub ButtonBack_Click(sender As Object, e As EventArgs) Handles ButtonBack.Click
+        Me.Close()
     End Sub
 
     Private Sub ButtonCloud_Click(sender As Object, e As EventArgs) Handles ButtonCloud.Click

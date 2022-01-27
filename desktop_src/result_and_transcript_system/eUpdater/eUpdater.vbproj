@@ -47,6 +47,12 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoUpdater">
+      <HintPath>AutoUpdater\sourceCode\sourceCode\AutoUpdater\AutoUpdater\bin\Debug\AutoUpdater.dll</HintPath>
+    </Reference>
+    <Reference Include="NAppUpdate.Framework">
+      <HintPath>NAppUpdate.Framework-0.5.1.0\NAppUpdate.Framework-0.5.1.0\net40\NAppUpdate.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -96,6 +102,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

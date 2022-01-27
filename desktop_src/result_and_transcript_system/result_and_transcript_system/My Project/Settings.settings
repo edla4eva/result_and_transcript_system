@@ -14,5 +14,8 @@
     <Setting Name="trial" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="activation_code" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d7e3-64b6-83j3-789d</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

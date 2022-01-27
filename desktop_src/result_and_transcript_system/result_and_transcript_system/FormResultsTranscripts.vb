@@ -60,11 +60,14 @@ Public Class FormResultsTranscripts
 
 
 
-    Private Function searchTranscripts(dMATNO As String)
+    Private Function searchTranscripts(dMATNO As String) As Boolean
+        Dim retVal As Boolean = False
         Dim tmpDSStudent As DataSet
-
         Dim strStudentFullName As String = ""
         Try
+            If dMATNO Is Nothing Or dMATNO = "" Then
+                Throw New InvalidExpressionException("The MATNO entered is empty or invalid") 'fail early
+            End If
             mappDB.MATNO = dMATNO
             tmpDSStudent = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
             dgvStudents.DataSource = tmpDSStudent.Tables(0)
@@ -72,7 +75,9 @@ Public Class FormResultsTranscripts
             resizeDatagrids("Students")
 
             tmpDSStudentName = mappDB.GetDataWhere(String.Format(STR_SQL_STUDENTS_FULL_NAME, dMATNO))
-
+            If tmpDSStudentName Is Nothing Or tmpDSStudentName.Tables(0).Rows.Count = 0 Then
+                Throw New ArgumentNullException("There is no student with the entered MATNO in the database") 'fail early
+            End If
             With tmpDSStudentName.Tables(0)
                 If .Rows.Count > 0 Then
                     strStudentFullName = .Rows(0).Item("student_firstname") & " " & .Rows(0).Item("student_othernames") & " " & .Rows(0).Item("student_surname")
@@ -96,8 +101,12 @@ Public Class FormResultsTranscripts
             Else
                 PictureBoxImg.Image = Image.FromFile(TMPileNAME4)
             End If
+            retVal = True
+            Return retVal
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            logError(ex.ToString)
+            Throw
+            Return retVal
         End Try
     End Function
 
@@ -141,18 +150,21 @@ Public Class FormResultsTranscripts
         Me.Close()
     End Sub
     Private Sub ButtonTranscript_Click(sender As Object, e As EventArgs) Handles ButtonTranscript.Click
-        searchTranscripts(TextBoxMATNO.Text)
-        objReports.MATNO = TextBoxMATNO.Text 'TODO
-        If dgvStudents.Rows.Count > 0 Then
-            getTranscripts(dgvStudents.Rows(0).Cells("matno").Value.ToString)
-            Dim dt As DataTable = dgvTranscripts.DataSource
-            objReports.updateReportDataSource("DataSet1", Me.ReportViewerTranscript, dt)
-        End If
-        ReportViewerTranscript.BringToFront()
+        Try
+            searchTranscripts(TextBoxMATNO.Text)
+            objReports.MATNO = TextBoxMATNO.Text 'TODO
+            If dgvStudents.Rows.Count > 0 Then
+                getTranscripts(dgvStudents.Rows(0).Cells("matno").Value.ToString)
+                Dim dt As DataTable = dgvTranscripts.DataSource
+                objReports.updateReportDataSource("DataSet1", Me.ReportViewerTranscript, dt)
+            End If
+            ReportViewerTranscript.BringToFront()
+        Catch ex As Exception
+            MessageBox.Show("Oops! Someting went wrong" & vbCrLf & vbCrLf & "Details" & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
     Private Function getGPCard(dMATNO As String) As DataSet
-
-        Dim tmpDSRegCourses As DataSet
+        ' Dim tmpDSRegCourses As DataSet
         Dim tmpDSTranscript As New DataSet
         Dim tmpDTResults As New DataTable
         Dim tmpDSBroadsheets As New DataSet
@@ -293,7 +305,8 @@ Public Class FormResultsTranscripts
             tmpDSTranscript.Tables.Add(tmpDTTranscript)
             Return tmpDSTranscript
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            logError(ex.Message)
+            Throw
         End Try
 
     End Function
@@ -301,7 +314,7 @@ Public Class FormResultsTranscripts
 
     Private Function getTranscripts(dMATNO As String) As DataSet
 
-        Dim tmpDSRegCourses As DataSet
+        'Dim tmpDSRegCourses As DataSet
         Dim tmpDSTranscript As New DataSet
         Dim tmpDTResults As New DataTable
         Dim tmpDSBroadsheets As New DataSet
@@ -353,11 +366,10 @@ Public Class FormResultsTranscripts
         Try
             mappDB.MATNO = dMATNO
             'tmpDSRegCourses = mappDB.GetDataWhere(String.Format(STR_SQL_COURSES_REGS_WHERE, dMATNO), "Courses") 'todo
-            'we need ti iterattively querythedb
+            'we need t0 iterattively querythedb
             For x = 100 To 800 Step 100
                 tmpDTResults = mappDB.getBroadsheetForTranscript(dMATNO, x.ToString, False)
                 If tmpDTResults Is Nothing Then Continue For
-
 
                 Dim j As Integer = COURSE_START_COL
                 For i = 0 To tmpDTResults.Rows.Count - 1
@@ -446,7 +458,8 @@ Public Class FormResultsTranscripts
             'tmpDSTranscript.Tables.Add(tmpD)
             Return tmpDSTranscript
         Catch ex As Exception
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Throw
+            Return Nothing
         End Try
 
     End Function
@@ -464,7 +477,10 @@ Public Class FormResultsTranscripts
         End Select
     End Sub
     Private Sub bgwExportToExcel_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwExportToExcel.RunWorkerCompleted
-        If dgvTranscripts.DataSource Is Nothing Then Exit Sub
+        If dgvTranscripts.DataSource Is Nothing Then
+            MsgBox("Transcript data could not be retiewved")
+            Exit Sub
+        End If
         MsgBox("Done: GeneratedResultBroadsheet - " & retFileName)
         Me.TextBoxTemplateFileName.Text = retFileName
         ButtonEport.Enabled = True
@@ -473,18 +489,21 @@ Public Class FormResultsTranscripts
     End Sub
 
     Private Sub ButtonEport_Click(sender As Object, e As EventArgs) Handles ButtonEport.Click
-        If MessageBox.Show("Are you sure you want to export to excel?", "Export", MessageBoxButtons.YesNoCancel) = MsgBoxResult.Yes Then
-        Else
-            Exit Sub
-        End If
-        If dgvTranscripts.DataSource Is Nothing Then Exit Sub
-        DTTranscripts = dgvTranscripts.DataSource
-        Me.ButtonEport.Enabled = False
-        TimerBS.Enabled = True
-        TimerBS.Start()
+        Try
+            If MessageBox.Show("Are you sure you want to export to excel?", "Export", MessageBoxButtons.YesNoCancel) = MsgBoxResult.Yes Then
+            Else
+                Exit Sub
+            End If
+            If dgvTranscripts.DataSource Is Nothing Then Exit Sub
+            DTTranscripts = dgvTranscripts.DataSource
+            Me.ButtonEport.Enabled = False
+            TimerBS.Enabled = True
+            TimerBS.Start()
 
-        bgwExportToExcel.RunWorkerAsync(2)
-
+            bgwExportToExcel.RunWorkerAsync(2)
+        Catch ex As Exception
+            MessageBox.Show("Oops! Someting went wrong" & vbCrLf & vbCrLf & "Details" & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub ButtonDownload_Click(sender As Object, e As EventArgs) Handles ButtonDownload.Click
@@ -532,26 +551,26 @@ Public Class FormResultsTranscripts
     End Sub
 
     Private Sub ButtonGPACard_Click(sender As Object, e As EventArgs) Handles ButtonGPACard.Click
-        searchTranscripts(TextBoxMATNO.Text)
-        objReports.MATNO = "ENG0000001" 'TODO
-        If dgvStudents.Rows.Count > 0 Then
-            getGPCard(dgvStudents.Rows(0).Cells("matno").Value.ToString)
-            Dim dt As DataTable
-            If Not dgvTranscripts.DataSource Is Nothing Then
-                dt = dgvTranscripts.DataSource
-                objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCard, dt)
-                objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCARDDIP, dt)
+        Try
+            searchTranscripts(TextBoxMATNO.Text)
+            objReports.MATNO = "ENG0000001" 'TODO
+            If dgvStudents.Rows.Count > 0 Then
+                getGPCard(dgvStudents.Rows(0).Cells("matno").Value.ToString)
+                Dim dt As DataTable
+                If Not dgvTranscripts.DataSource Is Nothing Then
+                    dt = dgvTranscripts.DataSource
+                    objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCard, dt)
+                    objReports.updateReportDataSource("DataSet1", Me.ReportViewerGPCARDDIP, dt)
+                End If
             End If
-        End If
-        If RadioButtonDIP.Checked = True Then
-            ReportViewerGPCARDDIP.BringToFront()
-        Else
-            ReportViewerGPCard.BringToFront()
-        End If
-
+            If RadioButtonDIP.Checked = True Then
+                ReportViewerGPCARDDIP.BringToFront()
+            Else
+                ReportViewerGPCard.BringToFront()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Oops! Someting went wrong" & vbCrLf & vbCrLf & "Details" & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
-    Private Sub TextBoxMATNO_TextChanged(sender As Object, e As EventArgs) Handles TextBoxMATNO.TextChanged
-
-    End Sub
 End Class

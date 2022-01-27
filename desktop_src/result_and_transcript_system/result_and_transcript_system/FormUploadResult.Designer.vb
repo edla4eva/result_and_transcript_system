@@ -77,6 +77,7 @@ Partial Class FormUploadResult
         Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
         Me.LabelProgress = New System.Windows.Forms.Label()
         Me.TimerResult = New System.Windows.Forms.Timer(Me.components)
+        Me.ButtonBack = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -129,6 +130,7 @@ Partial Class FormUploadResult
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(41, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(40, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ButtonBack)
         Me.SidePanel.Controls.Add(Me.ButtonDownloadTemplate)
         Me.SidePanel.Controls.Add(Me.Panel2)
         Me.SidePanel.Controls.Add(Me.ButtonBatchUpload)
@@ -214,7 +216,7 @@ Partial Class FormUploadResult
         Me.ButtonCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonCheck.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonCheck.ForeColor = System.Drawing.Color.White
-        Me.ButtonCheck.Location = New System.Drawing.Point(3, 146)
+        Me.ButtonCheck.Location = New System.Drawing.Point(3, 159)
         Me.ButtonCheck.Name = "ButtonCheck"
         Me.ButtonCheck.Size = New System.Drawing.Size(128, 55)
         Me.ButtonCheck.TabIndex = 5
@@ -267,7 +269,7 @@ Partial Class FormUploadResult
         Me.ButtonBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonBrowse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.ButtonBrowse.ForeColor = System.Drawing.Color.White
-        Me.ButtonBrowse.Location = New System.Drawing.Point(3, 63)
+        Me.ButtonBrowse.Location = New System.Drawing.Point(3, 91)
         Me.ButtonBrowse.Name = "ButtonBrowse"
         Me.ButtonBrowse.Size = New System.Drawing.Size(128, 55)
         Me.ButtonBrowse.TabIndex = 0
@@ -644,6 +646,16 @@ Partial Class FormUploadResult
         Me.TimerResult.Enabled = True
         Me.TimerResult.Interval = 1000
         '
+        'ButtonBack
+        '
+        Me.ButtonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonBack.Image = Global.result_and_transcript_system.My.Resources.Resources.arrow_back_regular_24
+        Me.ButtonBack.Location = New System.Drawing.Point(6, 58)
+        Me.ButtonBack.Name = "ButtonBack"
+        Me.ButtonBack.Size = New System.Drawing.Size(119, 23)
+        Me.ButtonBack.TabIndex = 92
+        Me.ButtonBack.UseVisualStyleBackColor = True
+        '
         'FormUploadResult
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -727,4 +739,5 @@ Partial Class FormUploadResult
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Label11 As Label
     Friend WithEvents ButtonDownloadTemplate As Button
+    Friend WithEvents ButtonBack As Button
 End Class

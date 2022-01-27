@@ -327,7 +327,7 @@ Public Class FormSettings
 
     Private Sub ButtonCourseTitles_Click(sender As Object, e As EventArgs) Handles ButtonCourseTitles.Click
         Dim dt As DataTable
-        Dim tmpCourse As String
+        Dim tmpCourse As String = ""
         Dim strSQLCoursesOrder As String = STR_COURSES_ORDER_GENERAL
         Dim coursesOrderDS As DataSet
         coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, Session_idr, course_dept_idr), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
@@ -361,5 +361,36 @@ Public Class FormSettings
         For i = 0 To dt.Rows.Count - 1
 
         Next
+    End Sub
+
+    Private Sub ButtonErrorLog_Click(sender As Object, e As EventArgs) Handles ButtonErrorLog.Click
+        Try
+
+            Dim fullFilePath As String
+            Dim fileContents As String
+            With My.Computer.FileSystem
+                fullFilePath = .CombinePath(.SpecialDirectories.MyDocuments, "RTPS_Result_Software_error_log" & Now.Date.Day & ".txt")
+                fileContents = .ReadAllText(fullFilePath)
+            End With
+            RichTextBox1.Text = fileContents
+            RichTextBox1.Visible = True
+            RichTextBox1.Dock = DockStyle.Fill
+        Catch ex As Exception
+            logError(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub ButtonUpdate_Click(sender As Object, e As EventArgs) Handles ButtonUpdate.Click
+        Try
+            Dim fullFilePath As String
+
+            With My.Computer.FileSystem
+                fullFilePath = .CombinePath(.SpecialDirectories.MyDocuments, "Update_for_RTPS_Result_Software.exe")
+            End With
+            Process.Start(fullFilePath)
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Failed to update")
+        End Try
     End Sub
 End Class

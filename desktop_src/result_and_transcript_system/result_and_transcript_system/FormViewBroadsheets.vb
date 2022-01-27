@@ -195,6 +195,10 @@ Public Class FormViewBroadsheets
 
     End Sub
 
+    Private Sub ButtonBack_Click(sender As Object, e As EventArgs) Handles ButtonBack.Click
+        Me.Close()
+    End Sub
+
     Private Sub DataGridView1_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentDoubleClick
         'Dim myDataSet As DataSet
         If e.RowIndex >= 0 Then
@@ -203,10 +207,14 @@ Public Class FormViewBroadsheets
     End Sub
 
     Private Sub ButtonRework_Click(sender As Object, e As EventArgs) Handles ButtonRework.Click
-
-        MainForm.ChangeMenu("GenerateBroadsheet")
-        FormGenerateBroadsheet.importBroadsheetData(DataGridView1.DataSource)
-
+        Try
+            MainForm.ChangeMenu("GenerateBroadsheet")
+            FormGenerateBroadsheet.importBroadsheetData(DataGridView1.DataSource)
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox(ex.ToString)
+            'lets be silent about this, prompting users when thy did not issue any comand is poor UI design
+        End Try
     End Sub
 
 

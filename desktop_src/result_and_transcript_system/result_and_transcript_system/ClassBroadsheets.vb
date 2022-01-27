@@ -263,14 +263,14 @@ Public Class ClassBroadsheets
 #End Region
 
     Function reprocessBroadsheetData() As DataSet
-        Dim countC, countReg, countResultsBS As Integer
-        Dim AllCoursesDS, coursesOrderDS, RegStudentsDS, FSBroadsheetDS As DataSet
+        Dim countC, countReg As Integer
+        Dim AllCoursesDS, coursesOrderDS, RegStudentsDS As DataSet
         Dim dictCoursesOrder As New Dictionary(Of Integer, String)
 
         Dim dictRegistered_1 As New Dictionary(Of String, String)
         Dim dictRegistered_2 As New Dictionary(Of String, String)
         Dim strSQLRegStudents, strSQLAllCourses, strSQLCoursesOrder, strSQLJoin As String
-        Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
+        'Dim tmpStr, tmpStrMATNO, tmpStrCourseCode As String
         Dim tmpInt As Integer = -4
 
         Dim courses(LAST_COL) As String
@@ -278,7 +278,7 @@ Public Class ClassBroadsheets
 
         Dim ds As New DataSet
         Dim dt As New DataTable
-        Dim dr As DataRow
+        ' Dim dr As DataRow
         Dim dictCol, dictMATNO As New Dictionary(Of String, Integer)
         Dim approvedCredits As Integer = 501
         strSQLJoin = STR_SQL_JOIN_QUERY_EXTRACTED_RESULTS_OF_STUDENTS_TO_INSERT_IN_BROADSHEET

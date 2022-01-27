@@ -252,10 +252,10 @@ Public Class FormViewResults
         Dim numStu As Integer
         Dim avrScore As Integer
         Dim sumScore As Integer = 0
-        Dim codedScores As Long
+        'Dim codedScores As Long
         Dim tmpCode As String = ""
         Dim finalHash As String
-        Dim timeStamp As Long
+        'Dim timeStamp As Long
         'data
 
 
@@ -375,5 +375,9 @@ Public Class FormViewResults
 
     Private Sub LabelClose_Click(sender As Object, e As EventArgs) Handles LabelClose.Click
         PanelReport.Hide()
+    End Sub
+
+    Private Sub ButtonBack_Click(sender As Object, e As EventArgs) Handles ButtonBack.Click
+        Me.Close()
     End Sub
 End Class

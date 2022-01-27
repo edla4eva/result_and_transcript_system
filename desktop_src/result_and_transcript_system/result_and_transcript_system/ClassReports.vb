@@ -615,7 +615,7 @@ Public Class ClassReports
         Dim dt As DataTable
         Dim dr As DataRow
         Dim snCoulumn, matnoCoulumn As DataColumn
-        Dim nameCoulumn, surnameCoulumn, statusCoulumn, creditsCoulumn, deptNameCoulumn, SessionCoulumn As DataColumn
+        Dim nameCoulumn, surnameCoulumn, statusCoulumn, deptNameCoulumn, SessionCoulumn As DataColumn
 
         Dim i As Integer
         Dim sumCr As Double = 0

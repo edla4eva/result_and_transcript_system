@@ -199,6 +199,9 @@
                 addForm(FormSenateResult)
             Case "viewRegs"
                 addForm(FormViewRegs)
+            Case "CourseMarkSheets"
+                addForm(FormCourseMarkSheets)
+
                 'Me.WindowState = FormWindowState.Maximized
         End Select
     End Sub
@@ -246,15 +249,21 @@
 
 
     Private Sub PanelBtn_Click(sender As Object, e As EventArgs) Handles PanelBtn.Click
+        SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 10  '5% margin left and right
+        PanelBtn.Visible = False
+        PanelBtn_back.Visible = True
 
-        'Test code area
-
+        'PanelContainer.Dock = DockStyle.Fill
+        LinkLabelShowHide.Text = "<<Hide"
+        'todo show text
+        ButtonHome.Text = "Home"
     End Sub
 
     Private Sub LinkLabelShowHide_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelShowHide.LinkClicked
 
         If SidePanel.Width < ButtonExit.Width Then
             SidePanel.Width = ButtonExit.Width + ButtonExit.Width / 10  '5% margin left and right
+            'PanelContainer.Dock = DockStyle.Fill
             LinkLabelShowHide.Text = "<<Hide"
             'todo show text
             ButtonHome.Text = "Home"
@@ -268,15 +277,19 @@
         End If
     End Sub
     Public Sub doCloseForm() 'Todo RemoUI
-        If mappDB.User = "CA" Then
-            Me.ChangeMenu("CourseAdviser")
-        ElseIf mappDB.User = "CL" Then
-            Me.ChangeMenu("CourseLecturer")
-        ElseIf mappDB.User = "ST" Then
-            Me.ChangeMenu("Student")
-        Else
-            Me.ChangeMenu("User")
-        End If
+        Try
+            If mappDB.User = "CA" Then
+                Me.ChangeMenu("CourseAdviser")
+            ElseIf mappDB.User = "CL" Then
+                Me.ChangeMenu("CourseLecturer")
+            ElseIf mappDB.User = "ST" Then
+                Me.ChangeMenu("Student")
+            Else
+                Me.ChangeMenu("User")
+            End If
+        Catch ex As Exception
+            Throw
+        End Try
     End Sub
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
 
@@ -289,6 +302,21 @@
 
     Private Sub PanelBtn_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn.Paint
 
+    End Sub
+
+    Private Sub PanelBtn_back_Paint(sender As Object, e As PaintEventArgs) Handles PanelBtn_back.Paint
+
+    End Sub
+
+    Private Sub PanelBtn_back_Click(sender As Object, e As EventArgs) Handles PanelBtn_back.Click
+        SidePanel.Width = LinkLabelShowHide.Width
+        PanelBtn.Visible = True
+        PanelBtn_back.Visible = False
+        LinkLabelShowHide.Text = " Show>>"
+        'todo
+        'show icons in button
+        'ButtonHome.BackgroundImage = HomeIcon 
+        ButtonHome.Text = "^"
     End Sub
 End Class
 

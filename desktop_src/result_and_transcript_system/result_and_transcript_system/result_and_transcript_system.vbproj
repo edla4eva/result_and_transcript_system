@@ -173,6 +173,12 @@
     <Compile Include="FormAdmin.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormCourseMarkSheets.designer.vb">
+      <DependentUpon>FormCourseMarkSheets.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCourseMarkSheets.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormHelp.Designer.vb">
       <DependentUpon>FormHelp.vb</DependentUpon>
     </Compile>
@@ -307,6 +313,9 @@
     <EmbeddedResource Include="FormAdmin.resx">
       <DependentUpon>FormAdmin.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormCourseMarkSheets.resx">
+      <DependentUpon>FormCourseMarkSheets.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHelp.resx">
       <DependentUpon>FormHelp.vb</DependentUpon>
     </EmbeddedResource>
@@ -408,6 +417,10 @@
     <None Include="Male-Image.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="arrow-back-regular-24.png" />
+    <None Include="double_arrow.png" />
+    <None Include="double_arrow_left_small.png" />
+    <None Include="double_arrow_small.png" />
     <Content Include="SqlServerTypes\Loader.cs" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">

@@ -76,7 +76,9 @@ Public Class ClassExcelFile
             'myDataSet = Nothing
 
         Catch ex As Exception
-            MsgBox("Cannot create Excel File Object" & vbCrLf & ex.Message)
+            logError("Cannot create Excel File Object" & vbCrLf & ex.Message)
+            Throw
+            Return Nothing
         End Try
 
     End Function
@@ -109,6 +111,8 @@ Public Class ClassExcelFile
             dFont.FontName = "Times New Roman"
             dFont.FontHeightInPoints = 14
 
+            styleCreditCols = workbook.CreateCellStyle
+            styleSignfooter = workbook.CreateCellStyle
 
             styleMediumBorderCenter = workbook.CreateCellStyle()
             styleMediumBorderCenter.Alignment = HorizontalAlignment.Center
@@ -335,8 +339,9 @@ Public Class ClassExcelFile
                 dtCateGory = mappDB.GetDataWhere("SELECT * FROM category ORDER BY category").Tables(0)
             End If
         Catch ex As Exception
-            MsgBox("There were some issues with the excel file creation" & vbCrLf & ex.ToString)
 
+            logError("There were some issues with the excel file creation" & vbCrLf & ex.ToString)
+            Throw
         End Try
 
         Try
@@ -429,13 +434,12 @@ Public Class ClassExcelFile
                 Next
             Next
         Catch ex As Exception
-            MsgBox("There were some issues with the footers" & vbCrLf & ex.ToString)
-
+            'not serious enough to throw the error. report, log  and suppress
+            MsgBox("There were some issues with the footers. You may have to do it manually" & vbCrLf & ex.ToString)
+            logError("There were some issues with the footers" & vbCrLf & ex.ToString)
         End Try
         'save work
         Try
-
-
             'todo: if file exists(fileName) create new filename
             If System.IO.File.Exists(fileName) Then
                 fileName = Path.GetDirectoryName(fileName) & "\" & Path.GetFileNameWithoutExtension(fileName) & Rnd(45).ToString & Now.Minute.ToString & Path.GetExtension(fileName)
@@ -444,15 +448,15 @@ Public Class ClassExcelFile
                 Try
                     writeToFile(workbook, fileName)
                 Catch ex As Exception
-
-                    'hanle
+                    'hanle by aiting for user response - effective
                     MsgBox("The Excel file is Open , close it and click ok")
-
+                    logError(ex.ToString)
                     Try
-                        writeToFile(workbook, fileName)
+                        writeToFile(workbook, fileName) 'try again
                     Catch ex2 As Exception
-                        MsgBox("There seems to be an excel related problem" & vbCrLf & ex2.ToString)
+                        logError("There seems to be an excel related problem" & vbCrLf & ex2.ToString)
                         fileName = ""
+                        Throw New FieldAccessException("It appears there was a problem wriring to the existing file", ex2)
                     End Try
 
                 End Try
@@ -462,12 +466,17 @@ Public Class ClassExcelFile
                 Try
                     writeToFile(workbook, fileName)
                 Catch ex2 As Exception
-                    MsgBox("There seems to be an excel related problem" & vbCrLf & ex2.ToString)
+                    logError("There seems to be an excel related problem" & vbCrLf & ex2.ToString)
                     fileName = ""
+                    Throw New FileNotFoundException("There seems to be an excel related problem", ex2)
                 End Try
             End If
+            Return fileName
         Catch ex As Exception
-            MsgBox("There is a file Access issue relate to permissions" & vbCrLf & ex.ToString)
+            logError("There seems to be an excel related problem" & vbCrLf & ex.ToString)
+            fileName = ""
+            Throw New FileNotFoundException("There seems to be an excel related problem", ex)
+        Finally
 
         End Try
         Return fileName

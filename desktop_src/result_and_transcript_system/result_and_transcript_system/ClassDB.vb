@@ -208,7 +208,7 @@ Public Class ClassDB
                 xConn.Close()
             End Using
         Catch ex As Exception
-            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message)
+            Throw New Exception("Database access problem, connect and try again" & vbCrLf & ex.Message, ex)
             'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return Nothing
         End Try
@@ -661,91 +661,101 @@ Public Class ClassDB
     End Function
 
     Public Function manualResultInsertDB(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
-        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            xConn.ConnectionString = getCorrectConnectionstring()
-            xConn.Open()
-            '1. check for duplicates and delete
-            Dim sql As String = "INSERT INTO results (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
-            Dim strTimestmp As String = Now.ToString
-            'access
-            Dim cmd As New OleDbCommand
-            'Dim da As OleDbDataAdapter
-            Dim id As Long = 0
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
+                '1. check for duplicates and delete
+                Dim sql As String = "INSERT INTO results (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
+                Dim strTimestmp As String = Now.ToString
+                'access
+                Dim cmd As New OleDbCommand
+                'Dim da As OleDbDataAdapter
+                Dim id As Long = 0
 
-            id = mappDB.getMaxID("select Max(Results.result_id) AS MaxOfresult_id FROM Results")
-            For Each row As DataRow In dt.Rows
-                id = id + 1
-                'todo: use parameters
-                sql = "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,result_timestamp) "
-                sql = sql & "VALUES (" & id & "," & row.Item("sn") & ",'" & row.Item("matno") & "','" & row.Item("name") & "'," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "','" & strTimestmp & "');"   '
-
-                'Debug.Print(sql)
-                cmd = New OleDbCommand(sql, xConn)
-                'cmd.Transaction.Begin()
-                'da = New OleDbDataAdapter(cmd)
-                'da.Update(dt) 'da.fill() this is a promising mthd
-                cmd.ExecuteNonQuery()
-                'TODO: Show progress (trigger event)
-
-            Next
-
-            'cmd.Transaction.Commit()
-
-            closeConn(xConn)
-            cmd.Dispose()
-        End Using
-        Return True
-    End Function
-    Public Function manualRegInsertDB(dt As DataTable) As Boolean
-        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            xConn.ConnectionString = getCorrectConnectionstring()
-            xConn.Open()
-            '1. check for duplicates and delete
-            Dim sql As String = STR_SQL_INSERT_STUDENTS_WITH_PARAMS ' "INSERT INTO Reg (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
-            Dim strTimestmp As String = Now.ToString
-            'access
-            Dim cmd As New OleDbCommand
-            'Dim da As OleDbDataAdapter
-            Dim matno As String = ""
-            Dim retmatno As String = ""
-            Dim dtSingleRow As DataTable
-            Dim retFailed As String = "Failed to insert the following: "
-            For Each row As DataRow In dt.Rows
-                matno = row.Item("matno")
-                retmatno = mappDB.GetRecordWhere(String.Format("select matno from Reg WHERE matno='{0}'", matno))
-                If retmatno = matno Then
-                    ' record already exits
-                    retFailed = retFailed & vbCrLf & matno & " alredy exists, "
-                    'option 1. update (ovewrite)
-                    'option 2 donothing and add it to a datatable to tell the user
-                Else
+                id = CLng(mappDB.getMaxID("select Max(Results.result_id) AS MaxOfresult_id FROM Results"))
+                For Each row As DataRow In dt.Rows
+                    id = id + 1
                     'todo: use parameters
-                    sql = STR_SQL_INSERT_STUDENTS_WITH_PARAMS   ' "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,result_timestamp) "
-                    dtSingleRow = dt.Copy
-                    dtSingleRow.Rows.Clear()
-                    dtSingleRow.Rows.Add(row.ItemArray)
-                    dtSingleRow.AcceptChanges()
+                    sql = "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,result_timestamp) "
+                    sql = sql & "VALUES (" & id & "," & row.Item("sn") & ",'" & row.Item("matno") & "','" & row.Item("name") & "'," & row.Item("score") & "," & dDept & ",'" & dCourse & "','" & dSession & "','" & strTimestmp & "');"   '
 
+                    'Debug.Print(sql)
                     cmd = New OleDbCommand(sql, xConn)
-                    cmd.Parameters.AddRange(getParamsFromDatatable(dt).ToArray)
                     'cmd.Transaction.Begin()
                     'da = New OleDbDataAdapter(cmd)
                     'da.Update(dt) 'da.fill() this is a promising mthd
-
-                    Try
-                        cmd.ExecuteNonQuery()
-                    Catch ex As Exception
-                        retFailed = retFailed & vbCrLf & row.Item("matno")
-                    End Try
+                    cmd.ExecuteNonQuery()
                     'TODO: Show progress (trigger event)
-                End If
-            Next
-            'cmd.Transaction.Commit()
-            MsgBox(retFailed)
-            closeConn(xConn)
-            cmd.Dispose()
-        End Using
-        Return True
+
+                Next
+
+                'cmd.Transaction.Commit()
+
+                closeConn(xConn)
+                cmd.Dispose()
+            End Using
+            Return True
+        Catch ex As Exception
+            logError(ex.ToString)
+            Throw
+        End Try
+    End Function
+    Public Function manualRegInsertDB(dt As DataTable) As Boolean
+        Try
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
+                '1. check for duplicates and delete
+                Dim sql As String = STR_SQL_INSERT_STUDENTS_WITH_PARAMS ' "INSERT INTO Reg (result_id, student_idr, total, result_timestamp) "  'todo: move sql to module
+                Dim strTimestmp As String = Now.ToString
+                'access
+                Dim cmd As New OleDbCommand
+                'Dim da As OleDbDataAdapter
+                Dim matno As String = ""
+                Dim retmatno As String = ""
+                Dim dtSingleRow As DataTable
+                Dim retFailed As String = "Failed to insert the following: "
+                For Each row As DataRow In dt.Rows
+                    matno = row.Item("matno")
+                    retmatno = mappDB.GetRecordWhere(String.Format("select matno from Reg WHERE matno='{0}'", matno))
+                    If retmatno = matno Then
+                        ' record already exits
+                        retFailed = retFailed & vbCrLf & matno & " alredy exists, "
+                        'option 1. update (ovewrite)
+                        'option 2 donothing and add it to a datatable to tell the user
+                    Else
+                        'todo: use parameters
+                        sql = STR_SQL_INSERT_STUDENTS_WITH_PARAMS   ' "INSERT INTO results (result_id,s_n,matno,fullname,total,department_idr, course_code_idr, session_idr,result_timestamp) "
+                        dtSingleRow = dt.Copy
+                        dtSingleRow.Rows.Clear()
+                        dtSingleRow.Rows.Add(row.ItemArray)
+                        dtSingleRow.AcceptChanges()
+
+                        cmd = New OleDbCommand(sql, xConn)
+                        cmd.Parameters.AddRange(getParamsFromDatatable(dt).ToArray)
+                        'cmd.Transaction.Begin()
+                        'da = New OleDbDataAdapter(cmd)
+                        'da.Update(dt) 'da.fill() this is a promising mthd
+
+                        Try
+                            cmd.ExecuteNonQuery()
+                        Catch ex As Exception
+                            retFailed = retFailed & vbCrLf & row.Item("matno")
+                        End Try
+                        'TODO: Show progress (trigger event)
+                    End If
+                Next
+                'cmd.Transaction.Commit()
+                MsgBox(retFailed)
+                closeConn(xConn)
+                cmd.Dispose()
+            End Using
+            Return True
+        Catch ex As Exception
+            logError(ex.ToString)
+            Throw
+        End Try
     End Function
     Public Function manualInsertDBCloud(dt As DataTable, dSession As String, dDept As Integer, dCourse As String) As Boolean
         ''1. check for duplicates and delete
@@ -782,26 +792,31 @@ Public Class ClassDB
         Return True
     End Function
     Public Function getMaxID(dstrSQL) As Long
-        Dim returnVal As Long = Nothing
-        Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
-            xConn.ConnectionString = getCorrectConnectionstring()
-            xConn.Open()
+        Try
+            Dim returnVal As Long = 1
+            Dim retStr As String = ""
+            Using xConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString)
+                xConn.ConnectionString = getCorrectConnectionstring()
+                xConn.Open()
 
-            Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
-            Dim rd As OleDb.OleDbDataReader
+                Dim cmdLocal As New OleDb.OleDbCommand(dstrSQL, xConn)
+                Dim rd As OleDb.OleDbDataReader
 
-            rd = cmdLocal.ExecuteReader
-            rd.Read()
-            If rd.HasRows Then
-                returnVal = CLng(rd.GetValue(0).ToString())
-            End If
-            rd.Close()
-            rd = Nothing
-            closeConn(xConn) 'safely close it
-        End Using
+                rd = cmdLocal.ExecuteReader
+                rd.Read()
+                If rd.HasRows Then
+                    retStr = rd.GetValue(0).ToString()
+                    If retStr = "" Then returnVal = 1 Else returnVal = CLng(retStr)
+                End If
+                rd.Close()
+                rd = Nothing
+                closeConn(xConn) 'safely close it
+            End Using
 
-        Return returnVal
-
+            Return returnVal
+        Catch ex As Exception
+            Throw
+        End Try
     End Function
 
     'TODO:: incomplete
@@ -821,20 +836,25 @@ Public Class ClassDB
     End Function
     'TODO:: use dictonaries
     Function getDeptID(strDept As String, Optional forceStrict As Boolean = False) As Integer
-        Dim retVal As Integer = 1
-        If dictDepts.Count > 0 Then
-            If dictDepts.ContainsKey(strDept) Then retVal = CInt(dictDepts.Keys(strDept))
-        Else
-            getDeptSessionsIntoDictionaries()  'so we dont have to do db call again
-            If forceStrict = True Then
-                retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+        Try
+            Dim retVal As Integer = 1
+            If dictDepts.Count > 0 Then
+                If dictDepts.ContainsKey(strDept) Then retVal = CInt(dictDepts.Keys(strDept))
             Else
-                'todo: Where Like in sql
-                retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+                getDeptSessionsIntoDictionaries()  'so we dont have to do db call again
+                If forceStrict = True Then
+                    retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
+                Else
+                    'todo: Where Like in sql
+                    retVal = CInt(mappDB.GetRecordWhere(String.Format("SELECT dept_id FROM departments WHERE dept_name='{0}'", strDept)))
 
+                End If
             End If
-        End If
-        Return retVal
+            Return retVal
+        Catch ex As Exception
+            logError(ex.ToString)
+            Throw
+        End Try
     End Function
     Function getSessionID(strSession As String, Optional forceStrict As Boolean = False) As String
         'TODO: If forceStrict=True Then retVal= fromDB
@@ -888,23 +908,28 @@ Public Class ClassDB
 
     End Function
     Public Function getAllCourses() As DataSet
-        Dim AllCoursesDS As New DataSet
-        Dim countC As Integer
+        Try
 
-        AllCoursesDS = mappDB.GetDataWhere(STR_ALL_COURSES_ORDERED, "Courses")
-        countC = AllCoursesDS.Tables(0).Rows.Count
-        'Get All Courses in Array
-        dictAllCourseCodeKeyAndCourseUnitVal.Clear()
-        dictAllCourseCodeKeyAndCourseLevelVal.Clear()
-        dictAllCourseCodeKeyAndCourseSemesterVal.Clear()
+            Dim AllCoursesDS As New DataSet
+            Dim countC As Integer
 
-        For j = 0 To countC - 1 'create columns for courses 'TODO: 1st and second
-            dictAllCourseCodeKeyAndCourseUnitVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_unit").ToString))
-            dictAllCourseCodeKeyAndCourseLevelVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_level").ToString))
-            dictAllCourseCodeKeyAndCourseSemesterVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_semester").ToString))
-        Next
+            AllCoursesDS = mappDB.GetDataWhere(STR_ALL_COURSES_ORDERED, "Courses")
+            countC = AllCoursesDS.Tables(0).Rows.Count
+            'Get All Courses in Array
+            dictAllCourseCodeKeyAndCourseUnitVal.Clear()
+            dictAllCourseCodeKeyAndCourseLevelVal.Clear()
+            dictAllCourseCodeKeyAndCourseSemesterVal.Clear()
 
-        Return AllCoursesDS
+            For j = 0 To countC - 1 'create columns for courses 'TODO: 1st and second
+                dictAllCourseCodeKeyAndCourseUnitVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_unit").ToString))
+                dictAllCourseCodeKeyAndCourseLevelVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_level").ToString))
+                dictAllCourseCodeKeyAndCourseSemesterVal.Add(AllCoursesDS.Tables(0).Rows(j).Item("course_code").ToString, CInt(AllCoursesDS.Tables(0).Rows(j).Item("course_semester").ToString))
+            Next
+
+            Return AllCoursesDS
+        Catch ex As Exception
+            Throw
+        End Try
     End Function
     Public Function getCoursesOrderIntoDictionaries(session_idr, course_dept_idr, dLevel) As Boolean
         Try

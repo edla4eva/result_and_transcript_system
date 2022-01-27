@@ -15,12 +15,6 @@ Public Class FormGenerateBroadsheet
     Dim dvScores, dvGrades As DataView
     Dim tmpFileName As String
 
-    'Dim dictDepts As New Dictionary(Of String, String)
-    'Dim dictCourses As New Dictionary(Of String, String)
-    'Dim dictAllCourses As New Dictionary(Of String, String)
-    'Dim dictSessions As New Dictionary(Of String, String)
-
-
     Private Sub FormGenerateBroadsheet_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         On Error Resume Next
         Me.BackColor = RGBColors.colorBackground
@@ -34,7 +28,7 @@ Public Class FormGenerateBroadsheet
 
     Private Sub ButtonProcessBroadsheet_Click(sender As Object, e As EventArgs) Handles ButtonProcessBroadsheet.Click
         Try
-            If MsgBox("Are you sure you wat to generate brodsheet data? Existing data will be deleted." & vbCrLf & "Note that approved broadsheets can not be changed", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
+            If MsgBox("Are you sure you want to generate brodsheet data? Existing data will be deleted." & vbCrLf & "Note that approved broadsheets can not be changed", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
                 Exit Sub
             End If
 
@@ -64,21 +58,7 @@ Public Class FormGenerateBroadsheet
             objBroadsheet.HOD = TextBoxHOD.Text
             objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
             objBroadsheet.Dean = TextBoxDean.Text
-            'objBroadsheet.levelCGPaPercentages = ""   'todo get from settings
-            '_levelCGPAPercentages(0) = 0.05
-            '_levelCGPAPercentages(1) = 0.1
-            '_levelCGPAPercentages(2) = 0.15
-            '_levelCGPAPercentages(3) = 0.2
-            '_levelCGPAPercentages(4) = 0.5
-            '_levelCGPAPercentages(5) = 0
-            '_levelCGPAPercentages(6) = 0
-            '_levelCGPAPercentages(7) = 0
-            '_levelCGPAPercentages(8) = 0
-            'objBroadsheet.levelCGPaPercentagesUME
-            'objBroadsheet.levelCGPaPercentagesDE2
-            'objBroadsheet.levelCGPaPercentagesDE3
-            'objBroadsheet.levelCGPaPercentagesDIP
-
+            'objBroadsheet.levelCGPaPercentages = ""   'todo get from course_order
             If RadioButtonUseBuiltIn.Checked = True Then
                 objBroadsheet.broadsheetFileName = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
                 'get broadsheetDatta from result and students table
@@ -141,7 +121,11 @@ Public Class FormGenerateBroadsheet
         Return False
     End Function
     Public Function getBroadheetTableName(dSession As String, dDeptID As String, dLevel As String) As String
-        Return String.Format("Broadsheet_all_{0}_{1}_{2}", dSession.Replace("/", "x"), dDeptID, dLevel)
+        Try
+            Return String.Format("Broadsheet_all_{0}_{1}_{2}", dSession.Replace("/", "x"), dDeptID, dLevel)
+        Catch ex As Exception
+            Throw
+        End Try
     End Function
 
     Public Sub createBroadsheetTables(dSession As String, dDeptID As String, dLevel As String)
@@ -157,7 +141,7 @@ Public Class FormGenerateBroadsheet
                 mappDB.doQuery(String.Format("DROP Table {0}", tblName))
                 'End If
             Catch ex As Exception
-
+                Throw New ArgumentException("Exception Occured - Could not delete broadsheet", ex)    'fail early
             End Try
             strSQL = "Create Table " & tblName & "( "
             For i = 0 To DataGridViewBroadSheet.Columns.Count - 1
@@ -179,8 +163,9 @@ Public Class FormGenerateBroadsheet
                 MsgBox("Could create table to save generated broadsheet data")
             End If
         Catch ex As Exception
-            MsgBox("Error occured, see log For details" & vbCrLf & ex.Message)
+
             logError(ex.ToString)
+            Throw
         End Try
     End Sub
 
@@ -201,7 +186,7 @@ Public Class FormGenerateBroadsheet
                 ss = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value.ToString
                 dtDestination = mappDB.bulkInsertDBUsingDataAdapter(dtSource, getBroadheetTableName(ss, dept, lv))
                 'now add colnames to seperate table
-                dtColNames = mappDB.GetDataWhere(strSQL).Tables(0)
+                dtColNames = mappDB.GetDataWhere(strSQL).Tables(0) 'can cause error
                 dtColNames.Rows.Clear()
                 dtColNames.Rows.Add({"mock"})
                 For j = 0 To dtSource.Columns.Count - 1
@@ -242,23 +227,26 @@ Public Class FormGenerateBroadsheet
             logError(ex.ToString)
         End Try
     End Sub
-    Sub saveData()
-
-    End Sub
     Private Sub SelectBroadsheetTemplate_Click(sender As Object, e As EventArgs)
-        Dim FileOpenDialogBroadsheet As New OpenFileDialog()
-        Dim resultFileName As String = ""
+        Try
+            Dim FileOpenDialogBroadsheet As New OpenFileDialog()
+            Dim resultFileName As String = ""
 
-        If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
-            resultFileName = FileOpenDialogBroadsheet.FileName()
-        End If
-        Me.TextBoxTemplateFileName.Text = resultFileName
-        objExcelFile.excelFileName = resultFileName
+            If Not FileOpenDialogBroadsheet.ShowDialog = DialogResult.Cancel Then
+                resultFileName = FileOpenDialogBroadsheet.FileName()
+            End If
+            Me.TextBoxTemplateFileName.Text = resultFileName
+            objExcelFile.excelFileName = resultFileName
 
-        showButtons("Process", False)
+            showButtons("Process", False)
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+        End Try
     End Sub
 
     Sub showButtons(ButtonName As String, enableOnly As Boolean)
+        On Error Resume Next
         Select Case ButtonName
             Case "Process"
                 If enableOnly Then Me.ButtonProcessBroadsheet.Enabled = True Else Me.ButtonProcessBroadsheet.Visible = True
@@ -266,6 +254,7 @@ Public Class FormGenerateBroadsheet
         End Select
     End Sub
     Sub hideButtons(ButtonName As String, disableOnly As Boolean)
+        On Error Resume Next
         Select Case ButtonName
             Case "Process"
                 If disableOnly Then Me.ButtonProcessBroadsheet.Enabled = False Else Me.ButtonProcessBroadsheet.Visible = False
@@ -274,13 +263,18 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub ButtonGrades_Click(sender As Object, e As EventArgs) Handles ButtonGrades.Click
-        If RadioButtonScores.Checked = True Then
-            RadioButtonScores.Checked = False
-            RadioButtonGrades.Checked = True
-        Else
-            RadioButtonScores.Checked = True
-            RadioButtonGrades.Checked = False
-        End If
+        Try
+            If RadioButtonScores.Checked = True Then
+                RadioButtonScores.Checked = False
+                RadioButtonGrades.Checked = True
+            Else
+                RadioButtonScores.Checked = True
+                RadioButtonGrades.Checked = False
+            End If
+        Catch ex As Exception
+            'silent 
+            logError(ex.ToString)
+        End Try
     End Sub
 
     Sub showGrades()
@@ -302,7 +296,7 @@ Public Class FormGenerateBroadsheet
             'DataGridViewBroadSheet.AllowUserToAddRows = True
             'DataGridViewBroadSheet.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Sunken
         Catch ex As Exception
-            MsgBox("Broadsheet scores have to be generated first before grades")
+            Throw New ArgumentException("Broadsheet scores have to be generated first before grades")
             logError(ex.ToString)
         End Try
     End Sub
@@ -324,25 +318,9 @@ Public Class FormGenerateBroadsheet
             logError(ex.ToString)
         End Try
     End Sub
-    Function getCoursesList() As String()
-        Dim str As New List(Of String)
-        str.Add("PRE571")
-        str.Add("CPE571")
-        str.Add("CPE591")
-
-        Return str.ToArray
-    End Function
-
-    Private Sub Label7_Click(sender As Object, e As EventArgs)
-        PanelModify.Visible = False
-    End Sub
-
-
 
     Private Sub FormGenerateBroadsheet_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         On Error Resume Next
-
-        'Me.TextBoxTemplateFileName.Text = My.Application.Info.DirectoryPath & "\templates\broadsheet.xltx"
         Me.ButtonProcessBroadsheet.Enabled = False
         Me.ButtonExportToExcel.Enabled = False
         Me.ButtonExportPDF.Enabled = False
@@ -350,25 +328,31 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub TimerBS_Tick(sender As Object, e As EventArgs) Handles TimerBS.Tick
+        On Error Resume Next
         If objBroadsheet.progress <= 100 Then ProgressBarBS.Value = CInt(objBroadsheet.progress)
         Me.LabelProgress.Text = (objBroadsheet.progress).ToString & "% - " & objBroadsheet.progressStr
     End Sub
 
     Private Sub BgWProcess_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BgWProcess.DoWork
-        objBroadsheet.broadsheetDataDS = Nothing
+        Try
+            objBroadsheet.broadsheetDataDS = Nothing
 
-        Select Case CInt(e.Argument)
-            Case BGW_PROCESS_INTERROP_YR_SCORES 'interop
-                objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, True)
+            Select Case CInt(e.Argument)
+                Case BGW_PROCESS_INTERROP_YR_SCORES 'interop
+                    objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, True)
 
-            Case BGW_PROCESS_BUILTIN_NPOI_LEVEL  'use formula
-                objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
+                Case BGW_PROCESS_BUILTIN_NPOI_LEVEL  'use formula
+                    objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
 
-            Case BGW_PROCESS_REPROCESS
-                objBroadsheet.broadsheetDataDS = objBroadsheet.reprocessBroadsheetData()
-            Case Else
-                objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
-        End Select
+                Case BGW_PROCESS_REPROCESS
+                    objBroadsheet.broadsheetDataDS = objBroadsheet.reprocessBroadsheetData()
+                Case Else
+                    objBroadsheet.broadsheetDataDS = objBroadsheet.createBroadsheetData(course_dept_idr.ToString, session_idr, course_level, False)
+            End Select
+        Catch ex As Exception
+            MsgBox("Oops! Something went wrong. See log for detals")
+            logError(ex.ToString)
+        End Try
     End Sub
 
     Private Sub BgWProcess_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BgWProcess.RunWorkerCompleted
@@ -440,6 +424,7 @@ Public Class FormGenerateBroadsheet
             objBroadsheet.progressStr = ""
         Catch ex As Exception
             ButtonProcessBroadsheet.Enabled = True
+            logError(ex.ToString)
             MsgBox("An error occured during the creation of the broadsheet" & vbCrLf & vbCrLf & ex.Message)
         End Try
 
@@ -452,14 +437,12 @@ Public Class FormGenerateBroadsheet
         'TODO: create UI to configure order
         'If retFileName = "" Then MsgBox("File name is empty")
         'TODO: get all the data (such as level, dept, fac, hod etc) from the datagrivView only
-
-        footers(0) = TextBoxCourseAdviser.Text
-        footers(1) = TextBoxDean.Text
-        footers(2) = TextBoxHOD.Text
-        '1-interrp  2. built in     -2 grades
-        '4-diploma
         Try
-
+            footers(0) = TextBoxCourseAdviser.Text
+            footers(1) = TextBoxDean.Text
+            footers(2) = TextBoxHOD.Text
+            '1-interrp  2. built in     -2 grades
+            '4-diploma
 
             Select Case System.Math.Abs(CInt(e.Argument))
                 Case Is > 1000  'interop Template based
@@ -483,76 +466,76 @@ Public Class FormGenerateBroadsheet
             End Select
             'objExcelFile.createExcelFile_NPOI(My.Application.Info.DirectoryPath & "\samples\generated_broadsheet.xlsx") 'worked
         Catch ex As Exception
+            logError(ex.ToString)
             MsgBox("Could not export" & vbCrLf & ex.ToString)
         End Try
     End Sub
     Private Sub bgwExportToExcel_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwExportToExcel.RunWorkerCompleted
-        If DataGridViewBroadSheet.DataSource Is Nothing Then Exit Sub
-        'copy the file
-        'TODO: access denied
-        'My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\GeneratedResultBroadsheet" & dlevel & ".xlsm", True)
-        'replace template with fresh copy
-        If CheckBoxFirsrSemester.Checked = False Then
-            'hide em
-        ElseIf CheckBoxSecondSemester.Checked = False Then
-            'Hide em
-        End If
+        Try
+            If DataGridViewBroadSheet.DataSource Is Nothing Then
+                MsgBox("Could not export, Empty records returned")
+                Exit Sub
+            End If
+            'copy the file
+            'TODO: access denied
+            'My.Computer.FileSystem.CopyFile(My.Application.Info.DirectoryPath & "\templates\broadsheet - Copy3.xlsm", My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\GeneratedResultBroadsheet" & dlevel & ".xlsm", True)
+            'replace template with fresh copy
+            If CheckBoxFirsrSemester.Checked = False Then
+                'hide em
+            ElseIf CheckBoxSecondSemester.Checked = False Then
+                'Hide em
+            End If
 
-        MsgBox("Done: GeneratedResultBroadsheet - " & retFileName)
-        Me.TextBoxTemplateFileName.Text = retFileName
-        ButtonExportToExcel.Enabled = True
-        TimerBS.Stop()
-        ButtonProcessBroadsheet.Enabled = True
-        Me.ProgressBarBS.Value = 100
+            MsgBox("Done: GeneratedResultBroadsheet - " & retFileName)
+            Me.TextBoxTemplateFileName.Text = retFileName
+            ButtonExportToExcel.Enabled = True
+            TimerBS.Stop()
+            ButtonProcessBroadsheet.Enabled = True
+            Me.ProgressBarBS.Value = 100
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Could not export" & vbCrLf & ex.ToString)
+        End Try
     End Sub
     Private Sub ButtonReProcesClick(sender As Object, e As EventArgs) Handles ButtonReProces.Click
-        'DataGridViewBroadSheet.UpdateCellValue 
-        dtScores = DataGridViewBroadSheet.DataSource.totable
-        objBroadsheet.dataTablesScoresAndGrades(0) = dtScores
-        objBroadsheet.Level = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value
-        objBroadsheet.DeptId = mappDB.getDeptID(DataGridViewBroadSheet.Rows(0).Cells("bs_department_name").Value)
-        objBroadsheet.Session = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value
+        Try
+            dtScores = DataGridViewBroadSheet.DataSource.totable
+            objBroadsheet.dataTablesScoresAndGrades(0) = dtScores
+            objBroadsheet.Level = DataGridViewBroadSheet.Rows(0).Cells("bs_level").Value
+            objBroadsheet.DeptId = mappDB.getDeptID(DataGridViewBroadSheet.Rows(0).Cells("bs_department_name").Value)
+            objBroadsheet.Session = DataGridViewBroadSheet.Rows(0).Cells("bs_session").Value
 
 
-        footers(0) = TextBoxCourseAdviser.Text
-        footers(1) = TextBoxDean.Text
-        footers(2) = TextBoxHOD.Text
+            footers(0) = TextBoxCourseAdviser.Text
+            footers(1) = TextBoxDean.Text
+            footers(2) = TextBoxHOD.Text
 
-        ButtonProcessBroadsheet.Enabled = False
-        TimerBS.Enabled = True
-        TimerBS.Start()
+            ButtonProcessBroadsheet.Enabled = False
+            TimerBS.Enabled = True
+            TimerBS.Start()
 
-        If CheckBoxSecondSemester.Checked Then
-            objBroadsheet.broadsheetSemester = 2
-        Else
-            objBroadsheet.broadsheetSemester = 1
-        End If
-        objBroadsheet.DepartmentName = mappDB.getDeptName(course_dept_idr)
-        objBroadsheet.FacultyName = "Faculty of Engineering"    'TODO: remove hard code
-        objBroadsheet.SchoolName = "University of Benin"
+            If CheckBoxSecondSemester.Checked Then
+                objBroadsheet.broadsheetSemester = 2
+            Else
+                objBroadsheet.broadsheetSemester = 1
+            End If
+            objBroadsheet.DepartmentName = mappDB.getDeptName(course_dept_idr)
+            objBroadsheet.FacultyName = "Faculty of Engineering"    'TODO: remove hard code
+            objBroadsheet.SchoolName = "University of Benin"
 
-        objBroadsheet.HOD = TextBoxHOD.Text
-        objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
-        objBroadsheet.Dean = TextBoxDean.Text
-        'objBroadsheet.levelCGPaPercentages = ""   'todo get from settings
-        '_levelCGPAPercentages(0) = 0.05
-        '_levelCGPAPercentages(1) = 0.1
-        '_levelCGPAPercentages(2) = 0.15
-        '_levelCGPAPercentages(3) = 0.2
-        '_levelCGPAPercentages(4) = 0.5
-        '_levelCGPAPercentages(5) = 0
-        '_levelCGPAPercentages(6) = 0
-        '_levelCGPAPercentages(7) = 0
-        '_levelCGPAPercentages(8) = 0
-        'objBroadsheet.levelCGPaPercentagesUME
-        'objBroadsheet.levelCGPaPercentagesDE2
-        'objBroadsheet.levelCGPaPercentagesDE3
-        'objBroadsheet.levelCGPaPercentagesDIP
+            objBroadsheet.HOD = TextBoxHOD.Text
+            objBroadsheet.CourseAdviser = TextBoxCourseAdviser.Text
+            objBroadsheet.Dean = TextBoxDean.Text
+            'objBroadsheet.levelCGPaPercentages = ""   'todo get from settings
+            'Dim courses As Object()
+            'courses = dtScores.Rows(0).ItemArray
+            'objBroadsheet.updateDatasetWithComputedValues(dtScores, dtGrades, dictAllCourseCodeKeyAndCourseLevelVal.courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1)
+            BgWProcess.RunWorkerAsync(BGW_PROCESS_REPROCESS)
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Could not export" & vbCrLf & ex.ToString)
+        End Try
 
-        'Dim courses As Object()
-        'courses = dtScores.Rows(0).ItemArray
-        'objBroadsheet.updateDatasetWithComputedValues(dtScores, dtGrades, dictAllCourseCodeKeyAndCourseLevelVal.courses, credits, course_level, dictAllCourseCodeKeyAndCourseLevelVal, dictRegistered_1)
-        BgWProcess.RunWorkerAsync(BGW_PROCESS_REPROCESS)
     End Sub
     Sub testDB()
         Try
@@ -580,16 +563,21 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Public Function checkProcessState() As Boolean
-        If objBroadsheet.dataTablesScoresAndGrades Is Nothing Then
+        Try
+            If objBroadsheet.dataTablesScoresAndGrades Is Nothing Then
+                Return False
+            Else
+                Return True
+            End If
+        Catch ex As Exception
             Return False
-        Else
-            Return True
-        End If
+        End Try
     End Function
     Private Sub ButtonExportToExcel_Click(sender As Object, e As EventArgs) Handles ButtonExportToExcel.Click
         Dim tmpPARAM As Integer = 0
         'dont export unless we are ready
         If checkProcessState() = False Then
+            MsgBox("Please Process (Re-Process) the broadsheet before attempting to Export")
             Exit Sub
         End If
         SaveFileDialog1.Title = "Select a name for the exported Excel File"
@@ -665,60 +653,78 @@ Public Class FormGenerateBroadsheet
 
     Private Sub ButtonDownload_Click(sender As Object, e As EventArgs) Handles ButtonDownload.Click
         Try
-
-            'objResult.resultTemplateFileName
+            If TextBoxTemplateFileName.Text = "" Then
+                MsgBox("You have to expot to Excel first before you can download the broadsheet in Excel format")
+                Exit Sub
+            End If
             If SaveFileDialog1.ShowDialog = DialogResult.OK Then
                 My.Computer.FileSystem.CopyFile(TextBoxTemplateFileName.Text, SaveFileDialog1.FileName)
             End If
         Catch ex As Exception
+            logError(ex.ToString)
             MsgBox(ex.Message)
         End Try
     End Sub
 
     Public Function getRegisteredStudents() As String()
-        Dim retList As New List(Of String)
-        Dim tmpDT As DataTable
-        Dim tmpRecordEntry As String = ""
-        tmpDT = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0)
-        If tmpDT.Rows.Count > 0 Then
-            For i = 0 To tmpDT.Rows.Count - 1
-                If dictSessions.ContainsKey(tmpDT.Rows(i).Item("session_idr")) And CInt(tmpDT.Rows(i).Item("level")) > 99 And CInt(tmpDT.Rows(i).Item("dept_idr")) >= 0 Then
-                    tmpRecordEntry = tmpDT.Rows(i).Item("session_idr") & "," & mappDB.getDeptName(tmpDT.Rows(i).Item("dept_idr")) & "," & tmpDT.Rows(i).Item("level")
-                    retList.Add(tmpRecordEntry)
-                End If
-            Next
-        End If
-        'todo: list all regs in Regs and call a function to use the reg if it is selected
-        Return retList.ToArray
+        Try
+
+            Dim retList As New List(Of String)
+            Dim tmpDT As DataTable
+            Dim tmpRecordEntry As String = ""
+            tmpDT = mappDB.GetDataWhere(STR_SQL_ALL_REG_SUMMARY).Tables(0)
+            If tmpDT.Rows.Count > 0 Then
+                For i = 0 To tmpDT.Rows.Count - 1
+                    If dictSessions.ContainsKey(tmpDT.Rows(i).Item("session_idr")) And CInt(tmpDT.Rows(i).Item("level")) > 99 And CInt(tmpDT.Rows(i).Item("dept_idr")) >= 0 Then
+                        tmpRecordEntry = tmpDT.Rows(i).Item("session_idr") & "," & mappDB.getDeptName(tmpDT.Rows(i).Item("dept_idr")) & "," & tmpDT.Rows(i).Item("level")
+                        retList.Add(tmpRecordEntry)
+                    End If
+                Next
+            End If
+            'todo: list all regs in Regs and call a function to use the reg if it is selected
+            Return retList.ToArray
+
+        Catch ex As Exception
+            logError(ex.ToString)
+            Throw
+        End Try
     End Function
     Private Sub bgwLoad_DoWork(sender As Object, e As DoWorkEventArgs) Handles bgwLoad.DoWork
-        mappDB.getDeptSessionsIntoDictionaries()
-        strRegisteredStudents = getRegisteredStudents()
+        Try
+            mappDB.getDeptSessionsIntoDictionaries()
+            strRegisteredStudents = getRegisteredStudents()
+        Catch ex As Exception
+            logError(ex.ToString)
+            ' MsgBox("Failed to load Department and Sssions info" & vbrlf & ex.ToString)
+        End Try
     End Sub
 
     Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
-        Me.ButtonProcessBroadsheet.Enabled = True
-        Me.ButtonExportToExcel.Enabled = True
-        Me.ButtonExportPDF.Enabled = True
+        Try
+            Me.ButtonProcessBroadsheet.Enabled = True
+            Me.ButtonExportToExcel.Enabled = True
+            Me.ButtonExportPDF.Enabled = True
 
-        If strRegisteredStudents.Count > 0 Then
-            ComboBoxRegisteredStudents.Items.Clear()
-            ComboBoxRegisteredStudents.Items.AddRange(strRegisteredStudents)
-            ComboBoxRegisteredStudents.SelectedIndex = 0
+            If strRegisteredStudents.Count > 0 Then
+                ComboBoxRegisteredStudents.Items.Clear()
+                ComboBoxRegisteredStudents.Items.AddRange(strRegisteredStudents)
+                ComboBoxRegisteredStudents.SelectedIndex = 0
 
-            strParamsSessionDeptLevel = ComboBoxRegisteredStudents.SelectedItem.ToString.Split(",")
-            session_idr = strParamsSessionDeptLevel(0)
-            course_dept_idr = mappDB.getDeptID(strParamsSessionDeptLevel(1))
-            course_level = strParamsSessionDeptLevel(2)
-
-
-        Else
-            ComboBoxRegisteredStudents.Items.Clear()
-            ComboBoxRegisteredStudents.Text = "NO REGISTERED STUDENTS"
-            course_level = 100
-            course_dept_idr = 1
-            session_idr = "2018/2019"
-        End If
+                strParamsSessionDeptLevel = ComboBoxRegisteredStudents.SelectedItem.ToString.Split(",")
+                session_idr = strParamsSessionDeptLevel(0)
+                course_dept_idr = mappDB.getDeptID(strParamsSessionDeptLevel(1))
+                course_level = strParamsSessionDeptLevel(2)
+            Else
+                ComboBoxRegisteredStudents.Items.Clear()
+                ComboBoxRegisteredStudents.Text = "NO REGISTERED STUDENTS"
+                course_level = 100
+                course_dept_idr = 1
+                session_idr = "2018/2019"
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Failed to load Department and Sssions info" & vbCrLf & ex.ToString)
+        End Try
     End Sub
     Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
         Me.Close()
@@ -729,9 +735,15 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Public Sub importBroadsheetData(dv As DataView)
-        Me.DataGridViewBroadSheet.DataSource = dv
-        'TODO: department etc
-        'load everything loadable
+        Try
+            Me.DataGridViewBroadSheet.DataSource = dv
+            'TODO: department etc
+            'load everything loadable
+        Catch ex As Exception
+            logError(ex.ToString)
+            Throw
+            'lets be silent about this, prompting users when thy did not issue any comand is poor UI design
+        End Try
     End Sub
 
 
@@ -747,40 +759,44 @@ Public Class FormGenerateBroadsheet
 
 
     Private Sub ButtonAddSession_Click(sender As Object, e As EventArgs)
-        FormAddNewStuff.ShowDialog()
-        ' FormAddNewStuff.AddEm()
-        'FormAddNewStuff.AddEm()
+        Try
+            FormAddNewStuff.ShowDialog()
+            ' FormAddNewStuff.AddEm()
+            'FormAddNewStuff.AddEm()
 
-        'referesh combo
-        'combolist
+            'referesh combo
+            'combolist
+        Catch ex As Exception
+            logError(ex.ToString)
+            'lets be silent about this, prompting users when thy did not issue any comand is poor UI design
+        End Try
     End Sub
 
     Private Sub ButtonOpen_Click(sender As Object, e As EventArgs) Handles ButtonOpen.Click
         Try
-
             System.Diagnostics.Process.Start(TextBoxTemplateFileName.Text)
         Catch ex As Exception
+            logError(ex.ToString)
             MsgBox("Could not open excel file" & vbCrLf & ex.Message)
         End Try
     End Sub
 
-    Private Sub DataGridViewBroadSheet_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewBroadSheet.CellContentClick
-
-    End Sub
-
-    Private Sub ContextMenuStrip1_Opening(sender As Object, e As CancelEventArgs) Handles ContextMenuStrip1.Opening
-
-    End Sub
     Private Sub UpgradeTo40ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeTo40ToolStripMenuItem.Click
-        If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
-            DataGridViewBroadSheet.CurrentCell().Value = 40
+        Try
+            If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
+                DataGridViewBroadSheet.CurrentCell().Value = 40
 
-            'effect change in audit dgv
-            'DataGridViewBroadSheet_audit.rows(currentcell.rowindex).cell(currentcekk.columnindex).value = "Ugraded from x to 40 by CA"
-        End If
+                'effect change in audit dgv
+                'DataGridViewBroadSheet_audit.rows(currentcell.rowindex).cell(currentcekk.columnindex).value = "Ugraded from x to 40 by CA"
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Could not upgrade" & vbCrLf & ex.Message)
+        End Try
+
     End Sub
     Private Sub ApplyChangeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ApplyChangeToolStripMenuItem.Click
-
+        On Error Resume Next
         DataGridViewBroadSheet.CurrentCell().Value = ToolStripTextBox1.Text
         'log it
 
@@ -789,9 +805,6 @@ Public Class FormGenerateBroadsheet
 
     End Sub
 
-    Private Sub Label4_Click(sender As Object, e As EventArgs)
-
-    End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         On Error Resume Next
@@ -809,12 +822,16 @@ Public Class FormGenerateBroadsheet
     End Sub
 
     Private Sub RadioButtonScores_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonScores.CheckedChanged
-        If RadioButtonScores.Checked Then
-            showScores()
-        Else
-            showGrades()
-        End If
-
+        Try
+            If RadioButtonScores.Checked Then
+                showScores()
+            Else
+                showGrades()
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+            'lets be silent about this, prompting users when thy did not issue any comand is poor UI design
+        End Try
     End Sub
 
     Private Sub ComboBoxRegisteredStudents_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxRegisteredStudents.SelectedIndexChanged
@@ -831,91 +848,108 @@ Public Class FormGenerateBroadsheet
             'load previously generated broadsheet if availiable
             'TODO: show spinner
 
-
-
-
             'todo: validations
         Catch ex As Exception
-
+            logError(ex.ToString)
+            'lets be silent about this, prompting users when thy did not issue any comand is poor UI design
         End Try
     End Sub
 
     Private Sub ButtonLoadSavedBS_Click(sender As Object, e As EventArgs) Handles ButtonLoadSavedBS.Click
-        On Error Resume Next
         Dim tmpDT As New DataTable
-        tmpDT = mappDB.GetDataWhere("SELECT * FROM " & getBroadheetTableName(session_idr, course_dept_idr, course_level)).Tables(0)
-        If tmpDT.Rows.Count > 0 Then
-            DataGridViewBroadSheet.DataSource = tmpDT.DefaultView
-        End If
+        Try
+            tmpDT = mappDB.GetDataWhere("SELECT * FROM " & getBroadheetTableName(session_idr, course_dept_idr, course_level)).Tables(0)
+            If tmpDT.Rows.Count > 0 Then
+                DataGridViewBroadSheet.DataSource = tmpDT.DefaultView
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Oops! Something went wrong, see log for details")
+        End Try
     End Sub
 
     Private Sub All39To40ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles All39To40ToolStripMenuItem.Click
+        Try
+            Dim xUpgrades As Integer = 0
 
-        Dim xUpgrades As Integer = 0
-        For i = 0 To DataGridViewBroadSheet.Rows.Count - 1
-            For j = COURSE_START_COL To COURSE_END_COL
-                If DataGridViewBroadSheet.Rows(i).Cells(j).Value = "39" Then
-                    'todo check if it is a departmental course ... dictDeptCourses
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "40"
-                    xUpgrades = xUpgrades + 1
-                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "44" Then
-                    xUpgrades = xUpgrades + 1
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "45"
-                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "59" Then
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "60"
-                    xUpgrades = xUpgrades + 1
-                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "69" Then
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "70"
-                    xUpgrades = xUpgrades + 1
-                End If
+            For i = 0 To DataGridViewBroadSheet.Rows.Count - 1
+                For j = COURSE_START_COL To COURSE_END_COL
+                    If DataGridViewBroadSheet.Rows(i).Cells(j).Value = "39" Then
+                        'todo check if it is a departmental course ... dictDeptCourses
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "40"
+                        xUpgrades = xUpgrades + 1
+                    ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "44" Then
+                        xUpgrades = xUpgrades + 1
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "45"
+                    ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "59" Then
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "60"
+                        xUpgrades = xUpgrades + 1
+                    ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "69" Then
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "70"
+                        xUpgrades = xUpgrades + 1
+                    End If
+                Next
             Next
-        Next
-        For i = 0 To DataGridViewBroadSheet.Rows.Count - 1
-            For j = COURSE_START_COL_2 To COURSE_END_COL_2
-                If DataGridViewBroadSheet.Rows(i).Cells(j).Value = "39" Then
-                    'todo check if it is a departmental course ... dictDeptCourses
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "40"
-                    xUpgrades = xUpgrades + 1
-                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "44" Then
-                    xUpgrades = xUpgrades + 1
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "45"
-                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "59" Then
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "60"
-                    xUpgrades = xUpgrades + 1
-                ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "69" Then
-                    DataGridViewBroadSheet.Rows(i).Cells(j).Value = "70"
-                    xUpgrades = xUpgrades + 1
-                End If
+            For i = 0 To DataGridViewBroadSheet.Rows.Count - 1
+                For j = COURSE_START_COL_2 To COURSE_END_COL_2
+                    If DataGridViewBroadSheet.Rows(i).Cells(j).Value = "39" Then
+                        'todo check if it is a departmental course ... dictDeptCourses
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "40"
+                        xUpgrades = xUpgrades + 1
+                    ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "44" Then
+                        xUpgrades = xUpgrades + 1
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "45"
+                    ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "59" Then
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "60"
+                        xUpgrades = xUpgrades + 1
+                    ElseIf DataGridViewBroadSheet.Rows(i).Cells(j).Value = "69" Then
+                        DataGridViewBroadSheet.Rows(i).Cells(j).Value = "70"
+                        xUpgrades = xUpgrades + 1
+                    End If
+                Next
             Next
-        Next
 
-        MsgBox(xUpgrades & " Upgrades applied")
+            MsgBox(xUpgrades & " Upgrades applied")
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Oops! Something went wrong, see log for details")
+        End Try
     End Sub
 
-    Private Sub RadioButtonGrades_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonGrades.CheckedChanged
+    Private Sub TextBoxTemplateFileName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxTemplateFileName.TextChanged
 
     End Sub
 
     Private Sub UpgradeWith2MarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith2MarksToolStripMenuItem.Click
-        If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
-            DataGridViewBroadSheet.CurrentCell().Value = DataGridViewBroadSheet.CurrentCell().Value + 2
-            'effect change in audit dgv
-            'DataGridViewBroadSheet_audit.rows(currentcell.rowindex).cell(currentcekk.columnindex).value = "Ugraded from x to 40 by CA"
-        End If
+        Try
+            If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
+                DataGridViewBroadSheet.CurrentCell().Value = DataGridViewBroadSheet.CurrentCell().Value + 2
+                'effect change in audit dgv
+                'DataGridViewBroadSheet_audit.rows(currentcell.rowindex).cell(currentcekk.columnindex).value = "Ugraded from x to 40 by CA"
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+        MsgBox("Oops! Something went wrong, see log for details")
+        End Try
     End Sub
 
     Private Sub UpgradeWith1MarkToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpgradeWith1MarkToolStripMenuItem.Click
-        Dim rI, cI As Integer
-        Dim cellVal As Integer = 0
-        cellVal = CInt(DataGridViewBroadSheet.CurrentCell().Value)
-        rI = DataGridViewBroadSheet.CurrentCell().RowIndex
-        cI = DataGridViewBroadSheet.CurrentCell().ColumnIndex
-        If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
-            DataGridViewBroadSheet.CurrentCell().Value = +2
+        Try
+            Dim rI, cI As Integer
+            Dim cellVal As Integer = 0
+            cellVal = CInt(DataGridViewBroadSheet.CurrentCell().Value)
+            rI = DataGridViewBroadSheet.CurrentCell().RowIndex
+            cI = DataGridViewBroadSheet.CurrentCell().ColumnIndex
+            If DataGridViewBroadSheet.CurrentCell.ColumnIndex >= 7 Then
+                DataGridViewBroadSheet.CurrentCell().Value = +2
 
-            'effect change in audit dgv
-            'DataGridViewBroadsheetAudit.Rows(rI).Cells(cI).Value = "Ugraded from " & cellVal & " to 40 by " & mappDB.UserName
-        End If
+                'effect change in audit dgv
+                'DataGridViewBroadsheetAudit.Rows(rI).Cells(cI).Value = "Ugraded from " & cellVal & " to 40 by " & mappDB.UserName
+            End If
+        Catch ex As Exception
+            logError(ex.ToString)
+            MsgBox("Oops! Something went wrong, see log for details")
+        End Try
     End Sub
 End Class
 
