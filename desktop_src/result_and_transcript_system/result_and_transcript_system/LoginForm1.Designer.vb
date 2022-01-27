@@ -120,7 +120,7 @@ Partial Class LoginForm1
         Me.TextBoxNewPassword.Name = "TextBoxNewPassword"
         Me.TextBoxNewPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.TextBoxNewPassword.Size = New System.Drawing.Size(274, 29)
-        Me.TextBoxNewPassword.TabIndex = 14
+        Me.TextBoxNewPassword.TabIndex = 9
         Me.TextBoxNewPassword.Text = "adminCA"
         Me.TextBoxNewPassword.Visible = False
         '
@@ -182,7 +182,7 @@ Partial Class LoginForm1
         Me.PasswordTextBox.Name = "PasswordTextBox"
         Me.PasswordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.PasswordTextBox.Size = New System.Drawing.Size(274, 29)
-        Me.PasswordTextBox.TabIndex = 9
+        Me.PasswordTextBox.TabIndex = 8
         Me.PasswordTextBox.Text = "adminCA"
         '
         'LoginOKButton
@@ -212,6 +212,7 @@ Partial Class LoginForm1
         '
         'LoginForm1
         '
+        Me.AcceptButton = Me.LoginOKButton
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(643, 446)

@@ -1,4 +1,14 @@
 ﻿Public Class FormAdmin
+
+    Dim tmpDS As DataSet
+    Dim dsStudents, dsReg As New DataSet
+
+    'forced to do this
+    Dim glbCourseOrderConn As New OleDb.OleDbConnection(ModuleGeneral.STR_connectionString32)
+    Dim glbAdapter As New OleDb.OleDbDataAdapter()
+    Dim glbDTCourseOrder As DataTable
+    Dim glbBND As New BindingSource
+
     Private Sub FormCourseAdviser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             Me.BackColor = RGBColors.colorBackground
@@ -23,18 +33,44 @@
         Dim strSQLCoursesOrder As String
         Dim coursesOrderDS As DataSet
         Try
-            strSQLCoursesOrder = "SELECT * FROM Courses_order_new"  ' WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
-            'coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, "2018/2019", 1), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
-            coursesOrderDS = mappDB.GetDataWhere(strSQLCoursesOrder)    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+            '    strSQLCoursesOrder = "SELECT * FROM Courses_order_new"  ' WHERE (session_idr='{0}' AND dept_idr={1}) ORDER BY sn;" 'and level
+            '    'coursesOrderDS = mappDB.GetDataWhere(String.Format(strSQLCoursesOrder, "2018/2019", 1), "Courses")    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
+            '    coursesOrderDS = mappDB.GetDataWhere(strSQLCoursesOrder)    'TODO Every inserts in courses_order table mus be 15*5 rows. sn can be used to order
 
+            '    DataGridViewCoursesOrder.DataSource = coursesOrderDS.Tables(0).DefaultView
 
-            DataGridViewCoursesOrder.DataSource = coursesOrderDS.Tables(0).DefaultView
+            fillCourseOrderGridUsingdataAdapter()
+            DataGridViewCoursesOrder.DataSource = glbBND
         Catch ex As Exception
             logError(ex.ToString)
-        MsgBox("An error occured, see log for details")
+            MsgBox("An error occured, see log for details")
         End Try
     End Sub
+    Private Function fillCourseOrderGridUsingdataAdapter(Optional dSession As String = Nothing, Optional deptid As Integer = Nothing, Optional dlvl As Integer = Nothing) As Boolean 'dSess As String, dDeptID As Integer, dLvl As Integer) As Boolean
+        Try
+            Dim strSQL As String
+            strSQL = String.Format("SELECT * FROM Courses_order_new") ' WHERE session_idr='{1}',dept_idr={2},[level]={3}", dSess, dDeptID, dLvl)
 
+
+            If glbCourseOrderConn.State = ConnectionState.Open Then glbCourseOrderConn.Close()
+            glbCourseOrderConn.ConnectionString = mappDB.getCorrectConnectionstring()
+
+            glbCourseOrderConn.Open()
+            glbDTCourseOrder = mappDB.GetDataWhere(strSQL).Tables(0)
+            glbAdapter = New OleDb.OleDbDataAdapter(strSQL, glbCourseOrderConn)
+            glbAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey
+
+            '1. fill it
+            glbAdapter.Fill(glbDTCourseOrder)
+            glbBND.DataSource = glbDTCourseOrder
+            Return True
+        Catch ex As Exception
+            'MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+            'Return False
+            Throw
+        End Try
+    End Function
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles ButtonStudents.Click
         Try
             MainForm.ChangeMenu("StudentsRegistration")
@@ -59,7 +95,7 @@
             MainForm.ChangeMenu("UploadResult")
         Catch ex As Exception
             logError(ex.ToString)
-        MsgBox("Oops! Something went wrong, see log for details")
+            MsgBox("Oops! Something went wrong, see log for details")
         End Try
     End Sub
 
@@ -68,7 +104,7 @@
             MainForm.ChangeMenu("UploadResult")
         Catch ex As Exception
             logError(ex.ToString)
-        MsgBox("Oops! Something went wrong, see log for details")
+            MsgBox("Oops! Something went wrong, see log for details")
         End Try
     End Sub
 
@@ -82,12 +118,15 @@
     End Sub
 
     Private Sub FormAdmin_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-        Try
+
+        On Error Resume Next
             MainForm.doCloseForm()
-        Catch ex As Exception
-            logError(ex.ToString)
-            MsgBox("Oops! Something went wrong, see log for details")
-        End Try
+
+        glbCourseOrderConn.Close()
+
+        glbCourseOrderConn = Nothing
+
+
     End Sub
 
 
@@ -95,8 +134,8 @@
         Try
             DataGridViewCoursesOrder.Update()
         Catch ex As Exception
-        logError(ex.ToString)
-        MsgBox("Oops! Something went wrong, see log for details")
+            logError(ex.ToString)
+            MsgBox("Oops! Something went wrong, see log for details")
         End Try
     End Sub
 
@@ -114,4 +153,31 @@
         'into the row
 
     End Sub
+
+    Private Sub ButtonSaveGrid_Click(sender As Object, e As EventArgs) Handles ButtonSaveGrid.Click
+        If updateRegGridUsingdataAdapter() Then
+            MsgBox("Saved Successfully")
+        Else
+            MsgBox("Changes could not be saved. Please check the input and try again")
+        End If
+
+    End Sub
+    Private Function updateRegGridUsingdataAdapter() As Boolean
+        Try
+            Dim strSQL As String
+
+            strSQL = "SELECT * FROM Courses_order_new" ' WHERE session_idr={1}"
+
+            Dim builder As New OleDb.OleDbCommandBuilder(glbAdapter)
+            builder.QuotePrefix = "["
+            builder.QuoteSuffix = "]"
+            glbAdapter.Update(glbDTCourseOrder)    'persist in db
+            Return True
+        Catch ex As Exception
+            MsgBox("Error occured, see log for details" & vbCrLf & ex.Message)
+            logError(ex.ToString)
+            Return False
+        End Try
+    End Function
+
 End Class

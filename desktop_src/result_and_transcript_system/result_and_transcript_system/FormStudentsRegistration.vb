@@ -1652,4 +1652,10 @@ Public Class FormStudentsRegistration
     Private Sub TextBoxCourse_2_Click(sender As Object, e As EventArgs) Handles TextBoxCourseCode_2.Click
         showCoursesList()
     End Sub
+
+    Private Sub ComboBoxDepartments_GotFocus(sender As Object, e As EventArgs) Handles ComboBoxDepartments.GotFocus
+
+        Me.AcceptButton = ButtonRefreshFormview
+
+    End Sub
 End Class

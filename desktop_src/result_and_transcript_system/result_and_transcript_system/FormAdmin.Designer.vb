@@ -39,16 +39,17 @@ Partial Class FormAdmin
         Me.TimerBS = New System.Windows.Forms.Timer(Me.components)
         Me.ProgressBarBS = New System.Windows.Forms.ProgressBar()
         Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.ButtonActivate = New System.Windows.Forms.Button()
         Me.Button17 = New System.Windows.Forms.Button()
         Me.TextBox5 = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.TextBoxDevPass = New System.Windows.Forms.TextBox()
         Me.GroupBoxDev = New System.Windows.Forms.GroupBox()
-        Me.Button9 = New System.Windows.Forms.Button()
+        Me.ButtonOtherConfig = New System.Windows.Forms.Button()
         Me.TextBoxDev = New System.Windows.Forms.TextBox()
-        Me.Button6 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.ButtonAddCourses = New System.Windows.Forms.Button()
+        Me.ButtonSaveGrid = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -63,7 +64,6 @@ Partial Class FormAdmin
         Me.ComboBoxDepartments = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.TextBoxDepartment = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         CType(Me.DataGridViewCoursesOrder, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox7.SuspendLayout()
@@ -241,6 +241,18 @@ Partial Class FormAdmin
         Me.GroupBox7.TabIndex = 36
         Me.GroupBox7.TabStop = False
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(41, 16)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(66, 24)
+        Me.Label1.TabIndex = 40
+        Me.Label1.Text = "Admin"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'ButtonActivate
         '
         Me.ButtonActivate.BackColor = System.Drawing.Color.Transparent
@@ -296,10 +308,10 @@ Partial Class FormAdmin
         'GroupBoxDev
         '
         Me.GroupBoxDev.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.GroupBoxDev.Controls.Add(Me.Button9)
+        Me.GroupBoxDev.Controls.Add(Me.ButtonOtherConfig)
         Me.GroupBoxDev.Controls.Add(Me.TextBoxDev)
-        Me.GroupBoxDev.Controls.Add(Me.Button6)
-        Me.GroupBoxDev.Controls.Add(Me.Button3)
+        Me.GroupBoxDev.Controls.Add(Me.ButtonAddCourses)
+        Me.GroupBoxDev.Controls.Add(Me.ButtonSaveGrid)
         Me.GroupBoxDev.Controls.Add(Me.Button5)
         Me.GroupBoxDev.Controls.Add(Me.TextBox2)
         Me.GroupBoxDev.Controls.Add(Me.Label11)
@@ -311,18 +323,18 @@ Partial Class FormAdmin
         Me.GroupBoxDev.TabStop = False
         Me.GroupBoxDev.Visible = False
         '
-        'Button9
+        'ButtonOtherConfig
         '
-        Me.Button9.BackColor = System.Drawing.Color.Transparent
-        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button9.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Button9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button9.Location = New System.Drawing.Point(6, 161)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(138, 30)
-        Me.Button9.TabIndex = 40
-        Me.Button9.Text = "Other Config"
-        Me.Button9.UseVisualStyleBackColor = False
+        Me.ButtonOtherConfig.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonOtherConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonOtherConfig.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.ButtonOtherConfig.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonOtherConfig.Location = New System.Drawing.Point(6, 161)
+        Me.ButtonOtherConfig.Name = "ButtonOtherConfig"
+        Me.ButtonOtherConfig.Size = New System.Drawing.Size(138, 30)
+        Me.ButtonOtherConfig.TabIndex = 40
+        Me.ButtonOtherConfig.Text = "Other Config"
+        Me.ButtonOtherConfig.UseVisualStyleBackColor = False
         '
         'TextBoxDev
         '
@@ -332,31 +344,31 @@ Partial Class FormAdmin
         Me.TextBoxDev.Size = New System.Drawing.Size(137, 45)
         Me.TextBoxDev.TabIndex = 37
         '
-        'Button6
+        'ButtonAddCourses
         '
-        Me.Button6.BackColor = System.Drawing.Color.Transparent
-        Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button6.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Button6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button6.Location = New System.Drawing.Point(6, 127)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(138, 30)
-        Me.Button6.TabIndex = 35
-        Me.Button6.Text = "Add Courses"
-        Me.Button6.UseVisualStyleBackColor = False
+        Me.ButtonAddCourses.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonAddCourses.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonAddCourses.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.ButtonAddCourses.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonAddCourses.Location = New System.Drawing.Point(6, 127)
+        Me.ButtonAddCourses.Name = "ButtonAddCourses"
+        Me.ButtonAddCourses.Size = New System.Drawing.Size(138, 30)
+        Me.ButtonAddCourses.TabIndex = 35
+        Me.ButtonAddCourses.Text = "Add Courses"
+        Me.ButtonAddCourses.UseVisualStyleBackColor = False
         '
-        'Button3
+        'ButtonSaveGrid
         '
-        Me.Button3.BackColor = System.Drawing.Color.Transparent
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button3.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Button3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button3.Location = New System.Drawing.Point(7, 34)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(138, 87)
-        Me.Button3.TabIndex = 34
-        Me.Button3.Text = "Save Broadsheet Config"
-        Me.Button3.UseVisualStyleBackColor = False
+        Me.ButtonSaveGrid.BackColor = System.Drawing.Color.Transparent
+        Me.ButtonSaveGrid.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSaveGrid.Font = New System.Drawing.Font("Arial Black", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.ButtonSaveGrid.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.ButtonSaveGrid.Location = New System.Drawing.Point(7, 34)
+        Me.ButtonSaveGrid.Name = "ButtonSaveGrid"
+        Me.ButtonSaveGrid.Size = New System.Drawing.Size(138, 87)
+        Me.ButtonSaveGrid.TabIndex = 34
+        Me.ButtonSaveGrid.Text = "Save Broadsheet Config"
+        Me.ButtonSaveGrid.UseVisualStyleBackColor = False
         '
         'Button5
         '
@@ -510,18 +522,6 @@ Partial Class FormAdmin
         Me.TextBoxDepartment.Size = New System.Drawing.Size(88, 20)
         Me.TextBoxDepartment.TabIndex = 25
         '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(41, 16)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(66, 24)
-        Me.Label1.TabIndex = 40
-        Me.Label1.Text = "Admin"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'FormAdmin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -569,10 +569,10 @@ Partial Class FormAdmin
     Friend WithEvents Label13 As Label
     Friend WithEvents TextBoxDevPass As TextBox
     Friend WithEvents GroupBoxDev As GroupBox
-    Friend WithEvents Button9 As Button
+    Friend WithEvents ButtonOtherConfig As Button
     Friend WithEvents TextBoxDev As TextBox
-    Friend WithEvents Button6 As Button
-    Friend WithEvents Button3 As Button
+    Friend WithEvents ButtonAddCourses As Button
+    Friend WithEvents ButtonSaveGrid As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents Label11 As Label
