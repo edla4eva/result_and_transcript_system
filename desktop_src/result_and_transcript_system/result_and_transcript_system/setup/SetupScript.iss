@@ -3,11 +3,12 @@
 ;my custom perl code/directive
 [Code]
 #define MyAppName "RTPS Result Software"
-#define MyAppVersion "1.0.1B5"
+#define MyAppVersion "1.0.7"
 #define MyAppPublisher "Edoghogho Olaye"
 #define MyAppURL "https://www.edla4eva.github.io/guide.html"
-#define MyAppExeName "RTPS_Result_Setup_1_0_1_Beta_6"
+#define MyAppExeName "RTPS_Result_Setup_1_0_1_Beta_7"
 #define MyDir "RTPS Result Soft"
+#define RTPSExeFilename "result_and_transcript_system.exe"
 
 [Setup]
 PrivilegesRequired=admin
@@ -33,7 +34,7 @@ Name: "{group}\RTPS Result Software"; Filename: "{app}\result_and_transcript_sys
 ;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,MyApp}"; Flags: runascurrentuser nowait postinstall skipifsilent; Check: returnTrue()
 
 [InstallDelete]
-Type: files; Name: {app}\{#MyAppExeName}
+Type: files; Name: {app}\{#RTPSExeFilename}
 
 [Files]
 ;main program
