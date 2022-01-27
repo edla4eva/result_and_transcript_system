@@ -3,7 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-
+#binaries
+desktop_src/result_and_transcript_system/result_and_transcript_system/setup
+desktop_src/result_and_transcript_system/result_and_transcript_system/RTPS Result Soft Setup
 #db
 web_src/svr
 web_src/install
