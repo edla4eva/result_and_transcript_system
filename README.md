@@ -1,20 +1,16 @@
 # result_and_transcript_system
 A Result and Transcript Processing System for Universities
-RTPS Result Software
+
+
+
+# RTPS Result Software
 ====================
 
 Welcome to the RTPS Result Software page. RTPS is a result and transript processing systems for universities and other educational institutions
------------------------------------------------------------------------------------------------------------------------------------------------
-
-[Contact Author for v1.0.18 (Stable)](#contactDev)
-
-  
-
-[Contribute/Older Unsupported Versions](https://github.com/edla4eva/result_and_transcript_system/releases)
 
 ![](assets/img/hero-img.png)
 
-RTPS Features
+## RTPS Features
 -------------
 
 Result processing, broadsheet generation, senate version, GP cards, transcripts
